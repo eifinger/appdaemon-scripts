@@ -1,3 +1,7 @@
+global_modules:
+  - secrets
+  - gooogle_wrapper
+
 notfiyOfActionWhenAway:
   module: notfiyOfActionWhenAway
   class: NotfiyOfActionWhenAway
@@ -47,3 +51,6 @@ googleTravelTime:
     travel_time_work_from_home:
       from: Wilhelm-Theodor-Römheld-Straße 2, D-55130 Mainz, Germany
       to: System Vertrieb Alexander GmbH, Borsigstraße, Wiesbaden
+  global_dependencies:
+    - secrets
+    - google_wrapper

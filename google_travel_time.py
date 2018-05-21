@@ -1,5 +1,6 @@
 import appdaemon.plugins.hass.hassapi as hass
-import google_wrapper as gmaps
+import google_wrapper
+import secrets
 
 #
 # App to turn something on when motion detected then off again after a delay if no more motion was detected
@@ -27,6 +28,8 @@ import google_wrapper as gmaps
 class GoogleTravelTime(hass.Hass):
 
     def initialize(self):
+
+        self.gmaps = google_wrapper.GoogleWrapper(key = secrets.GOOGLE_MAPS_API_TOKEN)
     
         self.handle = None
         self.max_api_calls = 2500

@@ -1,11 +1,10 @@
 import googlemaps
 from datetime import datetime
-import secrets
 
 class GoogleWrapper:
 
-    def __init__(self):
-        self.gmaps = googlemaps.Client(secrets.GOOGLE_MAPS_API_TOKEN)
+    def __init__(self, key):
+        self.gmaps = googlemaps.Client(key)
 
     def get_distance_matrix(self, origin, destination):
         now = datetime.now()
