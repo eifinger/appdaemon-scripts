@@ -45,7 +45,13 @@ class GoogleTravelTime(hass.Hass):
             self.delay = int(round(self.delay * len(self.args["entities"])))
             self.log("Found {} entities to update. Setting delay to {}".format(str(len(self.args["entities"])), str(self.delay)))
             for entity in self.args["entities"]:
-                travelTime = self.get_distance_matrix(self.args["entities"][entity]["from"], self.args["entities"][entity]["to"])
+                _from = self.args["entities"][entity]["from"]
+                if _from.startswith("secret_"):
+                    _from = self.get_secret(_from)
+                _to = self.args["entities"][entity]["to"]
+                if _to.startswith("secret_"):
+                    _to = self.get_secret(_to)
+                travelTime = self.get_distance_matrix(_from, _to)
                 roundedTravelTime = int(round(travelTime["duration_in_traffic"]["value"] / 60))
                 self.log("Updating {} to {} minutes".format(entity, str(roundedTravelTime)))
                 self.set_state(entity, state = roundedTravelTime)
@@ -64,3 +70,9 @@ class GoogleTravelTime(hass.Hass):
         duration = matrix['rows'][0]['elements'][0]['duration']
         duration_in_traffic = matrix['rows'][0]['elements'][0]['duration_in_traffic']
         return {"distance": distance, "duration": duration, "duration_in_traffic": duration_in_traffic}
+
+    def get_secret(self, key):
+        if key in secrets.secret_dict:
+            return secrets.secret_dict[key]
+        else:
+            self.log("Could not find {} in secret_dict".format(key))
