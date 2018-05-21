@@ -1,5 +1,6 @@
 import appdaemon.plugins.hass.hassapi as hass
-import google_wrapper
+import googlemaps
+import datetime
 import secrets
 
 #
@@ -29,7 +30,7 @@ class GoogleTravelTime(hass.Hass):
 
     def initialize(self):
 
-        self.gmaps = google_wrapper.GoogleWrapper(key = secrets.GOOGLE_MAPS_API_TOKEN)
+        self.gmaps = googlemaps.googlemaps.Client(secrets.GOOGLE_MAPS_API_TOKEN)
     
         self.handle = None
         self.max_api_calls = 2500
@@ -46,8 +47,21 @@ class GoogleTravelTime(hass.Hass):
             self.log("Found {} entities to update. Setting delay to {}".format(str(len(self.args["entities"])), str(self.delay)))
             for entity in self.args["entities"]:
                 self.log("entitiy: {}".format(entity))
-                travelTime = int(round(self.gmaps.get_distance_matrix(entity["from"], entity["to"])["duration_in_traffic"]["value"] / 60))
+                travelTime = int(round(self.get_distance_matrix(entity["from"], entity["to"])["duration_in_traffic"]["value"] / 60))
                 self.log("Updating {} to {} minutes".format(entity, str(travelTime)))
                 self.set_state(entity, travelTime)
         else:
             self.log("No entities defined", level = "ERROR")
+
+    def get_distance_matrix(self, origin, destination):
+        now = datetime.now()
+        matrix = self.gmaps.distance_matrix(origin,
+                                            destination,
+                                            mode="driving",
+                                            departure_time=now,
+                                            language="de",
+                                            traffic_model = "best_guess")
+        distance = matrix['rows'][0]['elements'][0]['distance']
+        duration = matrix['rows'][0]['elements'][0]['duration']
+        duration_in_traffic = matrix['rows'][0]['elements'][0]['duration_in_traffic']
+        return {"distance": distance, "duration": duration, "duration_in_traffic": duration_in_traffic}

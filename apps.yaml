@@ -1,6 +1,5 @@
 global_modules:
   - secrets
-  - gooogle_wrapper
 
 notfiyOfActionWhenAway:
   module: notfiyOfActionWhenAway
@@ -53,4 +52,3 @@ googleTravelTime:
       to: System Vertrieb Alexander GmbH, Borsigstraße, Wiesbaden
   global_dependencies:
     - secrets
-    - google_wrapper
