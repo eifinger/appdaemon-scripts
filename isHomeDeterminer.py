@@ -30,7 +30,7 @@ class IsHomeDeterminer(hass.Hass):
                 oneplus3 = new
             self.isHomeHandler(oneplus3T, oneplus3)
 
-    def isHomeHandler(self, oneplus3T, oneplus3)
+    def isHomeHandler(self, oneplus3T, oneplus3):
         if oneplus3 == "home" or oneplus3T == "home":
             self.set_state(self.args["isHome"], state = "on")
         if oneplus3 == "not_home" and oneplus3T == "not_home":
