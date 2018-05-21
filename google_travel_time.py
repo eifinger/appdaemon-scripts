@@ -30,7 +30,7 @@ class GoogleTravelTime(hass.Hass):
     
         self.handle = None
         self.max_api_calls = 2500
-        self.delay = int(round((((3600 * 24) / self.max_api_calls) * 1,1)))
+        self.delay = int(round(3600 * 24 / self.max_api_calls * 1,1))
         self.log("Delay is: {}".format(self.delay))
 
         self.calculate_travel_times()
