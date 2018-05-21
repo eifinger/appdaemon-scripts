@@ -29,12 +29,11 @@ import secrets
 class GoogleTravelTime(hass.Hass):
 
     def initialize(self):
-
         self.gmaps = googlemaps.googlemaps.Client(secrets.GOOGLE_MAPS_API_TOKEN)
     
         self.handle = None
         self.max_api_calls = 2500
-        self.delay = int(round(3600 * 24 / self.max_api_calls * 1,1))
+        self.delay = int(round(3600 * 24 / self.max_api_calls * 2))
         self.log("Delay is: {}".format(self.delay))
 
         self.calculate_travel_times()
@@ -46,15 +45,15 @@ class GoogleTravelTime(hass.Hass):
             self.delay = int(round(self.delay * len(self.args["entities"])))
             self.log("Found {} entities to update. Setting delay to {}".format(str(len(self.args["entities"])), str(self.delay)))
             for entity in self.args["entities"]:
-                self.log("entitiy: {}".format(entity))
-                travelTime = int(round(self.get_distance_matrix(entity["from"], entity["to"])["duration_in_traffic"]["value"] / 60))
-                self.log("Updating {} to {} minutes".format(entity, str(travelTime)))
-                self.set_state(entity, travelTime)
+                travelTime = self.get_distance_matrix(self.args["entities"][entity]["from"], self.args["entities"][entity]["to"])
+                roundedTravelTime = int(round(travelTime["duration_in_traffic"]["value"] / 60))
+                self.log("Updating {} to {} minutes".format(entity, str(roundedTravelTime)))
+                self.set_state(entity, state = roundedTravelTime)
         else:
             self.log("No entities defined", level = "ERROR")
 
     def get_distance_matrix(self, origin, destination):
-        now = datetime.now()
+        now = datetime.datetime.now()
         matrix = self.gmaps.distance_matrix(origin,
                                             destination,
                                             mode="driving",
