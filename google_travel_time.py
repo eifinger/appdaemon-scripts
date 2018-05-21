@@ -35,6 +35,11 @@ class GoogleTravelTime(hass.Hass):
         self.max_api_calls = 2500
         self.delay = int(round(3600 * 24 / self.max_api_calls * 2))
         self.log("Delay is: {}".format(self.delay))
+        if "entities" in self.args:
+            self.delay = int(round(self.delay * len(self.args["entities"])))
+            self.log("Found {} entities to update. Setting delay to {}".format(str(len(self.args["entities"])), str(self.delay)))
+        else:
+            self.log("No entities defined", level = "ERROR")
 
         self.calculate_travel_times()
         self.run_in(self.calculate_travel_times, self.delay)            
@@ -42,8 +47,6 @@ class GoogleTravelTime(hass.Hass):
     
     def calculate_travel_times(self, *kwargs):
         if "entities" in self.args:
-            self.delay = int(round(self.delay * len(self.args["entities"])))
-            self.log("Found {} entities to update. Setting delay to {}".format(str(len(self.args["entities"])), str(self.delay)))
             for entity in self.args["entities"]:
                 _from = self.args["entities"][entity]["from"]
                 if _from.startswith("secret_"):

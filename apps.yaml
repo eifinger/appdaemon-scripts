@@ -64,8 +64,6 @@ googleTravelTime:
       to: secret_home
     input_number.travel_time_home_from_work:
       from: secret_work
-      to: secret_home
-
-      
+      to: secret_home   
   global_dependencies:
     - secrets
