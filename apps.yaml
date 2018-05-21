@@ -48,7 +48,24 @@ googleTravelTime:
   class: GoogleTravelTime
   entities:
     input_number.travel_time_work_from_home:
-      from: Wilhelm-Theodor-Römheld-Straße 2, D-55130 Mainz, Germany
-      to: System Vertrieb Alexander GmbH, Borsigstraße, Wiesbaden
+      from: secret_home
+      to: secret_work
+    input_number.travel_time_work_from_sindlingen:
+      from: secret_sindlingen
+      to: secret_work
+    input_number.travel_time_sindlingen_from_home:
+      from: secret_home
+      to: secret_sindlingen
+    input_number.travel_time_sindlingen_from_work:
+      from: secret_work
+      to: secret_sindlingen
+    input_number.travel_time_home_from_sindlingen:
+      from: secret_sindlingen
+      to: secret_home
+    input_number.travel_time_home_from_work:
+      from: secret_work
+      to: secret_home
+
+      
   global_dependencies:
     - secrets
