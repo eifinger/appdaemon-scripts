@@ -40,10 +40,10 @@ class GoogleTravelTime(hass.Hass):
     def calculate_travel_times(self, *kwargs):
         if "entities" in self.args:
             self.delay = int(round(self.delay * len(self.args["entities"])))
-            self.log("Found {} entities to update. Setting delay to {}", format(len(self.args["entities"]), self.delay))
+            self.log("Found {} entities to update. Setting delay to {}", format(str(len(self.args["entities"])), str(self.delay)))
             for entity in self.args["entities"]:
                 travelTime = int(round(self.gmaps.get_distance_matrix(entity["from"], entity["to"])["duration_in_traffic"]["value"] / 60))
-                self.log("Updating {} to {} minutes".format(entity, travelTime))
+                self.log("Updating {} to {} minutes".format(entity, str(travelTime)))
                 self.set_state(entity, travelTime)
         else:
             self.log("No entities defined", level = "ERROR")
