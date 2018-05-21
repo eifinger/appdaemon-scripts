@@ -1,0 +1,41 @@
+notfiyOfActionWhenAway:
+  module: notfiyOfActionWhenAway
+  class: NotfiyOfActionWhenAway
+  sensor: binary_sensor.door_window_sensor_158d000126a57b,binary_sensor.motion_sensor_158d00012aab97,media_player.denon_avrx1300w,switch.livingroom_large_lamp,switch.studyroom_lamp,switch.livingroom_small_lamp,switch.studyroom_ceiling_lamp,switch.storageroom_ceiling_lamp,switch.kitchen_ceiling_lamp,switch.livingroom_ceiling,switch.lobby_ceiling,switch.snowboard,light.bedroom_yeelight,light.bar_table
+  isHome: input_boolean.is_home
+
+#eventMonitor:
+#  module: eventMonitor
+#  class: Monitor
+#  events: click,motion_action
+
+#Toggle Studyroom lamp when Xiaomi Button is clicked once
+xiaomiroundButtonClicked:
+  module: buttonClicked
+  class: ButtonClicked
+  sensor: binary_sensor.switch_158d00012db9e5
+  actor_single: switch.studyroom_lamp
+  actor_double: switch.studyroom_ceiling_lamp
+
+storageRoomMotionTrigger:
+  module: motionTrigger
+  class: MotionTrigger
+  sensor: binary_sensor.motion_sensor_158d00012aab97
+  entity_on: switch.storageroom_ceiling_lamp
+  entity_off: switch.storageroom_ceiling_lamp
+
+comingHome:
+  module: comingHome
+  class: ComingHome
+  sensor: binary_sensor.door_window_sensor_158d000126a57b
+  isHome: input_boolean.is_home
+  actor: switch.livingroom_large_lamp
+
+presence:
+  module: isHomeDeterminer
+  class: IsHomeDeterminer
+  isHome: input_boolean.is_home
+
+newWifiDeviceNotify:
+  module: newWifiDeviceNotify
+  class: DeviceNotify
