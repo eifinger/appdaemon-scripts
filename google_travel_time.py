@@ -62,12 +62,13 @@ class GoogleTravelTime(hass.Hass):
                 self.log("Updating {} to {} minutes".format(entity, str(roundedTravelTime)))
                 self.set_state(entity, state = roundedTravelTime)
                 #Notify component
-                if self.get_state(self.args["entities"][entity]["notify_input_boolean"]) == "on":
+                if roundedTravelTime <= travelTime["duration"]["value"] * 1.2 and self.get_state(self.args["entities"][entity]["notify_input_boolean"]) == "on":
                     if self.args["entities"][entity]["to"].endswith("work"):
                         _to = "Work"
                     if self.args["entities"][entity]["to"].endswith("home"):
                         _to = "Home"
                     message = messages.journey_start().format(_to)
+                    self.log("Notify user")
                     self.call_service("notify/slack",message=message)
                     self.turn_off(self.args["entities"][entity]["notify_input_boolean"])
         else:
