@@ -39,10 +39,14 @@ presence:
   module: isHomeDeterminer
   class: IsHomeDeterminer
   isHome: input_boolean.is_home
+  global_dependencies:
+    - messages
 
 newWifiDeviceNotify:
   module: newWifiDeviceNotify
   class: DeviceNotify
+  global_dependencies:
+    - messages
 
 googleTravelTime:
   module: google_travel_time

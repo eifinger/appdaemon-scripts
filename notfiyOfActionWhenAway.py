@@ -1,4 +1,5 @@
 import appdaemon.plugins.hass.hassapi as hass
+import messages
 #
 # App to send notification when a sensor changes state
 #
@@ -24,7 +25,7 @@ class NotfiyOfActionWhenAway(hass.Hass):
         isHome = self.get_state(self.args["isHome"])
         if isHome == "off":
           self.log("{} changed to {}".format(self.friendly_name(entity), new))
-          self.call_service("notify/slack",message="{} changed to {}".format(self.friendly_name(entity), new))
+          self.call_service("notify/slack",message=messages.device_change_alert().format(self.friendly_name(entity), new))
       else:
         self.log("isHome is not defined", level= "ERROR")
       
