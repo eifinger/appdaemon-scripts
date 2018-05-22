@@ -48,6 +48,12 @@ newWifiDeviceNotify:
   global_dependencies:
     - messages
 
+notifyFailedLogin:
+  module: notifyFailedLogin
+  class: NotifyFailedLogin
+  global_dependencies:
+    - messages
+
 googleTravelTime:
   module: google_travel_time
   class: GoogleTravelTime

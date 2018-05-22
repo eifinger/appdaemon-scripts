@@ -10,7 +10,7 @@ import messages
 # Version 1.0:
 #   Initial Version
 
-class NotfiyOfActionWhenAway(hass.Hass):
+class NotifyFailedLogin(hass.Hass):
 
   def initialize(self):
     self.listen_state(self.state_change, "persistent_notification.httplogin")

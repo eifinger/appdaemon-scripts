@@ -7,5 +7,5 @@ class DeviceNotify(appapi.AppDaemon):
 
   def newDevice(self, event_name, data, kwargs):
     if event_name == "device_tracker_new_device":
-        message = .format(data)
+        message = messages.unknown_device_connected().format(data)
         self.call_service("notify/slack",message=message)
