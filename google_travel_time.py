@@ -2,26 +2,29 @@ import appdaemon.plugins.hass.hassapi as hass
 import googlemaps
 import datetime
 import secrets
+import messages
 
 #
-# App to turn something on when motion detected then off again after a delay if no more motion was detected
+# App which calculates travel time between two locations and if wanted notifies the user if the travel time is within a normal amount
 #
 #
 # Args:
 #
 # entities: Entity state to update
+# notify_input_boolean: input_boolean determining whether to notify
 # entity.from : Location from where to drive
 # entity.to : Location to drive to
 # example:
 # entities:
 #  input_number.travel_from_home_to_work:
+#    notify_input_boolean: input_boolean.travel_from_home_to_work
 #    from: Mainz
 #    to: Wiesbaden
 #
 # Release Notes
 #
 # Version 1.1:
-#   Add ability for other apps to cancel the timer
+#   Add notification feature
 #
 # Version 1.0:
 #   Initial Version
@@ -58,6 +61,15 @@ class GoogleTravelTime(hass.Hass):
                 roundedTravelTime = int(round(travelTime["duration_in_traffic"]["value"] / 60))
                 self.log("Updating {} to {} minutes".format(entity, str(roundedTravelTime)))
                 self.set_state(entity, state = roundedTravelTime)
+                #Notify component
+                if self.get_state(self.args["entities"][entity]["notify_input_boolean"]) == "on":
+                    if self.args["entities"][entity]["to"].endswith("work"):
+                        _to = "Work"
+                    if self.args["entities"][entity]["to"].endswith("home"):
+                        _to = "Home"
+                    message = messages.journey_start().format(_to)
+                    self.call_service("notify/slack",message=message)
+                    self.turn_off(self.args["entities"][entity]["notify_input_boolean"])
         else:
             self.log("No entities defined", level = "ERROR")
 
