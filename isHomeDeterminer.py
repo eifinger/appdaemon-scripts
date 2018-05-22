@@ -1,4 +1,5 @@
 import appdaemon.plugins.hass.hassapi as hass
+import messages
 #
 # App to Turn on Lobby Lamp when Door openes and OnePlus is not Home
 #
@@ -35,5 +36,5 @@ class IsHomeDeterminer(hass.Hass):
             self.set_state(self.args["isHome"], state = "on")
         if oneplus3 == "not_home" and oneplus3T == "not_home":
             self.set_state(self.args["isHome"], state = "off")
-            self.call_service("notify/slack",message="Everyone left home. Setting isHome to off")
+            self.call_service("notify/slack",message=messages.isHome_off())
       
