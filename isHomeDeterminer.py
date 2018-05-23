@@ -33,8 +33,10 @@ class IsHomeDeterminer(hass.Hass):
 
     def isHomeHandler(self, oneplus3T, oneplus3):
         if oneplus3 == "home" or oneplus3T == "home":
+            self.log("Setting {} to on".format(self.args["isHome"]))
             self.set_state(self.args["isHome"], state = "on")
         if oneplus3 == "not_home" and oneplus3T == "not_home":
+            self.log("Setting {} to off".format(self.args["isHome"]))
             self.set_state(self.args["isHome"], state = "off")
             self.call_service("notify/slack",message=messages.isHome_off())
       
