@@ -69,6 +69,7 @@ class GoogleTravelTime(hass.Hass):
                     self.turn_off(self.args["entities"][entity]["notify_input_boolean"])
         else:
             self.log("No entities defined", level = "ERROR")
+        self.run_in(self.calculate_travel_times, self.delay) 
 
     def get_distance_matrix(self, origin, destination):
         now = datetime.datetime.now()
