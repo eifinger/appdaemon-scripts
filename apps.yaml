@@ -28,11 +28,6 @@ storageRoomMotionTrigger:
   entity_on: switch.storageroom_ceiling_lamp
   entity_off: switch.storageroom_ceiling_lamp
 
-isHomeDeterminer:
-  module: isHomeDeterminer
-  class: IsHomeDeterminer
-  isHome: input_boolean.is_home
-
 comingHome:
   module: comingHome
   class: ComingHome
@@ -46,6 +41,7 @@ presence:
   isHome: input_boolean.is_home
   global_dependencies:
     - messages
+    - secrets
 
 newWifiDeviceNotify:
   module: newWifiDeviceNotify

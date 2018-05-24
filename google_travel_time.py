@@ -43,8 +43,6 @@ class GoogleTravelTime(hass.Hass):
             self.log("Found {} entities to update. Setting delay to {}".format(str(len(self.args["entities"])), str(self.delay)))
         else:
             self.log("No entities defined", level = "ERROR")
-
-        self.calculate_travel_times()
         self.run_in(self.calculate_travel_times, self.delay)            
 
     
