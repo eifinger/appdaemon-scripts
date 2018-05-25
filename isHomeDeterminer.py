@@ -15,9 +15,9 @@ import secrets
 class IsHomeDeterminer(hass.Hass):
 
     def initialize(self):
-        oneplus3 = self.get_state(self.get_secret("secret_device_user_one"))
-        oneplus3T = self.get_state(self.get_secret("secret_device_user_two"))
-        self.isHomeHandler(oneplus3T, oneplus3)
+        device_user_one = self.get_state(self.get_secret("secret_device_user_one"))
+        device_user_two = self.get_state(self.get_secret("secret_device_user_two"))
+        self.isHomeHandler(device_user_two, device_user_one)
         
         self.listen_state(self.state_change, self.get_secret("secret_device_user_one"))
         self.listen_state(self.state_change, self.get_secret("secret_device_user_two"))
@@ -25,18 +25,20 @@ class IsHomeDeterminer(hass.Hass):
     def state_change(self, entity, attribute, old, new, kwargs):
         if new != "":
             if entity == self.get_secret("secret_device_user_two"):
-                oneplus3 = self.get_state(self.get_secret("secret_device_user_one"))
-                oneplus3T = new
+                device_user_one = self.get_state(self.get_secret("secret_device_user_one"))
+                self.isHomeHandler(new, device_user_one)
+                self.call_service("notify/slack", message=messages.welcome_home().format(self.get_secret("secret_name_user_one")))
             if entity == self.get_secret("secret_device_user_one"):
-                oneplus3T = self.get_state(self.get_secret("secret_device_user_two"))
-                oneplus3 = new
-            self.isHomeHandler(oneplus3T, oneplus3)
+                device_user_two = self.get_state(self.get_secret("secret_device_user_two"))
+                self.isHomeHandler(new, device_user_two)
+                self.call_service("notify/slack", message=messages.welcome_home().format(self.get_secret("secret_name_user_two")))
+            
 
-    def isHomeHandler(self, oneplus3T, oneplus3):
-        if oneplus3 == "home" or oneplus3T == "home":
+    def isHomeHandler(self, new, other):
+        if new == "home" or other == "home":
             self.log("Setting {} to on".format(self.args["isHome"]))
             self.set_state(self.args["isHome"], state = "on")
-        if oneplus3 == "not_home" and oneplus3T == "not_home":
+        if new == "not_home" and other == "not_home":
             self.log("Setting {} to off".format(self.args["isHome"]))
             self.set_state(self.args["isHome"], state = "off")
             self.call_service("notify/slack",message=messages.isHome_off())

@@ -35,6 +35,13 @@ def failed_login_detected():
         return "Alarm: Failed login detected."
     return "Alarm: Failed login detected."
 
+def welcome_home():
+    if language == "de":
+        return "Willkommen zu Hause {}."
+    if language == "en":
+        return "Welcome Home {}."
+    return "Welcome Home {}."
+
     
     
     
