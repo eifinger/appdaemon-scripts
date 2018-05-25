@@ -82,7 +82,15 @@ googleTravelTime:
     input_number.travel_time_home_from_work:
       notify_input_boolean: input_boolean.travel_time_home_from_work
       from: secret_work
-      to: secret_home   
+      to: secret_home  
+    input_number.travel_time_elmo_from_home:
+      notify_input_boolean: input_boolean.travel_time_elmo_from_home
+      from: secret_home
+      to: secret_elmo_location   
+    input_number.travel_time_elmo_from_sindlingen:
+      notify_input_boolean: input_boolean.travel_time_elmo_from_sindlingen
+      from: secret_sindlingen
+      to: secret_elmo_location   
   global_dependencies:
     - secrets
     - messages
