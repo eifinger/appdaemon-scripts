@@ -16,17 +16,17 @@ def isHome_off():
 
 def unknown_device_connected():
     if language == "de":
-        return "Unbekanntes Gerät entdeckt: {}"
+        return "@here Unbekanntes Gerät entdeckt: {}"
     if language == "en":
-        return "Unknown device connected: {}"
-    return "Unknown device connected: {}"
+        return "@here Unknown device connected: {}"
+    return "@here Unknown device connected: {}"
 
 def device_change_alert():
     if language == "de":
-        return "Alarm: {} ist gewechselt auf {}"
+        return "@here Alarm: {} ist gewechselt auf {}"
     if language == "en":
-        return "Alarm: {} changed to {}"
-    return "Alarm: {} changed to {}"
+        return "@here Alarm: {} changed to {}"
+    return "@here Alarm: {} changed to {}"
 
 def failed_login_detected():
     if language == "de":
