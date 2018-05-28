@@ -30,10 +30,10 @@ def device_change_alert():
 
 def failed_login_detected():
     if language == "de":
-        return "Alarm: Fehlgeschlagener Login festgestellt."
+        return "@here Alarm: Fehlgeschlagener Login festgestellt."
     if language == "en":
-        return "Alarm: Failed login detected."
-    return "Alarm: Failed login detected."
+        return "@here Alarm: Failed login detected."
+    return "@here Alarm: Failed login detected."
 
 def welcome_home():
     if language == "de":
