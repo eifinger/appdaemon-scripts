@@ -15,12 +15,14 @@ import secrets
 class IsHomeDeterminer(hass.Hass):
 
     def initialize(self):
+        self.listen_state_handle_list = []
+
         device_user_one = self.get_state(self.get_secret("secret_device_user_one"))
         device_user_two = self.get_state(self.get_secret("secret_device_user_two"))
         self.isHomeHandler(device_user_two, device_user_one)
         
-        self.listen_state(self.state_change, self.get_secret("secret_device_user_one"))
-        self.listen_state(self.state_change, self.get_secret("secret_device_user_two"))
+        self.listen_state_handle_list.append(self.listen_state(self.state_change, self.get_secret("secret_device_user_one")))
+        self.listen_state_handle_list.append(self.listen_state(self.state_change, self.get_secret("secret_device_user_two")))
     
     def state_change(self, entity, attribute, old, new, kwargs):
         if new != "":
@@ -48,4 +50,8 @@ class IsHomeDeterminer(hass.Hass):
             return secrets.secret_dict[key]
         else:
             self.log("Could not find {} in secret_dict".format(key))
+
+    def terminate(self):
+        for listen_state_handle in self.listen_state_handle_list:
+        self.cancel_listen_state(listen_state_handle)
       

@@ -15,9 +15,11 @@ import appdaemon.plugins.hass.hassapi as hass
 class ComingHome(hass.Hass):
 
   def initialize(self):
+    self.listen_state_handle_list = []
+
     if "sensor" in self.args:
       for sensor in self.split_device_list(self.args["sensor"]):
-        self.listen_state(self.state_change, sensor)
+        self.listen_state_handle_list.append(self.listen_state(self.state_change, sensor))
     
   def state_change(self, entity, attribute, old, new, kwargs):
     if new != "":
@@ -28,4 +30,8 @@ class ComingHome(hass.Hass):
           self.turn_on(self.args["actor"])
       else:
         self.log("isHome is not defined", level= "ERROR")
+
+  def terminate(self):
+    for listen_state_handle in self.listen_state_handle_list:
+      self.cancel_listen_state(listen_state_handle)
       

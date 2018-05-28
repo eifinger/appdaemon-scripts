@@ -34,7 +34,6 @@ class GoogleTravelTime(hass.Hass):
     def initialize(self):
         self.gmaps = googlemaps.googlemaps.Client(secrets.GOOGLE_MAPS_API_TOKEN)
     
-        self.handle = None
         self.max_api_calls = 2500
         self.delay = int(round(3600 * 24 / self.max_api_calls * 2))
         self.log("Delay is: {}".format(self.delay))
@@ -43,7 +42,7 @@ class GoogleTravelTime(hass.Hass):
             self.log("Found {} entities to update. Setting delay to {}".format(str(len(self.args["entities"])), str(self.delay)))
         else:
             self.log("No entities defined", level = "ERROR")
-        self.run_in(self.calculate_travel_times, self.delay)            
+        self.timer_handle = self.run_in(self.calculate_travel_times, self.delay)            
 
     
     def calculate_travel_times(self, *kwargs):
@@ -87,3 +86,6 @@ class GoogleTravelTime(hass.Hass):
             return secrets.secret_dict[key]
         else:
             self.log("Could not find {} in secret_dict".format(key))
+
+    def terminate(self):
+        self.cancel_timer(self.timer_handle)

@@ -23,7 +23,8 @@ class MotionTrigger(hass.Hass):
 
     def initialize(self):
     
-        self.handle = None
+        self.timer_handle = None
+        self.listen_event_handle_list = []
 
         # Subscribe to sensors
         if "sensor" in self.args:
@@ -36,7 +37,7 @@ class MotionTrigger(hass.Hass):
             else:
                 self.log("No entitity_off defined", level = "WARN")
 
-            self.listen_event(self.motion_detected, "motion")
+            self.listen_event_handle_list.append(self.listen_event(self.motion_detected, "motion"))
         else:
             self.log("No sensor defined", level = "ERROR")
 
@@ -49,8 +50,8 @@ class MotionTrigger(hass.Hass):
             delay = self.args["delay"]
         else:
             delay = 70
-        self.cancel_timer(self.handle)
-        self.handle = self.run_in(self.light_off, delay)
+        self.cancel_timer(self.timer_handle)
+        self.timer_handle = self.run_in(self.light_off, delay)
   
     def light_off(self, kwargs):
         if "entity_off" in self.args:
@@ -59,5 +60,8 @@ class MotionTrigger(hass.Hass):
         else:
             self.log("No entitity_off defined", level = "WARN")
         
-    def cancel(self):
-        self.cancel_timer(self.handle)
+    def terminate(self):
+        self.cancel_timer(self.timer_handle)
+
+        for listen_event_handle in self.listen_event_handle_list:
+            self.cancel_listen_event(listen_event_handle)
