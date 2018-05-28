@@ -42,6 +42,19 @@ def welcome_home():
         return "Welcome Home {}."
     return "Welcome Home {}."
 
+def forgot_window_open():
+    if language == "de":
+        return "@here Du hast {} offen gelassen Dummie."
+    if language == "en":
+        return "@here You left open {} Dummy."
+    return "@here You left open {} Dummy."
+
+def forgot_light_on():
+    if language == "de":
+        return "Du hast {} angelassen. Ich habe es für dich ausgemacht."
+    if language == "en":
+        return "You left on {}. I turned it off for you"
+    return "You left on {}. I turned it off for you"
     
     
     
