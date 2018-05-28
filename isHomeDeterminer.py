@@ -19,7 +19,7 @@ class IsHomeDeterminer(hass.Hass):
 
         device_user_one = self.get_state(self.get_secret("secret_device_user_one"))
         device_user_two = self.get_state(self.get_secret("secret_device_user_two"))
-        self.isHomeHandler(device_user_two, None, device_user_one)
+        self.isHomeHandler(device_user_two, device_user_two, device_user_one)
         
         self.listen_state_handle_list.append(self.listen_state(self.state_change, self.get_secret("secret_device_user_one")))
         self.listen_state_handle_list.append(self.listen_state(self.state_change, self.get_secret("secret_device_user_two")))
