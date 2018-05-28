@@ -17,9 +17,10 @@ class NotifyFailedLogin(hass.Hass):
     self.listen_state_handle_list.append(self.listen_state(self.state_change, "persistent_notification.httplogin"))
     
   def state_change(self, entity, attribute, old, new, kwargs):
-    if new != "" and new != "unkown":
-        self.log("Failed login attempt detected.")
-        self.call_service("notify/slack",message=messages.failed_login_detected())
+    if new != "" and new == "notifying":
+        message = self.get_state("persistent_notification.httplogin",attribute="message")
+        self.log(message)
+        self.call_service("notify/slack",message=messages.failed_login_detected().format(message))
 
   def terminate(self):
     for listen_state_handle in self.listen_state_handle_list:
