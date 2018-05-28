@@ -21,17 +21,15 @@ class DetectWrongStateWhenLeaving(hass.Hass):
     
   def state_change(self, entity, attribute, old, new, kwargs):
     if new != "" and new == "off":
-    for sensor in self.split_device_list(self.args["sensor"]):
-      state = self.get_state(sensor)
-      if state == "on":
-        self.turn_off(sensor)
-        self.log(messages.forgot_light_on().format(self.friendly_name(sensor)))
-        self.call_service("notify/slack",message=messages.forgot_light_on().format(self.friendly_name(sensor)))
-      if state == "open":
-        self.log(messages.forgot_window_open().format(self.friendly_name(sensor)))
-        self.call_service("notify/slack",message=messages.forgot_window_open().format(self.friendly_name(sensor)))
-      else:
-        self.log("isHome is not defined", level= "ERROR")
+      for sensor in self.split_device_list(self.args["sensor"]):
+        state = self.get_state(sensor)
+        if state == "on":
+          self.turn_off(sensor)
+          self.log(messages.forgot_light_on().format(self.friendly_name(sensor)))
+          self.call_service("notify/slack",message=messages.forgot_light_on().format(self.friendly_name(sensor)))
+        if state == "open":
+          self.log(messages.forgot_window_open().format(self.friendly_name(sensor)))
+          self.call_service("notify/slack",message=messages.forgot_window_open().format(self.friendly_name(sensor)))
 
   def terminate(self):
     for listen_state_handle in self.listen_state_handle_list:
