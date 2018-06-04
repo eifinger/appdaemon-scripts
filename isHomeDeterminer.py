@@ -26,7 +26,9 @@ class IsHomeDeterminer(hass.Hass):
     
     def state_change(self, entity, attribute, old, new, kwargs):
         if new != "" and new != old:
-            if new == "Home":
+            self.log("{} changed from {} to {}".format(entity,old,new))
+            if new == "home":
+                self.log("{} came Home".format(entity))
                 if entity == self.get_secret("secret_device_user_one"):
                     device_user_one_state = self.get_state(self.get_secret("secret_device_user_one"))
                     self.isHomeHandler(new, old, device_user_one_state)
