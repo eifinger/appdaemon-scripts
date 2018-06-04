@@ -101,3 +101,10 @@ googleTravelTime:
   global_dependencies:
     - secrets
     - messages
+
+leavingZoneNotifier:
+  module: leavingZoneNotifier
+  class: LeavingZoneNotifier
+  global_dependencies:
+    - secrets
+    - messages
