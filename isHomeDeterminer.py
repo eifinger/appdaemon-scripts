@@ -26,14 +26,15 @@ class IsHomeDeterminer(hass.Hass):
     
     def state_change(self, entity, attribute, old, new, kwargs):
         if new != "" and new != old:
-            if entity == self.get_secret("secret_device_user_one"):
-                device_user_one_state = self.get_state(self.get_secret("secret_device_user_one"))
-                self.isHomeHandler(new, old, device_user_one_state)
-                self.call_service("notify/slack", message=messages.welcome_home().format(self.get_secret("secret_name_user_one")))
-            if entity == self.get_secret("secret_device_user_two"):
-                device_user_two_state = self.get_state(self.get_secret("secret_device_user_two"))
-                self.isHomeHandler(new, old, device_user_two_state)
-                self.call_service("notify/slack", message=messages.welcome_home().format(self.get_secret("secret_name_user_two")))
+            if new == "Home":
+                if entity == self.get_secret("secret_device_user_one"):
+                    device_user_one_state = self.get_state(self.get_secret("secret_device_user_one"))
+                    self.isHomeHandler(new, old, device_user_one_state)
+                    self.call_service("notify/slack", message=messages.welcome_home().format(self.get_secret("secret_name_user_one")))
+                if entity == self.get_secret("secret_device_user_two"):
+                    device_user_two_state = self.get_state(self.get_secret("secret_device_user_two"))
+                    self.isHomeHandler(new, old, device_user_two_state)
+                    self.call_service("notify/slack", message=messages.welcome_home().format(self.get_secret("secret_name_user_two")))
             
 
     def isHomeHandler(self, new, old, other):
