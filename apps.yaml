@@ -102,9 +102,11 @@ googleTravelTime:
     - secrets
     - messages
 
-leavingZoneNotifier:
+leavingWorkNotifierUserOne:
   module: leavingZoneNotifier
   class: LeavingZoneNotifier
+  proximity: proximity.work
+  device: secret_device_user_one
   global_dependencies:
     - secrets
     - messages

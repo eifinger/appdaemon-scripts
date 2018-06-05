@@ -55,6 +55,13 @@ def forgot_light_on():
     if language == "en":
         return "You left on {}. I turned it off for you"
     return "You left on {}. I turned it off for you"
+
+def user_is_leaving_zone():
+    if language == "de":
+        return "@here {} ist gerade von {} weg."
+    if language == "en":
+        return "@here {} just left {}"
+    return "@here {} just left {}" 
     
     
     
