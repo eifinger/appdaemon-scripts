@@ -28,7 +28,7 @@ class LeavingZoneNotifier(hass.Hass):
         self.log("device: {}".format(device))
         self.log("entity: {}, new: {}, attribute: {}".format(entity,new, attributes))
 
-        if attributes["nearest"] == device and attributes["dir_of_travel"] == "away_from":
+        if new["attributes"]["nearest"] == device and new["attributes"]["dir_of_travel"] == "away_from":
             if self.args["device"] == "secret_device_user_one":
                 user = self.get_secret("secret_name_user_one")
             self.log(messages.user_is_leaving_zone().format(user, self.friendly_name(self.args["proximity"])))
