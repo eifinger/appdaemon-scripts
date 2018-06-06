@@ -18,17 +18,17 @@ class LeavingZoneNotifier(hass.Hass):
     def initialize(self):
         self.listen_state_handle_list = []
 
-        self.listen_state_handle_list.append(self.listen_state(self.state_change, self.args["proximity"]))
+        self.listen_state_handle_list.append(self.listen_state(self.state_change, self.args["proximity"], attribute = "all"))
     
-    def state_change(self, entity, attribute, old, new, kwargs):
+    def state_change(self, entity, attributes, old, new, kwargs):
         device = self.args["device"]
         if device.startswith("secret_"):
             device = self.get_secret(device)
 
         self.log("device: {}".format(device))
-        self.log("entity: {}, new: {}, attribute: {}".format(entity,new, attribute))
+        self.log("entity: {}, new: {}, attribute: {}".format(entity,new, attributes))
 
-        if attribute["nearest"] == device and attribute["dir_of_travel"] == "away_from":
+        if attributes["nearest"] == device and attributes["dir_of_travel"] == "away_from":
             if self.args["device"] == "secret_device_user_one":
                 user = self.get_secret("secret_name_user_one")
             self.log(messages.user_is_leaving_zone().format(user, self.friendly_name(self.args["proximity"])))
