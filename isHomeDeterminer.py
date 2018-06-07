@@ -6,7 +6,8 @@ import secrets
 #
 # Args:
 #
-# isHome: input_boolean which shows if someone is home eg input_boolean.isHome
+# isHome: input_boolean which shows if someone is home e.g. input_boolean.isHome
+# door_sensor: Door sensor which indicated the frontdoor opened e.g. binary_sensor.door_window_sensor_158d000126a57b
 # Release Notes
 #
 # Version 1.0:
@@ -37,6 +38,13 @@ class IsHomeDeterminer(hass.Hass):
                     device_user_two_state = self.get_state(self.get_secret("secret_device_user_two"))
                     self.isHomeHandler(new, old, device_user_two_state)
                     self.call_service("notify/slack", message=messages.welcome_home().format(self.get_secret("secret_name_user_two")))
+            else:
+                if entity == self.get_secret("secret_device_user_one"):
+                    device_user_one_state = self.get_state(self.get_secret("secret_device_user_one"))
+                    self.isHomeHandler(new, old, device_user_one_state)
+                if entity == self.get_secret("secret_device_user_two"):
+                    device_user_two_state = self.get_state(self.get_secret("secret_device_user_two"))
+                    self.isHomeHandler(new, old, device_user_two_state)
             
 
     def isHomeHandler(self, new, old, other):
