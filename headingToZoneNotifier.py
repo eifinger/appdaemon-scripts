@@ -14,7 +14,7 @@ import secrets
 # Version 1.0:
 #   Initial Version
 
-class LeavingZoneNotifier(hass.Hass):
+class HeadingToZoneNotifier(hass.Hass):
 
     def initialize(self):
         user_name = self.args["user_name"]
@@ -33,7 +33,7 @@ class LeavingZoneNotifier(hass.Hass):
         self.log("device: {}".format(device))
         self.log("entity: {}, new: {}, attribute: {}".format(entity,new, attributes))
 
-        if new["attributes"]["nearest"] == device and new["attributes"]["dir_of_travel"] == "away_from":
+        if new["attributes"]["nearest"] == device and new["attributes"]["dir_of_travel"] == "towards":
             self.log(messages.user_is_leaving_zone().format(user_name, self.friendly_name(self.args["proximity"])))
             self.call_service("notify/slack",message=messages.user_is_leaving_zone().format(user_name, self.friendly_name(self.args["proximity"])))
 

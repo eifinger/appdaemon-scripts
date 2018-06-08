@@ -42,7 +42,7 @@ comingHome:
   isHome: input_boolean.is_home
   actor: switch.livingroom_large_lamp
 
-presence:
+isHomeDeterminer:
   module: isHomeDeterminer
   class: IsHomeDeterminer
   isHome: input_boolean.is_home
@@ -107,6 +107,17 @@ leavingWorkNotifierUserOne:
   class: LeavingZoneNotifier
   proximity: proximity.work
   device: secret_device_user_one
+  user_name: secret_name_user_one
+  global_dependencies:
+    - secrets
+    - messages
+
+headingHomekNotifierUserOne:
+  module: headingToZoneNotifier
+  class: HeadingToZoneNotifier
+  proximity: proximity.home
+  device: secret_device_user_one
+  user_name: secret_name_user_one
   global_dependencies:
     - secrets
     - messages

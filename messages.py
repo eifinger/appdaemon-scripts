@@ -62,6 +62,13 @@ def user_is_leaving_zone():
     if language == "en":
         return "@here {} just left {}"
     return "@here {} just left {}" 
+
+def user_is_heading_to_zone():
+    if language == "de":
+        return "@here {} ist auf dem Weg nach {}."
+    if language == "en":
+        return "@here {} is on his way to {}"
+    return "@here {} is on his way to {}" 
     
     
     
