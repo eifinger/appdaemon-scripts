@@ -51,7 +51,7 @@ class IsHomeDeterminer(hass.Hass):
         if new == "home" or other == "home":
             self.log("Setting {} to on".format(self.args["isHome"]))
             self.set_state(self.args["isHome"], state = "on")
-        if new == "not_home" and other == "not_home":
+        if new == "not_home" and other == "not_home" and old == "home":
             self.log("Setting {} to off".format(self.args["isHome"]))
             self.set_state(self.args["isHome"], state = "off")
             if new != old:
