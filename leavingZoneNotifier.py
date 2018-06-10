@@ -33,7 +33,7 @@ class LeavingZoneNotifier(hass.Hass):
         self.log("device: {}".format(device))
         self.log("entity: {}, new: {}, attribute: {}".format(entity,new, attributes))
 
-        if new["attributes"]["nearest"] == device and new["attributes"]["dir_of_travel"] == "away_from":
+        if new["attributes"]["nearest"] == device and old["attributes"]["dir_of_travel"] != "away_from" and new["attributes"]["dir_of_travel"] == "away_from":
             self.log(messages.user_is_leaving_zone().format(self.user_name, self.friendly_name(self.args["proximity"])))
             self.call_service("notify/slack",message=messages.user_is_leaving_zone().format(self.user_name, self.friendly_name(self.args["proximity"])))
 
