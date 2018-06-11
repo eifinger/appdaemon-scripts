@@ -32,6 +32,9 @@ class LeavingZoneNotifier(hass.Hass):
         self.listen_state_handle_list = []
         self.timer_handle = None
 
+        self.last_triggered = 0
+        self.time_between_messages = 600
+
         self.listen_state_handle_list.append(self.listen_state(self.state_change, self.args["proximity"], attribute = "all"))
         self.listen_state_handle_list.append(self.listen_state(self.zone_state_change, self.args["device"], attribute = "all"))
     
@@ -47,9 +50,12 @@ class LeavingZoneNotifier(hass.Hass):
         if (new["attributes"]["nearest"] == device and 
         old["attributes"]["dir_of_travel"] != "away_from" and 
         new["attributes"]["dir_of_travel"] == "away_from" and
-        self.device_zone == self.args["zone"]):
+        self.device_zone == self.args["zone"] and
+        (self.time() - self.last_triggered) > self.time_between_messages):
             self.log(messages.user_is_leaving_zone().format(self.user_name, self.friendly_name(self.args["proximity"])))
             self.call_service("notify/slack",message=messages.user_is_leaving_zone().format(self.user_name, self.friendly_name(self.args["proximity"])))
+            
+        self.last_triggered = self.time()
 
 
     def zone_state_change(self, entity, attributes, old, new, kwargs):

@@ -23,7 +23,7 @@ class HeadingToZoneNotifier(hass.Hass):
 
         self.listen_state_handle_list = []
 
-        self.last_triggered = None
+        self.last_triggered = 0
         self.time_between_messages = 600
 
         self.listen_state_handle_list.append(self.listen_state(self.state_change, self.args["proximity"], attribute = "all"))
@@ -39,17 +39,17 @@ class HeadingToZoneNotifier(hass.Hass):
         if (new["attributes"]["nearest"] == device and 
         old["attributes"]["dir_of_travel"] != "towards" and 
         new["attributes"]["dir_of_travel"] == "towards"):
-            if self.last_triggered == None:
+            if self.last_triggered == 0:
                 self.last_triggered = self.time()
                 self.log(messages.user_is_heading_to_zone().format(self.user_name, self.friendly_name(self.args["proximity"])))
                 self.call_service("notify/slack",message=messages.user_is_heading_to_zone().format(self.user_name, self.friendly_name(self.args["proximity"])))
-            if (self.last_triggered - self.time()) > self.time_between_messages and self.last_triggered != None:
+            if self.last_triggered != 0 and (self.time() - self.last_triggered) > self.time_between_messages:
                 self.last_triggered = self.time()
                 self.log(messages.user_is_still_heading_to_zone().format(self.user_name, self.friendly_name(self.args["proximity"])))
                 self.call_service("notify/slack",message=messages.user_is_still_heading_to_zone().format(self.user_name, self.friendly_name(self.args["proximity"])))
 
         if new["attributes"]["nearest"] == device and old["attributes"]["dir_of_travel"] == "arrived":
-            self.last_triggered = None
+            self.last_triggered = 0
 
 
 
