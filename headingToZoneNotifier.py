@@ -35,7 +35,7 @@ class HeadingToZoneNotifier(hass.Hass):
 
         if new["attributes"]["nearest"] == device and old["attributes"]["dir_of_travel"] != "towards" and new["attributes"]["dir_of_travel"] == "towards":
             self.log(messages.user_is_leaving_zone().format(self.user_name, self.friendly_name(self.args["proximity"])))
-            self.call_service("notify/slack",message=messages.user_is_leaving_zone().format(self.user_name, self.friendly_name(self.args["proximity"])))
+            self.call_service("notify/slack",message=messages.user_is_heading_to_zone().format(self.user_name, self.friendly_name(self.args["proximity"])))
 
 
 
