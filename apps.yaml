@@ -108,6 +108,8 @@ leavingWorkNotifierUserOne:
   proximity: proximity.work
   device: secret_name_user_one
   user_name: secret_name_user_one
+  zone: Work
+  zone_tracker_delay: 180
   global_dependencies:
     - secrets
     - messages
