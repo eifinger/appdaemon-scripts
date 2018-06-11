@@ -26,8 +26,11 @@ class NotfiyOfActionWhenAway(hass.Hass):
       if "isHome" in self.args:
         isHome = self.get_state(self.args["isHome"])
         if isHome == "off":
-          self.log("{} changed to {}".format(self.friendly_name(entity), new))
-          self.call_service("notify/slack",message=messages.device_change_alert().format(self.friendly_name(entity), new))
+          if entity == "binary_sensor.motion_sensor_158d00012aab97" and new == "off":
+            pass
+          else:
+            self.log("{} changed to {}".format(self.friendly_name(entity), new))
+            self.call_service("notify/slack",message=messages.device_change_alert().format(self.friendly_name(entity), new))
       else:
         self.log("isHome is not defined", level= "ERROR")
 
