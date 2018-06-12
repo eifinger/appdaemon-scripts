@@ -39,14 +39,14 @@ class LeavingZoneNotifier(hass.Hass):
         self.listen_state_handle_list.append(self.listen_state(self.state_change, self.args["proximity"], attribute = "all"))
         self.listen_state_handle_list.append(self.listen_state(self.zone_state_change, self.args["device"], attribute = "all"))
     
-    def state_change(self, entity, attributes, old, new, kwargs):
+    def state_change(self, entity, attribute, old, new, kwargs):
         device = self.args["device"]
         if device.startswith("secret_"):
             device = self.get_secret(device)
 
         self.log("device: {}".format(device))
         self.log("device_zone: {}".format(self.device_zone))
-        self.log("entity: {}, new: {}, attribute: {}".format(entity,new, attributes))
+        self.log("entity: {}, new: {}".format(entity,new))
 
         if (new["attributes"]["nearest"] == device and 
         old["attributes"]["dir_of_travel"] != "away_from" and 
@@ -60,9 +60,11 @@ class LeavingZoneNotifier(hass.Hass):
 
 
     def zone_state_change(self, entity, attributes, old, new, kwargs):
+        self.log("Zone change detected, will run set_device_zone in {} seconds".format(self.delay))
         self.timer_handle = self.run_in(self.set_device_zone, self.delay, device_zone=new)
 
     def set_device_zone(self, device_zone):
+        self.log("Setting device_zone to: {}".format(device_zone))
         self.device_zone = device_zone
 
     def get_secret(self, key):
