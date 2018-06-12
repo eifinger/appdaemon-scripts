@@ -31,20 +31,20 @@ class IsHomeDeterminer(hass.Hass):
             if new == "home":
                 self.log("{} came Home".format(entity))
                 if entity == self.get_secret("secret_device_user_one"):
-                    device_user_one_state = self.get_state(self.get_secret("secret_device_user_one"))
-                    self.isHomeHandler(new, old, device_user_one_state)
-                    self.call_service("notify/slack", message=messages.welcome_home().format(self.get_secret("secret_name_user_one")))
-                if entity == self.get_secret("secret_device_user_two"):
                     device_user_two_state = self.get_state(self.get_secret("secret_device_user_two"))
                     self.isHomeHandler(new, old, device_user_two_state)
+                    self.call_service("notify/slack", message=messages.welcome_home().format(self.get_secret("secret_name_user_one")))
+                if entity == self.get_secret("secret_device_user_two"):
+                    device_user_one_state = self.get_state(self.get_secret("secret_device_user_one"))
+                    self.isHomeHandler(new, old, device_user_one_state)
                     self.call_service("notify/slack", message=messages.welcome_home().format(self.get_secret("secret_name_user_two")))
             else:
                 if entity == self.get_secret("secret_device_user_one"):
-                    device_user_one_state = self.get_state(self.get_secret("secret_device_user_one"))
-                    self.isHomeHandler(new, old, device_user_one_state)
-                if entity == self.get_secret("secret_device_user_two"):
                     device_user_two_state = self.get_state(self.get_secret("secret_device_user_two"))
                     self.isHomeHandler(new, old, device_user_two_state)
+                if entity == self.get_secret("secret_device_user_two"):
+                    device_user_one_state = self.get_state(self.get_secret("secret_device_user_one"))
+                    self.isHomeHandler(new, old, device_user_one_state)
             
 
     def isHomeHandler(self, new, old, other):
