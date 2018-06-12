@@ -1,6 +1,7 @@
 import appdaemon.plugins.hass.hassapi as hass
 import messages
 import secrets
+import datetime
 #
 # App to notify if user_one is leaving a zone. User had to be in that zone 3 minutes before in order for the notification to be triggered
 #
@@ -33,7 +34,7 @@ class LeavingZoneNotifier(hass.Hass):
         self.timer_handle = None
 
         self.last_triggered = 0
-        self.time_between_messages = 600
+        self.time_between_messages = datetime.timedelta(seconds=600)
 
         self.listen_state_handle_list.append(self.listen_state(self.state_change, self.args["proximity"], attribute = "all"))
         self.listen_state_handle_list.append(self.listen_state(self.zone_state_change, self.args["device"], attribute = "all"))
