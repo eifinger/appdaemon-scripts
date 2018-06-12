@@ -76,6 +76,15 @@ def user_is_still_heading_to_zone():
     if language == "en":
         return "@here {} is still on his way to {}"
     return "@here {} is still on his way to {}" 
+
+def welcome_in_new_flat():
+    if language == "de":
+        return "Willkommen im neuem zu Hause {}."
+    if language == "en":
+        return "Welcome in your new home {}"
+    return "Welcome in your new home {}" 
+
+    
     
     
     

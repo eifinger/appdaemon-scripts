@@ -123,3 +123,11 @@ headingHomekNotifierUserOne:
   global_dependencies:
     - secrets
     - messages
+
+zoneArrivalNotifier:
+  module: zoneArrivalNotifier
+  class: ZoneArrivalNotifier
+  global_dependencies:
+    - secrets
+    - messages
+
