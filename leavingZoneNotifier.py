@@ -51,11 +51,11 @@ class LeavingZoneNotifier(hass.Hass):
         old["attributes"]["dir_of_travel"] != "away_from" and 
         new["attributes"]["dir_of_travel"] == "away_from" and
         self.device_zone == self.args["zone"] and
-        (self.time() - self.last_triggered) > self.time_between_messages):
+        (self.datetime() - self.last_triggered) > self.time_between_messages):
             self.log(messages.user_is_leaving_zone().format(self.user_name, self.friendly_name(self.args["proximity"])))
             self.call_service("notify/slack",message=messages.user_is_leaving_zone().format(self.user_name, self.friendly_name(self.args["proximity"])))
             
-        self.last_triggered = self.time()
+        self.last_triggered = self.datetime()
 
 
     def zone_state_change(self, entity, attributes, old, new, kwargs):

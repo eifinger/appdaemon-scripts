@@ -40,11 +40,11 @@ class HeadingToZoneNotifier(hass.Hass):
         old["attributes"]["dir_of_travel"] != "towards" and 
         new["attributes"]["dir_of_travel"] == "towards"):
             if self.last_triggered == 0:
-                self.last_triggered = self.time()
+                self.last_triggered = self.datetime()
                 self.log(messages.user_is_heading_to_zone().format(self.user_name, self.friendly_name(self.args["proximity"])))
                 self.call_service("notify/slack",message=messages.user_is_heading_to_zone().format(self.user_name, self.friendly_name(self.args["proximity"])))
-            if self.last_triggered != 0 and (self.time() - self.last_triggered) > self.time_between_messages:
-                self.last_triggered = self.time()
+            if self.last_triggered != 0 and (self.datetime() - self.last_triggered) > self.time_between_messages:
+                self.last_triggered = self.datetime()
                 self.log(messages.user_is_still_heading_to_zone().format(self.user_name, self.friendly_name(self.args["proximity"])))
                 self.call_service("notify/slack",message=messages.user_is_still_heading_to_zone().format(self.user_name, self.friendly_name(self.args["proximity"])))
 
