@@ -131,3 +131,10 @@ zoneArrivalNotifier:
     - secrets
     - messages
 
+dummyTelegramTrigger:
+  module: dummyTelegramTrigger
+  class: DummyTelegramTrigger
+  global_dependencies:
+    - secrets
+    - messages
+
