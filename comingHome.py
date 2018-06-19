@@ -1,6 +1,6 @@
 import appdaemon.plugins.hass.hassapi as hass
 #
-# App to Turn on Lobby Lamp when Door openes and OnePlus is not Home
+# App to Turn on Lobby Lamp when Door openes and no one is Home
 #
 # Args:
 #

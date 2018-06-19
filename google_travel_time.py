@@ -62,7 +62,7 @@ class GoogleTravelTime(hass.Hass):
                 if roundedTravelTime <= travelTime["duration"]["value"] * 1.2 and self.get_state(self.args["entities"][entity]["notify_input_boolean"]) == "on":
                     message = messages.journey_start().format(_to)
                     self.log("Notify user")
-                    self.call_service("notify/slack",message=message)
+                    self.call_service("notify/group_notifications",message=message)
                     self.turn_off(self.args["entities"][entity]["notify_input_boolean"])
         else:
             self.log("No entities defined", level = "ERROR")

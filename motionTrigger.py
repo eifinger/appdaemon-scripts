@@ -58,7 +58,7 @@ class MotionTrigger(hass.Hass):
             self.log("Turning {} off".format(self.args["entity_off"]))
             self.turn_off(self.args["entity_off"])
         else:
-            self.log("No entitity_off defined", level = "WARN")
+            self.log("No entity_off defined", level = "WARN")
         
     def terminate(self):
         self.cancel_timer(self.timer_handle)

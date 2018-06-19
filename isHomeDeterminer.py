@@ -2,12 +2,13 @@ import appdaemon.plugins.hass.hassapi as hass
 import messages
 import secrets
 #
-# App to Turn on Lobby Lamp when Door openes and OnePlus is not Home
+# App to 
 #
 # Args:
 #
 # isHome: input_boolean which shows if someone is home e.g. input_boolean.isHome
 # door_sensor: Door sensor which indicated the frontdoor opened e.g. binary_sensor.door_window_sensor_158d000126a57b
+# user_name: who to notify
 # Release Notes
 #
 # Version 1.0:
@@ -33,11 +34,11 @@ class IsHomeDeterminer(hass.Hass):
                 if entity == self.get_secret("secret_device_user_one"):
                     device_user_two_state = self.get_state(self.get_secret("secret_device_user_two"))
                     self.isHomeHandler(new, old, device_user_two_state)
-                    self.call_service("notify/slack", message=messages.welcome_home().format(self.get_secret("secret_name_user_one")))
+                    self.call_service("notify/group_notifications", message=messages.welcome_home().format(self.get_secret("secret_name_user_one")))
                 if entity == self.get_secret("secret_device_user_two"):
                     device_user_one_state = self.get_state(self.get_secret("secret_device_user_one"))
                     self.isHomeHandler(new, old, device_user_one_state)
-                    self.call_service("notify/slack", message=messages.welcome_home().format(self.get_secret("secret_name_user_two")))
+                    self.call_service("notify/group_notifications", message=messages.welcome_home().format(self.get_secret("secret_name_user_two")))
             else:
                 if entity == self.get_secret("secret_device_user_one"):
                     device_user_two_state = self.get_state(self.get_secret("secret_device_user_two"))
@@ -55,7 +56,7 @@ class IsHomeDeterminer(hass.Hass):
             self.log("Setting {} to off".format(self.args["isHome"]))
             self.set_state(self.args["isHome"], state = "off")
             if new != old:
-                self.call_service("notify/slack",message=messages.isHome_off())
+                self.call_service("notify/group_notifications",message=messages.isHome_off())
 
     def get_secret(self, key):
         if key in secrets.secret_dict:

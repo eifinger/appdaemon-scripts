@@ -54,7 +54,7 @@ class LeavingZoneNotifier(hass.Hass):
         self.device_zone == self.args["zone"] and
         (self.datetime() - self.last_triggered) > self.time_between_messages):
             self.log(messages.user_is_leaving_zone().format(self.user_name, self.friendly_name(self.args["proximity"])))
-            self.call_service("notify/slack",message=messages.user_is_leaving_zone().format(self.user_name, self.friendly_name(self.args["proximity"])))
+            self.call_service("notify/" + self.user_name,message=messages.user_is_leaving_zone().format(self.user_name, self.friendly_name(self.args["proximity"])))
             
         self.last_triggered = self.datetime()
 
