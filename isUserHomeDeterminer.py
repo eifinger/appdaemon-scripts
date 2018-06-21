@@ -2,7 +2,11 @@ import appdaemon.plugins.hass.hassapi as hass
 import messages
 import secrets
 #
-# App to Turn on Lobby Lamp when Door openes and OnePlus is not Home
+# App to toggle an input boolean when a person enters or leaves home.
+# This is determined based on a combination of a GPS device tracker and the door sensor.
+#
+# - If the door sensor openes and the device_tracker changed to "home" in the last 2 minutes this means someone got home
+# - If the door sensor openes and the device_tracker changes to "not_home" in the next to minutes this means someone left home
 #
 # Args:
 #
@@ -14,10 +18,12 @@ import secrets
 # Version 1.0:
 #   Initial Version
 
-class IsHomeDeterminer(hass.Hass):
+class IsUserHomeDeterminer(hass.Hass):
 
     def initialize(self):
         self.listen_state_handle_list = []
+
+        self.delay = 120
 
         self.input_boolean = self.args["input_boolean"]
         if self.input_boolean.startswith("secret_"):
@@ -35,10 +41,29 @@ class IsHomeDeterminer(hass.Hass):
         if new != "" and new != old:
             self.log("{} changed from {} to {}".format(entity,old,new))
             device_tracker_state = self.get_state(self.device_tracker)
-            self.log(device_tracker_state)
+            self.log("device_tracker_state: {}".format(device_tracker_state))
             last_changed = device_tracker_state["last_changed"]
-            if device_tracker_state == "home" and (self.datetime() - last_changed ) < 120:
+            #User got home: Device tracker changed to home before door sensor triggered
+            if device_tracker_state == "home" and (self.datetime() - last_changed ) < self.delay:
                 self.turn_on(self.input_boolean)
+            #User got home: Device tracker is still not home. Wait if it changes to home in the next self.delay seconds
+            elif device_tracker_state != "home":
+                self.run_in(self.check_if_user_got_home,self.delay)
+            #User left home: Device tracker is still home.  Wait if it changes to home in the next self.delay seconds
+            elif device_tracker_state == "home":
+                self.run_in(self.check_if_user_left_home,self.delay)
+
+    def check_if_user_left_home(self):
+        device_tracker_state = self.get_state(self.device_tracker)
+        self.log("device_tracker_state: {}".format(device_tracker_state))
+        if device_tracker_state != "home":
+            self.turn_off(self.input_boolean)
+
+    def check_if_user_got_home(self):
+        device_tracker_state = self.get_state(self.device_tracker)
+        self.log("device_tracker_state: {}".format(device_tracker_state))
+        if device_tracker_state == "home":
+            self.turn_on(self.input_boolean)
 
     def get_secret(self, key):
         if key in secrets.secret_dict:

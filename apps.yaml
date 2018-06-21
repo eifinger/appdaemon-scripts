@@ -40,6 +40,7 @@ storageRoomMotionTrigger:
   entity_on: switch.storageroom_ceiling_lamp
   entity_off: switch.storageroom_ceiling_lamp
 
+#Switch on Lobby lamp when the first person is coming home and the sun is down
 comingHome:
   module: comingHome
   class: ComingHome
@@ -47,6 +48,7 @@ comingHome:
   isHome: input_boolean.is_home
   actor: switch.livingroom_large_lamp
 
+#Control the isHome state. Determines if someone is home or all persons are away
 isHomeDeterminer:
   module: isHomeDeterminer
   class: IsHomeDeterminer
@@ -121,6 +123,50 @@ zoneArrivalNotifier:
 dummyTelegramTrigger:
   module: dummyTelegramTrigger
   class: DummyTelegramTrigger
+  global_dependencies:
+    - secrets
+    - messages
+
+#Determine if user one gets/leaves home
+isUserHomeDeterminerUserOne:
+  module: isUserHomeDeterminer
+  class: IsUserHomeDeterminer
+  input_boolean: input_boolean.user_one_home
+  device_tracker: secret_device_user_one
+  door_sensor: binary_sensor.door_window_sensor_158d000126a57b
+  global_dependencies:
+    - secrets
+    - messages
+
+#Determine if user two gets/leaves home
+isUserHomeDeterminerUserTwo:
+  module: isUserHomeDeterminer
+  class: IsUserHomeDeterminer
+  input_boolean: input_boolean.user_two_home
+  device_tracker: secret_device_user_two
+  door_sensor: binary_sensor.door_window_sensor_158d000126a57b
+  global_dependencies:
+    - secrets
+    - messages
+
+#Notification if user one arrives at home
+homeArrivalNotifierUserOne:
+  module: homeArrivalNotifier
+  class: HomeArrivalNotifier
+  input_boolean: input_boolean.user_one_home
+  notify_name: secret_name_user_one
+  zone_name: Home
+  global_dependencies:
+    - secrets
+    - messages
+
+#Notification if user two arrives at home
+homeArrivalNotifierUserTwo:
+  module: homeArrivalNotifier
+  class: HomeArrivalNotifier
+  input_boolean: input_boolean.user_two_home
+  notify_name: secret_name_user_two
+  zone_name: Home
   global_dependencies:
     - secrets
     - messages
