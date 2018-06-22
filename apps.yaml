@@ -12,7 +12,6 @@ notfiyOfActionWhenAway:
     - messages
     - secrets
 
-
 detectWrongStateWhenLeaving:
   module: detectWrongStateWhenLeaving
   class: DetectWrongStateWhenLeaving

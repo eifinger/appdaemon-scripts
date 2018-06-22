@@ -42,6 +42,7 @@ class IsHomeDeterminer(hass.Hass):
         return True
 
     def get_arg(self, key):
+        self.log(self.args)
         key = self.args[key]
         if key.startswith("secret_"):
             if key in secrets.secret_dict:
