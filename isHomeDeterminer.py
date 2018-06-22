@@ -53,7 +53,7 @@ class IsHomeDeterminer(hass.Hass):
 
     def get_arg_list(self, key):
         arg_list = []
-        for key in self.split_device_list(self.args[key])
+        for key in self.split_device_list(self.args[key]):
             if key.startswith("secret_"):
                 if key in secrets.secret_dict:
                     arg_list.append(secrets.secret_dict[key])
