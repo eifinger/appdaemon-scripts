@@ -19,7 +19,7 @@ class IsHomeDeterminer(hass.Hass):
 
         self.ishome = self.get_arg("ishome")
         
-        for input_boolean in self.split_device_list(self.args["input_booleans"]):
+        for input_boolean in self.get_arg_list("input_booleans"):
             self.listen_state_handle_list.append(self.listen_state(self.state_change, self.get_arg(input_boolean)))
     
     def state_change(self, entity, attribute, old, new, kwargs):
@@ -50,6 +50,18 @@ class IsHomeDeterminer(hass.Hass):
                 self.log("Could not find {} in secret_dict".format(key))
         else:
             return key
+
+    def get_arg_list(self, key):
+        arg_list = []
+        for key in self.split_device_list(self.args[key])
+            if key.startswith("secret_"):
+                if key in secrets.secret_dict:
+                    arg_list.append(secrets.secret_dict[key])
+                else:
+                    self.log("Could not find {} in secret_dict".format(key))
+            else:
+                arg_list.append(key)
+        return arg_list
 
     def terminate(self):
         for listen_state_handle in self.listen_state_handle_list:
