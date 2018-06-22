@@ -19,7 +19,7 @@ class IsHomeDeterminer(hass.Hass):
 
         self.ishome = self.get_arg("ishome")
         
-        for input_boolean in self.args["input_booleans"]:
+        for input_boolean in self.split_device_list(self.args["input_booleans"]):
             self.listen_state_handle_list.append(self.listen_state(self.state_change, self.get_arg(input_boolean)))
     
     def state_change(self, entity, attribute, old, new, kwargs):
