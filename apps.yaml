@@ -51,7 +51,7 @@ comingHome:
 isHomeDeterminer:
   module: isHomeDeterminer
   class: IsHomeDeterminer
-  isHome: input_boolean.is_home
+  ishome: input_boolean.is_home
   input_booleans: input_boolean.user_one_home,input_boolean.user_two_home
   global_dependencies:
     - messages
