@@ -106,7 +106,7 @@ leavingWorkNotifierUserOne:
 headingHomekNotifierUserOne:
   module: headingToZoneNotifier
   class: HeadingToZoneNotifier
-  proximity: proximity.home
+  proximity: proximity.home_user_one
   device: secret_name_user_one
   user_name: secret_name_user_one
   global_dependencies:
