@@ -32,12 +32,12 @@ xiaomiroundButtonClicked:
   actor_single: switch.studyroom_lamp
   actor_double: switch.studyroom_ceiling_lamp
 
-storageRoomMotionTrigger:
+obenTreppeMotionTrigger:
   module: motionTrigger
   class: MotionTrigger
   sensor: binary_sensor.motion_sensor_158d00012aab97
-  entity_on: switch.storageroom_ceiling_lamp
-  entity_off: switch.storageroom_ceiling_lamp
+  entity_on: light.treppe_oben
+  entity_off: light.treppe_oben
 
 #Switch on Lobby lamp when the first person is coming home and the sun is down
 comingHome:
