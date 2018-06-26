@@ -38,6 +38,7 @@ obenTreppeMotionTrigger:
   sensor: binary_sensor.motion_sensor_158d00012aab97
   entity_on: light.treppe_oben
   entity_off: light.treppe_oben
+  after_sundown: True
 
 #Switch on Lobby lamp when the first person is coming home and the sun is down
 comingHome:
