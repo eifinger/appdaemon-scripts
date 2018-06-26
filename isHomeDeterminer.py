@@ -20,7 +20,7 @@ class IsHomeDeterminer(hass.Hass):
         self.ishome = self.get_arg("ishome")
         
         for input_boolean in self.get_arg_list("input_booleans"):
-            self.listen_state_handle_list.append(self.listen_state(self.state_change, self.get_arg(input_boolean)))
+            self.listen_state_handle_list.append(self.listen_state(self.state_change, input_boolean))
     
     def state_change(self, entity, attribute, old, new, kwargs):
         if new != "" and new != old:
