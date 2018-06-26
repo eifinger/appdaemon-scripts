@@ -9,6 +9,7 @@ import appdaemon.plugins.hass.hassapi as hass
 # sensor: binary sensor to use as trigger
 # entity_on : entity to turn on when detecting motion, can be a light, script, scene or anything else that can be turned on
 # entity_off : entity to turn off when detecting motion, can be a light, script or anything else that can be turned off. Can also be a scene which will be turned on
+# after (optionally): Only trigger after a certain time
 # delay: amount of time after turning on to turn off again. If not specified defaults to 70 seconds.
 #
 # Release Notes
@@ -43,6 +44,7 @@ class MotionTrigger(hass.Hass):
 
     
     def motion_detected(self, event_name, data, kwargs):
+        self.log("Motion: event_name: {}, data: {}".format(event_name,data))
         if data["entity_id"] == self.args["sensor"]:
             self.log("Motion detected: turning {} on".format(self.args["entity_on"]))
             self.turn_on(self.args["entity_on"])
