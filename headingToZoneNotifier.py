@@ -40,7 +40,7 @@ class HeadingToZoneNotifier(hass.Hass):
         if (new["attributes"]["nearest"] == device and 
         old["attributes"]["dir_of_travel"] != "towards" and 
         new["attributes"]["dir_of_travel"] == "towards" and
-        new["state"] < 4):
+        int(new["state"]) < 4):
             if self.last_triggered == 0:
                 self.last_triggered = self.datetime()
                 self.log(messages.user_is_heading_to_zone().format(self.user_name, self.friendly_name(self.args["proximity"])))
