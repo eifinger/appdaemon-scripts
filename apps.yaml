@@ -110,6 +110,7 @@ headingHomekNotifierUserOne:
   proximity: proximity.home_user_one
   device: secret_name_user_one
   user_name: secret_name_user_one
+  notify_name: secret_name_user_two
   global_dependencies:
     - secrets
     - messages
