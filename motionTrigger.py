@@ -44,7 +44,7 @@ class MotionTrigger(hass.Hass):
 
     
     def motion_detected(self, event_name, data, kwargs):
-        self.log("Motion: event_name: {}, data: {}".format(event_name,data))
+        self.log("Motion: event_name: {}, data: {}".format(event_name,data), level = "DEBUG")
         if data["entity_id"] == self.args["sensor"]:
             self.log("Motion detected: turning {} on".format(self.args["entity_on"]))
             self.turn_on(self.args["entity_on"])
