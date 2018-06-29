@@ -47,11 +47,11 @@ class GoogleTravelTime(hass.Hass):
         self.log("new: {}".format(new))
 
         duration_in_traffic = new["attributes"]["duration_in_traffic"]
-        duration_in_traffic_minutes = duration_in_traffic.substring(0,duration_in_traffic.find(" "))
+        duration_in_traffic_minutes = duration_in_traffic[:duration_in_traffic.find(" ")]
         self.log("duration_in_traffic_minutes: {}".format(duration_in_traffic_minutes))
 
         duration = new["attributes"]["duration"]
-        duration_minutes = duration.substring(0,duration.find(" "))
+        duration_minutes = duration.substring[:duration.find(" ")]
         self.log("duration_minutes: {}".format(duration_minutes))
 
         if duration_in_traffic_minutes <= duration_minutes * self.acceptable_range and self.get_state(self.notify_input_boolean) == "on":
