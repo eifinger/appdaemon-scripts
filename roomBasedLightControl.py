@@ -28,8 +28,8 @@ class RoomBasedLightControl(hass.Hass):
         self.timer_handle_list = []
 
         self.room_sensor = self.get_arg("room_sensor")
-        self.mappings = self.get_arg("mappings")
         self.entity = self.get_arg("entity")
+        self.mappings = self.args["mappings"]
 
         self.mappings_dict = {}
 
