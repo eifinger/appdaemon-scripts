@@ -1,27 +1,21 @@
 import appdaemon.plugins.hass.hassapi as hass
-import googlemaps
 import datetime
 import secrets
 import messages
 
 #
-# App which calculates travel time between two locations and if wanted notifies the user if the travel time is within a normal amount
+# App which notifies the user if the travel time is within a normal amount
 #
 #
 # Args:
-#
-# entities: Entity state to update
-# notify_input_boolean: input_boolean determining whether to notify
-# entity.from : Location from where to drive
-# entity.to : Location to drive to
-# example:
-# entities:
-#  input_number.travel_from_home_to_work:
-#    notify_input_boolean: input_boolean.travel_from_home_to_work
-#    from: Mainz
-#    to: Wiesbaden
+# sensor: google travel sensor to watch. example: sensor.travel_time_home_from_work
+# notify_input_boolean: input_boolean determining whether to notify. example: input_boolean.travel_time_home_from_work
+# acceptable_range (optional): Multiplier of the normal travel time that is still acceptable. example: 1.2
 #
 # Release Notes
+#
+# Version 1.2:
+#   Moved to standard google travel sensors. Now only notification
 #
 # Version 1.1:
 #   Add notification feature
@@ -32,17 +26,20 @@ import messages
 class GoogleTravelTime(hass.Hass):
 
     def initialize(self):
-        self.gmaps = googlemaps.googlemaps.Client(secrets.GOOGLE_MAPS_API_TOKEN)
-    
-        self.max_api_calls = 2500
-        self.delay = int(round(3600 * 24 / self.max_api_calls * 2))
-        self.log("Delay is: {}".format(self.delay))
-        if "entities" in self.args:
-            self.delay = int(round(self.delay * len(self.args["entities"])))
-            self.log("Found {} entities to update. Setting delay to {}".format(str(len(self.args["entities"])), str(self.delay)))
-        else:
-            self.log("No entities defined", level = "ERROR")
-        self.timer_handle = self.run_in(self.calculate_travel_times, self.delay)            
+
+        self.listen_state_handle_list = []
+        self.timer_handle_list = []
+
+        self.sensor = self.get_arg("sensor")
+        self.notify_input_boolean = self.get_arg("notify_input_boolean")
+        self.acceptable_range = self.get_arg("acceptable_range")
+
+        self.listen_state_handle_list.append(self.listen_state(self.state_change, self.sensor, attribute = "all"))
+
+    def state_change(self, entity, attributes, old, new, kwargs):
+        self.log("entity: {}".format(entity))
+        self.log("old: {}".format(old))
+        self.log("new: {}".format(new))
 
     
     def calculate_travel_times(self, *kwargs):
@@ -68,24 +65,16 @@ class GoogleTravelTime(hass.Hass):
             self.log("No entities defined", level = "ERROR")
         self.run_in(self.calculate_travel_times, self.delay) 
 
-    def get_distance_matrix(self, origin, destination):
-        now = datetime.datetime.now()
-        matrix = self.gmaps.distance_matrix(origin,
-                                            destination,
-                                            mode="driving",
-                                            departure_time=now,
-                                            language="de",
-                                            traffic_model = "best_guess")
-        distance = matrix['rows'][0]['elements'][0]['distance']
-        duration = matrix['rows'][0]['elements'][0]['duration']
-        duration_in_traffic = matrix['rows'][0]['elements'][0]['duration_in_traffic']
-        return {"distance": distance, "duration": duration, "duration_in_traffic": duration_in_traffic}
-
-    def get_secret(self, key):
-        if key in secrets.secret_dict:
-            return secrets.secret_dict[key]
+    def get_arg(self, key):
+        key = self.args[key]
+        if key.startswith("secret_"):
+            if key in secrets.secret_dict:
+                return secrets.secret_dict[key]
+            else:
+                self.log("Could not find {} in secret_dict".format(key))
         else:
-            self.log("Could not find {} in secret_dict".format(key))
+            return key
 
     def terminate(self):
-        self.cancel_timer(self.timer_handle)
+        for listen_state_handle in self.listen_state_handle_list:
+            self.cancel_listen_state(listen_state_handle)
