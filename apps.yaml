@@ -200,6 +200,19 @@ zoneArrivalNotifier:
   global_dependencies:
     - secrets
     - messages
-
-
+#################################################################
+## ZoneNotifiers
+#################################################################
+roomBasedLightControl:
+  module: roomBasedLightControl
+  class: RoomBasedLightControl
+  room_sensor: sensor.mqtt_room_user_one
+  entity: input_boolean.room_based_light
+  mappings:
+    livingroom:
+      room: livingroom
+      entity: switch.large_lamp
+  global_dependencies:
+    - secrets
+    - messages
 
