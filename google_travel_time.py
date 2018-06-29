@@ -32,7 +32,10 @@ class GoogleTravelTime(hass.Hass):
 
         self.sensor = self.get_arg("sensor")
         self.notify_input_boolean = self.get_arg("notify_input_boolean")
-        self.acceptable_range = self.get_arg("acceptable_range")
+        try:
+            self.acceptable_range = self.get_arg("acceptable_range")
+        except KeyError:
+            self.acceptable_range = 1.2
 
         self.listen_state_handle_list.append(self.listen_state(self.state_change, self.sensor, attribute = "all"))
 
