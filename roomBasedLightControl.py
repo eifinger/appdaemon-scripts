@@ -34,7 +34,7 @@ class RoomBasedLightControl(hass.Hass):
         self.mappings_dict = {}
 
         for mapping in self.mappings:
-            mappings_dict[self.mappings[mapping]["room"]] = self.mappings[mapping]["entity"]
+            self.mappings_dict[self.mappings[mapping]["room"]] = self.mappings[mapping]["entity"]
 
         self.listen_state_handle_list.append(self.listen_state(self.state_change, self.entity))
 
