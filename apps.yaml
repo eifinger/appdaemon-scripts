@@ -71,12 +71,32 @@ notifyFailedLogin:
   global_dependencies:
     - messages
     - secrets
-
+#################################################################
+## GoogleTravelTime
+#################################################################
 googleTravelTime_home_from_work:
   module: google_travel_time
   class: GoogleTravelTime
   sensor: sensor.travel_time_home_from_work
   notify_input_boolean: input_boolean.travel_time_home_from_work
+  global_dependencies:
+    - secrets
+    - messages
+
+googleTravelTime_work_from_home:
+  module: google_travel_time
+  class: GoogleTravelTime
+  sensor: sensor.travel_time_work_from_home
+  notify_input_boolean: input_boolean.travel_time_work_from_home
+  global_dependencies:
+    - secrets
+    - messages
+
+googleTravelTime_elmo_from_home:
+  module: google_travel_time
+  class: GoogleTravelTime
+  sensor: sensor.travel_time_elmo_from_home
+  notify_input_boolean: input_boolean.travel_time_elmo_from_home
   global_dependencies:
     - secrets
     - messages
