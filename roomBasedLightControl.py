@@ -42,7 +42,7 @@ class RoomBasedLightControl(hass.Hass):
         self.log("{} turned {}".format(self.friendly_name(self.entity),new))
         room = self.get_state(self.room_sensor)
         self.log("User is in room {}".format(room))
-        entity = mappings_dict.get(room)
+        entity = self.mappings_dict.get(room)
         self.log("Entity for that room is: {}".format(entity))
 
         if new == "on":
