@@ -45,10 +45,10 @@ class RoomBasedLightControl(hass.Hass):
         entity = mappings_dict.get(room)
         self.log("Entity for that room is: {}".format(entity))
 
-        if new = "on":
+        if new == "on":
             self.log("Turning {} on".format(entity))
             self.turn_on(entity)
-        elif new = "off":
+        elif new == "off":
             self.log("Turning {} off".format(entity))
             self.turn_off(entity)
 
