@@ -1,6 +1,18 @@
+#################################################################
+## Global
+#################################################################
 global_modules:
   - secrets
   - messages
+
+#################################################################
+## Security
+#################################################################
+detectWrongStateWhenLeaving:
+  module: detectWrongStateWhenLeaving
+  class: DetectWrongStateWhenLeaving
+  sensor: binary_sensor.motion_sensor_158d00012aab97,media_player.denon_avrx1300w,switch.livingroom_large_lamp,switch.studyroom_lamp,switch.livingroom_small_lamp,switch.studyroom_ceiling_lamp,switch.storageroom_ceiling_lamp,switch.kitchen_ceiling_lamp,switch.livingroom_ceiling,switch.lobby_ceiling,switch.snowboard,light.bedroom_yeelight,light.bar_table
+  isHome: input_boolean.is_home
 
 notfiyOfActionWhenAway:
   module: notfiyOfActionWhenAway
@@ -11,19 +23,18 @@ notfiyOfActionWhenAway:
   global_dependencies:
     - messages
     - secrets
-
-detectWrongStateWhenLeaving:
-  module: detectWrongStateWhenLeaving
-  class: DetectWrongStateWhenLeaving
-  sensor: binary_sensor.motion_sensor_158d00012aab97,media_player.denon_avrx1300w,switch.livingroom_large_lamp,switch.studyroom_lamp,switch.livingroom_small_lamp,switch.studyroom_ceiling_lamp,switch.storageroom_ceiling_lamp,switch.kitchen_ceiling_lamp,switch.livingroom_ceiling,switch.lobby_ceiling,switch.snowboard,light.bedroom_yeelight,light.bar_table
-  isHome: input_boolean.is_home
   
-
+#################################################################
+## eventMonitor
+#################################################################
 #eventMonitor:
 #  module: eventMonitor
 #  class: Monitor
 #  events: click,motion_action
 
+#################################################################
+## ButtonClicked
+#################################################################
 #Toggle Studyroom lamp when Xiaomi Button is clicked once
 xiaomiroundButtonClicked:
   module: buttonClicked
@@ -31,7 +42,9 @@ xiaomiroundButtonClicked:
   sensor: binary_sensor.switch_158d00012db9e5
   actor_single: switch.studyroom_lamp
   actor_double: switch.studyroom_ceiling_lamp
-
+#################################################################
+## MotionTrigger
+#################################################################
 obenTreppeMotionTrigger:
   module: motionTrigger
   class: MotionTrigger
@@ -39,7 +52,9 @@ obenTreppeMotionTrigger:
   entity_on: light.treppe_oben
   entity_off: light.treppe_oben
   after_sundown: True
-
+#################################################################
+## ComingHome
+#################################################################
 #Switch on Lobby lamp when the first person is coming home and the sun is down
 comingHome:
   module: comingHome
@@ -48,6 +63,30 @@ comingHome:
   isHome: input_boolean.is_home
   actor: switch.livingroom_large_lamp
 
+#Notification if user one arrives at home
+homeArrivalNotifierUserOne:
+  module: homeArrivalNotifier
+  class: HomeArrivalNotifier
+  input_boolean: input_boolean.user_one_home
+  notify_name: secret_name_user_one
+  zone_name: Home
+  global_dependencies:
+    - secrets
+    - messages
+
+#Notification if user two arrives at home
+homeArrivalNotifierUserTwo:
+  module: homeArrivalNotifier
+  class: HomeArrivalNotifier
+  input_boolean: input_boolean.user_two_home
+  notify_name: secret_name_user_two
+  zone_name: Home
+  global_dependencies:
+    - secrets
+    - messages 
+#################################################################
+## Presence
+#################################################################
 #Control the isHome state. Determines if someone is home or all persons are away
 isHomeDeterminer:
   module: isHomeDeterminer
@@ -58,12 +97,38 @@ isHomeDeterminer:
     - messages
     - secrets
 
+#Determine if user one gets/leaves home
+isUserHomeDeterminerUserOne:
+  module: isUserHomeDeterminer
+  class: IsUserHomeDeterminer
+  input_boolean: input_boolean.user_one_home
+  device_tracker: secret_device_user_one
+  door_sensor: binary_sensor.door_window_sensor_158d000126a57b
+  global_dependencies:
+    - secrets
+    - messages
+
+#Determine if user two gets/leaves home
+isUserHomeDeterminerUserTwo:
+  module: isUserHomeDeterminer
+  class: IsUserHomeDeterminer
+  input_boolean: input_boolean.user_two_home
+  device_tracker: secret_device_user_two
+  door_sensor: binary_sensor.door_window_sensor_158d000126a57b
+  global_dependencies:
+    - secrets
+    - messages   
+#################################################################
+## DeviceNotify
+#################################################################
 newWifiDeviceNotify:
   module: newWifiDeviceNotify
   class: DeviceNotify
   global_dependencies:
     - messages
-
+#################################################################
+## NotifyFailedLogin
+#################################################################
 notifyFailedLogin:
   module: notifyFailedLogin
   class: NotifyFailedLogin
@@ -79,6 +144,7 @@ googleTravelTime_home_from_work:
   class: GoogleTravelTime
   sensor: sensor.travel_time_home_from_work
   notify_input_boolean: input_boolean.travel_time_home_from_work
+  notify_name: group_notifications
   global_dependencies:
     - secrets
     - messages
@@ -88,6 +154,7 @@ googleTravelTime_work_from_home:
   class: GoogleTravelTime
   sensor: sensor.travel_time_work_from_home
   notify_input_boolean: input_boolean.travel_time_work_from_home
+  notify_name: group_notifications
   global_dependencies:
     - secrets
     - messages
@@ -97,10 +164,13 @@ googleTravelTime_elmo_from_home:
   class: GoogleTravelTime
   sensor: sensor.travel_time_elmo_from_home
   notify_input_boolean: input_boolean.travel_time_elmo_from_home
+  notify_name: group_notifications
   global_dependencies:
     - secrets
     - messages
-
+#################################################################
+## ZoneNotifiers
+#################################################################
 leavingWorkNotifierUserOne:
   module: leavingZoneNotifier
   class: LeavingZoneNotifier
@@ -131,47 +201,5 @@ zoneArrivalNotifier:
     - secrets
     - messages
 
-#Determine if user one gets/leaves home
-isUserHomeDeterminerUserOne:
-  module: isUserHomeDeterminer
-  class: IsUserHomeDeterminer
-  input_boolean: input_boolean.user_one_home
-  device_tracker: secret_device_user_one
-  door_sensor: binary_sensor.door_window_sensor_158d000126a57b
-  global_dependencies:
-    - secrets
-    - messages
 
-#Determine if user two gets/leaves home
-isUserHomeDeterminerUserTwo:
-  module: isUserHomeDeterminer
-  class: IsUserHomeDeterminer
-  input_boolean: input_boolean.user_two_home
-  device_tracker: secret_device_user_two
-  door_sensor: binary_sensor.door_window_sensor_158d000126a57b
-  global_dependencies:
-    - secrets
-    - messages
-
-#Notification if user one arrives at home
-homeArrivalNotifierUserOne:
-  module: homeArrivalNotifier
-  class: HomeArrivalNotifier
-  input_boolean: input_boolean.user_one_home
-  notify_name: secret_name_user_one
-  zone_name: Home
-  global_dependencies:
-    - secrets
-    - messages
-
-#Notification if user two arrives at home
-homeArrivalNotifierUserTwo:
-  module: homeArrivalNotifier
-  class: HomeArrivalNotifier
-  input_boolean: input_boolean.user_two_home
-  notify_name: secret_name_user_two
-  zone_name: Home
-  global_dependencies:
-    - secrets
-    - messages
 
