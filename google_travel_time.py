@@ -55,7 +55,7 @@ class GoogleTravelTime(hass.Hass):
         self.log("duration_minutes: {}".format(duration_minutes))
 
         if duration_in_traffic_minutes <= duration_minutes * self.acceptable_range and self.get_state(self.notify_input_boolean) == "on":
-            message = messages.journey_start().format(_to)
+            message = messages.journey_start().format(new["attributes"]["destination_addresses"][0])
             self.log("Notify user")
             self.call_service("notify/" + self.notify_name, message=message)
             self.turn_off(self.notify_input_boolean)
