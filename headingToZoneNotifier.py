@@ -9,9 +9,13 @@ import datetime
 #   device: Device to track
 #   proximity: Proximity Entity which the device is leaving from
 #   user_name: Name of the user used in the notification message
+#   notify_input_boolean: input_boolean which toggles the notification
 #   notify_name: Who to notify
 #
 # Release Notes
+# Version 1.2:
+#   Added notify_input_boolean
+#
 # Version 1.1:
 #   Added notify_name
 #
@@ -28,6 +32,8 @@ class HeadingToZoneNotifier(hass.Hass):
         self.notify_name = self.get_arg("notify_name")
 
         self.listen_state_handle_list = []
+
+        self.notify_input_boolean = self.get_arg("notify_input_boolean")
 
         self.last_triggered = 0
         self.time_between_messages = datetime.timedelta(seconds=600)
@@ -49,11 +55,15 @@ class HeadingToZoneNotifier(hass.Hass):
             if self.last_triggered == 0:
                 self.last_triggered = self.datetime()
                 self.log(messages.user_is_heading_to_zone().format(self.user_name, self.friendly_name(self.args["proximity"])))
-                self.call_service("notify/" + self.notify_name,message=messages.user_is_heading_to_zone().format(self.user_name, self.friendly_name(self.args["proximity"])))
+                if self.get_state(self.notify_input_boolean) == "on":
+                    self.log("Notifying {}".format(self.notify_name)) 
+                    self.call_service("notify/" + self.notify_name,message=messages.user_is_heading_to_zone().format(self.user_name, self.friendly_name(self.args["proximity"])))
             if self.last_triggered != 0 and (self.datetime() - self.last_triggered) > self.time_between_messages:
                 self.last_triggered = self.datetime()
                 self.log(messages.user_is_still_heading_to_zone().format(self.user_name, self.friendly_name(self.args["proximity"])))
-                self.call_service("notify/" + self.notify_name,message=messages.user_is_still_heading_to_zone().format(self.user_name, self.friendly_name(self.args["proximity"])))
+                if self.get_state(self.notify_input_boolean) == "on":
+                    self.log("Notifying {}".format(self.notify_name)) 
+                    self.call_service("notify/" + self.notify_name,message=messages.user_is_still_heading_to_zone().format(self.user_name, self.friendly_name(self.args["proximity"])))
 
         if new["attributes"]["nearest"] == device and old["attributes"]["dir_of_travel"] == "arrived":
             self.last_triggered = 0
