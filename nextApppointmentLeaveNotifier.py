@@ -34,7 +34,6 @@ class NextApppointmentLeaveNotifier(hass.Hass):
         self.timer_handle = self.run_at(self.notify,notification_time)
 
         self.listen_state_handle_list.append(self.listen_state(self.state_change, self.sensor))
-        self.listen_state_handle_list.append(self.listen_state(self.state_change, self.sensor))
 
     def state_change(self, entity, attributes, old, new, kwargs):
         self.cancel_timer(self.timer_handle)
