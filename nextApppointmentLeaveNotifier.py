@@ -46,7 +46,9 @@ class NextApppointmentLeaveNotifier(hass.Hass):
 
     def calculate_notification_time(self):
         time_to_leave = self.convert_utc(self.get_state(self.sensor))
-        offset = int(self.get_state(self.input_number))
+        offset_raw = self.get_state(self.input_number)
+        offset_raw = offset_raw[:offset_raw.find(".")]
+        offset = int(offset_raw)
         time_to_leave += offset * 60
         return time_to_leave
 
