@@ -12,6 +12,7 @@ import messages
 # notify_input_boolean: input_boolean determining whether to notify. example: input_boolean.announce_time_to_leave
 # notify_name: Who to notify. example: group_notifications
 # destination_name_sensor: Sensor which holds the Destination name to use in notification. example: sensor.cal_next_appointment_location
+# travel_time_sensor: sensor which holds the travel time. example: sensor.travel_time_next_appointment_location
 #
 # Release Notes
 #
@@ -29,6 +30,7 @@ class NextApppointmentLeaveNotifier(hass.Hass):
         self.notify_input_boolean = self.get_arg("notify_input_boolean")
         self.notify_name = self.get_arg("notify_name")
         self.destination_name_sensor = self.get_arg("destination_name_sensor")
+        self.travel_time_sensor = self.get_arg("travel_time_sensor")
 
         notification_time = datetime.datetime.strptime(self.get_state(self.sensor),"%Y-%m-%d %H:%M")
         try:
@@ -53,7 +55,7 @@ class NextApppointmentLeaveNotifier(hass.Hass):
 
     def notify_user(self, *kwargs):
         self.log("Notify user")
-        self.call_service("notify/" + self.notify_name, message=messages.time_to_leave().format(self.get_state(self.destination_name_sensor)))
+        self.call_service("notify/" + self.notify_name, message=messages.time_to_leave().format(self.get_state(self.destination_name_sensor),self.get_state(self.travel_time_sensor)))
 
     def get_arg(self, key):
         key = self.args[key]

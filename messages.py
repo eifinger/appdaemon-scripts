@@ -79,10 +79,10 @@ def user_is_still_heading_to_zone():
 
 def time_to_leave():
     if language == "de":
-        return "Es ist Zeit loszufahren nach {}."
+        return "Es ist Zeit loszufahren nach {}. Du brauchst {}"
     if language == "en":
-        return "It's time to leave to {}"
-    return "It's time to leave to {}"
+        return "It's time to leave to {}. It will take {}"
+    return "It's time to leave to {}. It will take {}"
 
     
     
