@@ -33,6 +33,7 @@ class NextApppointmentLeaveNotifier(hass.Hass):
         notification_time = datetime.datetime.strptime(self.get_state(self.sensor),"%Y-%m-%d %H:%M")
         try:
             self.timer_handle = self.run_at(self.notify,notification_time)
+            self.log("Will notify at {}".format(notification_time))
         except ValueError:
             self.notify()
 
@@ -43,6 +44,7 @@ class NextApppointmentLeaveNotifier(hass.Hass):
         notification_time = datetime.datetime.strptime(self.get_state(self.sensor),"%Y-%m-%d %H:%M")
         try:
             self.timer_handle = self.run_at(self.notify,notification_time)
+            self.log("Will notify at {}".format(notification_time))
         except ValueError:
             self.notify()
 
