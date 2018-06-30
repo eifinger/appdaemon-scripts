@@ -168,6 +168,18 @@ googleTravelTime_elmo_from_home:
   global_dependencies:
     - secrets
     - messages
+
+nextApppointmentLeaveNotifier:
+  module: nextApppointmentLeaveNotifier
+  class: NextApppointmentLeaveNotifier
+  sensor: sensor.calc_leave_time
+  notify_input_boolean: input_boolean.announce_time_to_leave
+  notify_name: group_notifications
+  input_number: input_number.leave_time_offset
+  destination_name_sensor: sensor.cal_next_appointment_location
+  global_dependencies:
+    - secrets
+    - messages
 #################################################################
 ## ZoneNotifiers
 #################################################################
