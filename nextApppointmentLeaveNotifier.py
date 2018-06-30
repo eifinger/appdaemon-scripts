@@ -36,7 +36,7 @@ class NextApppointmentLeaveNotifier(hass.Hass):
             self.log("Will notify at {}".format(notification_time))
         except ValueError:
             self.log("Notify user")
-            self.call_service("notify/" + self.notify_name, message=messages.time_to_leave.format(self.get_state(self.destination_name_sensor)))
+            self.call_service("notify/" + self.notify_name, message=messages.time_to_leave().format(self.get_state(self.destination_name_sensor)))
 
         self.listen_state_handle_list.append(self.listen_state(self.state_change, self.sensor))
 
@@ -48,7 +48,7 @@ class NextApppointmentLeaveNotifier(hass.Hass):
             self.log("Will notify at {}".format(notification_time))
         except ValueError:
             self.log("Notify user")
-            self.call_service("notify/" + self.notify_name, message=messages.time_to_leave.format(self.get_state(self.destination_name_sensor)))
+            self.call_service("notify/" + self.notify_name, message=messages.time_to_leave().format(self.get_state(self.destination_name_sensor)))
 
     def get_arg(self, key):
         key = self.args[key]
