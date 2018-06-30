@@ -11,7 +11,6 @@ import messages
 # sensor: sensor to watch. example: sensor.calc_leave_time
 # notify_input_boolean: input_boolean determining whether to notify. example: input_boolean.announce_time_to_leave
 # notify_name: Who to notify. example: group_notifications
-# input_number: input_number which tells how early to leave. example: input_number.leave_time_offset
 # destination_name_sensor: Sensor which holds the Destination name to use in notification. example: sensor.cal_next_appointment_location
 #
 # Release Notes
@@ -29,10 +28,9 @@ class NextApppointmentLeaveNotifier(hass.Hass):
         self.sensor = self.get_arg("sensor")
         self.notify_input_boolean = self.get_arg("notify_input_boolean")
         self.notify_name = self.get_arg("notify_name")
-        self.input_number = self.get_arg("input_number")
         self.destination_name_sensor = self.get_arg("destination_name_sensor")
 
-        notification_time = self.calculate_notification_time()
+        notification_time = self.convert_utc(self.get_state(self.sensor))
         self.timer_handle = self.run_at(self.notify,notification_time)
 
         self.listen_state_handle_list.append(self.listen_state(self.state_change, self.sensor))
@@ -40,17 +38,8 @@ class NextApppointmentLeaveNotifier(hass.Hass):
 
     def state_change(self, entity, attributes, old, new, kwargs):
         self.cancel_timer(self.timer_handle)
-        notification_time = self.calculate_notification_time()
+        notification_time = self.convert_utc(self.get_state(self.sensor))
         self.timer_handle = self.run_at(self.notify,notification_time)
-
-
-    def calculate_notification_time(self):
-        time_to_leave = self.convert_utc(self.get_state(self.sensor))
-        offset_raw = self.get_state(self.input_number)
-        offset_raw = offset_raw[:offset_raw.find(".")]
-        offset = int(offset_raw)
-        time_to_leave += datetime.timedelta(0,offset * 60) 
-        return time_to_leave
 
     def notfiy(self):
         self.log("Notify user")
