@@ -177,6 +177,7 @@ nextApppointmentLeaveNotifier:
   notify_name: group_notifications
   input_number: input_number.leave_time_offset
   destination_name_sensor: sensor.cal_next_appointment_location
+  travel_time_sensor: sensor.travel_time_next_appointment_location
   global_dependencies:
     - secrets
     - messages
