@@ -30,14 +30,14 @@ class NextApppointmentLeaveNotifier(hass.Hass):
         self.notify_name = self.get_arg("notify_name")
         self.destination_name_sensor = self.get_arg("destination_name_sensor")
 
-        notification_time = self.parse_time(self.get_state(self.sensor))
+        notification_time = datetime.datetime.strptime(self.get_state(self.sensor),"%Y-%m-%d %H:%M")
         self.timer_handle = self.run_at(self.notify,notification_time)
 
         self.listen_state_handle_list.append(self.listen_state(self.state_change, self.sensor))
 
     def state_change(self, entity, attributes, old, new, kwargs):
         self.cancel_timer(self.timer_handle)
-        notification_time = self.convert_utc(self.get_state(self.sensor))
+        notification_time = datetime.datetime.strptime(self.get_state(self.sensor),"%Y-%m-%d %H:%M")
         self.timer_handle = self.run_at(self.notify,notification_time)
 
     def notfiy(self):
