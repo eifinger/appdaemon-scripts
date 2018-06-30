@@ -49,7 +49,7 @@ class NextApppointmentLeaveNotifier(hass.Hass):
         offset_raw = self.get_state(self.input_number)
         offset_raw = offset_raw[:offset_raw.find(".")]
         offset = int(offset_raw)
-        time_to_leave += offset * 60
+        time_to_leave += datetime.timedelta(0,offset * 60) 
         return time_to_leave
 
     def notfiy(self):
