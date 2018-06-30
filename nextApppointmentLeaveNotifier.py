@@ -51,7 +51,7 @@ class NextApppointmentLeaveNotifier(hass.Hass):
         except ValueError:
             self.notify_user()
 
-    def notify_user(self, **kwargs):
+    def notify_user(self, *kwargs):
         self.log("Notify user")
         self.call_service("notify/" + self.notify_name, message=messages.time_to_leave().format(self.get_state(self.destination_name_sensor)))
 
