@@ -38,14 +38,12 @@ class NextApppointmentLeaveNotifier(hass.Hass):
         self.location_of_last_notified_event = ""
 
         notification_time = datetime.datetime.strptime(self.get_state(self.sensor),"%Y-%m-%d %H:%M")
-        travel_time = self.get_state(self.travel_time_sensor)
-        self.log("Traveltime: {}".format(travel_time))
-        try:
-            self.timer_handle = self.run_at(self.notify_user,notification_time)
-            self.log("Will notify at {}".format(notification_time))
-        except ValueError:
-            self.log("Notification time is in the past")
-            pass
+        if self.get_state(self.travel_time_sensor) =! "unknown":
+            try:
+                self.timer_handle = self.run_at(self.notify_user,notification_time)
+                self.log("Will notify at {}".format(notification_time))
+            except ValueError:
+                self.log("Notification time is in the past")
 
         self.listen_state_handle_list.append(self.listen_state(self.state_change, self.sensor))
 
@@ -53,15 +51,16 @@ class NextApppointmentLeaveNotifier(hass.Hass):
         try:
             self.cancel_timer(self.timer_handle)
         except AttributeError:
+            #Timer was not set
             pass
         #Parse time string from sensor. For parsing information look at http://strftime.org/
         notification_time = datetime.datetime.strptime(self.get_state(self.sensor),"%Y-%m-%d %H:%M")
-        try:
-            self.timer_handle = self.run_at(self.notify_user,notification_time)
-            self.log("Will notify at {}".format(notification_time))
-        except ValueError:
-            self.log("Notification time is in the past")
-            pass
+        if self.get_state(self.travel_time_sensor) =! "unknown":
+            try:
+                self.timer_handle = self.run_at(self.notify_user,notification_time)
+                self.log("Will notify at {}".format(notification_time))
+            except ValueError:
+                self.log("Notification time is in the past")
 
     def notify_user(self, *kwargs):
         if self.get_state(self.notify_input_boolean) == "on":
