@@ -38,6 +38,8 @@ class NextApppointmentLeaveNotifier(hass.Hass):
         self.location_of_last_notified_event = ""
 
         notification_time = datetime.datetime.strptime(self.get_state(self.sensor),"%Y-%m-%d %H:%M")
+        travel_time = self.get_state(self.travel_time_sensor)
+        self.log("Traveltime: {}".format(travel_time))
         try:
             self.timer_handle = self.run_at(self.notify_user,notification_time)
             self.log("Will notify at {}".format(notification_time))
@@ -62,13 +64,16 @@ class NextApppointmentLeaveNotifier(hass.Hass):
             pass
 
     def notify_user(self, *kwargs):
-        location_name = self.get_state(self.destination_name_sensor)
-        if self.location_of_last_notified_event == location_name:
-            self.log("User already got notified for {}".format())
+        if self.get_state(self.notify_input_boolean) == "on":
+            location_name = self.get_state(self.destination_name_sensor)
+            if self.location_of_last_notified_event == location_name:
+                self.log("User already got notified for {}".format())
+            else:
+                self.log("Notify user")
+                self.call_service("notify/" + self.notify_name, message=messages.time_to_leave().format(location_name,self.get_state(self.travel_time_sensor)))
+                self.location_of_last_notified_event = location_name
         else:
-            self.log("Notify user")
-            self.call_service("notify/" + self.notify_name, message=messages.time_to_leave().format(location_name,self.get_state(self.travel_time_sensor)))
-            self.location_of_last_notified_event = location_name
+            self.log("Notification is turned off")
 
     def get_arg(self, key):
         key = self.args[key]
