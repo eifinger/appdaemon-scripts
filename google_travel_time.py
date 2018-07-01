@@ -42,17 +42,17 @@ class GoogleTravelTime(hass.Hass):
         self.listen_state_handle_list.append(self.listen_state(self.state_change, self.sensor, attribute = "all"))
 
     def state_change(self, entity, attributes, old, new, kwargs):
-        self.log("entity: {}".format(entity))
-        self.log("old: {}".format(old))
-        self.log("new: {}".format(new))
+        self.log("entity: {}".format(entity), level = "DEBUG")
+        self.log("old: {}".format(old), level = "DEBUG")
+        self.log("new: {}".format(new), level = "DEBUG")
 
         duration_in_traffic = new["attributes"]["duration_in_traffic"]
         duration_in_traffic_minutes = int(duration_in_traffic[:duration_in_traffic.find(" ")])
-        self.log("duration_in_traffic_minutes: {}".format(duration_in_traffic_minutes))
+        self.log("duration_in_traffic_minutes: {}".format(duration_in_traffic_minutes), level = "DEBUG")
 
         duration = new["attributes"]["duration"]
         duration_minutes = int(duration[:duration.find(" ")])
-        self.log("duration_minutes: {}".format(duration_minutes))
+        self.log("duration_minutes: {}".format(duration_minutes), level = "DEBUG")
 
         if duration_in_traffic_minutes <= duration_minutes * self.acceptable_range and self.get_state(self.notify_input_boolean) == "on":
             message = messages.journey_start().format(new["attributes"]["destination_addresses"][0])
