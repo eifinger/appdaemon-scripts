@@ -38,7 +38,7 @@ class NextApppointmentLeaveNotifier(hass.Hass):
         self.location_of_last_notified_event = ""
 
         notification_time = datetime.datetime.strptime(self.get_state(self.sensor),"%Y-%m-%d %H:%M")
-        if self.get_state(self.travel_time_sensor) =! "unknown":
+        if self.get_state(self.travel_time_sensor) != "unknown":
             try:
                 self.timer_handle = self.run_at(self.notify_user,notification_time)
                 self.log("Will notify at {}".format(notification_time))
