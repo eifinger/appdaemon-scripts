@@ -32,12 +32,16 @@ class NextApppointmentLeaveNotifier(hass.Hass):
         self.destination_name_sensor = self.get_arg("destination_name_sensor")
         self.travel_time_sensor = self.get_arg("travel_time_sensor")
 
+        #Used to check of user got already notified for this event
+        self.location_of_last_notified_event = ""
+
         notification_time = datetime.datetime.strptime(self.get_state(self.sensor),"%Y-%m-%d %H:%M")
         try:
             self.timer_handle = self.run_at(self.notify_user,notification_time)
             self.log("Will notify at {}".format(notification_time))
         except ValueError:
-            self.notify_user()
+            self.log("Notification time is in the past")
+            pass
 
         self.listen_state_handle_list.append(self.listen_state(self.state_change, self.sensor))
 
@@ -46,16 +50,23 @@ class NextApppointmentLeaveNotifier(hass.Hass):
             self.cancel_timer(self.timer_handle)
         except AttributeError:
             pass
+        #Parse time string from sensor. For parsing information look at http://strftime.org/
         notification_time = datetime.datetime.strptime(self.get_state(self.sensor),"%Y-%m-%d %H:%M")
         try:
             self.timer_handle = self.run_at(self.notify_user,notification_time)
             self.log("Will notify at {}".format(notification_time))
         except ValueError:
-            self.notify_user()
+            self.log("Notification time is in the past")
+            pass
 
     def notify_user(self, *kwargs):
-        self.log("Notify user")
-        self.call_service("notify/" + self.notify_name, message=messages.time_to_leave().format(self.get_state(self.destination_name_sensor),self.get_state(self.travel_time_sensor)))
+        location_name = self.get_state(self.destination_name_sensor)
+        if self.location_of_last_notified_event == location_name:
+            self.log("User already got notified for {}".format())
+        else:
+            self.log("Notify user")
+            self.call_service("notify/" + self.notify_name, message=messages.time_to_leave().format(location_name,self.get_state(self.travel_time_sensor)))
+            self.location_of_last_notified_event = location_name
 
     def get_arg(self, key):
         key = self.args[key]
