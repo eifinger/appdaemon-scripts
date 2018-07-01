@@ -32,6 +32,8 @@ class NextApppointmentLeaveNotifier(hass.Hass):
         self.destination_name_sensor = self.get_arg("destination_name_sensor")
         self.travel_time_sensor = self.get_arg("travel_time_sensor")
 
+        self.timer_handle = None
+
         #Used to check of user got already notified for this event
         self.location_of_last_notified_event = ""
 
@@ -81,5 +83,5 @@ class NextApppointmentLeaveNotifier(hass.Hass):
     def terminate(self):
         for listen_state_handle in self.listen_state_handle_list:
             self.cancel_listen_state(listen_state_handle)
-
-        self.cancel_timer(self.timer_handle)
+        if self.timer_handle != None:
+            self.cancel_timer(self.timer_handle)
