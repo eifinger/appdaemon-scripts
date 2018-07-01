@@ -9,6 +9,8 @@ class DeviceNotify(appapi.AppDaemon):
     self.listen_event_handle_list.append(self.listen_event(self.newDevice, "device_tracker"))
 
   def newDevice(self, event_name, data, kwargs):
+    self.log("event_name: {}".format(event_name))
+    self.log("data: {}".format(data))
     if event_name == "device_tracker_new_device":
         message = messages.unknown_device_connected().format(data)
         self.call_service("notify/group_notifications",message=message)
