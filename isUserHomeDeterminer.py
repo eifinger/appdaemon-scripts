@@ -36,33 +36,33 @@ class IsUserHomeDeterminer(hass.Hass):
         if new != "" and new != old:
             self.log("{} changed from {} to {}".format(entity,old,new), level = "DEBUG")
             if new == "off" and old == "on":
-                device_tracker_state["state"] = self.get_state(self.device_tracker, attribute = "all")
+                device_tracker_state = self.get_state(self.device_tracker, attribute = "all")
                 self.log("device_tracker_state: {}".format(device_tracker_state), level = "DEBUG")
                 last_changed = device_tracker_state["last_changed"]
                 #User got home: Device tracker changed to home before door sensor triggered
-                if device_tracker_state == "home" and (self.datetime() - last_changed ) < self.delay:
+                if device_tracker_state["state"]  == "home" and (self.datetime() - last_changed ) < self.delay:
                     self.log("User got home")
                     self.turn_on(self.input_boolean)
                 #User got home: Device tracker is still not home. Wait if it changes to home in the next self.delay seconds
-                elif device_tracker_state != "home":
+                elif device_tracker_state["state"]  != "home":
                     self.log("Wait for device tracker to change to 'home'")
                     self.timer_handle_list.append(self.run_in(self.check_if_user_got_home,self.delay))
                 #User left home: Device tracker is still home.  Wait if it changes to home in the next self.delay seconds
-                elif device_tracker_state == "home":
+                elif device_tracker_state["state"]  == "home":
                     self.log("Wait for device tracker to change to 'not_home'")
                     self.timer_handle_list.append(self.run_in(self.check_if_user_left_home,self.delay))
 
     def check_if_user_left_home(self, *kwargs):
-        device_tracker_state = self.get_state(self.device_tracker)
+        device_tracker_state = self.get_state(self.device_tracker, attribute = "all")
         self.log("device_tracker_state: {}".format(device_tracker_state), level = "DEBUG")
-        if device_tracker_state != "home":
+        if device_tracker_state["state"]  != "home":
             self.log("User left home")
             self.turn_off(self.input_boolean)
 
     def check_if_user_got_home(self, *kwargs):
-        device_tracker_state = self.get_state(self.device_tracker)
+        device_tracker_state = self.get_state(self.device_tracker, attribute = "all")
         self.log("device_tracker_state: {}".format(device_tracker_state), level = "DEBUG")
-        if device_tracker_state == "home":
+        if device_tracker_state["state"]  == "home":
             self.log("User got home")
             self.turn_on(self.input_boolean)
 
