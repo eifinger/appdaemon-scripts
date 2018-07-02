@@ -24,18 +24,33 @@ class ButtonClicked(hass.Hass):
         if data["entity_id"] == self.args["sensor"]:
             if data["click_type"] == "single":
                 self.log("ButtonClicked: {}".format(data["entity_id"]))
-                self.log("Toggling {}".format(self.args["actor_single"]))
                 if self.get_state(self.args["actor_single"]) == "on":
-                    self.turn_off(self.args["actor_single"])
+                    self.log("Turning {} off".format(self.args["actor_single"]))
+                    #Workaround for Yeelight see https://community.home-assistant.io/t/transition-for-turn-off-service-doesnt-work-for-yeelight-lightstrip/25333/4
+                    if self.args["actor_single"].startswith("light")
+                        self.call_service("light/turn_on", entity_id = self.args["actor_single"], transition = 1, brightness = 1)
+                        self.run_in(self.turn_off_workaround,2)
+                    else:
+                        self.turn_off(self.args["actor_single"])
                 if self.get_state(self.args["actor_single"]) == "off":
+                    self.log("Turning {} on".format(self.args["actor_single"]))
                     self.turn_on(self.args["actor_single"])
             if data["click_type"] == "double":
                 self.log("ButtonClicked: {}".format(data["entity_id"]))
                 self.log("Toggling {}".format(self.args["actor_double"]))
                 if self.get_state(self.args["actor_double"]) == "on":
-                    self.turn_off(self.args["actor_double"])
+                    #Workaround for Yeelight see https://community.home-assistant.io/t/transition-for-turn-off-service-doesnt-work-for-yeelight-lightstrip/25333/4
+                    if self.args["actor_single"].startswith("light")
+                        self.call_service("light/turn_on", entity_id = self.args["actor_single"], transition = 1, brightness = 1)
+                        self.run_in(self.turn_off_workaround,2)
+                    else:
+                        self.turn_off(self.args["actor_single"])
                 if self.get_state(self.args["actor_double"]) == "off":
+                    self.log("Turning {} on".format(self.args["actor_single"]))
                     self.turn_on(self.args["actor_double"])
+
+    def turn_off_workaround(self):
+        self.call_service("light/turn_off", entity_id = self.args["actor_single"])
 
     def terminate(self):
         for listen_event_handle in self.listen_event_handle_list:
