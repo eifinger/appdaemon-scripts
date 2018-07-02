@@ -22,18 +22,13 @@ class IsUserHomeDeterminer(hass.Hass):
 
     def initialize(self):
         self.listen_state_handle_list = []
+        self.timer_handle_list = []
 
         self.delay = 120
 
-        self.input_boolean = self.args["input_boolean"]
-        if self.input_boolean.startswith("secret_"):
-            self.input_boolean = self.get_secret(self.input_boolean)
-        self.device_tracker = self.args["device_tracker"]
-        if self.device_tracker.startswith("secret_"):
-            self.device_tracker = self.get_secret(self.device_tracker)
-        self.door_sensor = self.args["door_sensor"]
-        if self.door_sensor.startswith("secret_"):
-            self.door_sensor = self.get_secret(self.door_sensor)
+        self.input_boolean = self.get_arg("input_boolean")
+        self.device_tracker = self.get_arg("device_tracker")
+        self.door_sensor = self.get_arg("door_sensor")
         
         self.listen_state_handle_list.append(self.listen_state(self.state_change, self.door_sensor))
     
@@ -50,33 +45,40 @@ class IsUserHomeDeterminer(hass.Hass):
             #User got home: Device tracker is still not home. Wait if it changes to home in the next self.delay seconds
             elif device_tracker_state != "home":
                 self.log("Wait for device tracker to change to 'home'")
-                self.run_in(self.check_if_user_got_home,self.delay)
+                self.timer_handle_list.append(self.run_in(self.check_if_user_got_home,self.delay))
             #User left home: Device tracker is still home.  Wait if it changes to home in the next self.delay seconds
             elif device_tracker_state == "home":
                 self.log("Wait for device tracker to change to 'not_home'")
-                self.run_in(self.check_if_user_left_home,self.delay)
+                self.timer_handle_list.append(self.run_in(self.check_if_user_left_home,self.delay))
 
-    def check_if_user_left_home(self):
+    def check_if_user_left_home(self, *kwargs):
         device_tracker_state = self.get_state(self.device_tracker)
         self.log("device_tracker_state: {}".format(device_tracker_state), level = "DEBUG")
         if device_tracker_state != "home":
             self.log("User left home")
             self.turn_off(self.input_boolean)
 
-    def check_if_user_got_home(self):
+    def check_if_user_got_home(self, *kwargs):
         device_tracker_state = self.get_state(self.device_tracker)
         self.log("device_tracker_state: {}".format(device_tracker_state), level = "DEBUG")
         if device_tracker_state == "home":
             self.log("User got home")
             self.turn_on(self.input_boolean)
 
-    def get_secret(self, key):
-        if key in secrets.secret_dict:
-            return secrets.secret_dict[key]
+    def get_arg(self, key):
+        key = self.args[key]
+        if key.startswith("secret_"):
+            if key in secrets.secret_dict:
+                return secrets.secret_dict[key]
+            else:
+                self.log("Could not find {} in secret_dict".format(key))
         else:
-            self.log("Could not find {} in secret_dict".format(key))
+            return key
 
     def terminate(self):
         for listen_state_handle in self.listen_state_handle_list:
             self.cancel_listen_state(listen_state_handle)
+
+        for timer_handle in self.timer_handle_list:
+            self.cancel_timer(timer_handle)
       
