@@ -40,9 +40,9 @@ class IsUserHomeDeterminer(hass.Hass):
     def state_change(self, entity, attribute, old, new, kwargs):
         if new != "" and new != old:
             self.log("{} changed from {} to {}".format(entity,old,new))
-            device_tracker_state = self.get_state(self.device_tracker)
+            device_tracker_state = self.get_state(self.device_tracker, attribute = "all")
             self.log("device_tracker_state: {}".format(device_tracker_state))
-            last_changed = device_tracker_state["last_changed"]
+            last_changed = device_tracker_state["attributes"]["last_changed"]
             #User got home: Device tracker changed to home before door sensor triggered
             if device_tracker_state == "home" and (self.datetime() - last_changed ) < self.delay:
                 self.turn_on(self.input_boolean)
