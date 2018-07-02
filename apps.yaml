@@ -42,6 +42,14 @@ xiaomiroundButtonClicked:
   sensor: binary_sensor.switch_158d00012db9e5
   actor_single: switch.studyroom_lamp
   actor_double: switch.studyroom_ceiling_lamp
+
+xiaomiroundButtonBedroomClicked:
+  module: buttonClicked
+  class: ButtonClicked
+  sensor: binary_sensor.switch_158d0001b12a12
+  actor_single: light.bedroom_yeelight
+  actor_double: group.all
+
 #################################################################
 ## MotionTrigger
 #################################################################
