@@ -26,11 +26,11 @@ class IsHomeDeterminer(hass.Hass):
         if new != "" and new != old:
             self.log("{} changed from {} to {}".format(entity,old,new))
             if new == "on":
-                if self.are_others_away:
+                if self.are_others_away():
                     self.turn_on(self.ishome)
                     self.log("Setting {} to on".format(self.ishome))
             if new == "off":
-                if self.are_others_away:
+                if self.are_others_away():
                     self.turn_off(self.ishome)
                     self.log("Setting {} to off".format(self.ishome))
                     self.call_service("notify/group_notifications",message=messages.isHome_off())
