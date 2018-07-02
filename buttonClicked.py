@@ -27,7 +27,7 @@ class ButtonClicked(hass.Hass):
                 if self.get_state(self.args["actor_single"]) == "on":
                     self.log("Turning {} off".format(self.args["actor_single"]))
                     #Workaround for Yeelight see https://community.home-assistant.io/t/transition-for-turn-off-service-doesnt-work-for-yeelight-lightstrip/25333/4
-                    if self.args["actor_single"].startswith("light")
+                    if self.args["actor_single"].startswith("light"):
                         self.call_service("light/turn_on", entity_id = self.args["actor_single"], transition = 1, brightness = 1)
                         self.run_in(self.turn_off_workaround,2)
                     else:
@@ -40,7 +40,7 @@ class ButtonClicked(hass.Hass):
                 self.log("Toggling {}".format(self.args["actor_double"]))
                 if self.get_state(self.args["actor_double"]) == "on":
                     #Workaround for Yeelight see https://community.home-assistant.io/t/transition-for-turn-off-service-doesnt-work-for-yeelight-lightstrip/25333/4
-                    if self.args["actor_single"].startswith("light")
+                    if self.args["actor_single"].startswith("light"):
                         self.call_service("light/turn_on", entity_id = self.args["actor_single"], transition = 1, brightness = 1)
                         self.run_in(self.turn_off_workaround,2)
                     else:
