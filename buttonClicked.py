@@ -49,7 +49,7 @@ class ButtonClicked(hass.Hass):
                     self.log("Turning {} on".format(self.args["actor_single"]))
                     self.turn_on(self.args["actor_double"])
 
-    def turn_off_workaround(self):
+    def turn_off_workaround(self, *kwargs):
         self.call_service("light/turn_off", entity_id = self.args["actor_single"])
 
     def terminate(self):
