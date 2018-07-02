@@ -34,7 +34,10 @@ class ButtonClicked(hass.Hass):
                         self.turn_off(self.args["actor_single"])
                 if self.get_state(self.args["actor_single"]) == "off":
                     self.log("Turning {} on".format(self.args["actor_single"]))
-                    self.turn_on(self.args["actor_single"])
+                    if self.args["actor_single"].startswith("light"):
+                        self.call_service("light/turn_on", entity_id = self.args["actor_single"], transition = 1, brightness = 100)
+                    else:
+                        self.turn_on(self.args["actor_single"])
             if data["click_type"] == "double":
                 self.log("ButtonClicked: {}".format(data["entity_id"]))
                 self.log("Toggling {}".format(self.args["actor_double"]))
@@ -47,7 +50,10 @@ class ButtonClicked(hass.Hass):
                         self.turn_off(self.args["actor_single"])
                 if self.get_state(self.args["actor_double"]) == "off":
                     self.log("Turning {} on".format(self.args["actor_single"]))
-                    self.turn_on(self.args["actor_double"])
+                    if self.args["actor_single"].startswith("light"):
+                        self.call_service("light/turn_on", entity_id = self.args["actor_single"], transition = 1, brightness = 100)
+                    else:
+                        self.turn_on(self.args["actor_single"])
 
     def turn_off_workaround(self, *kwargs):
         self.call_service("light/turn_off", entity_id = self.args["actor_single"])
