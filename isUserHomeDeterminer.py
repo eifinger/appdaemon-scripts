@@ -1,6 +1,7 @@
 import appdaemon.plugins.hass.hassapi as hass
 import messages
 import secrets
+import datetime 
 #
 # App to toggle an input boolean when a person enters or leaves home.
 # This is determined based on a combination of a GPS device tracker and the door sensor.
@@ -39,8 +40,9 @@ class IsUserHomeDeterminer(hass.Hass):
                 device_tracker_state = self.get_state(self.device_tracker, attribute = "all")
                 self.log("device_tracker_state: {}".format(device_tracker_state), level = "DEBUG")
                 last_changed = device_tracker_state["last_changed"]
+                self.log("last_changed: {}".format(last_changed))
                 #User got home: Device tracker changed to home before door sensor triggered
-                if device_tracker_state["state"]  == "home" and (self.datetime() - last_changed ) < self.delay:
+                if device_tracker_state["state"]  == "home" and (datetime.datetime.now(datetime.timezone.utc) - self.convert_utc(last_changed) ) < datetime.timedelta(seconds=self.delay):
                     self.log("User got home")
                     self.turn_on(self.input_boolean)
                 #User got home: Device tracker is still not home. Wait if it changes to home in the next self.delay seconds
