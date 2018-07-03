@@ -48,7 +48,7 @@ class IsHomeDeterminer(hass.Hass):
         for input_boolean in self.args["input_booleans"]:
             if input_boolean == entity:
                 pass
-            elif self.get_state(self.get_arg(input_boolean)) == "on":
+            elif self.get_state(input_boolean) == "on":
                 return False
         return True
 
