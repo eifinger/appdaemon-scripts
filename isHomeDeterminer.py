@@ -35,7 +35,7 @@ class IsHomeDeterminer(hass.Hass):
                     self.log("Setting {} to off".format(self.ishome))
                     self.call_service("notify/group_notifications",message=messages.isHome_off())
 
-    def are_others_away():
+    def are_others_away(self):
         for input_boolean in self.args["input_booleans"]:
             if self.get_state(self.get_arg(input_boolean)) == "on":
                 return False
