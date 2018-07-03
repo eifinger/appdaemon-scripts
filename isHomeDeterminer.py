@@ -18,26 +18,37 @@ class IsHomeDeterminer(hass.Hass):
         self.listen_state_handle_list = []
 
         self.ishome = self.get_arg("ishome")
-        
+
         for input_boolean in self.get_arg_list("input_booleans"):
             self.listen_state_handle_list.append(self.listen_state(self.state_change, input_boolean))
+            if self.get_state(input_boolean) == "on":
+                if self.are_others_away(input_boolean):
+                    self.turn_on(self.ishome)
+                    self.log("Setting {} to on".format(self.ishome))
+            if self.get_state(input_boolean) == "off":
+                if self.are_others_away(input_boolean):
+                    self.turn_off(self.ishome)
+                    self.log("Setting {} to off".format(self.ishome))
+                    self.call_service("notify/group_notifications",message=messages.isHome_off())
     
     def state_change(self, entity, attribute, old, new, kwargs):
         if new != "" and new != old:
             self.log("{} changed from {} to {}".format(entity,old,new))
             if new == "on":
-                if self.are_others_away():
+                if self.are_others_away(entity):
                     self.turn_on(self.ishome)
                     self.log("Setting {} to on".format(self.ishome))
             if new == "off":
-                if self.are_others_away():
+                if self.are_others_away(entity):
                     self.turn_off(self.ishome)
                     self.log("Setting {} to off".format(self.ishome))
                     self.call_service("notify/group_notifications",message=messages.isHome_off())
 
-    def are_others_away(self):
+    def are_others_away(self, entity):
         for input_boolean in self.args["input_booleans"]:
-            if self.get_state(self.get_arg(input_boolean)) == "on":
+            if input_boolean == entity:
+                pass
+            elif self.get_state(self.get_arg(input_boolean)) == "on":
                 return False
         return True
 
