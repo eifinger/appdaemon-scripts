@@ -25,7 +25,7 @@ class IsUserHomeDeterminer(hass.Hass):
         self.listen_state_handle_list = []
         self.timer_handle_list = []
 
-        self.delay = 120
+        self.delay = 300
 
         self.input_boolean = self.get_arg("input_boolean")
         self.device_tracker = self.get_arg("device_tracker")
