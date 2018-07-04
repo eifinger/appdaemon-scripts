@@ -15,6 +15,9 @@ import appdaemon.plugins.hass.hassapi as hass
 #
 # Release Notes
 #
+# Version 1.3:
+#   Only turn off entity if it was turned on by this app
+#
 # Version 1.2:
 #   Add after_sundown argument
 #
@@ -31,20 +34,10 @@ class MotionTrigger(hass.Hass):
         self.timer_handle = None
         self.listen_event_handle_list = []
 
-        # Subscribe to sensors
-        if "sensor" in self.args:
-            if "entity_off" in self.args:
-                noMotionSince = self.get_state(self.args["sensor"], attribute="No motion since")
-                entityOffState = self.get_state(self.args["entity_off"])
-                if entityOffState == "on" and int(noMotionSince) > 0:
-                    self.log("Turning {} off".format(self.args["entity_off"]))
-                    self.turn_off(self.args["entity_off"])
-            else:
-                self.log("No entitity_off defined", level = "WARN")
+        self.turned_on_by_me = False #Giggedi
 
-            self.listen_event_handle_list.append(self.listen_event(self.motion_detected, "motion"))
-        else:
-            self.log("No sensor defined", level = "ERROR")
+        # Subscribe to sensors
+        self.listen_event_handle_list.append(self.listen_event(self.motion_detected, "motion"))
 
     
     def motion_detected(self, event_name, data, kwargs):
@@ -52,17 +45,22 @@ class MotionTrigger(hass.Hass):
         if data["entity_id"] == self.args["sensor"]:
             if "after_sundown" in self.args:
                 if self.args["after_sundown"] == True and self.sun_down():
-                    self.log("Motion detected: turning {} on".format(self.args["entity_on"]))
-                    self.turn_on(self.args["entity_on"])
+                    if self.get_state(self.args["entity_on"]) == "off":
+                        self.log("Motion detected: turning {} on".format(self.args["entity_on"]))
+                        self.turn_on(self.args["entity_on"])
+                        self.turned_on_by_me = True
             else:
-                self.log("Motion detected: turning {} on".format(self.args["entity_on"]))
-                self.turn_on(self.args["entity_on"])
+                if self.get_state(self.args["entity_on"]) == "off":
+                        self.log("Motion detected: turning {} on".format(self.args["entity_on"]))
+                        self.turn_on(self.args["entity_on"])
+                        self.turned_on_by_me = True
         if "delay" in self.args:
             delay = self.args["delay"]
         else:
             delay = 70
-        self.cancel_timer(self.timer_handle)
-        self.timer_handle = self.run_in(self.light_off, delay)
+        if self.turned_on_by_me = True:
+            self.cancel_timer(self.timer_handle)
+            self.timer_handle = self.run_in(self.light_off, delay)
   
     def light_off(self, kwargs):
         if "entity_off" in self.args:
