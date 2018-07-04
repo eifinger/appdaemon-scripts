@@ -46,7 +46,7 @@ class NotfiyOfActionWhenAway(hass.Hass):
 
   def get_arg(self, key):
     key = self.args[key]
-    if key.startswith("secret_"):
+    if type(key) is str and key.startswith("secret_"):
         if key in secrets.secret_dict:
             return secrets.secret_dict[key]
         else:
@@ -57,7 +57,7 @@ class NotfiyOfActionWhenAway(hass.Hass):
   def get_arg_list(self, key):
     arg_list = []
     for key in self.split_device_list(self.args[key]):
-        if key.startswith("secret_"):
+        if type(key) is str and key.startswith("secret_"):
             if key in secrets.secret_dict:
                 arg_list.append(secrets.secret_dict[key])
             else:
