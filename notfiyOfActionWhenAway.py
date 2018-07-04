@@ -36,8 +36,8 @@ class NotfiyOfActionWhenAway(hass.Hass):
         if entity.startswith("binary_sensor.motion_sensor") and new == "off":
           pass
         else:
-          self.log("Waiting {} seconds for someone to come home".format(self.ishome_delay))
-          self.timer_handle_list.append(self.run_in(self.notify_if_no_one_home,self.ishome_delay, entity = entity, new = new))
+          self.log("Waiting {} seconds for someone to come home".format(self.isHome_delay))
+          self.timer_handle_list.append(self.run_in(self.notify_if_no_one_home,self.isHome_delay, entity = entity, new = new))
 
   def notify_if_no_one_home(self, *args, **kwargs):
     if self.get_state(self.isHome) == "off":
