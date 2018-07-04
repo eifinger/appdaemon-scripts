@@ -24,11 +24,11 @@ class NotfiyOfActionWhenAway(hass.Hass):
     self.isHome_delay = self.get_arg("isHome_delay")
     self.isHome = self.get_arg("isHome")
 
-    for sensor in self.get_arg_list("sensor"):
-      self.listen_state_handle_list.append(self.listen_state(self.state_change, sensor))
-
     self.listen_state_handle_list = []
     self.timer_handle_list = []
+
+    for sensor in self.get_arg_list("sensor"):
+      self.listen_state_handle_list.append(self.listen_state(self.state_change, sensor))
     
   def state_change(self, entity, attribute, old, new, kwargs):
     if new != "":
