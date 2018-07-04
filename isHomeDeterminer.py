@@ -23,9 +23,8 @@ class IsHomeDeterminer(hass.Hass):
             self.log("{} is {}".format(input_boolean,self.get_state(input_boolean)))
             self.listen_state_handle_list.append(self.listen_state(self.state_change, input_boolean))
             if self.get_state(input_boolean) == "on":
-                if self.are_others_away(input_boolean):
-                    self.turn_on(self.ishome)
-                    self.log("Setting {} to on".format(self.ishome))
+                self.turn_on(self.ishome)
+                self.log("Setting {} to on".format(self.ishome))
             if self.get_state(input_boolean) == "off":
                 if self.are_others_away(input_boolean):
                     self.turn_off(self.ishome)
@@ -36,9 +35,8 @@ class IsHomeDeterminer(hass.Hass):
         if new != "" and new != old:
             self.log("{} changed from {} to {}".format(entity,old,new))
             if new == "on":
-                if self.are_others_away(entity):
-                    self.turn_on(self.ishome)
-                    self.log("Setting {} to on".format(self.ishome))
+                self.turn_on(self.ishome)
+                self.log("Setting {} to on".format(self.ishome))
             if new == "off":
                 if self.are_others_away(entity):
                     self.turn_off(self.ishome)
