@@ -11,15 +11,16 @@ global_modules:
 detectWrongStateWhenLeaving:
   module: detectWrongStateWhenLeaving
   class: DetectWrongStateWhenLeaving
-  sensor: binary_sensor.motion_sensor_158d00012aab97,media_player.denon_avrx1300w,switch.livingroom_large_lamp,switch.studyroom_lamp,switch.livingroom_small_lamp,switch.studyroom_ceiling_lamp,switch.storageroom_ceiling_lamp,switch.kitchen_ceiling_lamp,switch.livingroom_ceiling,switch.lobby_ceiling,switch.snowboard,light.bedroom_yeelight,light.bar_table
+  sensor: binary_sensor.door_window_sensor_158d000205b808,media_player.denon_avrx1300w,switch.large_lamp,switch.small_lamp,switch.snowboard,light.bedroom_yeelight,light.bar_table,light.lobby_yeelight,light.reading_lamp_yeelight,light.treppe_oben,light.stairs_lower_yeelight
   isHome: input_boolean.is_home
 
 notfiyOfActionWhenAway:
   module: notfiyOfActionWhenAway
   class: NotfiyOfActionWhenAway
-  sensor: binary_sensor.door_window_sensor_158d000126a57b,binary_sensor.motion_sensor_158d00012aab97,media_player.denon_avrx1300w,switch.livingroom_large_lamp,switch.studyroom_lamp,switch.livingroom_small_lamp,switch.studyroom_ceiling_lamp,switch.storageroom_ceiling_lamp,switch.kitchen_ceiling_lamp,switch.livingroom_ceiling,switch.lobby_ceiling,switch.snowboard,light.bedroom_yeelight,light.bar_table
+  sensor: binary_sensor.door_window_sensor_158d000126a57b,binary_sensor.door_window_sensor_158d0001bb4d94,binary_sensor.door_window_sensor_158d0001bb4dc0,binary_sensor.door_window_sensor_158d000205b808,binary_sensor.door_window_sensor_158d000205b82e,binary_sensor.motion_sensor_158d00012aab97,binary_sensor.motion_sensor_158d0001fa464b,binary_sensor.motion_sensor_158d0002006cfa
   isHome: input_boolean.is_home
   user_name: group_notifications
+  isHome_delay: 10
   global_dependencies:
     - messages
     - secrets
