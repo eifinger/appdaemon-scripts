@@ -58,7 +58,7 @@ class MotionTrigger(hass.Hass):
             delay = self.args["delay"]
         else:
             delay = 70
-        if self.turned_on_by_me = True:
+        if self.turned_on_by_me == True:
             self.cancel_timer(self.timer_handle)
             self.timer_handle = self.run_in(self.light_off, delay)
   
