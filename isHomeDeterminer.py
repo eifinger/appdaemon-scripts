@@ -20,6 +20,7 @@ class IsHomeDeterminer(hass.Hass):
         self.ishome = self.get_arg("ishome")
 
         for input_boolean in self.get_arg_list("input_booleans"):
+            self.log("{} is {}".format(input_boolean,self.get_state(input_boolean)))
             self.listen_state_handle_list.append(self.listen_state(self.state_change, input_boolean))
             if self.get_state(input_boolean) == "on":
                 if self.are_others_away(input_boolean):
@@ -45,8 +46,9 @@ class IsHomeDeterminer(hass.Hass):
                     self.call_service("notify/group_notifications",message=messages.isHome_off())
 
     def are_others_away(self, entity):
+        self.log("Entity: {}".format(entity))
         for input_boolean in self.get_arg_list("input_booleans"):
-            self.log("Checking {}".format(input_boolean))
+            self.log("{} is {}".format(input_boolean,self.get_state(input_boolean)))
             if input_boolean == entity:
                 pass
             elif self.get_state(input_boolean) == "on":
