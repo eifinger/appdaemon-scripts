@@ -5,8 +5,8 @@ import secrets
 # App to 
 #
 # Args:
-# input_booleans: list of input boolean which determine if a user is home
-# ishome: input boolean which determins if someone is home
+#   input_booleans: list of input boolean which determine if a user is home
+#   ishome: input boolean which determins if someone is home
 # Release Notes
 #
 # Version 1.0:
