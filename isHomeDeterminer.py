@@ -45,11 +45,14 @@ class IsHomeDeterminer(hass.Hass):
                     self.call_service("notify/group_notifications",message=messages.isHome_off())
 
     def are_others_away(self, entity):
-        for input_boolean in self.args["input_booleans"]:
+        for input_boolean in self.get_arg_list("input_booleans"):
+            self.log("Checking {}".format(input_boolean))
             if input_boolean == entity:
                 pass
             elif self.get_state(input_boolean) == "on":
+                self.log("{} is still at on".format(input_boolean))
                 return False
+        self.log("Everybody not home")
         return True
 
     def get_arg(self, key):
