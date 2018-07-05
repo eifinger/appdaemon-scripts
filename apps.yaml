@@ -4,6 +4,7 @@
 global_modules:
   - secrets
   - messages
+  - globals
 
 #################################################################
 ## Security
@@ -23,6 +24,17 @@ notfiyOfActionWhenAway:
   isHome_delay: 10
   global_dependencies:
     - messages
+    - secrets
+
+faceboxNotifier:
+  module: faceboxNotifier
+  class: FaceboxNotifier
+  sensor: binary_sensor.switch_158d0001b12a12
+  camera: camera.android_ip_webcam_door
+  filename: /config/www/facebox/tmp/image.jpg
+  image_processing: image_processing.facebox
+  global_dependencies:
+    - globals
     - secrets
   
 #################################################################
