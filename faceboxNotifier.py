@@ -39,6 +39,7 @@ class FaceboxNotifier(hass.Hass):
     def event_detected(self, event_name, data, kwargs):
         if data["entity_id"] == self.sensor:
             if data["click_type"] == "single":
+                self.log("Calling camera/snapshot")
                 self.call_service("camera/snapshot", entity_id = self.camera, filename = self.filename)
                 self.timer_handle_list.append(self.run_in(self.triggerImageProcessing,2))
 
@@ -50,6 +51,7 @@ class FaceboxNotifier(hass.Hass):
         self.timer_handle_list.append(self.run_in(self.triggerImageProcessing,2))
 
     def triggerImageProcessing(self, kwargs):
+        self.log("Calling image_processing/scan")
         self.call_service("image_processing/scan", entity_id = self.image_processing)
         
     def terminate(self):

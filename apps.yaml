@@ -29,7 +29,7 @@ notfiyOfActionWhenAway:
 faceboxNotifier:
   module: faceboxNotifier
   class: FaceboxNotifier
-  sensor: binary_sensor.switch_158d0001b12a12
+  sensor: binary_sensor.switch_158d00012db9e5
   camera: camera.android_ip_webcam_door
   filename: /config/www/facebox/tmp/image.jpg
   image_processing: image_processing.facebox
@@ -48,13 +48,6 @@ faceboxNotifier:
 #################################################################
 ## ButtonClicked
 #################################################################
-#Toggle Studyroom lamp when Xiaomi Button is clicked once
-xiaomiroundButtonClicked:
-  module: buttonClicked
-  class: ButtonClicked
-  sensor: binary_sensor.switch_158d00012db9e5
-  actor_single: switch.studyroom_lamp
-  actor_double: switch.studyroom_ceiling_lamp
 
 xiaomiroundButtonBedroomClicked:
   module: buttonClicked
