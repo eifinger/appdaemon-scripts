@@ -82,7 +82,7 @@ homeArrivalNotifierUserOne:
   module: homeArrivalNotifier
   class: HomeArrivalNotifier
   input_boolean: input_boolean.user_one_home
-  notify_name: secret_name_user_one
+  notify_name: group_notifications
   zone_name: Home
   global_dependencies:
     - secrets
@@ -93,7 +93,7 @@ homeArrivalNotifierUserTwo:
   module: homeArrivalNotifier
   class: HomeArrivalNotifier
   input_boolean: input_boolean.user_two_home
-  notify_name: secret_name_user_two
+  notify_name: group_notifications
   zone_name: Home
   global_dependencies:
     - secrets
@@ -201,11 +201,10 @@ nextApppointmentLeaveNotifier:
 leavingWorkNotifierUserOne:
   module: leavingZoneNotifier
   class: LeavingZoneNotifier
-  proximity: proximity.work
   device: secret_name_user_one
   user_name: secret_name_user_one
   zone: Work
-  zone_tracker_delay: 180
+  notify_name: group_notifications
   global_dependencies:
     - secrets
     - messages

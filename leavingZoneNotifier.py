@@ -2,17 +2,20 @@ import appdaemon.plugins.hass.hassapi as hass
 import messages
 import secrets
 import datetime
+import globals
 #
 # App to notify if user_one is leaving a zone. User had to be in that zone 3 minutes before in order for the notification to be triggered
 #
 # Args:
 #   device: Device to track
-#   proximity: Proximity Entity which the device is leaving from
 #   user_name: Name of the user used in the notification message
 #   zone: zone name from which the user is leaving
-#   zone_tracker_delay: delay between device_zone changes
+#   notify_name: Who to notify. example: group_notifications
 #
 # Release Notes
+#
+# Version 1.1:
+#   Rework without proximity
 #
 # Version 1.0:
 #   Initial Version
@@ -20,62 +23,45 @@ import datetime
 class LeavingZoneNotifier(hass.Hass):
 
     def initialize(self):
-        self.user_name = self.args["user_name"]
-        if self.user_name.startswith("secret_"):
-            self.user_name = self.get_secret(self.user_name)
 
-        self.device_zone = self.get_state(self.args["device"])
-        if "zone_tracker_delay" in self.args:
-            self.delay = self.args["zone_tracker_delay"]
-        else:
-            self.delay = 180
+        self.user_name = globals.get_arg(self.args,"user_name")
+        self.zone = globals.get_arg(self.args,"zone")
+        self.notify_name = globals.get_arg(self.args,"notify_name")
+        self.device = globals.get_arg(self.args,"device")
+        # 'lingering_time' the time a user has to stay in a zone for this app to trigger
+        self.lingering_time = 3600
+        self.delay = 120
+
+        self.user_entered_zone = None
 
         self.listen_state_handle_list = []
-        self.timer_handle = None
-
-        self.last_triggered = 0
+        self.timer_handle_list = []
         self.time_between_messages = datetime.timedelta(seconds=600)
 
-        self.listen_state_handle_list.append(self.listen_state(self.state_change, self.args["proximity"], attribute = "all"))
-        self.listen_state_handle_list.append(self.listen_state(self.zone_state_change, self.args["device"], attribute = "all"))
-    
-    def state_change(self, entity, attribute, old, new, kwargs):
-        device = self.args["device"]
-        if device.startswith("secret_"):
-            device = self.get_secret(device)
-
-        self.log("device: {}".format(device))
-        self.log("device_zone: {}".format(self.device_zone))
-        self.log("entity: {}, new: {}".format(entity,new))
-
-        if (new["attributes"]["nearest"] == device and 
-        old["attributes"]["dir_of_travel"] != "away_from" and 
-        new["attributes"]["dir_of_travel"] == "away_from" and
-        self.device_zone == self.args["zone"] and
-        (self.datetime() - self.last_triggered) > self.time_between_messages):
-            self.log(messages.user_is_leaving_zone().format(self.user_name, self.friendly_name(self.args["proximity"])))
-            self.call_service("notify/" + self.user_name,message=messages.user_is_leaving_zone().format(self.user_name, self.friendly_name(self.args["proximity"])))
-            
-        self.last_triggered = self.datetime()
-
+        self.listen_state_handle_list.append(self.listen_state(self.zone_state_change, self.device, attribute = "all"))
 
     def zone_state_change(self, entity, attributes, old, new, kwargs):
-        self.log("Zone change detected, will run set_device_zone in {} seconds".format(self.delay))
-        self.timer_handle = self.run_in(self.set_device_zone, self.delay, device_zone=new)
+        last_changed = self.convert_utc(new["attributes"]["last_changed"])
+        if new == self.zone:
+            self.log("Setting user_entered_zone to {}".format(last_changed))
+            self.user_entered_zone = last_changed
+        if old == self.zone:
+            if self.user_entered_zone == None or (self.convert_utc(last_changed) - self.user_entered_zone >= datetime.timedelta(seconds=self.lingering_time)):
+                self.log("Zone of {} changed from {} to {}. Wait {} seconds until notification.".format(self.friendly_name(entity),old,new,self.delay))
+                self.timer_handle_list.append(self.run_in(self.notify_user, self.delay, old_zone = old))
 
-    def set_device_zone(self, device_zone):
-        self.log("Setting device_zone to: {}".format(device_zone))
-        self.device_zone = device_zone
+        
 
-    def get_secret(self, key):
-        if key in secrets.secret_dict:
-            return secrets.secret_dict[key]
-        else:
-            self.log("Could not find {} in secret_dict".format(key))
+    def notify_user(self, kwargs):
+        #Check if user did not come back to the zone in the meantime
+        if self.get_state(self.device) != kwargs["old_zone"]:
+            self.call_service("notify/" + self.notify_name, message=messages.user_is_leaving_zone().format(self.user_name, self.zone)) 
+
 
     def terminate(self):
         for listen_state_handle in self.listen_state_handle_list:
             self.cancel_listen_state(listen_state_handle)
 
-        self.cancel_timer(self.timer_handle)
+        for timer_handle in self.timer_handle_list:
+            self.cancel_timer(timer_handle)
       
