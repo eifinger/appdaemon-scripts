@@ -34,7 +34,7 @@ class FaceboxNotifier(hass.Hass):
         # Subscribe to sensors
         self.listen_event_handle_list.append(self.listen_event(self.motion_detected, "motion"))
         self.listen_event_handle_list.append(self.listen_event(self.event_detected, "click"))
-        #self.listen_state_handle_list.append(self.listen_state(self.triggered,self.sensor))
+        self.listen_state_handle_list.append(self.listen_state(self.triggered,"binary_sensor.door_window_sensor_158d000126a57b"))
 
     def event_detected(self, event_name, data, kwargs):
         if data["entity_id"] == self.sensor:
@@ -47,6 +47,10 @@ class FaceboxNotifier(hass.Hass):
         self.log("Motion: event_name: {}, data: {}".format(event_name,data))
 
     def triggered(self, entity, attribute, old, new, kwargs):
+        if new == "on":
+            self.timer_handle_list.append(self.run_in(self.takeSnapshot,2))
+
+    def takeSnapshot(self, kwargs):
         self.call_service("camera/snapshot", entity_id = self.camera, filename = self.filename)
         self.timer_handle_list.append(self.run_in(self.triggerImageProcessing,2))
 
