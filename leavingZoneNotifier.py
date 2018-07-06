@@ -1,8 +1,8 @@
 import appdaemon.plugins.hass.hassapi as hass
 import messages
-import secrets
 import datetime
 import globals
+import secrets
 #
 # App to notify if user_one is leaving a zone. User had to be in that zone 3 minutes before in order for the notification to be triggered
 #
