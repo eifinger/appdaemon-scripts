@@ -1,3 +1,4 @@
+import secrets
 def get_arg(args, key):
         key = args[key]
         if key.startswith("secret_"):
