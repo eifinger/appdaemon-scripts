@@ -37,12 +37,12 @@ class NotfiyOfActionWhenAway(hass.Hass):
           pass
         else:
           self.log("Waiting {} seconds for someone to come home".format(self.isHome_delay))
-          self.timer_handle_list.append(self.run_in(self.notify_if_no_one_home,self.isHome_delay, entity = entity, new = new))
+          self.timer_handle_list.append(self.run_in(self.notify_if_no_one_home,self.isHome_delay, sensor = entity, new = new))
 
   def notify_if_no_one_home(self, **kwargs):
     if self.get_state(self.isHome) == "off":
-      self.log("{} changed to {}".format(self.friendly_name(kwargs["entity"]), kwargs["new"]))
-      self.call_service("notify/" + self.user_name,message=messages.device_change_alert().format(self.friendly_name(kwargs["entity"]), kwargs["new"]))
+      self.log("{} changed to {}".format(self.friendly_name(kwargs["sensor"]), kwargs["new"]))
+      self.call_service("notify/" + self.user_name,message=messages.device_change_alert().format(self.friendly_name(kwargs["sensor"]), kwargs["new"]))
 
   def terminate(self):
     for listen_state_handle in self.listen_state_handle_list:
