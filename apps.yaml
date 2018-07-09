@@ -66,6 +66,13 @@ obenTreppeMotionTrigger:
   entity_on: light.treppe_oben
   entity_off: light.treppe_oben
   after_sundown: True
+
+bedroomMotionTrigger:
+  module: motionTrigger
+  class: MotionTrigger
+  sensor: binary_sensor.motion_sensor_158d0002006cfa
+  entity_on: light.bedroom_yeelight
+  after_sundown: True
 #################################################################
 ## ComingHome
 #################################################################
