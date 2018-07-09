@@ -20,9 +20,9 @@ import globals
 class NotfiyOfActionWhenAway(hass.Hass):
 
   def initialize(self):
-    self.user_name = globals.get_arg("user_name")
-    self.isHome_delay = globals.get_arg("isHome_delay")
-    self.isHome = globals.get_arg("isHome")
+    self.user_name = globals.get_arg(self.args,"user_name")
+    self.isHome_delay = globals.get_arg(self.args,"isHome_delay")
+    self.isHome = globals.get_arg(self.args,"isHome")
 
     self.listen_state_handle_list = []
     self.timer_handle_list = []
