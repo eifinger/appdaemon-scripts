@@ -42,6 +42,7 @@ class LeavingZoneNotifier(hass.Hass):
 
     def zone_state_change(self, entity, attributes, old, new, kwargs):
         last_changed = self.convert_utc(new["attributes"]["last_changed"])
+        self.log("Zone of {} changed from {} to {}.".format(self.friendly_name(entity),old,new))
         if new == self.zone:
             self.log("Setting user_entered_zone to {}".format(last_changed))
             self.user_entered_zone = last_changed
