@@ -27,7 +27,7 @@ class NotfiyOfActionWhenAway(hass.Hass):
     self.listen_state_handle_list = []
     self.timer_handle_list = []
 
-    for sensor in globals.get_arg_list("sensor"):
+    for sensor in globals.get_arg_list(self.args,"sensor"):
       self.listen_state_handle_list.append(self.listen_state(self.state_change, sensor))
     
   def state_change(self, entity, attribute, old, new, kwargs):
