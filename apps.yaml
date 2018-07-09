@@ -83,6 +83,7 @@ homeArrivalNotifierUserOne:
   class: HomeArrivalNotifier
   input_boolean: input_boolean.user_one_home
   notify_name: group_notifications
+  user_name: secret_name_user_one
   zone_name: Home
   global_dependencies:
     - secrets
@@ -94,6 +95,7 @@ homeArrivalNotifierUserTwo:
   class: HomeArrivalNotifier
   input_boolean: input_boolean.user_two_home
   notify_name: group_notifications
+  user_name: secret_name_user_two
   zone_name: Home
   global_dependencies:
     - secrets
