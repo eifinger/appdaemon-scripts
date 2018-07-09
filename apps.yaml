@@ -21,6 +21,7 @@ detectDoorOpenWhenGoingToBed:
   sensor: binary_sensor.door_window_sensor_158d000205b808
   entity: light.bedroom_yeelight
   after_sundown: True
+  notify_name: group_notifications
   global_dependencies:
     - globals
     - messages
