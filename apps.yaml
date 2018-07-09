@@ -15,6 +15,16 @@ detectWrongStateWhenLeaving:
   sensor: binary_sensor.door_window_sensor_158d000205b808,media_player.denon_avrx1300w,switch.large_lamp,switch.small_lamp,switch.snowboard,light.bedroom_yeelight,light.bar_table,light.lobby_yeelight,light.reading_lamp_yeelight,light.treppe_oben,light.stairs_lower_yeelight
   isHome: input_boolean.is_home
 
+detectDoorOpenWhenGoingToBed:
+  module: detectDoorOpenWhenGoingToBed
+  class: DetectDoorOpenWhenGoingToBed
+  sensor: binary_sensor.door_window_sensor_158d000205b808
+  entity: light.bedroom_yeelight
+  after_sundown: True
+  global_dependencies:
+    - globals
+    - messages
+
 notfiyOfActionWhenAway:
   module: notfiyOfActionWhenAway
   class: NotfiyOfActionWhenAway
@@ -24,7 +34,7 @@ notfiyOfActionWhenAway:
   isHome_delay: 10
   global_dependencies:
     - messages
-    - secrets
+    - globals
 
 faceboxNotifier:
   module: faceboxNotifier
@@ -35,7 +45,7 @@ faceboxNotifier:
   image_processing: image_processing.facebox
   global_dependencies:
     - globals
-    - secrets
+    - messages
   
 #################################################################
 ## eventMonitor
