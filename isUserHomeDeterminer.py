@@ -27,9 +27,9 @@ class IsUserHomeDeterminer(hass.Hass):
 
         self.delay = 600
 
-        self.input_boolean = globals.get_arg("input_boolean")
-        self.device_tracker = globals.get_arg("device_tracker")
-        self.door_sensor = globals.get_arg("door_sensor")
+        self.input_boolean = globals.get_arg(self.args,"input_boolean")
+        self.device_tracker = globals.get_arg(self.args,"device_tracker")
+        self.door_sensor = globals.get_arg(self.args,"door_sensor")
         
         self.listen_state_handle_list.append(self.listen_state(self.state_change, self.door_sensor))
     
