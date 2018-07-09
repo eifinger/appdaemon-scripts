@@ -11,7 +11,7 @@ def get_arg(args, key):
 
 def get_arg_list(args, key):
     arg_list = []
-    for key in self.split_device_list(args[key]):
+    for key in (args[key]).split(","):
         if type(key) is str and key.startswith("secret_"):
             if key in secrets.secret_dict:
                 arg_list.append(secrets.secret_dict[key])
