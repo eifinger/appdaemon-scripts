@@ -1,13 +1,13 @@
 import appdaemon.plugins.hass.hassapi as hass
 import messages
-import secrets
+import globals
 import datetime 
 #
 # App to toggle an input boolean when a person enters or leaves home.
 # This is determined based on a combination of a GPS device tracker and the door sensor.
 #
-# - If the door sensor openes and the device_tracker changed to "home" in the last 2 minutes this means someone got home
-# - If the door sensor openes and the device_tracker changes to "not_home" in the next to minutes this means someone left home
+# - If the door sensor opens and the device_tracker changed to "home" in the last self.delay minutes this means someone got home
+# - If the door sensor opens and the device_tracker changes to "not_home" in the next self.delay minutes this means someone left home
 #
 # Args:
 #
@@ -27,9 +27,9 @@ class IsUserHomeDeterminer(hass.Hass):
 
         self.delay = 600
 
-        self.input_boolean = self.get_arg("input_boolean")
-        self.device_tracker = self.get_arg("device_tracker")
-        self.door_sensor = self.get_arg("door_sensor")
+        self.input_boolean = globals.get_arg("input_boolean")
+        self.device_tracker = globals.get_arg("device_tracker")
+        self.door_sensor = globals.get_arg("door_sensor")
         
         self.listen_state_handle_list.append(self.listen_state(self.state_change, self.door_sensor))
     
@@ -67,16 +67,6 @@ class IsUserHomeDeterminer(hass.Hass):
         if device_tracker_state["state"]  == "home":
             self.log("User got home")
             self.turn_on(self.input_boolean)
-
-    def get_arg(self, key):
-        key = self.args[key]
-        if key.startswith("secret_"):
-            if key in secrets.secret_dict:
-                return secrets.secret_dict[key]
-            else:
-                self.log("Could not find {} in secret_dict".format(key))
-        else:
-            return key
 
     def terminate(self):
         for listen_state_handle in self.listen_state_handle_list:
