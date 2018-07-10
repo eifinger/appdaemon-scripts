@@ -44,6 +44,8 @@ faceboxNotifier:
   camera: camera.android_ip_webcam_door
   filename: /config/www/facebox/tmp/image.jpg
   image_processing: image_processing.facebox
+  known_faces: secret_name_user_one,secret_name_user_two
+  notify_name: group_notifications
   global_dependencies:
     - globals
     - messages

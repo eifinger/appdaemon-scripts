@@ -84,6 +84,19 @@ def time_to_leave():
         return "It's time to leave to {}. It will take {} minutes"
     return "It's time to leave to {}. It will take {} minutes"
 
+def identified_face():
+    if language == "de":
+        return "Ich habe {} erkannt"
+    if language == "en":
+        return "I have recognized {}."
+    return "I have recognized {}."
+
+def unknown_face_detected():
+    if language == "de":
+        return "Ich habe dieses Gesicht nicht erkannt"
+    if language == "en":
+        return "I have not recognized this face"
+    return "I have not recognized this face"
     
     
     
