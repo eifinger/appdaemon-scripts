@@ -16,6 +16,9 @@ import datetime
 # door_sensor: Door sensor which indicated the frontdoor opened e.g. binary_sensor.door_window_sensor_158d000126a57b
 # Release Notes
 #
+# Version 1.1:
+#   Set when initializing (also when HA restarts)
+#
 # Version 1.0:
 #   Initial Version
 
@@ -30,9 +33,17 @@ class IsUserHomeDeterminer(hass.Hass):
         self.input_boolean = globals.get_arg(self.args,"input_boolean")
         self.device_tracker = globals.get_arg(self.args,"device_tracker")
         self.door_sensor = globals.get_arg(self.args,"door_sensor")
-        
+
+        device_tracker_state = self.get_state(self.device_tracker)
+        if device_tracker_state["state"]  == "home":
+            self.log("User is home")
+            self.turn_on(self.input_boolean)
+        else:
+            self.log("User is not home")
+            self.turn_off(self.input_boolean)
+
         self.listen_state_handle_list.append(self.listen_state(self.state_change, self.door_sensor))
-    
+        
     def state_change(self, entity, attribute, old, new, kwargs):
         if new != "" and new != old:
             self.log("{} changed from {} to {}".format(entity,old,new), level = "DEBUG")
