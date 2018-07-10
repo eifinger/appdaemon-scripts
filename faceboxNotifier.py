@@ -95,7 +95,7 @@ class FaceboxNotifier(hass.Hass):
                 directory = self.facebox_unknown_directory
                 if not os.path.exists(directory):
                     os.makedirs(directory)
-                filename =  directory + time.strftime("%Y%m%d%H%M%S.jpg")
+                filename =  directory + "/" + time.strftime("%Y%m%d%H%M%S.jpg")
                 self.log("Copy file from {} to {}".format(self.filename, filename))
                 shutil.copyfile(self.filename, filename)
 
