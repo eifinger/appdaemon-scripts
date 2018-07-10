@@ -11,11 +11,13 @@ import time
 # Args:
 #
 # sensor: binary sensor to use as trigger
+# button: xiaomi button to use as a trigger
 # camera : camera entity. example: camera.ip_webcam
 # filename : filename to write image file to. example: /config/www/facebox/tmp/image.jpg
 # image_processing: image_processing entity to call. example: image_processing.facebox_saved_images
 # known_faces: comma separated names of known faces. example: Tina,Markus
 # notify_name: Who to notify. example: group_notifications
+# wol_switch: Wake on Lan switch which turns on the facebox server. example: switch.facebox_wol
 #
 # Release Notes
 #
@@ -31,35 +33,37 @@ class FaceboxNotifier(hass.Hass):
         self.listen_state_handle_list = []
 
         self.sensor = globals.get_arg(self.args,"sensor")
+        self.button = globals.get_arg(self.args,"button")
         self.camera = globals.get_arg(self.args,"camera")
         self.filename = globals.get_arg(self.args,"filename")
         self.image_processing = globals.get_arg(self.args,"image_processing")
         self.known_faces = globals.get_arg_list(self.args,"known_faces")
         self.notify_name = globals.get_arg(self.args,"notify_name")
+        self.wol_switch = globals.get_arg(self.args,"wol_switch")
 
         self.facebox_source_directory = "/config/www/facebox/"
         self.facebox_unknown_directory = "/config/www/facebox/unknown"
 
         # Subscribe to sensors
-        self.listen_event_handle_list.append(self.listen_event(self.motion_detected, "motion"))
-        self.listen_event_handle_list.append(self.listen_event(self.event_detected, "click"))
-        self.listen_state_handle_list.append(self.listen_state(self.triggered,"binary_sensor.door_window_sensor_158d000126a57b"))
+        self.listen_event_handle_list.append(self.listen_event(self.button_clicked, "click"))
+        self.listen_state_handle_list.append(self.listen_state(self.triggered,self.sensor))
 
-    def event_detected(self, event_name, data, kwargs):
-        if data["entity_id"] == self.sensor:
+    def button_clicked(self, event_name, data, kwargs):
+        if data["entity_id"] == self.button:
             if data["click_type"] == "single":
-                self.log("Calling camera/snapshot")
-                self.call_service("camera/snapshot", entity_id = self.camera, filename = self.filename)
-                self.timer_handle_list.append(self.run_in(self.triggerImageProcessing,2))
-
-    def motion_detected(self, event_name, data, kwargs):
-        self.log("Motion: event_name: {}, data: {}".format(event_name,data))
+                self.timer_handle_list.append(self.run_in(self.sendWakeOnLan,1.5))
 
     def triggered(self, entity, attribute, old, new, kwargs):
         if new == "on":
-            self.timer_handle_list.append(self.run_in(self.takeSnapshot,1.5))
+            self.timer_handle_list.append(self.run_in(self.sendWakeOnLan,1.5))
+
+    def sendWakeOnLan(self, kwargs):
+        self.log("Sending WoL")
+        self.turn_on(self.wol_switch)
+        self.timer_handle_list.append(self.run_in(self.takeSnapshot,1.5))
 
     def takeSnapshot(self, kwargs):
+        self.log("Calling camera/snapshot")
         self.call_service("camera/snapshot", entity_id = self.camera, filename = self.filename)
         self.timer_handle_list.append(self.run_in(self.triggerImageProcessing,2))
 
