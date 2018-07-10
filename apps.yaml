@@ -93,7 +93,7 @@ comingHome:
   class: ComingHome
   sensor: binary_sensor.door_window_sensor_158d000126a57b
   isHome: input_boolean.is_home
-  actor: switch.livingroom_large_lamp
+  actor: light.lobby_yeelight
 
 #Notification if user one arrives at home
 homeArrivalNotifierUserOne:
