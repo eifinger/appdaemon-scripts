@@ -1,4 +1,5 @@
 import appdaemon.plugins.hass.hassapi as hass
+import globals
 #
 # App to Turn on Lobby Lamp when Door openes and no one is Home
 #
@@ -9,6 +10,9 @@ import appdaemon.plugins.hass.hassapi as hass
 # actor: actor to turn on
 # Release Notes
 #
+# Version 1.1:
+#   Using globals
+#
 # Version 1.0:
 #   Initial Version
 
@@ -17,19 +21,18 @@ class ComingHome(hass.Hass):
   def initialize(self):
     self.listen_state_handle_list = []
 
-    if "sensor" in self.args:
-      for sensor in self.split_device_list(self.args["sensor"]):
-        self.listen_state_handle_list.append(self.listen_state(self.state_change, sensor))
+    self.sensor = globals.get_arg(self.args,"sensor")
+    self.isHome = globals.get_arg(self.args,"isHome")
+    self.actor = globals.get_arg(self.args,"actor")
+
+    self.listen_state_handle_list.append(self.listen_state(self.state_change, self.sensor))
     
   def state_change(self, entity, attribute, old, new, kwargs):
     if new != "":
-      if "isHome" in self.args:
-        isHome = self.get_state(self.args["isHome"])
-        if isHome == "off" and self.get_state("sun.sun") == "below_horizon":
-          self.log("{} changed to {}".format(self.friendly_name(entity), new))
-          self.turn_on(self.args["actor"])
-      else:
-        self.log("isHome is not defined", level= "ERROR")
+      isHome_state = self.get_state(self.isHome)
+      if isHome_state == "off" and self.sun_down():
+        self.log("{} changed to {}".format(self.friendly_name(entity), new))
+        self.turn_on(self.actor)
 
   def terminate(self):
     for listen_state_handle in self.listen_state_handle_list:
