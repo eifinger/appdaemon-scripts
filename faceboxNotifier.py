@@ -46,7 +46,7 @@ class FaceboxNotifier(hass.Hass):
 
     def triggered(self, entity, attribute, old, new, kwargs):
         if new == "on":
-            self.timer_handle_list.append(self.run_in(self.takeSnapshot,2))
+            self.timer_handle_list.append(self.run_in(self.takeSnapshot,1.5))
 
     def takeSnapshot(self, kwargs):
         self.call_service("camera/snapshot", entity_id = self.camera, filename = self.filename)
