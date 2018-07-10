@@ -221,7 +221,7 @@ nextApppointmentLeaveNotifier:
 leavingWorkNotifierUserOne:
   module: leavingZoneNotifier
   class: LeavingZoneNotifier
-  device: secret_name_user_one
+  device: secret_device_user_one
   user_name: secret_name_user_one
   zone: Work
   notify_name: group_notifications
