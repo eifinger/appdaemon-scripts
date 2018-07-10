@@ -66,6 +66,7 @@ class FaceboxNotifier(hass.Hass):
     def triggerImageProcessing(self, kwargs):
         self.log("Calling image_processing/scan")
         self.call_service("image_processing/scan", entity_id = self.image_processing)
+        self.timer_handle_list.append(self.run_in(self.processImageProcessingResult,2))
 
     def processImageProcessingResult(self, kwargs):
         image_processing_state = self.get_state(self.image_processing, attribute = "all")
