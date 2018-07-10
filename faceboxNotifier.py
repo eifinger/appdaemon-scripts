@@ -38,6 +38,7 @@ class FaceboxNotifier(hass.Hass):
         self.notify_name = globals.get_arg_list(self.args,"notify_name")
 
         self.facebox_source_directory = "/config/www/facebox/"
+        self.facebox_unknown_directory = "/config/www/facebox/unknown"
 
         # Subscribe to sensors
         self.listen_event_handle_list.append(self.listen_event(self.motion_detected, "motion"))
@@ -88,7 +89,14 @@ class FaceboxNotifier(hass.Hass):
                     shutil.copyfile(self.filename, filename)
             if not face_identified:
                 self.log("Unknown face")
-
+                self.call_service("notify/" + self.notify_name,message=messages.unknown_face_detected())
+                #copy file for training
+                directory = self.facebox_unknown_directory
+                if not os.path.exists(directory):
+                    os.makedirs(directory)
+                filename =  directory + time.strftime("%Y%m%d%H%M%S.jpg")
+                self.log("Copy file from {} to {}".format(self.filename, filename))
+                shutil.copyfile(self.filename, filename)
 
         
     def terminate(self):
