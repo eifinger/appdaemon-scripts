@@ -35,7 +35,7 @@ class FaceboxNotifier(hass.Hass):
         self.filename = globals.get_arg(self.args,"filename")
         self.image_processing = globals.get_arg(self.args,"image_processing")
         self.known_faces = globals.get_arg_list(self.args,"known_faces")
-        self.notify_name = globals.get_arg_list(self.args,"notify_name")
+        self.notify_name = globals.get_arg(self.args,"notify_name")
 
         self.facebox_source_directory = "/config/www/facebox/"
         self.facebox_unknown_directory = "/config/www/facebox/unknown"
