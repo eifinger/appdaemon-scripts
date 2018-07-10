@@ -34,7 +34,7 @@ class IsUserHomeDeterminer(hass.Hass):
         self.device_tracker = globals.get_arg(self.args,"device_tracker")
         self.door_sensor = globals.get_arg(self.args,"door_sensor")
 
-        device_tracker_state = self.get_state(self.device_tracker)
+        device_tracker_state = self.get_state(self.device_tracker, attribute = "all")
         if device_tracker_state["state"]  == "home":
             self.log("User is home")
             self.turn_on(self.input_boolean)
