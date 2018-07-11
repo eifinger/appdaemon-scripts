@@ -34,6 +34,8 @@ class NextApppointmentLeaveNotifier(hass.Hass):
 
         self.timer_handle = None
 
+        self.google_source_url = "http://maps.google.com/maps?q="
+
         #Used to check of user got already notified for this event
         self.location_of_last_notified_event = ""
 
@@ -70,8 +72,9 @@ class NextApppointmentLeaveNotifier(hass.Hass):
             if self.location_of_last_notified_event == location_name:
                 self.log("User already got notified for {}".format())
             else:
+                google_maps_url = self.google_source_url + location_name.replace(" ","+")
                 self.log("Notify user")
-                self.call_service("notify/" + self.notify_name, message=messages.time_to_leave().format(location_name,self.get_state(self.travel_time_sensor)))
+                self.call_service("notify/" + self.notify_name, message=messages.time_to_leave().format(location_name,self.get_state(self.travel_time_sensor), google_maps_url))
                 self.location_of_last_notified_event = location_name
         else:
             self.log("Notification is turned off")

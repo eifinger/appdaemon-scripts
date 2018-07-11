@@ -79,10 +79,10 @@ def user_is_still_heading_to_zone():
 
 def time_to_leave():
     if language == "de":
-        return "Es ist Zeit loszufahren nach {}. Du brauchst {} Minuten"
+        return "Es ist Zeit loszufahren nach {}. Du brauchst {} Minuten. Hier ist ein Google Maps Link: {}"
     if language == "en":
-        return "It's time to leave to {}. It will take {} minutes"
-    return "It's time to leave to {}. It will take {} minutes"
+        return "It's time to leave to {}. It will take {} minutes. Here is a Google Maps Link: {}"
+    return "It's time to leave to {}. It will take {} minutes. Here is a Google Maps Link: {}"
 
 def identified_face():
     if language == "de":
