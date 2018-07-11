@@ -95,6 +95,8 @@ class FaceboxNotifier(hass.Hass):
             if not face_identified:
                 self.log("Unknown face")
                 self.call_service("notify/" + self.notify_name,message=messages.unknown_face_detected())
+                #send file
+                self.call_service("TELEGRAM_BOT/SEND_PHOTO", file=self.filename)
                 #copy file for training
                 directory = self.facebox_unknown_directory
                 if not os.path.exists(directory):
