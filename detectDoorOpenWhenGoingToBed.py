@@ -29,8 +29,12 @@ class DetectDoorOpenWhenGoingToBed(hass.Hass):
     self.listen_state_handle_list.append(self.listen_state(self.state_change, self.entity))
     
   def state_change(self, entity, attribute, old, new, kwargs):
+    self.log("new: {}".format(new))
+    self.log("after_sundown: {}".format(self.after_sundown))
+    self.log("sun_down: {}".format(self.sun_down()))
     if new != "" and new == "on" and ( ( self.after_sundown == True and self.sun_down() ) or self.after_sundown == False ):
         state = self.get_state(self.sensor)
+        self.log("state: {}".format(state))
         if state == "open":
           self.log(messages.forgot_window_open().format(self.friendly_name(self.sensor)))
           self.call_service("notify/" + self.notify_name,message=messages.forgot_window_open().format(self.friendly_name(self.sensor)))
