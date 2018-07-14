@@ -31,7 +31,7 @@ class NotfiyOfActionWhenAway(hass.Hass):
       self.listen_state_handle_list.append(self.listen_state(self.state_change, sensor))
     
   def state_change(self, entity, attribute, old, new, kwargs):
-    if new != "":
+    if new != "" and new != old:
       if self.get_state(self.isHome) == "off":
         if entity.startswith("binary_sensor.motion_sensor") and new == "off":
           pass
