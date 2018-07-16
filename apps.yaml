@@ -43,11 +43,23 @@ faceboxNotifier:
   sensor: binary_sensor.door_window_sensor_158d000126a57b
   button: binary_sensor.switch_158d00012db9e5
   camera: camera.android_ip_webcam_door
-  filename: /config/www/facebox/tmp/image.jpg
+  filename: secret_facebox_notifier_filename
   image_processing: image_processing.facebox
   known_faces: secret_name_user_one,secret_name_user_two
   notify_name: group_notifications
   wol_switch: switch.facebox_wol
+  global_dependencies:
+    - globals
+    - messages
+
+faceboxTeacher:
+  module: faceboxTeacher
+  class: FaceboxTeacher
+  folderpath: secret_facebox_folderpath
+  image_processing_healthcheck: image_processing.facebox_health_check_picture
+  healthcheck_face_name: secret_name_user_one
+  ip: secret_facebox_ip
+  port: secret_facebox_port
   global_dependencies:
     - globals
     - messages
