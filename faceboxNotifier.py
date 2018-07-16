@@ -5,7 +5,7 @@ import shutil
 import os
 import time
 #
-# App which runs facebox face detection and notifies the result
+# App which runs facebox face detection and notifies the user with the result
 #
 #
 # Args:
@@ -48,31 +48,42 @@ class FaceboxNotifier(hass.Hass):
         self.listen_event_handle_list.append(self.listen_event(self.button_clicked, "click"))
         self.listen_state_handle_list.append(self.listen_state(self.triggered,self.sensor))
 
+        self.listen_event_handle_list.append(self.listen_event(self.receive_telegram_text, 'telegram_text'))
+        self.listen_event_handle_list.append(self.listen_event(self.receive_telegram_callback, 'telegram_callback'))
+
     def button_clicked(self, event_name, data, kwargs):
+        """Extra callback method to trigger the face detection on demand by pressing a Xiaomi Button"""
         if data["entity_id"] == self.button:
             if data["click_type"] == "single":
                 self.timer_handle_list.append(self.run_in(self.sendWakeOnLan,1.5))
 
     def triggered(self, entity, attribute, old, new, kwargs):
+        """State Callback to start the face detection process"""
         if new == "on":
             self.timer_handle_list.append(self.run_in(self.sendWakeOnLan,1.5))
 
     def sendWakeOnLan(self, kwargs):
+        """Send a Wake on Lan package to the Facebox Server"""
         self.log("Sending WoL")
         self.turn_on(self.wol_switch)
         self.timer_handle_list.append(self.run_in(self.takeSnapshot,1.5))
 
     def takeSnapshot(self, kwargs):
+        """Take a snapshot. Save to a file."""
         self.log("Calling camera/snapshot")
         self.call_service("camera/snapshot", entity_id = self.camera, filename = self.filename)
         self.timer_handle_list.append(self.run_in(self.triggerImageProcessing,2))
 
     def triggerImageProcessing(self, kwargs):
+        """Trigger Facebox image processing (on the saved file)"""
         self.log("Calling image_processing/scan")
         self.call_service("image_processing/scan", entity_id = self.image_processing)
         self.timer_handle_list.append(self.run_in(self.processImageProcessingResult,2))
 
     def processImageProcessingResult(self, kwargs):
+        """Process the result of the facebox face detection. Based on the face detected, 
+        move the image to a new directory to be used as additional training data.
+        """
         image_processing_state = self.get_state(self.image_processing, attribute = "all")
         matched_faces = image_processing_state["attributes"]["matched_faces"]
         total_faces = image_processing_state["attributes"]["total_faces"]
@@ -104,6 +115,71 @@ class FaceboxNotifier(hass.Hass):
                 filename =  directory + "/" + time.strftime("%Y%m%d%H%M%S.jpg")
                 self.log("Copy file from {} to {}".format(self.filename, filename))
                 shutil.copyfile(self.filename, filename)
+
+    def receive_telegram_text(self, event_name, data, kwargs)):
+        """Text repeater."""
+        assert event_name == 'telegram_text'
+        user_id = data['user_id']
+        msg = 'You said: ``` %s ```' % data['text']
+        keyboard = [[("Edit message", "/edit_msg"),
+                     ("Don't", "/do_nothing")],
+                    [("Remove this button", "/remove button")]]
+        self.call_service('telegram_bot/send_message',
+                          title='*Dumb automation*',
+                          target=user_id,
+                          message=msg,
+                          disable_notification=True,
+                          inline_keyboard=keyboard)
+
+    def receive_telegram_callback(self, event_name, data, kwargs)):
+        """Event listener for Telegram callback queries."""
+        assert event_name == 'telegram_callback'
+        data_callback = data['data']
+        callback_id = data['id']
+        chat_id = data['chat_id']
+        # keyboard = ["Edit message:/edit_msg, Don't:/do_nothing",
+        #             "Remove this button:/remove button"]
+        keyboard = [[("Edit message", "/edit_msg"),
+                     ("Don't", "/do_nothing")],
+                    [("Remove this button", "/remove button")]]
+
+        if data_callback == '/edit_msg':  # Message editor:
+            # Answer callback query
+            self.call_service('telegram_bot/answer_callback_query',
+                              message='Editing the message!',
+                              callback_query_id=callback_id,
+                              show_alert=True)
+
+            # Edit the message origin of the callback query
+            msg_id = data['message']['message_id']
+            user = data['from_first']
+            title = '*Message edit*'
+            msg = 'Callback received from %s. Message id: %s. Data: ``` %s ```'
+            self.call_service('telegram_bot/edit_message',
+                              chat_id=chat_id,
+                              message_id=msg_id,
+                              title=title,
+                              message=msg % (user, msg_id, data_callback),
+                              inline_keyboard=keyboard)
+
+        elif data_callback == '/remove button':  # Keyboard editor:
+            # Answer callback query
+            self.call_service('telegram_bot/answer_callback_query',
+                              message='Callback received for editing the '
+                                      'inline keyboard!',
+                              callback_query_id=callback_id)
+
+            # Edit the keyboard
+            new_keyboard = keyboard[:1]
+            self.call_service('telegram_bot/edit_replymarkup',
+                              chat_id=chat_id,
+                              message_id='last',
+                              inline_keyboard=new_keyboard)
+
+        elif data_callback == '/do_nothing':  # Only Answer to callback query
+            self.call_service('telegram_bot/answer_callback_query',
+                              message='OK, you said no!',
+                              callback_query_id=callback_id)
 
         
     def terminate(self):
