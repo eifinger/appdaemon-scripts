@@ -97,6 +97,13 @@ def unknown_face_detected():
     if language == "en":
         return "I have not recognized this face"
     return "I have not recognized this face"
+
+def noface_detected():
+    if language == "de":
+        return "Ich konnte kein Gesicht finden"
+    if language == "en":
+        return "I could not detect a face"
+    return "I could not detect a face"
     
     
     

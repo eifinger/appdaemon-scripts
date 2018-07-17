@@ -48,6 +48,9 @@ faceboxNotifier:
   known_faces: secret_name_user_one,secret_name_user_two
   notify_name: group_notifications
   wol_switch: switch.facebox_wol
+  facebox_source_directory: secret_facebox_folderpath
+  facebox_unknown_directory: secret_facebox_unknown_directory
+  facebox_noface_directory: secret_facebox_noface_directory
   global_dependencies:
     - globals
     - messages

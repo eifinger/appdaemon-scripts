@@ -41,8 +41,16 @@ class FaceboxNotifier(hass.Hass):
         self.notify_name = globals.get_arg(self.args,"notify_name")
         self.wol_switch = globals.get_arg(self.args,"wol_switch")
 
-        self.facebox_source_directory = "/config/www/facebox/"
-        self.facebox_unknown_directory = "/config/www/facebox/unknown"
+        self.facebox_source_directory = globals.get_arg(self.args,"facebox_source_directory")
+        if not self.facebox_source_directory.endswith("/"):
+            self.facebox_source_directory = self.facebox_source_directory + "/"
+        self.facebox_unknown_directory = globals.get_arg(self.args,"facebox_unknown_directory") 
+        if not self.facebox_unknown_directory.endswith("/"):
+            self.facebox_unknown_directory = self.facebox_unknown_directory + "/"
+        self.facebox_noface_directory = globals.get_arg(self.args,"facebox_noface_directory") 
+        if not self.facebox_noface_directory.endswith("/"):
+            self.facebox_noface_directory = self.facebox_noface_directory + "/"
+            
 
         # Subscribe to sensors
         self.listen_event_handle_list.append(self.listen_event(self.button_clicked, "click"))
@@ -89,6 +97,14 @@ class FaceboxNotifier(hass.Hass):
         total_faces = image_processing_state["attributes"]["total_faces"]
         if total_faces == 0:
             self.log("No faces were detected.")
+            self.call_service("notify/" + self.notify_name,message=messages.noface_detected())
+            #send file
+            self.call_service("TELEGRAM_BOT/SEND_PHOTO", file=self.filename)
+            if not os.path.exists(self.facebox_noface_directory):
+                os.makedirs(self.facebox_noface_directory)
+            filename =  self.facebox_noface_directory + "/" + time.strftime("%Y%m%d%H%M%S.jpg")
+            self.log("Copy file from {} to {}".format(self.filename, filename))
+            shutil.copyfile(self.filename, filename)
         elif total_faces == 1:
             face_identified = False
             for face in self.known_faces:
@@ -112,7 +128,7 @@ class FaceboxNotifier(hass.Hass):
                 directory = self.facebox_unknown_directory
                 if not os.path.exists(directory):
                     os.makedirs(directory)
-                filename =  directory + "/" + time.strftime("%Y%m%d%H%M%S.jpg")
+                filename =  directory + time.strftime("%Y%m%d%H%M%S.jpg")
                 self.log("Copy file from {} to {}".format(self.filename, filename))
                 shutil.copyfile(self.filename, filename)
 
