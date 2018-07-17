@@ -81,8 +81,8 @@ class FaceboxTeacher(hass.Hass):
                 self.log(response.status_code)
                 return False
         except requests.exceptions.RequestException as exception:
-            self.log("Server is unreachable", level = "WARN")
-            self.log(exception, level = "WARN")
+            self.log("Server is unreachable", level = "WARNING")
+            self.log(exception, level = "WARNING")
             self.run_in_delay = self.run_in_delay * 2
             if self.run_in_delay > self.run_in_max_delay:
                 self.run_in_delay = self.run_in_max_delay
