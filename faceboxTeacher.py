@@ -41,7 +41,7 @@ class FaceboxTeacher(hass.Hass):
         self.timer_handle_list.append(self.run_minutely(self.run_minutely_callback, None))
         
                 
-    def run_minutely_callback():
+    def run_minutely_callback(self, kwargs):
         """Check health every minute"""
         if check_classifier_health():
             self.check_if_trained()
