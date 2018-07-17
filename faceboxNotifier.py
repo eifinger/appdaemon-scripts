@@ -58,7 +58,6 @@ class FaceboxNotifier(hass.Hass):
         self.listen_event_handle_list.append(self.listen_event(self.button_clicked, "click"))
         self.listen_state_handle_list.append(self.listen_state(self.triggered,self.sensor))
 
-        self.listen_event_handle_list.append(self.listen_event(self.receive_telegram_text, 'telegram_text'))
         self.listen_event_handle_list.append(self.listen_event(self.receive_telegram_callback, 'telegram_callback'))
 
     def button_clicked(self, event_name, data, kwargs):
