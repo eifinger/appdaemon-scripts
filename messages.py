@@ -93,10 +93,10 @@ def identified_face():
 
 def unknown_face_detected():
     if language == "de":
-        return "Ich habe dieses Gesicht nicht erkannt"
+        return "Ich habe dieses Gesicht nicht erkannt. Kennst du es?"
     if language == "en":
-        return "I have not recognized this face"
-    return "I have not recognized this face"
+        return "I have not recognized this face. Do you know it?"
+    return "I have not recognized this face. Do you know it?"
 
 def noface_detected():
     if language == "de":

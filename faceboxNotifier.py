@@ -18,6 +18,7 @@ import time
 # known_faces: comma separated names of known faces. example: Tina,Markus
 # notify_name: Who to notify. example: group_notifications
 # wol_switch: Wake on Lan switch which turns on the facebox server. example: switch.facebox_wol
+# user_id: The user_id of the telegram user to ask whether he knows an unknown face
 #
 # Release Notes
 #
@@ -40,6 +41,7 @@ class FaceboxNotifier(hass.Hass):
         self.known_faces = globals.get_arg_list(self.args,"known_faces")
         self.notify_name = globals.get_arg(self.args,"notify_name")
         self.wol_switch = globals.get_arg(self.args,"wol_switch")
+        self.user_id = globals.get_arg(self.args,"user_id")
 
         self.facebox_source_directory = globals.get_arg(self.args,"facebox_source_directory")
         if not self.facebox_source_directory.endswith("/"):
@@ -100,11 +102,7 @@ class FaceboxNotifier(hass.Hass):
             self.call_service("notify/" + self.notify_name,message=messages.noface_detected())
             #send file
             self.call_service("TELEGRAM_BOT/SEND_PHOTO", file=self.filename)
-            if not os.path.exists(self.facebox_noface_directory):
-                os.makedirs(self.facebox_noface_directory)
-            filename =  self.facebox_noface_directory + "/" + time.strftime("%Y%m%d%H%M%S.jpg")
-            self.log("Copy file from {} to {}".format(self.filename, filename))
-            shutil.copyfile(self.filename, filename)
+            self.copyFile(self.facebox_noface_directory, self.filename)
         elif total_faces == 1:
             face_identified = False
             for face in self.known_faces:
@@ -114,38 +112,36 @@ class FaceboxNotifier(hass.Hass):
                     self.call_service("notify/" + self.notify_name,message=messages.identified_face().format(face))
                     #copy file for training
                     directory = self.facebox_source_directory + face
-                    if not os.path.exists(directory):
-                        os.makedirs(directory)
-                    filename =  directory + "/" + time.strftime("%Y%m%d%H%M%S.jpg")
-                    self.log("Copy file from {} to {}".format(self.filename, filename))
-                    shutil.copyfile(self.filename, filename)
+                    self.copyFile(directory, self.filename)
             if not face_identified:
                 self.log("Unknown face")
-                self.call_service("notify/" + self.notify_name,message=messages.unknown_face_detected())
-                #send file
+                #send photo
                 self.call_service("TELEGRAM_BOT/SEND_PHOTO", file=self.filename)
                 #copy file for training
                 directory = self.facebox_unknown_directory
-                if not os.path.exists(directory):
-                    os.makedirs(directory)
-                filename =  directory + time.strftime("%Y%m%d%H%M%S.jpg")
-                self.log("Copy file from {} to {}".format(self.filename, filename))
-                shutil.copyfile(self.filename, filename)
+                new_filename = self.copyFile(directory, self.filename)
+                self.ask_for_name(new_filename)
+                
 
-    def receive_telegram_text(self, event_name, data, kwargs):
-        """Text repeater."""
-        assert event_name == 'telegram_text'
-        user_id = data['user_id']
-        msg = 'You said: ``` %s ```' % data['text']
-        keyboard = [[("Edit message", "/edit_msg"),
-                     ("Don't", "/do_nothing")],
-                    [("Remove this button", "/remove button")]]
+    def ask_for_name(self, filename):
+        """Asks the user if he knows the face in the photo.
+        The filename is needed to link the user reply back to this message"""
+        keyboard = [("Unbekannt","/unkown" + filename)]
+        for face in self.known_faces:
+            keyboard.append((face,"/" + face + filename))
         self.call_service('telegram_bot/send_message',
-                          title='*Dumb automation*',
-                          target=user_id,
-                          message=msg,
-                          disable_notification=True,
+                          target=self.user_id,
+                          message=messages.unknown_face_detected(),
                           inline_keyboard=keyboard)
+
+    def copyFile(self, directory, old_filename):
+        """Copies a file from an old absolute path to a new directory and names it after the current timestamp appended by '.jpg'"""
+        if not os.path.exists(directory):
+            os.makedirs(directory)
+        filename =  directory + time.strftime("%Y%m%d%H%M%S.jpg")
+        self.log("Copy file from {} to {}".format(old_filename, filename))
+        shutil.copyfile(old_filename, filename)
+        return filename
 
     def receive_telegram_callback(self, event_name, data, kwargs):
         """Event listener for Telegram callback queries."""
@@ -153,48 +149,21 @@ class FaceboxNotifier(hass.Hass):
         data_callback = data['data']
         callback_id = data['id']
         chat_id = data['chat_id']
-        # keyboard = ["Edit message:/edit_msg, Don't:/do_nothing",
-        #             "Remove this button:/remove button"]
-        keyboard = [[("Edit message", "/edit_msg"),
-                     ("Don't", "/do_nothing")],
-                    [("Remove this button", "/remove button")]]
+        self.log("callback data: {}".format(data))
 
-        if data_callback == '/edit_msg':  # Message editor:
-            # Answer callback query
-            self.call_service('telegram_bot/answer_callback_query',
-                              message='Editing the message!',
-                              callback_query_id=callback_id,
-                              show_alert=True)
-
-            # Edit the message origin of the callback query
-            msg_id = data['message']['message_id']
-            user = data['from_first']
-            title = '*Message edit*'
-            msg = 'Callback received from %s. Message id: %s. Data: ``` %s ```'
-            self.call_service('telegram_bot/edit_message',
-                              chat_id=chat_id,
-                              message_id=msg_id,
-                              title=title,
-                              message=msg % (user, msg_id, data_callback),
-                              inline_keyboard=keyboard)
-
-        elif data_callback == '/remove button':  # Keyboard editor:
-            # Answer callback query
-            self.call_service('telegram_bot/answer_callback_query',
-                              message='Callback received for editing the '
-                                      'inline keyboard!',
+        for face in self.known_faces:
+            if data_callback.startswith("/" + face):
+                self.call_service('telegram_bot/answer_callback_query',
+                              message="Dankeschön!",
                               callback_query_id=callback_id)
+                directory = self.facebox_source_directory + face
+                old_file_path = self.facebox_unknown_directory + data_callback.split("/" + face,1)[1]
+                self.copyFile(directory, old_file_path)      
 
-            # Edit the keyboard
-            new_keyboard = keyboard[:1]
-            self.call_service('telegram_bot/edit_replymarkup',
-                              chat_id=chat_id,
-                              message_id='last',
-                              inline_keyboard=new_keyboard)
-
-        elif data_callback == '/do_nothing':  # Only Answer to callback query
+        if data_callback.startswith('/unkown'):  # Keyboard editor:
+            # Answer callback query
             self.call_service('telegram_bot/answer_callback_query',
-                              message='OK, you said no!',
+                              message="Dankeschön!",
                               callback_query_id=callback_id)
 
         
