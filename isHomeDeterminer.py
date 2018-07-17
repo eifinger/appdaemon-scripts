@@ -1,6 +1,6 @@
 import appdaemon.plugins.hass.hassapi as hass
 import messages
-import secrets
+import globals
 #
 # App to 
 #
@@ -17,15 +17,16 @@ class IsHomeDeterminer(hass.Hass):
     def initialize(self):
         self.listen_state_handle_list = []
 
-        self.ishome = self.get_arg("ishome")
+        self.ishome = globals.get_arg(self.args,"ishome")
+        self.input_booleans = globals.get_arg_list(self.args,"input_booleans")
 
-        for input_boolean in self.get_arg_list("input_booleans"):
+        for input_boolean in self.input_booleans:
             self.log("{} is {}".format(input_boolean,self.get_state(input_boolean)))
             self.listen_state_handle_list.append(self.listen_state(self.state_change, input_boolean))
-            if self.get_state(input_boolean) == "on" and self.get_state(ishome) == "off":
+            if self.get_state(input_boolean) == "on" and self.get_state(self.ishome) == "off":
                 self.turn_on(self.ishome)
                 self.log("Setting {} to on".format(self.ishome))
-            if self.get_state(input_boolean) == "off" and self.get_state(ishome) == "on":
+            if self.get_state(input_boolean) == "off" and self.get_state(self.ishome) == "on":
                 if self.are_others_away(input_boolean):
                     self.turn_off(self.ishome)
                     self.log("Setting {} to off".format(self.ishome))
@@ -45,7 +46,7 @@ class IsHomeDeterminer(hass.Hass):
 
     def are_others_away(self, entity):
         self.log("Entity: {}".format(entity))
-        for input_boolean in self.get_arg_list("input_booleans"):
+        for input_boolean in self.input_booleans:
             self.log("{} is {}".format(input_boolean,self.get_state(input_boolean)))
             if input_boolean == entity:
                 pass
@@ -54,28 +55,6 @@ class IsHomeDeterminer(hass.Hass):
                 return False
         self.log("Everybody not home")
         return True
-
-    def get_arg(self, key):
-        key = self.args[key]
-        if key.startswith("secret_"):
-            if key in secrets.secret_dict:
-                return secrets.secret_dict[key]
-            else:
-                self.log("Could not find {} in secret_dict".format(key))
-        else:
-            return key
-
-    def get_arg_list(self, key):
-        arg_list = []
-        for key in self.split_device_list(self.args[key]):
-            if key.startswith("secret_"):
-                if key in secrets.secret_dict:
-                    arg_list.append(secrets.secret_dict[key])
-                else:
-                    self.log("Could not find {} in secret_dict".format(key))
-            else:
-                arg_list.append(key)
-        return arg_list
 
     def terminate(self):
         for listen_state_handle in self.listen_state_handle_list:
