@@ -22,10 +22,10 @@ class IsHomeDeterminer(hass.Hass):
         for input_boolean in self.get_arg_list("input_booleans"):
             self.log("{} is {}".format(input_boolean,self.get_state(input_boolean)))
             self.listen_state_handle_list.append(self.listen_state(self.state_change, input_boolean))
-            if self.get_state(input_boolean) == "on":
+            if self.get_state(input_boolean) == "on" and self.get_state(ishome) == "off":
                 self.turn_on(self.ishome)
                 self.log("Setting {} to on".format(self.ishome))
-            if self.get_state(input_boolean) == "off":
+            if self.get_state(input_boolean) == "off" and self.get_state(ishome) == "on":
                 if self.are_others_away(input_boolean):
                     self.turn_off(self.ishome)
                     self.log("Setting {} to off".format(self.ishome))
