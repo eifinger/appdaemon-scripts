@@ -38,13 +38,17 @@ class FaceboxTeacher(hass.Hass):
         self.teach_url = "http://{}:{}/facebox/teach".format(self.ip, self.port)
         self.health_url = "http://{}:{}/info".format(self.ip, self.port)
 
-        self.timer_handle_list.append(self.run_minutely(self.run_minutely_callback, None))
+        self.run_in_delay = 1
+        self.run_in_max_delay = 3600
+
+        self.timer_handle_list.append(self.run_in(self.run_in_callback, self.run_in_delay))
         
                 
-    def run_minutely_callback(self, kwargs):
+    def run_in_callback(self, kwargs):
         """Check health every minute"""
         if self.check_classifier_health():
             self.check_if_trained()
+        self.timer_handle_list.append(self.run_in(self.run_in_callback,self.run_in_delay))
 
     def teach_name_by_file(teach_url, name, file_path):
         """Teach facebox a single name using a single file."""
@@ -69,6 +73,8 @@ class FaceboxTeacher(hass.Hass):
             response = requests.get(self.health_url)
             if response.status_code == 200:
                 self.log("Health-check passed")
+                self.run_in_delay = 1
+                self.log("Setting run_in_delay to {}".format(self.run_in_delay))
                 return True
             else:
                 self.log("Health-check failed")
@@ -77,6 +83,10 @@ class FaceboxTeacher(hass.Hass):
         except requests.exceptions.RequestException as exception:
             self.log("Server is unreachable", level = "WARN")
             self.log(exception, level = "WARN")
+            self.run_in_delay = self.run_in_delay * 2
+            if self.run_in_delay > self.run_in_max_delay:
+                self.run_in_delay = self.run_in_max_delay
+            self.log("Setting run_in_delay to {}".format(self.run_in_delay))
 
     def check_if_trained(self):
         """Initiate healthcheck on facebox"""
