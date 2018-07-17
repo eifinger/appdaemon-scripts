@@ -75,8 +75,8 @@ class FaceboxTeacher(hass.Hass):
                 self.log(response.status_code)
                 return False
         except requests.exceptions.RequestException as exception:
-            self.log("Server is unreachable")
-            self.log(exception)
+            self.log("Server is unreachable", level = "WARN")
+            self.log(exception, level = "WARN")
 
     def check_if_trained(self):
         """Initiate healthcheck on facebox"""
