@@ -37,10 +37,10 @@ class IsUserHomeDeterminer(hass.Hass):
         device_tracker_state = self.get_state(self.device_tracker, attribute = "all")
         if device_tracker_state["state"]  == "home":
             self.log("User is home")
-            self.turn_on(self.input_boolean)
+            self.timer_handle_list.append(self.run_in(self.turn_on_callback, 0, turn_on_entity = self.input_boolean))
         else:
             self.log("User is not home")
-            self.turn_off(self.input_boolean)
+            self.timer_handle_list.append(self.run_in(self.turn_off_callback, 0, turn_off_entity = self.input_boolean))
 
         self.listen_state_handle_list.append(self.listen_state(self.state_change, self.door_sensor))
         
@@ -78,6 +78,22 @@ class IsUserHomeDeterminer(hass.Hass):
         if device_tracker_state["state"]  == "home":
             self.log("User got home")
             self.turn_on(self.input_boolean)
+
+    def turn_on_callback(self, kwargs):
+        """This is needed because the turn_on command can result in a HTTP 503 when homeassistant is restarting"""
+        try:
+            self.turn_on(kwargs["turn_on_entity"])
+        except requests.exceptions.HTTPError as exception:
+            self.log("Error trying to turn on entity. Will try again in 1s. Error: {}".format(exception), level = "WARN")
+            self.timer_handle_list.append(self.run_in(self.turn_on_callback,1))
+
+    def turn_off_callback(self, kwargs):
+        """This is needed because the turn_off command can result in a HTTP 503 when homeassistant is restarting"""
+        try:
+            self.turn_off(kwargs["turn_off_entity"])
+        except requests.exceptions.HTTPError as exception:
+            self.log("Error trying to turn off entity. Will try again in 1s. Error: {}".format(exception), level = "WARN")
+            self.timer_handle_list.append(self.run_in(self.turn_off_callback,1))
 
     def terminate(self):
         for listen_state_handle in self.listen_state_handle_list:
