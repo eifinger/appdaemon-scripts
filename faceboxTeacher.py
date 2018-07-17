@@ -43,7 +43,7 @@ class FaceboxTeacher(hass.Hass):
                 
     def run_minutely_callback(self, kwargs):
         """Check health every minute"""
-        if check_classifier_health():
+        if self.check_classifier_health():
             self.check_if_trained()
 
     def teach_name_by_file(teach_url, name, file_path):
