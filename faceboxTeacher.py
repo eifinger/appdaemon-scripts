@@ -66,16 +66,16 @@ class FaceboxTeacher(hass.Hass):
     def check_classifier_health(self):
         """Check that classifier is reachable"""
         try:
-            response = requests.get(HEALTH_URL)
+            response = requests.get(self.health_url)
             if response.status_code == 200:
-                self.log("{} health-check passed".format(CLASSIFIER))
+                self.log("Health-check passed")
                 return True
             else:
-                self.log("{} health-check failed".format(CLASSIFIER))
+                self.log("Health-check failed")
                 self.log(response.status_code)
                 return False
         except requests.exceptions.RequestException as exception:
-            self.log("{} is unreachable".format(CLASSIFIER))
+            self.log("Server is unreachable")
             self.log(exception)
 
     def check_if_trained(self):
