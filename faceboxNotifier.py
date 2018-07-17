@@ -132,7 +132,7 @@ class FaceboxNotifier(hass.Hass):
                 self.log("Copy file from {} to {}".format(self.filename, filename))
                 shutil.copyfile(self.filename, filename)
 
-    def receive_telegram_text(self, event_name, data, kwargs)):
+    def receive_telegram_text(self, event_name, data, kwargs):
         """Text repeater."""
         assert event_name == 'telegram_text'
         user_id = data['user_id']
@@ -147,7 +147,7 @@ class FaceboxNotifier(hass.Hass):
                           disable_notification=True,
                           inline_keyboard=keyboard)
 
-    def receive_telegram_callback(self, event_name, data, kwargs)):
+    def receive_telegram_callback(self, event_name, data, kwargs):
         """Event listener for Telegram callback queries."""
         assert event_name == 'telegram_callback'
         data_callback = data['data']
