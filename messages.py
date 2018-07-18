@@ -133,6 +133,19 @@ def plants_watering_reminder_evening():
         return "I'm not sure whether you waterd your plants, so I thought I better remind you again"
     return "I'm not sure whether you waterd your plants, so I thought I better remind you again"
 
+def power_usage_on():
+    if language == "de":
+        return "{} ist gestartet."
+    if language == "en":
+        return "{} just started."
+    return "{} just started."
+
+def power_usage_off():
+    if language == "de":
+        return "{} ist fertig."
+    if language == "en":
+        return "{} just finished."
+    return "{} just finished."
     
     
     

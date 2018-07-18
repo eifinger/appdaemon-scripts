@@ -297,5 +297,20 @@ plantWateringNotifier:
   notify_name: group_notifications
   user_id: secret_telegram_user_id
   global_dependencies:
-    - secrets
+    - globals
+    - messages
+
+#################################################################
+## Plants Watering Reminder
+#################################################################
+powerUsageNotification_Dishwasher:
+  module: powerUsageNotification
+  class: PowerUsageNotification
+  sensor: sensor.dishwasher_power_usage
+  notify_name: group_notifications
+  delay: 60
+  threshold: 2
+  alternative_name: Die Spülmaschine
+  global_dependencies:
+    - globals
     - messages
