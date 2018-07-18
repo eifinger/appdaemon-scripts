@@ -43,9 +43,9 @@ class PlantWateringNotifier(hass.Hass):
         self.listen_event_handle_list.append(self.listen_event(self.receive_telegram_callback, 'telegram_callback'))
 
         #Remind daily at 08:00
-        self.timer_handle_list.append(self.run_daily(self.run_morning_callback,time = datetime.time(8, 0, 0)))
+        self.timer_handle_list.append(self.run_daily(self.run_morning_callback, datetime.time(8, 0, 0)))
         #Remind daily at 18:00
-        self.timer_handle_list.append(self.run_daily(self.run_evening_callback,time = datetime.time(18, 0, 0)))
+        self.timer_handle_list.append(self.run_daily(self.run_evening_callback, datetime.time(18, 0, 0)))
 
     def run_morning_callback(self, kwargs):
         """Check if it will rain and if not remind the user to water the plants"""
