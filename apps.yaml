@@ -285,4 +285,17 @@ roomBasedLightControl:
   global_dependencies:
     - secrets
     - messages
-
+#################################################################
+## Plants Watering Reminder
+#################################################################
+plantWateringNotifier:
+  module: plantWateringNotifier
+  class: PlantWateringNotifier
+  rain_precip_sensor: sensor.dark_sky_precip_probability
+  rain_precip_intensity_sensor: sensor.dark_sky_precip_intensity
+  precip_type_sensor: sensor.dark_sky_precip
+  notify_name: group_notifications
+  user_id: secret_telegram_user_id
+  global_dependencies:
+    - secrets
+    - messages

@@ -111,6 +111,28 @@ def facebox_not_responding():
     if language == "en":
         return "Facebox is not responding. Here is the photo"
     return "Facebox is not responding. Here is the photo"
+
+def plants_watering_reminder():
+    if language == "de":
+        return "Die Regenwahrscheinlichkeit beträgt heute nur {}. Vergiss nicht die Pflanzen zu gießen!"
+    if language == "en":
+        return "The Rain Propability is only {}. Don't forget to water the plants!"
+    return "The Rain Propability is only {}. Don't forget to water the plants!"
+
+def plants_watering_not_needed():
+    if language == "de":
+        return "Es wird heute mit einer Wahrscheinlichkeit von {} Prozent ungefähr {} Millimeter pro Stunde regnen. Du brauchst nicht selbst gießen."
+    if language == "en":
+        return "It will rain today {} millimeter per hour with a propability of {}. You don't have to water your plants"
+    return "It will rain today {} millimeter per hour with a propability of {}. You don't have to water your plants"
+
+def plants_watering_reminder_evening():
+    if language == "de":
+        return "Ich bin mir nicht sicher ob du vergessen hast die Pflanzen zu gießen, deswegen erinnere ich dich lieber noch einmal daran."
+    if language == "en":
+        return "I'm not sure whether you waterd your plants, so I thought I better remind you again"
+    return "I'm not sure whether you waterd your plants, so I thought I better remind you again"
+
     
     
     
