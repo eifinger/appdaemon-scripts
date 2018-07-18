@@ -2,6 +2,7 @@ import appdaemon.plugins.hass.hassapi as hass
 import messages
 import globals
 import datetime 
+import requests
 #
 # App to toggle an input boolean when a person enters or leaves home.
 # This is determined based on a combination of a GPS device tracker and the door sensor.
