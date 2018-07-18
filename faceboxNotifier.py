@@ -4,6 +4,7 @@ import messages
 import shutil
 import os
 import time
+import datetime
 #
 # App which runs facebox face detection and notifies the user with the result
 #
@@ -94,9 +95,17 @@ class FaceboxNotifier(hass.Hass):
         move the image to a new directory to be used as additional training data.
         """
         image_processing_state = self.get_state(self.image_processing, attribute = "all")
+        last_updated = image_processing_state["last_updated"]
         matched_faces = image_processing_state["attributes"]["matched_faces"]
         total_faces = image_processing_state["attributes"]["total_faces"]
-        if total_faces == 0:
+        if (datetime.datetime.now(datetime.timezone.utc) - self.convert_utc(last_changed) ) > datetime.timedelta(seconds=4):
+            self.log("Imageprocessing is down", level="WARNING")
+            self.call_service("notify/" + self.notify_name,message=messages.facebox_not_responding())
+            #send file
+            self.call_service("TELEGRAM_BOT/SEND_PHOTO", file=self.filename)
+            directory = self.facebox_unknown_directory
+            self.copyFile(directory, self.filename)
+        elif total_faces == 0:
             self.log("No faces were detected.")
             self.call_service("notify/" + self.notify_name,message=messages.noface_detected())
             #send file
@@ -120,6 +129,16 @@ class FaceboxNotifier(hass.Hass):
                 directory = self.facebox_unknown_directory
                 new_filename = self.copyFile(directory, self.filename)
                 self.ask_for_name(new_filename)
+        elif total_faces > 1:
+            for face in self.known_faces:
+                if face in matched_faces:
+                    self.log(messages.identified_face().format(face))
+                    self.call_service("notify/" + self.notify_name,message=messages.identified_face().format(face))
+            if total_faces != len(matched_faces):
+                self.log("Unknown face")
+                self.call_service("notify/" + self.notify_name,message=messages.unknown_face_detected())
+                #send photo
+                self.call_service("TELEGRAM_BOT/SEND_PHOTO", file=self.filename)
                 
 
     def ask_for_name(self, filename):

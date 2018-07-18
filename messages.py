@@ -104,6 +104,13 @@ def noface_detected():
     if language == "en":
         return "I could not detect a face"
     return "I could not detect a face"
+
+def facebox_not_responding():
+    if language == "de":
+        return "Facebox antwortet nicht. Hier ist das Bild"
+    if language == "en":
+        return "Facebox is not responding. Here is the photo"
+    return "Facebox is not responding. Here is the photo"
     
     
     
