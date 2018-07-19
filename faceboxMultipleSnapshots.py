@@ -75,7 +75,7 @@ class FaceboxMultipleSnapshots(hass.Hass):
         if new == "on":
             self.takeSnapshot()
 
-    def takeSnapshot(self, kwargs):
+    def takeSnapshot(self, *kwargs):
         """Take a snapshot. Save to a file."""
         for i in range(0,4):
             filename = self.facebox_source_directory + time.strftime("%Y%m%d%H%M%S") + "/" + str(i) + ".jpg"
