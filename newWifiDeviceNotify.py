@@ -1,7 +1,7 @@
-import appdaemon.appapi as appapi
+import appdaemon.plugins.hass.hassapi as hass
 import messages
 
-class DeviceNotify(appapi.AppDaemon):
+class DeviceNotify(hass.Hass):
 
   def initialize(self):
     self.listen_event_handle_list = []
