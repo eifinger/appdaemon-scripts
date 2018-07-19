@@ -133,7 +133,7 @@ class FaceboxNotifier(hass.Hass):
                 directory = self.facebox_unknown_directory
                 new_filename = self.copyFile(directory, self.filename)
                 self.ask_for_name(new_filename)
-        elif total_faces > 1:
+        elif total_faces != None and total_faces > 1:
             for face in self.known_faces:
                 if face in matched_faces:
                     self.log(messages.identified_face().format(face))
