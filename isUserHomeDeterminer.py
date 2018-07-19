@@ -85,7 +85,7 @@ class IsUserHomeDeterminer(hass.Hass):
         try:
             self.turn_on(kwargs["turn_on_entity"])
         except requests.exceptions.HTTPError as exception:
-            self.log("Error trying to turn on entity. Will try again in 1s. Error: {}".format(exception), level = "WARN")
+            self.log("Error trying to turn on entity. Will try again in 1s. Error: {}".format(exception), level = "WARNING")
             self.timer_handle_list.append(self.run_in(self.turn_on_callback,1))
 
     def turn_off_callback(self, kwargs):
@@ -93,7 +93,7 @@ class IsUserHomeDeterminer(hass.Hass):
         try:
             self.turn_off(kwargs["turn_off_entity"])
         except requests.exceptions.HTTPError as exception:
-            self.log("Error trying to turn off entity. Will try again in 1s. Error: {}".format(exception), level = "WARN")
+            self.log("Error trying to turn off entity. Will try again in 1s. Error: {}".format(exception), level = "WARNING")
             self.timer_handle_list.append(self.run_in(self.turn_off_callback,1))
 
     def terminate(self):
