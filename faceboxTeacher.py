@@ -49,7 +49,7 @@ class FaceboxTeacher(hass.Hass):
         """Check health every minute"""
         if self.check_classifier_health():
             self.check_if_trained()
-        self.timer_handle_list.append(self.run_in(self.run_in_callback,self.self.run_in_delay))
+        self.timer_handle_list.append(self.run_in(self.run_in_callback,self.run_in_delay))
 
     def teach_name_by_file(teach_url, name, file_path):
         """Teach facebox a single name using a single file."""
