@@ -71,10 +71,10 @@ faceboxTeacher:
 #################################################################
 ## eventMonitor
 #################################################################
-eventMonitor:
-  module: eventMonitor
-  class: Monitor
-  events: 
+#eventMonitor:
+#  module: eventMonitor
+#  class: Monitor
+#  events: 
 
 #################################################################
 ## ButtonClicked
