@@ -53,6 +53,8 @@ class FaceboxNotifier(hass.Hass):
         self.facebox_noface_directory = globals.get_arg(self.args,"facebox_noface_directory") 
         if not self.facebox_noface_directory.endswith("/"):
             self.facebox_noface_directory = self.facebox_noface_directory + "/"
+
+        self.waitBeforeSnapshot = 1.5
             
 
         # Subscribe to sensors
@@ -65,12 +67,12 @@ class FaceboxNotifier(hass.Hass):
         """Extra callback method to trigger the face detection on demand by pressing a Xiaomi Button"""
         if data["entity_id"] == self.button:
             if data["click_type"] == "single":
-                self.timer_handle_list.append(self.run_in(self.sendWakeOnLan,1.5))
+                self.timer_handle_list.append(self.run_in(self.takeSnapshot,self.waitBeforeSnapshot))
 
     def triggered(self, entity, attribute, old, new, kwargs):
         """State Callback to start the face detection process"""
         if new == "on":
-            self.timer_handle_list.append(self.run_in(self.sendWakeOnLan,1.5))
+            self.timer_handle_list.append(self.run_in(self.takeSnapshot,self.waitBeforeSnapshot))
 
     def sendWakeOnLan(self, kwargs):
         """Send a Wake on Lan package to the Facebox Server"""
@@ -82,7 +84,7 @@ class FaceboxNotifier(hass.Hass):
         """Take a snapshot. Save to a file."""
         self.log("Calling camera/snapshot")
         self.call_service("camera/snapshot", entity_id = self.camera, filename = self.filename)
-        self.timer_handle_list.append(self.run_in(self.triggerImageProcessing,2))
+        self.timer_handle_list.append(self.run_in(self.sendWakeOnLan,0))
 
     def triggerImageProcessing(self, kwargs):
         """Trigger Facebox image processing (on the saved file)"""
