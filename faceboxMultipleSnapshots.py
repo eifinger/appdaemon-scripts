@@ -68,12 +68,12 @@ class FaceboxMultipleSnapshots(hass.Hass):
         """Extra callback method to trigger the face detection on demand by pressing a Xiaomi Button"""
         if data["entity_id"] == self.button:
             if data["click_type"] == "single":
-                self.takeSnapshot()
+                self.takeSnapshot(None)
 
     def triggered(self, entity, attribute, old, new, kwargs):
         """State Callback to start the face detection process"""
         if new == "on":
-            self.takeSnapshot()
+            self.takeSnapshot(None)
 
     def takeSnapshot(self, kwargs):
         """Take a snapshot. Save to a file."""
