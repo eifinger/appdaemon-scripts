@@ -38,7 +38,7 @@ class IsUserHomeDeterminer(hass.Hass):
         device_tracker_state = self.get_state(self.device_tracker, attribute = "all")
         if device_tracker_state["state"]  == "home":
             self.log("User is home")
-            self.timer_handle_list.append(self.run_in(self.turn_on_callback, 0, self.input_boolean))
+            self.timer_handle_list.append(self.run_in(self.turn_on_callback, 0, *self.input_boolean))
         else:
             self.log("User is not home")
             self.timer_handle_list.append(self.run_in(self.turn_off_callback, 0, turn_off_entity = self.input_boolean))
