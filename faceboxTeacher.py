@@ -43,6 +43,8 @@ class FaceboxTeacher(hass.Hass):
         self.run_in_error_delay = 60
 
         self.timer_handle_list.append(self.run_in(self.run_in_callback, 0))
+
+        self.listen_event_handle_list.append(self.listen_event(self.event_callback,"eifinger_learn_faces"))
         
                 
     def run_in_callback(self, kwargs):
@@ -50,6 +52,11 @@ class FaceboxTeacher(hass.Hass):
         if self.check_classifier_health():
             self.check_if_trained()
         self.timer_handle_list.append(self.run_in(self.run_in_callback,self.run_in_delay))
+
+    def event_callback(self, event_name, data, kwargs):
+        """Callback function for manual trigger of face learning"""
+        self.log("Event received. Triggering Face Learning")
+        self.run_in_callback(None)
 
     def teach_name_by_file(teach_url, name, file_path):
         """Teach facebox a single name using a single file."""
