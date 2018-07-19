@@ -86,7 +86,7 @@ class IsUserHomeDeterminer(hass.Hass):
             self.turn_on(kwargs["turn_on_entity"])
         except requests.exceptions.HTTPError as exception:
             self.log("Error trying to turn on entity. Will try again in 1s. Error: {}".format(exception), level = "WARNING")
-            self.timer_handle_list.append(self.run_in(self.turn_on_callback,1,kwargs))
+            self.timer_handle_list.append(self.run_in(self.turn_on_callback, 1, turn_on_entity = kwargs["turn_on_entity"]))
 
     def turn_off_callback(self, kwargs):
         """This is needed because the turn_off command can result in a HTTP 503 when homeassistant is restarting"""
@@ -94,7 +94,7 @@ class IsUserHomeDeterminer(hass.Hass):
             self.turn_off(kwargs["turn_off_entity"])
         except requests.exceptions.HTTPError as exception:
             self.log("Error trying to turn off entity. Will try again in 1s. Error: {}".format(exception), level = "WARNING")
-            self.timer_handle_list.append(self.run_in(self.turn_off_callback,1,kwargs))
+            self.timer_handle_list.append(self.run_in(self.turn_off_callback, 1, turn_off_entity = kwargs["turn_off_entity"]))
 
     def terminate(self):
         for listen_state_handle in self.listen_state_handle_list:
