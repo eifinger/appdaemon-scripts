@@ -74,7 +74,7 @@ class PlantWateringNotifier(hass.Hass):
 
     def run_evening_callback(self, kwargs):
         """Remind user to water the plants he if didn't acknowledge it"""
-        if(precip_propability >= self.propability_minimum and precip_intensity >= self.intensity_minimum):
+        if( not self.reminder_acknowledged ):
             self.log("Reminding user")
             self.call_service("notify/" + self.notify_name,message=messages.plants_watering_reminder_evening())
 
