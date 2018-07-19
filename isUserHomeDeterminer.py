@@ -80,10 +80,10 @@ class IsUserHomeDeterminer(hass.Hass):
             self.log("User got home")
             self.turn_on(self.input_boolean)
 
-    def turn_on_callback(self, args,**kwargs):
+    def turn_on_callback(self, turn_on_entity):
         """This is needed because the turn_on command can result in a HTTP 503 when homeassistant is restarting"""
         try:
-            self.turn_on(kwargs["turn_on_entity"])
+            self.turn_on(turn_on_entity)
         except requests.exceptions.HTTPError as exception:
             self.log("Error trying to turn on entity. Will try again in 1s. Error: {}".format(exception), level = "WARNING")
             self.timer_handle_list.append(self.run_in(self.turn_on_callback,1))
