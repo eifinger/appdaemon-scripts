@@ -42,19 +42,19 @@ class PowerUsageNotification(hass.Hass):
     
     def state_change(self, entity, attribute, old, new, kwargs):
         # Initial: power usage goes up
-        if ( not self.triggered and int(new) > self.threshold ):
+        if ( not self.triggered and float(new) > self.threshold ):
             self.triggered = True
-            self.log("Power Usage is: {}".format(int(new)))
+            self.log("Power Usage is: {}".format(float(new)))
             self.log("Setting triggered to: {}".format(self.triggered))
             self.call_service("notify/" + self.notify_name,message=messages.power_usage_off().format(self.alternative_name))
         # Power usage goes down below threshold
-        elif ( self.triggered and self.isWaitingHandle == None and int(new) <= self.threshold):
+        elif ( self.triggered and self.isWaitingHandle == None and float(new) <= self.threshold):
             self.log("Waiting: {} seconds to notify.".format(self.delay))
             self.isWaitingHandle = self.run_in(notify_device_off,self.delay)
             self.log("Setting isWaitingHandle to: {}".format(self.isWaitingHandle))
             self.timer_handle_list.append(self.isWaitingHandle)
         # Power usage goes up before delay
-        elif( self.triggered and self.isWaitingHandle != None and int(new) > self.threshold):
+        elif( self.triggered and self.isWaitingHandle != None and float(new) > self.threshold):
             self.log("Cancelling timer")
             self.cancel_timer(self.isWaitingHandle)
             self.isWaitingHandle = None
