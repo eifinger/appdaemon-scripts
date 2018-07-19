@@ -80,7 +80,7 @@ class IsUserHomeDeterminer(hass.Hass):
             self.log("User got home")
             self.turn_on(self.input_boolean)
 
-    def turn_on_callback(self, **kwargs):
+    def turn_on_callback(self, args,**kwargs):
         """This is needed because the turn_on command can result in a HTTP 503 when homeassistant is restarting"""
         try:
             self.turn_on(kwargs["turn_on_entity"])
