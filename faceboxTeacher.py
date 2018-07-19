@@ -38,17 +38,18 @@ class FaceboxTeacher(hass.Hass):
         self.teach_url = "http://{}:{}/facebox/teach".format(self.ip, self.port)
         self.health_url = "http://{}:{}/info".format(self.ip, self.port)
 
-        self.run_in_delay = 1
-        self.run_in_max_delay = 3600
+        self.run_in_initial_delay = 43200
+        self.run_in_delay = self.run_in_initial_delay
+        self.run_in_error_delay = 60
 
-        self.timer_handle_list.append(self.run_in(self.run_in_callback, self.run_in_delay))
+        self.timer_handle_list.append(self.run_in(self.run_in_callback, 0))
         
                 
     def run_in_callback(self, kwargs):
         """Check health every minute"""
         if self.check_classifier_health():
             self.check_if_trained()
-        self.timer_handle_list.append(self.run_in(self.run_in_callback,self.run_in_delay))
+        self.timer_handle_list.append(self.run_in(self.run_in_callback,self.self.run_in_delay))
 
     def teach_name_by_file(teach_url, name, file_path):
         """Teach facebox a single name using a single file."""
@@ -73,19 +74,26 @@ class FaceboxTeacher(hass.Hass):
             response = requests.get(self.health_url)
             if response.status_code == 200:
                 self.log("Health-check passed")
-                self.run_in_delay = 1
+                self.run_in_delay = self.run_in_initial_delay
                 self.log("Setting run_in_delay to {}".format(self.run_in_delay))
                 return True
             else:
                 self.log("Health-check failed")
                 self.log(response.status_code)
+                # check for recurring error
+                if self.run_in_delay < self.run_in_initial_delay:
+                    self.run_in_delay = self.run_in_delay * 2
+                else:
+                    self.run_in_delay = self.run_in_error_delay
                 return False
         except requests.exceptions.RequestException as exception:
             self.log("Server is unreachable", level = "WARNING")
             self.log(exception, level = "WARNING")
-            self.run_in_delay = self.run_in_delay * 2
-            if self.run_in_delay > self.run_in_max_delay:
-                self.run_in_delay = self.run_in_max_delay
+            # check for recurring error
+            if self.run_in_delay < self.run_in_initial_delay:
+                self.run_in_delay = self.run_in_delay * 2
+            else:
+                self.run_in_delay = self.run_in_error_delay
             self.log("Setting run_in_delay to {}".format(self.run_in_delay))
 
     def check_if_trained(self):
