@@ -56,7 +56,7 @@ class FaceboxNotifier(hass.Hass):
         if not self.facebox_noface_directory.endswith("/"):
             self.facebox_noface_directory = self.facebox_noface_directory + "/"
 
-        self.waitBeforeSnapshot = 1.5
+        self.waitBeforeSnapshot = 2.5
             
 
         # Subscribe to sensors
