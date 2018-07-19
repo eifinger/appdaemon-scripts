@@ -23,6 +23,8 @@ import datetime
 #
 # Release Notes
 #
+# Version 1.1:
+#   Take Snapshot before sending WoL
 # Version 1.0:
 #   Initial Version
 
