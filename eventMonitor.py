@@ -16,6 +16,7 @@ class Monitor(hass.Hass):
                 self.log('watching event "{}" for state changes'.format(event))
                 self.listen_event_handle_list.append(self.listen_event(self.changed, event))
         if len(self.listen_event_handle_list) == 0:
+            self.log('watching all events for state changes')
             self.listen_event_handle_list.append(self.listen_event(self.changed))
 
     def changed(self, event_name, data, kwargs):
