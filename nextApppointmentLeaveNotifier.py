@@ -38,8 +38,9 @@ class NextApppointmentLeaveNotifier(hass.Hass):
 
         #Used to check of user got already notified for this event
         self.location_of_last_notified_event = ""
-
-        if self.get_state(self.sensor) != "unknown":
+        destination_name = self.get_state(self.destination_name_sensor)
+        self.log("destination_name_sensor: {} ".format(destination_name))
+        if destination_name != "unknown" and destination_name != "None":
             notification_time = datetime.datetime.strptime(self.get_state(self.sensor),"%Y-%m-%d %H:%M")
             if self.get_state(self.travel_time_sensor) != "unknown":
                 try:
@@ -57,7 +58,9 @@ class NextApppointmentLeaveNotifier(hass.Hass):
             #Timer was not set
             pass
         #Parse time string from sensor. For parsing information look at http://strftime.org/
-        if self.get_state(self.sensor) != "unknown":
+        destination_name = self.get_state(self.destination_name_sensor)
+        self.log("destination_name_sensor: {} ".format(destination_name))
+        if destination_name != "unknown" and destination_name != "None":
             notification_time = datetime.datetime.strptime(self.get_state(self.sensor),"%Y-%m-%d %H:%M")
             if self.get_state(self.travel_time_sensor) != "unknown":
                 try:
