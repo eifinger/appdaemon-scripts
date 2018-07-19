@@ -98,7 +98,7 @@ class FaceboxNotifier(hass.Hass):
         last_updated = image_processing_state["last_updated"]
         matched_faces = image_processing_state["attributes"]["matched_faces"]
         total_faces = image_processing_state["attributes"]["total_faces"]
-        if (datetime.datetime.now(datetime.timezone.utc) - self.convert_utc(last_changed) ) > datetime.timedelta(seconds=4):
+        if (datetime.datetime.now(datetime.timezone.utc) - self.convert_utc(last_updated) ) > datetime.timedelta(seconds=4):
             self.log("Imageprocessing is down", level="WARNING")
             self.call_service("notify/" + self.notify_name,message=messages.facebox_not_responding())
             #send file
