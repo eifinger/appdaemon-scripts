@@ -76,17 +76,17 @@ class FaceboxNotifier(hass.Hass):
         if new == "on":
             self.timer_handle_list.append(self.run_in(self.takeSnapshot,self.waitBeforeSnapshot))
 
-    def sendWakeOnLan(self, kwargs):
-        """Send a Wake on Lan package to the Facebox Server"""
-        self.log("Sending WoL")
-        self.turn_on(self.wol_switch)
-        self.timer_handle_list.append(self.run_in(self.takeSnapshot,1.5))
-
     def takeSnapshot(self, kwargs):
         """Take a snapshot. Save to a file."""
         self.log("Calling camera/snapshot")
         self.call_service("camera/snapshot", entity_id = self.camera, filename = self.filename)
         self.timer_handle_list.append(self.run_in(self.sendWakeOnLan,0))
+
+    def sendWakeOnLan(self, kwargs):
+        """Send a Wake on Lan package to the Facebox Server"""
+        self.log("Sending WoL")
+        self.turn_on(self.wol_switch)
+        self.timer_handle_list.append(self.run_in(self.triggerImageProcessing,1.5))
 
     def triggerImageProcessing(self, kwargs):
         """Trigger Facebox image processing (on the saved file)"""
