@@ -66,21 +66,21 @@ class IsUserHomeDeterminer(hass.Hass):
                     self.log("Wait for device tracker to change to 'not_home'")
                     self.timer_handle_list.append(self.run_in(self.check_if_user_left_home,self.delay))
 
-    def check_if_user_left_home(self, *kwargs):
+    def check_if_user_left_home(self,  kwargs):
         device_tracker_state = self.get_state(self.device_tracker, attribute = "all")
         self.log("device_tracker_state: {}".format(device_tracker_state), level = "DEBUG")
         if device_tracker_state["state"]  != "home":
             self.log("User left home")
             self.turn_off(self.input_boolean)
 
-    def check_if_user_got_home(self, *kwargs):
+    def check_if_user_got_home(self,  kwargs):
         device_tracker_state = self.get_state(self.device_tracker, attribute = "all")
         self.log("device_tracker_state: {}".format(device_tracker_state), level = "DEBUG")
         if device_tracker_state["state"]  == "home":
             self.log("User got home")
             self.turn_on(self.input_boolean)
 
-    def turn_on_callback(self, *kwargs):
+    def turn_on_callback(self, kwargs):
         """This is needed because the turn_on command can result in a HTTP 503 when homeassistant is restarting"""
         try:
             self.turn_on(kwargs["turn_on_entity"])
@@ -88,7 +88,7 @@ class IsUserHomeDeterminer(hass.Hass):
             self.log("Error trying to turn on entity. Will try again in 1s. Error: {}".format(exception), level = "WARNING")
             self.timer_handle_list.append(self.run_in(self.turn_on_callback, 1, turn_on_entity = kwargs["turn_on_entity"]))
 
-    def turn_off_callback(self, *kwargs):
+    def turn_off_callback(self, kwargs):
         """This is needed because the turn_off command can result in a HTTP 503 when homeassistant is restarting"""
         try:
             self.turn_off(kwargs["turn_off_entity"])
