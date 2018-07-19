@@ -15,4 +15,5 @@ secret_dict = {
     "secret_facebox_ip": "192.168.0.1",
     "secret_facebox_port": "12345",
     "secret_facebox_notifier_filename": "/config/www/facebox/tmp/image.jpg",
-    "secret_telegram_user_id": -21415521}
+    "secret_telegram_user_id": -21415521,
+    "secret_facebox_folderpath_multiple": "/config/www/facebox/multiple"}

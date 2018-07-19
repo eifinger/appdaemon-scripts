@@ -56,6 +56,25 @@ faceboxNotifier:
     - globals
     - messages
 
+faceboxMultipleSnapshots:
+  module: faceboxMultipleSnapshots
+  class: FaceboxMultipleSnapshots
+  sensor: binary_sensor.door_window_sensor_158d000126a57b
+  button: binary_sensor.switch_158d00012db9e5
+  camera: camera.android_ip_webcam_door
+  filename: secret_facebox_notifier_filename
+  image_processing: image_processing.facebox
+  known_faces: secret_name_user_one,secret_name_user_two
+  notify_name: group_notifications
+  wol_switch: switch.facebox_wol
+  user_id: secret_telegram_user_id
+  facebox_source_directory: secret_facebox_folderpath_multiple
+  facebox_unknown_directory: secret_facebox_unknown_directory
+  facebox_noface_directory: secret_facebox_noface_directory
+  global_dependencies:
+    - globals
+    - messages
+
 faceboxTeacher:
   module: faceboxTeacher
   class: FaceboxTeacher
