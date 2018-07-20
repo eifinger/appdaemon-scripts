@@ -46,7 +46,7 @@ class PowerUsageNotification(hass.Hass):
             self.triggered = True
             self.log("Power Usage is: {}".format(float(new)))
             self.log("Setting triggered to: {}".format(self.triggered))
-            self.call_service("notify/" + self.notify_name,message=messages.power_usage_off().format(self.alternative_name))
+            self.call_service("notify/" + self.notify_name,message=messages.power_usage_on().format(self.alternative_name))
         # Power usage goes down below threshold
         elif ( self.triggered and self.isWaitingHandle == None and float(new) <= self.threshold):
             self.log("Waiting: {} seconds to notify.".format(self.delay))
@@ -67,6 +67,7 @@ class PowerUsageNotification(hass.Hass):
         self.log("Setting triggered to: {}".format(self.triggered))
         self.isWaitingHandle = None
         self.log("Setting isWaitingHandle to: {}".format(self.isWaitingHandle))
+        self.call_service("notify/" + self.notify_name,message=messages.power_usage_off().format(self.alternative_name))
         
 
     def terminate(self):
