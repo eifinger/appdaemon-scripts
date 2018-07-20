@@ -19,7 +19,7 @@ import requests
 # Version 1.0:
 #   Initial Version
 
-class Standardsetter(hass.Hass):
+class StandardSetter(hass.Hass):
 
     def initialize(self):
     
