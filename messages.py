@@ -146,6 +146,13 @@ def power_usage_off():
     if language == "en":
         return "{} just finished."
     return "{} just finished."
+
+def alarm_triggered():
+    if language == "de":
+        return "Guten Morgen!"
+    if language == "en":
+        return "Good Morning!"
+    return "Good Morning!"
     
     
     
