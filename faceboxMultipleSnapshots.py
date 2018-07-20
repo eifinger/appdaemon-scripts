@@ -78,7 +78,10 @@ class FaceboxMultipleSnapshots(hass.Hass):
     def takeSnapshot(self, kwargs):
         """Take a snapshot. Save to a file."""
         for i in range(0,4):
-            filename = self.facebox_source_directory + time.strftime("%Y%m%d%H%M%S") + "/" + str(i) + ".jpg"
+            directory = self.facebox_source_directory + time.strftime("%Y%m%d%H%M%S")
+            filename = directory + "/" + str(i) + ".jpg"
+            if not os.path.exists(directory):
+                os.makedirs(directory)
             self.log("Calling camera/snapshot and saving it to: {}".format(filename))
             self.call_service("camera/snapshot", entity_id = self.camera, filename = filename)
         #self.timer_handle_list.append(self.run_in(self.sendWakeOnLan,0))
