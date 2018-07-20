@@ -29,25 +29,32 @@ class StandardSetter(hass.Hass):
 
         self.entity = globals.get_arg(self.args,"entity")
         self.standard_entity = globals.get_arg(self.args,"standard_entity")
-        self.trigger_event = globals.get_arg(self.args, "trigger_event")
-        self.trigger_state = globals.get_arg(self.args, "trigger_state")
+        try:
+            self.trigger_event = globals.get_arg(self.args, "trigger_event")
+        except KeyError as identifier:
+            self.trigger_event = None
+        try:
+            self.trigger_state = globals.get_arg(self.args, "trigger_state")
+        except KeyError as identifier:
+            self.trigger_state = None
+        
         self.trigger_entity = globals.get_arg(self.args, "trigger_entity")
 
         if self.trigger_event != None:
             self.listen_event_handle_list.append(self.listen_event(self.event_callback,self.trigger_event))
-
         self.listen_state_handle_list.append(self.listen_state(self.state_change, self.trigger_entity))
     
     
     def state_change(self, entity, attributes, old, new, kwargs):
-        if new != None and new == self.trigger_state:
-            if self.entity.startswith("input_select."):
-                self.log("Setting {} to {}.".format(self.entity, self.get_state(self.standard_entity)))
-                self.select_option(self.entity,self.get_state(self.standard_entity))
-            elif self.entity.startswith("input_number."):
-                self.set_value(self.entity,self.get_state(self.standard_entity))
-            else:
-                self.log("Unsupported entity type {}. Supported are: 'input_select' and 'input_select'".format(self.entity), level = "ERROR")
+        if new != None:
+            if self.trigger_state == None or (self.trigger_state != None and new == self.trigger_state):
+                if self.entity.startswith("input_select."):
+                    self.log("Setting {} to {}.".format(self.entity, self.get_state(self.standard_entity)))
+                    self.select_option(self.entity,self.get_state(self.standard_entity))
+                elif self.entity.startswith("input_number."):
+                    self.set_value(self.entity,self.get_state(self.standard_entity))
+                else:
+                    self.log("Unsupported entity type {}. Supported are: 'input_select' and 'input_select'".format(self.entity), level = "ERROR")
 
     def event_callback(self, event_name, data, kwargs):
         if data["entity_id"] == self.trigger_entity:
