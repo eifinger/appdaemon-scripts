@@ -144,6 +144,9 @@ class FaceboxNotifier(hass.Hass):
                 self.call_service("notify/" + self.notify_name,message=messages.unknown_face_detected())
                 #send photo
                 self.call_service("TELEGRAM_BOT/SEND_PHOTO", file=self.filename)
+        else:
+            self.log("We shouldn't get to here")
+            self.log("State: {}".format(image_processing_state))
                 
 
     def ask_for_name(self, filename):
