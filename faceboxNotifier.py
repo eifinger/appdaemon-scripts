@@ -98,6 +98,7 @@ class FaceboxNotifier(hass.Hass):
         """Process the result of the facebox face detection. Based on the face detected, 
         move the image to a new directory to be used as additional training data.
         """
+        self.log("Processing image result.")
         image_processing_state = self.get_state(self.image_processing, attribute = "all")
         last_updated = image_processing_state["last_updated"]
         matched_faces = image_processing_state["attributes"]["matched_faces"]
