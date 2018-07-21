@@ -142,9 +142,9 @@ class FaceboxTeacher(hass.Hass):
                 for file in os.listdir(folder_path):
                     if file.endswith(self.valid_filetypes):
                         file_path = os.path.join(folder_path, file)
-                        self.teach_name_by_file(teach_url=self.teach_url,
-                            name=folder_name,
-                            file_path=file_path)
+                        self.teach_name_by_file(self.teach_url,
+                            folder_name,
+                            file_path)
         
     def terminate(self):
         for timer_handle in self.timer_handle_list:
