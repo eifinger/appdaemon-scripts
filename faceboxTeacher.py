@@ -113,15 +113,14 @@ class FaceboxTeacher(hass.Hass):
         image_processing_state = self.get_state(self.image_processing_healthcheck, attribute = "all")
         matched_faces = image_processing_state["attributes"]["matched_faces"]
         total_faces = image_processing_state["attributes"]["total_faces"]
-        if total_faces == 1:
-            face_identified = False
-            for face in self.known_faces:
-                if face == self.healthcheck_face_name:
-                    face_identified = True
-                    self.log("Faces are still taught")
-            if not face_identified:
-                self.log("Faces are not taught")
-                self.teach_faces()
+        face_identified = False
+        if matched_faces == 1:
+            if matched_faces[0] == self.healthcheck_face_name:
+                face_identified = True
+                self.log("Faces are still taught")
+        if not face_identified:
+            self.log("Faces are not taught")
+            self.teach_faces()
 
 
     def list_folders(self, directory):
