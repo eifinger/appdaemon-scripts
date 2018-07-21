@@ -70,7 +70,7 @@ class AlarmClock(hass.Hass):
         self.log("hours: {}".format(hours))
         minutes = self.cached_alarm_time.split(":",1)[1]
         self.log("minutes: {}".format(minutes))
-        offset = self.cached_fade_in_time
+        offset = self.cached_fade_in_time.split(".",1)[0]
         temp_time = datetime.time(int(hours),int(minutes)) - datetime.time(0,int(offset))
         self.alarm_timer = self.run_at(self.trigger_alarm,temp_time.hour,temp_time.minute,0)
         self.timer_handle_list.append(self.alarm_timer)
