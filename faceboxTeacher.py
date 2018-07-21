@@ -135,13 +135,13 @@ class FaceboxTeacher(hass.Hass):
 
     def teach_faces(self):
         self.log("Teaching faces")
-        for folder_name in list_folders(self.folderpath):
+        for folder_name in self.list_folders(self.folderpath):
             if folder_name != "unknown" and folder_name != "healthcheck":
                 folder_path = os.path.join(self.folderpath, folder_name)
                 for file in os.listdir(folder_path):
                     if file.endswith(self.valid_filetypes):
                         file_path = os.path.join(folder_path, file)
-                        teach_name_by_file(teach_url=self.teach_url,
+                        self.teach_name_by_file(teach_url=self.teach_url,
                             name=folder_name,
                             file_path=file_path)
         
