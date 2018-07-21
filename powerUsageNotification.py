@@ -50,7 +50,7 @@ class PowerUsageNotification(hass.Hass):
         # Power usage goes down below threshold
         elif ( self.triggered and self.isWaitingHandle == None and float(new) <= self.threshold):
             self.log("Waiting: {} seconds to notify.".format(self.delay))
-            self.isWaitingHandle = self.run_in(notify_device_off,self.delay)
+            self.isWaitingHandle = self.run_in(self.notify_device_off,self.delay)
             self.log("Setting isWaitingHandle to: {}".format(self.isWaitingHandle))
             self.timer_handle_list.append(self.isWaitingHandle)
         # Power usage goes up before delay
