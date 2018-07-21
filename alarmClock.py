@@ -64,8 +64,12 @@ class AlarmClock(hass.Hass):
             self.add_timer()
 
     def add_timer(self):
+        self.log("cached_alarm_time: {}".format(self.cached_alarm_time))
+        self.log("cached_fade_in_time: {}".format(self.cached_fade_in_time))
         hours = self.cached_alarm_time.split(":",1)[0]
+        self.log("hours: {}".format(hours))
         minutes = self.cached_alarm_time.split(":",1)[1]
+        self.log("minutes: {}".format(minutes))
         offset = self.cached_fade_in_time
         temp_time = datetime.time(int(hours),int(minutes)) - datetime.time(0,int(offset))
         self.alarm_timer = self.run_at(self.trigger_alarm,temp_time.hour,temp_time.minute,0)
