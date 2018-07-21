@@ -137,7 +137,7 @@ class FaceboxTeacher(hass.Hass):
     def teach_faces(self):
         self.log("Teaching faces")
         for folder_name in self.list_folders(self.folderpath):
-            if folder_name != "unknown" and folder_name != "healthcheck":
+            if folder_name != "unknown" and folder_name != "healthcheck" and folder_name != "tmp":
                 folder_path = os.path.join(self.folderpath, folder_name)
                 for file in os.listdir(folder_path):
                     if file.endswith(self.valid_filetypes):
