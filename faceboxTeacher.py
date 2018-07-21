@@ -59,7 +59,7 @@ class FaceboxTeacher(hass.Hass):
         self.log("Event received. Triggering Face Learning")
         self.run_in_callback(None)
 
-    def teach_name_by_file(teach_url, name, file_path):
+    def teach_name_by_file(self, teach_url, name, file_path):
         """Teach facebox a single name using a single file."""
         file_name = file_path.split("/")[-1]
         file = {'file': open(file_path, 'rb')}
