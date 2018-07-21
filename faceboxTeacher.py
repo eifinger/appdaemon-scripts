@@ -1,6 +1,7 @@
 import appdaemon.plugins.hass.hassapi as hass
 import globals
 import requests
+import os
 
 #
 # App which runs facebox face detection and notifies the result
