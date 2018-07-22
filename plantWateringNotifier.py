@@ -56,7 +56,10 @@ class PlantWateringNotifier(hass.Hass):
         precip_type = self.get_state(self.precip_type_sensor)
         self.log("Precip Type: {}".format(precip_type))
 
-        if( precip_propability != None and float(precip_propability) >= self.propability_minimum and precip_intensity != None and float(precip_intensity) >= self.intensity_minimum):
+        if( precip_propability != None and precip_propability != "" and 
+        float(precip_propability) >= self.propability_minimum and 
+        precip_intensity != None and precip_intensity != "" and 
+        float(precip_intensity) >= self.intensity_minimum):
             self.reminder_acknowledged = False
             self.log("Setting reminder_acknowledged to: {}".format(self.reminder_acknowledged))
             self.log("Reminding user")

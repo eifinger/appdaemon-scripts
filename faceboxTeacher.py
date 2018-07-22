@@ -68,11 +68,11 @@ class FaceboxTeacher(hass.Hass):
         response = requests.post(teach_url, files=file, data=data)
 
         if response.status_code == 200:
-            self.log("File:{} taught with name:{}".format(file_name, name))
+            self.log("File: {} taught with name: {}".format(file_name, name))
             return True
 
         elif response.status_code == 400:
-            self.log("Teaching of file:{} failed with message:{}".format(
+            self.log("Teaching of file: {} failed with message: {}".format(
                 file_name, response.text))
             return False
 
