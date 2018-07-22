@@ -54,6 +54,8 @@ class FaceboxTeacher(hass.Hass):
                 
     def run_in_callback(self, kwargs):
         """Check health every minute"""
+        self.log("Sending WoL")
+        self.turn_on(self.wol_switch)
         if self.check_classifier_health():
             self.check_if_trained()
         self.timer_handle_list.append(self.run_in(self.run_in_callback,self.run_in_delay))
@@ -62,12 +64,6 @@ class FaceboxTeacher(hass.Hass):
         """Callback function for manual trigger of face learning"""
         self.log("Event received. Triggering Face Learning")
         self.run_in_callback(None)
-
-    def sendWakeOnLan(self, kwargs):
-        """Send a Wake on Lan package to the Facebox Server"""
-        self.log("Sending WoL")
-        self.turn_on(self.wol_switch)
-        self.timer_handle_list.append(self.run_in(self.triggerImageProcessing,1.5))
 
     def teach_name_by_file(self, teach_url, name, file_path):
         """Teach facebox a single name using a single file."""
