@@ -81,6 +81,7 @@ faceboxTeacher:
   folderpath: secret_facebox_folderpath
   image_processing_healthcheck: image_processing.facebox_health_check_picture
   healthcheck_face_name: secret_name_user_one
+  wol_switch: switch.facebox_wol
   ip: secret_facebox_ip
   port: secret_facebox_port
   global_dependencies:
