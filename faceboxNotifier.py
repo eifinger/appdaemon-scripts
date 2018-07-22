@@ -164,7 +164,7 @@ class FaceboxNotifier(hass.Hass):
         """Copies a file from an old absolute path to a new directory and names it after the current timestamp appended by '.jpg'"""
         if not os.path.exists(directory):
             os.makedirs(directory)
-        filename =  directory + time.strftime("%Y%m%d%H%M%S.jpg")
+        filename =  directory + "/" + time.strftime("%Y%m%d%H%M%S.jpg")
         self.log("Copy file from {} to {}".format(old_filename, filename))
         shutil.copyfile(old_filename, filename)
         return filename
