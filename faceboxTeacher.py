@@ -56,6 +56,10 @@ class FaceboxTeacher(hass.Hass):
         """Check health every minute"""
         self.log("Sending WoL")
         self.turn_on(self.wol_switch)
+        self.timer_handle_list.append(self.run_in(self.after_wol_callback,2))
+        
+
+    def after_wol_callback(self, kwargs):
         if self.check_classifier_health():
             self.check_if_trained()
         self.timer_handle_list.append(self.run_in(self.run_in_callback,self.run_in_delay))
