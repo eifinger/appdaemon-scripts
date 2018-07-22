@@ -13,6 +13,7 @@ import os
 #  healthcheck_face_name: name of the face. example: Viktor
 #  ip: the ip of facebox. example: localhost
 #  port: the port of facebox. example: 8080
+#  wol_switch: Wake on Lan switch which turns on the facebox server. example: switch.facebox_wol
 #  
 #
 # Release Notes
@@ -31,6 +32,7 @@ class FaceboxTeacher(hass.Hass):
         self.folderpath = globals.get_arg(self.args,"folderpath")
         self.image_processing_healthcheck = globals.get_arg(self.args, "image_processing_healthcheck")
         self.healthcheck_face_name = globals.get_arg(self.args, "healthcheck_face_name")
+        self.wol_switch = globals.get_arg(self.args,"wol_switch")
 
         self.ip = globals.get_arg(self.args,"ip")
         self.port = globals.get_arg(self.args,"port")
@@ -42,6 +44,8 @@ class FaceboxTeacher(hass.Hass):
         self.run_in_initial_delay = 43200
         self.run_in_delay = self.run_in_initial_delay
         self.run_in_error_delay = 60
+
+        self.exclude_folders = ("healthcheck", "multiple", "noface", "tmp", "unknown")
 
         self.timer_handle_list.append(self.run_in(self.run_in_callback, 0))
 
@@ -58,6 +62,12 @@ class FaceboxTeacher(hass.Hass):
         """Callback function for manual trigger of face learning"""
         self.log("Event received. Triggering Face Learning")
         self.run_in_callback(None)
+
+    def sendWakeOnLan(self, kwargs):
+        """Send a Wake on Lan package to the Facebox Server"""
+        self.log("Sending WoL")
+        self.turn_on(self.wol_switch)
+        self.timer_handle_list.append(self.run_in(self.triggerImageProcessing,1.5))
 
     def teach_name_by_file(self, teach_url, name, file_path):
         """Teach facebox a single name using a single file."""
@@ -115,6 +125,7 @@ class FaceboxTeacher(hass.Hass):
         matched_faces = image_processing_state["attributes"]["matched_faces"]
         total_faces = image_processing_state["attributes"]["total_faces"]
         face_identified = False
+        self.log("matched faces: {}".format(matched_faces))
         if matched_faces == 1:
             if matched_faces[0] == self.healthcheck_face_name:
                 face_identified = True
@@ -137,7 +148,7 @@ class FaceboxTeacher(hass.Hass):
     def teach_faces(self):
         self.log("Teaching faces")
         for folder_name in self.list_folders(self.folderpath):
-            if folder_name != "unknown" and folder_name != "healthcheck" and folder_name != "tmp":
+            if not folder_name in self.exclude_folders:
                 folder_path = os.path.join(self.folderpath, folder_name)
                 for file in os.listdir(folder_path):
                     if file.endswith(self.valid_filetypes):
