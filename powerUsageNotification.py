@@ -67,6 +67,7 @@ class PowerUsageNotification(hass.Hass):
         self.log("Setting triggered to: {}".format(self.triggered))
         self.isWaitingHandle = None
         self.log("Setting isWaitingHandle to: {}".format(self.isWaitingHandle))
+        self.log("Notifying user")
         self.call_service("notify/" + self.notify_name,message=messages.power_usage_off().format(self.alternative_name))
         
 
