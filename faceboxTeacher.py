@@ -125,6 +125,7 @@ class FaceboxTeacher(hass.Hass):
         matched_faces = image_processing_state["attributes"]["matched_faces"]
         total_faces = image_processing_state["attributes"]["total_faces"]
         face_identified = False
+        self.log(matched_faces.keys())
         if matched_faces == 1:
             self.log(matched_faces.keys())
             if matched_faces.keys() == self.healthcheck_face_name:
