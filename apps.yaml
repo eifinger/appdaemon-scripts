@@ -299,6 +299,9 @@ roomBasedLightControl:
     livingroom:
       room: livingroom
       entity: switch.large_lamp
+    kitchen:
+      room: kitchen
+      entity: switch.large_lamp
     bedroom:
       room: bedroom
       entity: light.bedroom_yeelight
