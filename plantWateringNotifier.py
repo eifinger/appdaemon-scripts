@@ -47,27 +47,23 @@ class PlantWateringNotifier(hass.Hass):
         #Remind daily at 18:00
         self.timer_handle_list.append(self.run_daily(self.run_evening_callback, datetime.time(18, 0, 0)))
 
-        self.run_morning_callback(None)
-
     def run_morning_callback(self, kwargs):
         """Check if it will rain and if not remind the user to water the plants"""
         precip_propability = self.get_state(self.rain_precip_sensor)
         self.log("Rain Propability: {}".format(float(precip_propability)))
-        self.log(float(precip_propability) >= float(self.propability_minimum))
         precip_intensity = self.get_state(self.rain_precip_intensity_sensor)
         self.log("Rain Intensity: {}".format(float(precip_intensity)))
-        self.log(float(precip_intensity) >= float(self.intensity_minimum))
         precip_type = self.get_state(self.precip_type_sensor)
         self.log("Precip Type: {}".format(precip_type))
 
         if( precip_propability != None and precip_propability != "" and 
-        float(precip_propability) >= self.propability_minimum and 
+        float(precip_propability) < self.propability_minimum and 
         precip_intensity != None and precip_intensity != "" and 
-        float(precip_intensity) >= self.intensity_minimum):
+        float(precip_intensity) < self.intensity_minimum):
             self.reminder_acknowledged = False
             self.log("Setting reminder_acknowledged to: {}".format(self.reminder_acknowledged))
             self.log("Reminding user")
-            keyboard = [("Hab ich gemacht",self.keyboard_callback)]
+            keyboard = [[("Hab ich gemacht",self.keyboard_callback)]]
             self.call_service('telegram_bot/send_message',
                           target=self.user_id,
                           message=messages.plants_watering_reminder().format(precip_propability),
@@ -100,6 +96,11 @@ class PlantWateringNotifier(hass.Hass):
                               callback_query_id=callback_id)
             self.reminder_acknowledged = True
             self.log("Setting reminder_acknowledged to: {}".format(self.reminder_acknowledged))
+
+            self.call_service('telegram_bot/edit_replymarkup',
+                              chat_id=chat_id,
+                              message_id='last',
+                              inline_keyboard=[])
 
         
     def terminate(self):
