@@ -47,12 +47,16 @@ class PlantWateringNotifier(hass.Hass):
         #Remind daily at 18:00
         self.timer_handle_list.append(self.run_daily(self.run_evening_callback, datetime.time(18, 0, 0)))
 
+        self.run_morning_callback(None)
+
     def run_morning_callback(self, kwargs):
         """Check if it will rain and if not remind the user to water the plants"""
         precip_propability = self.get_state(self.rain_precip_sensor)
-        self.log("Rain Propability: {}".format(precip_propability))
+        self.log("Rain Propability: {}".format(float(precip_propability)))
+        self.log(float(precip_propability) >= self.propability_minimum)
         precip_intensity = self.get_state(self.rain_precip_intensity_sensor)
-        self.log("Rain Intensity: {}".format(precip_intensity))
+        self.log("Rain Intensity: {}".format(float(precip_intensity)))
+        self.log(float(precip_intensity) >= self.intensity_minimum)
         precip_type = self.get_state(self.precip_type_sensor)
         self.log("Precip Type: {}".format(precip_type))
 
