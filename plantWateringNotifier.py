@@ -53,10 +53,10 @@ class PlantWateringNotifier(hass.Hass):
         """Check if it will rain and if not remind the user to water the plants"""
         precip_propability = self.get_state(self.rain_precip_sensor)
         self.log("Rain Propability: {}".format(float(precip_propability)))
-        self.log(float(precip_propability) >= self.propability_minimum)
+        self.log(float(precip_propability) >= float(self.propability_minimum))
         precip_intensity = self.get_state(self.rain_precip_intensity_sensor)
         self.log("Rain Intensity: {}".format(float(precip_intensity)))
-        self.log(float(precip_intensity) >= self.intensity_minimum)
+        self.log(float(precip_intensity) >= float(self.intensity_minimum))
         precip_type = self.get_state(self.precip_type_sensor)
         self.log("Precip Type: {}".format(precip_type))
 
