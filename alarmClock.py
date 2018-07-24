@@ -83,7 +83,7 @@ class AlarmClock(hass.Hass):
 
         self.alarm_timer = self.run_at(self.trigger_alarm, event_time)
         self.timer_handle_list.append(self.alarm_timer)
-        self.log("Alarm will trigger at {}".format(temp_time))
+        self.log("Alarm will trigger at {}".format(event_time))
 
     def trigger_alarm(self, kwargs):
         if self.get_state(self.wakemeup) == "on":
