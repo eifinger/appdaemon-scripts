@@ -87,6 +87,7 @@ class PlantWateringNotifier(hass.Hass):
         data_callback = data['data']
         callback_id = data['id']
         chat_id = data['chat_id']
+        message_id = data["message"]["message_id"]
         self.log("callback data: {}".format(data))  
 
         if data_callback == self.keyboard_callback:  # Keyboard editor:
@@ -99,7 +100,7 @@ class PlantWateringNotifier(hass.Hass):
 
             self.call_service('telegram_bot/edit_replymarkup',
                               chat_id=chat_id,
-                              message_id='last',
+                              message_id=message_id,
                               inline_keyboard=[])
 
         
