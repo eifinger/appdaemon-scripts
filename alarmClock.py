@@ -75,7 +75,7 @@ class AlarmClock(hass.Hass):
         runtime = datetime.time(int(hours),int(minutes))
         today = datetime.date.today()
         rundatetime = datetime.datetime.combine(today, runtime)
-        event_time = rundatetime - datetime.timedelta(seconds=int(offset))
+        event_time = rundatetime - datetime.timedelta(minutes=int(offset))
 
         #check if event is in the past
         if datetime.datetime.now() > event_time:
