@@ -77,6 +77,10 @@ class AlarmClock(hass.Hass):
         rundatetime = datetime.datetime.combine(today, runtime)
         event_time = rundatetime - datetime.timedelta(seconds=int(offset))
 
+        #check if event is in the past
+        if datetime.datetime.now() > event_time:
+            event_time = event_time + datetime.timedelta(days=1)
+
         self.alarm_timer = self.run_at(self.trigger_alarm, event_time)
         self.timer_handle_list.append(self.alarm_timer)
         self.log("Alarm will trigger at {}".format(temp_time))
