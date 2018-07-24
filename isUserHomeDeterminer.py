@@ -17,6 +17,9 @@ import requests
 # door_sensor: Door sensor which indicated the frontdoor opened e.g. binary_sensor.door_window_sensor_158d000126a57b
 # Release Notes
 #
+# Version 1.2:
+#   Change checking after a delay to a event based system
+#
 # Version 1.1:
 #   Set when initializing (also when HA restarts)
 #
@@ -60,23 +63,27 @@ class IsUserHomeDeterminer(hass.Hass):
                 #User got home: Device tracker is still not home. Wait if it changes to home in the next self.delay seconds
                 elif device_tracker_state["state"]  != "home":
                     self.log("Wait for device tracker to change to 'home'")
-                    self.timer_handle_list.append(self.run_in(self.check_if_user_got_home,self.delay))
+                    listen_state_handle = self.listen_state(self.check_if_user_got_home, self.device_tracker)
+                    self.listen_state_handle_list.append(listen_state_handle)
+                    self.timer_handle_list.append(self.run_in(self.cancel_listen_state_callback ,self.delay, listen_state_handle=listen_state_handle))
                 #User left home: Device tracker is still home.  Wait if it changes to home in the next self.delay seconds
                 elif device_tracker_state["state"]  == "home":
                     self.log("Wait for device tracker to change to 'not_home'")
-                    self.timer_handle_list.append(self.run_in(self.check_if_user_left_home,self.delay))
+                    listen_state_handle = self.listen_state(self.check_if_user_left_home, self.device_tracker)
+                    self.listen_state_handle_list.append(listen_state_handle)
+                    self.timer_handle_list.append(self.run_in(self.cancel_listen_state_callback, self.delay, listen_state_handle=listen_state_handle))
 
-    def check_if_user_left_home(self,  kwargs):
-        device_tracker_state = self.get_state(self.device_tracker, attribute = "all")
-        self.log("device_tracker_state: {}".format(device_tracker_state), level = "DEBUG")
-        if device_tracker_state["state"]  != "home":
+    def cancel_listen_state_callback(self, kwargs):
+        self.log("Timeout while waiting for user to get/leave home. Cancel listen_state")
+        self.cancel_listen_state(kwargs["listen_state_handle"])
+
+    def check_if_user_left_home(self, entity, attribute, old, new, kwargs):
+        if new != "home":
             self.log("User left home")
             self.turn_off(self.input_boolean)
 
     def check_if_user_got_home(self,  kwargs):
-        device_tracker_state = self.get_state(self.device_tracker, attribute = "all")
-        self.log("device_tracker_state: {}".format(device_tracker_state), level = "DEBUG")
-        if device_tracker_state["state"]  == "home":
+        if new == "home":
             self.log("User got home")
             self.turn_on(self.input_boolean)
 
