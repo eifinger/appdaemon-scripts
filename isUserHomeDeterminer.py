@@ -82,7 +82,7 @@ class IsUserHomeDeterminer(hass.Hass):
             self.log("User left home")
             self.turn_off(self.input_boolean)
 
-    def check_if_user_got_home(self,  kwargs):
+    def check_if_user_got_home(self, entity, attribute, old, new, kwargs):
         if new == "home":
             self.log("User got home")
             self.turn_on(self.input_boolean)
