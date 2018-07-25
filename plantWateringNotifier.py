@@ -69,7 +69,7 @@ class PlantWateringNotifier(hass.Hass):
         precip_intensity != None and precip_intensity != "" and 
         float(precip_intensity) < self.intensity_minimum):
             self.turn_off(self.reminder_acknowledged_entity)
-            self.log("Setting reminder_acknowledged to: {}".format("off")
+            self.log("Setting reminder_acknowledged to: {}".format("off"))
             self.log("Reminding user")
             keyboard = [[("Hab ich gemacht",self.keyboard_callback)]]
             self.call_service('telegram_bot/send_message',
@@ -79,7 +79,7 @@ class PlantWateringNotifier(hass.Hass):
 
         else:
             self.turn_on(self.reminder_acknowledged_entity)
-            self.log("Setting reminder_acknowledged to: {}".format("off")
+            self.log("Setting reminder_acknowledged to: {}".format("off"))
             self.log("Notifying user")
             self.call_service("notify/" + self.notify_name,message=messages.plants_watering_not_needed().format(precip_propability, precip_intensity))
 
