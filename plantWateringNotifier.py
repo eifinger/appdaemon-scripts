@@ -13,8 +13,13 @@ import datetime
 # precip_type_sensor: sensor which shows precip type. example: sensor.dark_sky_precip
 # notify_name: Who to notify. example: group_notifications
 # user_id: The user_id of the telegram user to ask whether he knows an unknown face. example: 812391
+# reminder_acknowledged_entity: Input Boolean to store the information whether the user acknowledged the notification.
+#                        This prevents new notifications upon HA/Appdaemon restart. example: input_boolean.persistence_plantwateringnotifier_reminder_acknowledged
 #
 # Release Notes
+#
+# Version 1.1:
+#   Store reminder acknowledged in an input_boolean to prevent notifications after HA/Appdaemon restarts
 #
 # Version 1.0:
 #   Initial Version
@@ -32,13 +37,16 @@ class PlantWateringNotifier(hass.Hass):
         self.precip_type_sensor = globals.get_arg(self.args,"precip_type_sensor")
         self.notify_name = globals.get_arg(self.args,"notify_name")
         self.user_id = globals.get_arg(self.args,"user_id")
+        self.reminder_acknowledged_entity = globals.get_arg(self.args,"reminder_acknowledged_entity")
+
+        
 
         self.intensity_minimum = 2 # mm/h
         self.propability_minimum = 90 # %
 
         self.keyboard_callback = "/plants_watered"
 
-        self.reminder_acknowledged = False
+        self.reminder_acknowledged = self.get_state(self.reminder_acknowledged_entity)
 
         self.listen_event_handle_list.append(self.listen_event(self.receive_telegram_callback, 'telegram_callback'))
 
@@ -60,8 +68,8 @@ class PlantWateringNotifier(hass.Hass):
         float(precip_propability) < self.propability_minimum and 
         precip_intensity != None and precip_intensity != "" and 
         float(precip_intensity) < self.intensity_minimum):
-            self.reminder_acknowledged = False
-            self.log("Setting reminder_acknowledged to: {}".format(self.reminder_acknowledged))
+            self.turn_off(self.reminder_acknowledged_entity)
+            self.log("Setting reminder_acknowledged to: {}".format("off")
             self.log("Reminding user")
             keyboard = [[("Hab ich gemacht",self.keyboard_callback)]]
             self.call_service('telegram_bot/send_message',
@@ -70,14 +78,14 @@ class PlantWateringNotifier(hass.Hass):
                           inline_keyboard=keyboard)
 
         else:
-            self.reminder_acknowledged = True
-            self.log("Setting reminder_acknowledged to: {}".format(self.reminder_acknowledged))
+            self.turn_on(self.reminder_acknowledged_entity)
+            self.log("Setting reminder_acknowledged to: {}".format("off")
             self.log("Notifying user")
             self.call_service("notify/" + self.notify_name,message=messages.plants_watering_not_needed().format(precip_propability, precip_intensity))
 
     def run_evening_callback(self, kwargs):
         """Remind user to water the plants he if didn't acknowledge it"""
-        if( not self.reminder_acknowledged ):
+        if( self.get_state(self.reminder_acknowledged_entity) == "off" ):
             self.log("Reminding user")
             self.call_service("notify/" + self.notify_name,message=messages.plants_watering_reminder_evening())
 
@@ -95,8 +103,8 @@ class PlantWateringNotifier(hass.Hass):
             self.call_service('telegram_bot/answer_callback_query',
                               message="Super!",
                               callback_query_id=callback_id)
-            self.reminder_acknowledged = True
-            self.log("Setting reminder_acknowledged to: {}".format(self.reminder_acknowledged))
+            self.turn_on(self.reminder_acknowledged_entity)
+            self.log("Setting reminder_acknowledged to: {}".format("on"))
 
             self.call_service('telegram_bot/edit_replymarkup',
                               chat_id=chat_id,

@@ -319,6 +319,7 @@ plantWateringNotifier:
   precip_type_sensor: sensor.dark_sky_precip
   notify_name: group_notifications
   user_id: secret_telegram_user_id
+  reminder_acknowledged_entity: input_boolean.persistence_plantwateringnotifier_reminder_acknowledged
   global_dependencies:
     - globals
     - messages
