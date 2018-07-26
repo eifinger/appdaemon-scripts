@@ -35,7 +35,7 @@ class DetectDoorOpenWhenGoingToBed(hass.Hass):
     if new != "" and new == "on" and ( ( self.after_sundown == True and self.sun_down() ) or self.after_sundown == False ):
         state = self.get_state(self.sensor)
         self.log("state: {}".format(state))
-        if state == "open":
+        if state == "on":
           self.log(messages.forgot_window_open().format(self.friendly_name(self.sensor)))
           self.call_service("notify/" + self.notify_name,message=messages.forgot_window_open().format(self.friendly_name(self.sensor)))
 
