@@ -121,8 +121,13 @@ class FaceboxTeacher(hass.Hass):
 
     def check_if_trained(self):
         """Initiate healthcheck on facebox"""
-        self.call_service("image_processing/scan", entity_id = self.image_processing_healthcheck)
-        self.timer_handle_list.append(self.run_in(self.check_if_trained_callback,2))
+        try:
+            self.call_service("image_processing/scan", entity_id = self.image_processing_healthcheck)
+            self.timer_handle_list.append(self.run_in(self.check_if_trained_callback,5))
+        except requests.exceptions.HTTPError as exception:
+            self.log("Error trying to call service. Will try again in 1s. Error: {}".format(exception), level = "WARNING")
+            self.timer_handle_list.append(self.run_in(self.check_if_trained, 1))
+        
 
     def check_if_trained_callback(self, kwargs):
         """Check if faces are trained. If not train them"""
