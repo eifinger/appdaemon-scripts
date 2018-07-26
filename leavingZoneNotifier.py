@@ -42,11 +42,11 @@ class LeavingZoneNotifier(hass.Hass):
 
     def zone_state_change(self, entity, attributes, old, new, kwargs):
         last_changed = self.convert_utc(new["last_changed"])
-        self.log("Zone of {} changed from {} to {}.".format(self.friendly_name(entity),old,new))
-        if new == self.zone:
+        self.log("Zone of {} changed from {} to {}.".format(self.friendly_name(entity),old,new), level="DEBUG")
+        if new["state"] == self.zone:
             self.log("Setting user_entered_zone to {}".format(last_changed))
             self.user_entered_zone = last_changed
-        if old == self.zone:
+        if old["state"] == self.zone:
             if self.user_entered_zone == None or (self.convert_utc(last_changed) - self.user_entered_zone >= datetime.timedelta(seconds=self.lingering_time)):
                 self.log("Zone of {} changed from {} to {}. Wait {} seconds until notification.".format(self.friendly_name(entity),old,new,self.delay))
                 self.timer_handle_list.append(self.run_in(self.notify_user, self.delay, old_zone = old))
