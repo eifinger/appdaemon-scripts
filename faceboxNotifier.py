@@ -86,7 +86,7 @@ class FaceboxNotifier(hass.Hass):
         """Send a Wake on Lan package to the Facebox Server"""
         self.log("Sending WoL")
         self.turn_on(self.wol_switch)
-        self.timer_handle_list.append(self.run_in(self.triggerImageProcessing,1.5))
+        self.timer_handle_list.append(self.run_in(self.triggerImageProcessing,5))
 
     def triggerImageProcessing(self, kwargs):
         """Trigger Facebox image processing (on the saved file)"""
