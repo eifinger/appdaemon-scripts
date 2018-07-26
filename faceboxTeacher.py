@@ -53,10 +53,15 @@ class FaceboxTeacher(hass.Hass):
         
                 
     def run_in_callback(self, kwargs):
-        """Check health every minute"""
-        self.log("Sending WoL")
-        self.turn_on(self.wol_switch)
-        self.timer_handle_list.append(self.run_in(self.after_wol_callback,2))
+        """Check health"""
+        try:
+            self.log("Sending WoL")
+            self.turn_on(self.wol_switch)
+            self.timer_handle_list.append(self.run_in(self.after_wol_callback,2))
+        except requests.exceptions.HTTPError as exception:
+            self.log("Error trying to turn on entity. Will try again in 1s. Error: {}".format(exception), level = "WARNING")
+            self.timer_handle_list.append(self.run_in(self.run_in_callback, 1))
+        
         
 
     def after_wol_callback(self, kwargs):
