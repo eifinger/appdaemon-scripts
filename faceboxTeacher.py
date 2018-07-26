@@ -47,7 +47,7 @@ class FaceboxTeacher(hass.Hass):
 
         self.exclude_folders = ("healthcheck", "multiple", "noface", "tmp", "unknown")
 
-        self.timer_handle_list.append(self.run_in(self.run_in_callback, 0))
+        self.timer_handle_list.append(self.run_in(self.run_in_callback, 5))
 
         self.listen_event_handle_list.append(self.listen_event(self.event_callback,"eifinger_learn_faces"))
         
