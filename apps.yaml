@@ -206,7 +206,7 @@ newWifiDeviceNotify:
 notifyFailedLogin:
   module: notifyFailedLogin
   class: NotifyFailedLogin
-  user_name: secret_name_user_one
+  notify_name: group_notifications
   global_dependencies:
     - messages
     - secrets
