@@ -16,10 +16,10 @@ def isHome_off():
 
 def unknown_device_connected():
     if language == "de":
-        return "Unbekanntes Gerät entdeckt: {}"
+        return "Unbekanntes Gerät entdeckt. Hostname: {}. MAC: {}."
     if language == "en":
-        return "Unknown device connected: {}"
-    return "Unknown device connected: {}"
+        return "Unknown device connected. Hostname: {}. MAC: {}"
+    return "Unknown device connected. Hostname: {}. MAC: {}"
 
 def device_change_alert():
     if language == "de":
