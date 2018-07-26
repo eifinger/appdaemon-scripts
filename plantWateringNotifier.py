@@ -99,7 +99,7 @@ class PlantWateringNotifier(hass.Hass):
         callback_id = data['id']
         chat_id = data['chat_id']
         message_id = data["message"]["message_id"]
-        message = data["message"]["text"]
+        message = data["text"]
         self.log("callback data: {}".format(data))  
 
         if data_callback == self.keyboard_callback:  # Keyboard editor:
