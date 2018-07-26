@@ -332,7 +332,7 @@ powerUsageNotification_Dishwasher:
   class: PowerUsageNotification
   sensor: sensor.dishwasher_power_usage
   notify_name: group_notifications
-  delay: 60
+  delay: 1260 #21 mninutes
   threshold: 2
   alternative_name: Die Spülmaschine
   global_dependencies:
