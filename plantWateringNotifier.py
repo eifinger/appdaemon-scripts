@@ -110,7 +110,7 @@ class PlantWateringNotifier(hass.Hass):
             self.turn_on(self.reminder_acknowledged_entity)
             self.log("Setting reminder_acknowledged to: {}".format("on"))
 
-            self.call_service('telegram_bot/edit_replymarkup',
+            self.call_service('telegram_bot/edit_message',
                               chat_id=chat_id,
                               message_id=message_id,
                               message=text + " Hast du um {}:{} erledigt.".format(datetime.datetime.now().hour,datetime.datetime.now().minute),
