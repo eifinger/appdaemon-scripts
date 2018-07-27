@@ -13,8 +13,9 @@ detectWrongStateWhenLeaving:
   module: detectWrongStateWhenLeaving
   class: DetectWrongStateWhenLeaving
   sensor: "binary_sensor.door_window_sensor_158d000205b808,binary_sensor.door_window_sensor_158d00020499ad,\
-  media_player.denon_avrx1300w,switch.large_lamp,switch.small_lamp,switch.snowboard,light.bedroom_yeelight,\
-  light.bar_table,light.lobby_yeelight,light.reading_lamp_yeelight,light.treppe_oben,light.stairs_lower_yeelight,switch.ventilator"
+  binary_sensor.door_window_sensor_158d0002059ddf,media_player.denon_avrx1300w,switch.large_lamp,\
+  switch.small_lamp,switch.snowboard,light.bedroom_yeelight,light.bar_table,light.lobby_yeelight,\
+  light.reading_lamp_yeelight,light.treppe_oben,light.stairs_lower_yeelight,switch.ventilator"
   isHome: input_boolean.is_home
 
 detectDoorOpenWhenGoingToBed:
@@ -419,7 +420,8 @@ turnFanOnWhenHot:
   class: TurnFanOnWhenHot
   temp_sensor: sensor.large_lamp_temperature
   threshold: 28
-  isHome: input_boolean.is_home
+  location_sensors: sensor.location_user_one,sensor.location_user_two
+  room: Wohnzimmer
   actor: switch.ventilator
   global_dependencies:
     - globals
