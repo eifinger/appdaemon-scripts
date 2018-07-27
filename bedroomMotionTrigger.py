@@ -54,11 +54,11 @@ class BedroomMotionTrigger(hass.Hass):
         try:
             self.constraint_entities_off = globals.get_arg_list(self.args,"constraint_entities_off")
         except KeyError as identifier:
-            self.constraint_entities_off = None
+            self.constraint_entities_off = []
         try:
             self.constraint_entities_on = globals.get_arg_list(self.args,"constraint_entities_on")
         except KeyError as identifier:
-            self.constraint_entities_on = None
+            self.constraint_entities_on = []
         self.location_user_one_sensor = globals.get_arg(self.args,"location_user_one_sensor")
         self.location_user_two_sensor = globals.get_arg(self.args,"location_user_two_sensor")
         self.bedroom_state = globals.get_arg(self.args,"bedroom_state")

@@ -63,11 +63,11 @@ class MotionTrigger(hass.Hass):
         try:
             self.constraint_entities_off = globals.get_arg_list(self.args,"constraint_entities_off")
         except KeyError as identifier:
-            self.constraint_entities_off = None
+            self.constraint_entities_off = []
         try:
             self.constraint_entities_on = globals.get_arg_list(self.args,"constraint_entities_on")
         except KeyError as identifier:
-            self.constraint_entities_on = None
+            self.constraint_entities_on = []
 
         # Subscribe to sensors
         self.listen_event_handle_list.append(self.listen_event(self.motion_detected, "motion"))
