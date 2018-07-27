@@ -158,7 +158,7 @@ comingHomeAlexa:
   sensor: binary_sensor.door_window_sensor_158d000126a57b
   isHome: input_boolean.is_home
   actor: script.receiver_set_source_cbl_sat
-  
+
 #Notification if user one arrives at home
 homeArrivalNotifierUserOne:
   module: homeArrivalNotifier
@@ -411,4 +411,16 @@ alarmClock:
   global_dependencies:
     - globals
     - messages
+#################################################################
+## Temperature
+#################################################################
+turnFanOnWhenHot:
+  module: turnFanOnWhenHot
+  class: TurnFanOnWhenHot
+  temp_sensor: sensor.large_lamp_temperature
+  threshold: 28
+  isHome: input_boolean.is_home
+  actor: switch.ventilator
+  global_dependencies:
+    - globals
     
