@@ -43,6 +43,7 @@ faceboxNotifier:
   sensor: binary_sensor.door_window_sensor_158d000126a57b
   button: binary_sensor.switch_158d00012db9e5
   camera: camera.android_ip_webcam_door
+  local_file_camera: camera.saved_image
   filename: secret_facebox_notifier_filename
   image_processing: image_processing.facebox
   known_faces: secret_name_user_one,secret_name_user_two
@@ -52,6 +53,8 @@ faceboxNotifier:
   facebox_source_directory: secret_facebox_folderpath
   facebox_unknown_directory: secret_facebox_unknown_directory
   facebox_noface_directory: secret_facebox_noface_directory
+  number_of_images: 10
+  waitBeforeSnapshot: 2.5
   global_dependencies:
     - globals
     - messages
@@ -119,11 +122,16 @@ obenTreppeMotionTrigger:
   after_sundown: True
 
 bedroomMotionTrigger:
-  module: motionTrigger
-  class: MotionTrigger
+  module: bedroomMotionTrigger
+  class: BedroomMotionTrigger
   sensor: binary_sensor.motion_sensor_158d0002006cfa
   entity_on: light.bedroom_yeelight
   after_sundown: True
+  after: 22:00
+  constraint_entities_off: binary_sensor.door_window_sensor_158d0001bb4d94
+  location_user_one_sensor: sensor.location_user_one
+  location_user_two_sensor: sensor.location_user_two
+  bedroom_state: Schlafzimmer
 #################################################################
 ## ComingHome
 #################################################################
