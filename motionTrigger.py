@@ -40,6 +40,8 @@ class MotionTrigger(hass.Hass):
     
         self.timer_handle = None
         self.listen_event_handle_list = []
+        self.listen_state_handle_list = []
+        self.timer_handle_list = []
 
         self.turned_on_by_me = False #Giggedi
         self.sensor = globals.get_arg(self.args,"sensor")
@@ -102,8 +104,10 @@ class MotionTrigger(hass.Hass):
         else:
             delay = 70
         if self.turned_on_by_me == True:
+            self.timer_handle_list.remove(self.timer_handle)
             self.cancel_timer(self.timer_handle)
             self.timer_handle = self.run_in(self.light_off, delay)
+            self.timer_handle_list.append(self.timer_handle)
   
     def light_off(self, kwargs):
         if self.entity_off != None:
