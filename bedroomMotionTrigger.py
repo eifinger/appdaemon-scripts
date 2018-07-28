@@ -101,7 +101,7 @@ class BedroomMotionTrigger(hass.Hass):
             self.log("Motion detected: turning {} on".format(self.entity_on))
             self.turn_on(self.entity_on)
             self.turned_on_by_me = True
-        if "delay"!= None:
+        if self.delay != None:
             delay = self.delay
         else:
             delay = 70
