@@ -418,8 +418,9 @@ alarmClock:
 turnFanOnWhenHot:
   module: turnFanOnWhenHot
   class: TurnFanOnWhenHot
+  app_switch: input_boolean.turn_fan_on_when_hot
   temp_sensor: sensor.large_lamp_temperature
-  threshold: 28
+  threshold_entity: input_number.turn_fan_on_when_hot_threshold
   location_sensors: sensor.location_user_one,sensor.location_user_two
   room: Wohnzimmer
   actor: switch.ventilator
