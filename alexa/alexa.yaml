@@ -8,8 +8,8 @@ alexa_api: # appdaemon skill
     YOUR_FRIENDLY_NAME3: Your_device_id_see_readme_how_to_get_it
     YOUR_FRIENDLY_NAME4: Your_device_id_see_readme_how_to_get_it
     unknownDevice: ein unbekannte platze
-  logfile: /path/to/you/log/alexaAD.log
-  responselogfile: /path/to/your/log/alexaResponse.log
+  logfile: /conf/log/alexaAD.log
+  responselogfile: /conf/log/alexaResponse.log
   language: DE
   temperatureUnit: "Grad"
   logging: "True"
