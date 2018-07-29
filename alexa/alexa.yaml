@@ -3,10 +3,6 @@ alexa_api: # appdaemon skill
   class: alexa_api
   cardTitle: Your Card Title
   devices:
-    YOUR_FRIENDLY_NAME1: Your_device_id_see_readme_how_to_get_it
-    YOUR_FRIENDLY_NAME2: Your_device_id_see_readme_how_to_get_it
-    YOUR_FRIENDLY_NAME3: Your_device_id_see_readme_how_to_get_it
-    YOUR_FRIENDLY_NAME4: Your_device_id_see_readme_how_to_get_it
     unknownDevice: ein unbekannte platze
   logfile: /conf/logs/alexaAD.log
   responselogfile: /conf/logs/alexaResponse.log
@@ -20,15 +16,15 @@ alexa_api: # appdaemon skill
     - <p><say-as interpret-as='interjection'>moin</say-as>. Schoen das du wieder im {{device}} bist,</p> <p>was ist dein wunsch?</p>
     - <say-as interpret-as='interjection'>mazzel tov</say-as>. <p>Ich sage hallo zu alle in {{device}}</p><p>Kann ich etwas fuer dich tun?</p>
   nextConversationQuestion:
-    - <p>Was kan ich fuer dich machen dann?</p>
+    - <p>Was kann ich als naechstes fuer dich tun?</p>
     - <p>Mit was willst du das ich dir helfe? </p>
   intentEnd:
-    - <p>Kan ich noch etwas fuer dich machen?</p>
-    - <p>Willst du das ich noch etwas anderes mach?</p>
-    - <p>Kann ich dir weiter mit noch etwas helfen?</p>
+    - <p>Kann ich noch etwas fuer dich machen?</p>
+    - <p>Willst du das ich noch etwas anderes mache?</p>
+    - <p>Kann ich dir mit noch etwas helfen?</p>
     - <p>Gibt es noch etwas was ich fuer dich tun kann?</p>
   conversationEnd:
-    - Bis naechste mal
+    - Bis zum naechsten mal
     - <say-as interpret-as='interjection'>arrivederci</say-as>
     - <say-as interpret-as='interjection'>bis bald</say-as>
     - <say-as interpret-as='interjection'>bis dann</say-as>
@@ -36,7 +32,6 @@ alexa_api: # appdaemon skill
     - <say-as interpret-as='interjection'>tschoe</say-as>
     - <say-as interpret-as='interjection'>viel glueck</say-as>
     - Schoen mit dir gesprochen zu haben
-    - Ok, ich sage Lindon schoene gruesse
   responseError:
     - Es tuet mir leit aber etwas ist falsch gegangen
-    - Leider meldet lindon ein fehler 
+    - Leider meldet home assistant einen Fehler 

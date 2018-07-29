@@ -4,8 +4,8 @@ temperatureStateIntent:
   language: DE
   temperatureUnit: "Grad"
   textLine:
-    - "Die Temperatur in {{location}} ist "
-    - "In diesem Moment ist es in {{location}} "
+    - "Die Temperatur im {{location}} ist "
+    - "In diesem Moment ist es im {{location}} "
     - "Im Moment ist die Temperatur "
   Error: <p>Ich habe nicht richtig verstanden welche Temperatur du wissen wolltest</p>
   sensors:
