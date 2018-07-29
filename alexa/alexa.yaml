@@ -1,0 +1,42 @@
+alexa_api: # appdaemon skill
+  module: alexa_api
+  class: alexa_api
+  cardTitle: Your Card Title
+  devices:
+    YOUR_FRIENDLY_NAME1: Your_device_id_see_readme_how_to_get_it
+    YOUR_FRIENDLY_NAME2: Your_device_id_see_readme_how_to_get_it
+    YOUR_FRIENDLY_NAME3: Your_device_id_see_readme_how_to_get_it
+    YOUR_FRIENDLY_NAME4: Your_device_id_see_readme_how_to_get_it
+    unknownDevice: ein unbekannte platze
+  logfile: /path/to/you/log/alexaAD.log
+  responselogfile: /path/to/your/log/alexaResponse.log
+  language: DE
+  temperatureUnit: "Grad"
+  logging: "True"
+  launchRequest:
+    - <p><say-as interpret-as='interjection'>bonjour</say-as>, bist du wieder in {{device}}?</p> <p>wie kann ich dir helfen?</p>
+    - <p><say-as interpret-as='interjection'>aloha</say-as>, wie gehts es in {{device}}?</p> <p>kann ich etwas fuer dich tun?</p>
+    - <p><say-as interpret-as='interjection'>hey</say-as>, du bist wieder in {{device}}.</p> <p>was kan ich machen?</p>
+    - <p><say-as interpret-as='interjection'>moin</say-as>. Schoen das du wieder im {{device}} bist,</p> <p>was ist dein wunsch?</p>
+    - <say-as interpret-as='interjection'>mazzel tov</say-as>. <p>Ich sage hallo zu alle in {{device}}</p><p>Kann ich etwas fuer dich tun?</p>
+  nextConversationQuestion:
+    - <p>Was kan ich fuer dich machen dann?</p>
+    - <p>Mit was willst du das ich dir helfe? </p>
+  intentEnd:
+    - <p>Kan ich noch etwas fuer dich machen?</p>
+    - <p>Willst du das ich noch etwas anderes mach?</p>
+    - <p>Kann ich dir weiter mit noch etwas helfen?</p>
+    - <p>Gibt es noch etwas was ich fuer dich tun kann?</p>
+  conversationEnd:
+    - Bis naechste mal
+    - <say-as interpret-as='interjection'>arrivederci</say-as>
+    - <say-as interpret-as='interjection'>bis bald</say-as>
+    - <say-as interpret-as='interjection'>bis dann</say-as>
+    - <say-as interpret-as='interjection'>mach's gut</say-as>
+    - <say-as interpret-as='interjection'>tschoe</say-as>
+    - <say-as interpret-as='interjection'>viel glueck</say-as>
+    - Schoen mit dir gesprochen zu haben
+    - Ok, ich sage Lindon schoene gruesse
+  responseError:
+    - Es tuet mir leit aber etwas ist falsch gegangen
+    - Leider meldet lindon ein fehler 
