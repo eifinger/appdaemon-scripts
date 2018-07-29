@@ -115,8 +115,9 @@ class BedroomMotionTrigger(hass.Hass):
             else:
                 delay = 70
             if self.turned_on_by_me == True:
-                self.timer_handle_list.remove(self.timer_handle)
-                self.cancel_timer(self.timer_handle)
+                if self.timer_handle != None:
+                    self.timer_handle_list.remove(self.timer_handle)
+                    self.cancel_timer(self.timer_handle)
                 self.timer_handle = self.run_in(self.light_off, delay)
                 self.timer_handle_list.append(self.timer_handle)
   
