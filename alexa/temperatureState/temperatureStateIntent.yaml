@@ -1,0 +1,12 @@
+temperatureStateIntent:
+  module: temperatureStateIntent
+  class: temperatureStateIntent
+  language: DE
+  temperatureUnit: "Grad"
+  textLine:
+    - "Die Temperatur in {{location}} ist "
+    - "In diesem Moment ist es in {{location}} "
+    - "Im Moment ist die Temperatur "
+  Error: <p>Ich habe nicht richtig verstanden welche Temperatur du wissen wolltest</p>
+  sensors:
+    wohnzimmer: sensor.large_lamp_temperature
