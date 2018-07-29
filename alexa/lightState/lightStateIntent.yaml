@@ -10,6 +10,6 @@ lightStateIntent:
   Error: <p>Ich habe nicht richtig verstanden welches geraet oder sensor du wissen wolltest</p>
   unreadableState: "unlesbar fuer mich"
   entities:
-    Wohnzimmer Temperatur: sensor.large_lamp_temperature
-    Deckenlampe: light.livingroom_yeelight
-    Ventilator: switch.ventilator
+    wohnzimmer temperatur: sensor.large_lamp_temperature
+    deckenlampe: light.livingroom_yeelight
+    ventilator: switch.ventilator
