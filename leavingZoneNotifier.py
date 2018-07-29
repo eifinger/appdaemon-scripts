@@ -6,12 +6,16 @@ import globals
 # App to notify if user_one is leaving a zone. User had to be in that zone 3 minutes before in order for the notification to be triggered
 #
 # Args:
+#   app_switch: on/off switch for this app. example: input_boolean.turn_fan_on_when_hot
 #   device: Device to track
 #   user_name: Name of the user used in the notification message
 #   zone: zone name from which the user is leaving
 #   notify_name: Who to notify. example: group_notifications
 #
 # Release Notes
+#
+# Version 1.2:
+#   Added app_switch
 #
 # Version 1.1:
 #   Rework without proximity
@@ -23,6 +27,7 @@ class LeavingZoneNotifier(hass.Hass):
 
     def initialize(self):
 
+        self.app_switch = globals.get_arg(self.args,"app_switch")
         self.user_name = globals.get_arg(self.args,"user_name")
         self.zone = globals.get_arg(self.args,"zone")
         self.notify_name = globals.get_arg(self.args,"notify_name")
@@ -40,15 +45,16 @@ class LeavingZoneNotifier(hass.Hass):
         self.listen_state_handle_list.append(self.listen_state(self.zone_state_change, self.device, attribute = "all"))
 
     def zone_state_change(self, entity, attributes, old, new, kwargs):
-        last_changed = self.convert_utc(new["last_changed"])
-        self.log("Zone of {} changed from {} to {}.".format(self.friendly_name(entity),old,new), level="DEBUG")
-        if new["state"] == self.zone:
-            self.log("Setting user_entered_zone to {}".format(last_changed))
-            self.user_entered_zone = last_changed
-        if old["state"] == self.zone:
-            if self.user_entered_zone == None or (last_changed - self.user_entered_zone >= datetime.timedelta(seconds=self.lingering_time)):
-                self.log("Zone of {} changed from {} to {}. Wait {} seconds until notification.".format(self.friendly_name(entity),old,new,self.delay))
-                self.timer_handle_list.append(self.run_in(self.notify_user, self.delay, old_zone = old))
+        if self.get_state(self.app_switch) == "on":
+            last_changed = self.convert_utc(new["last_changed"])
+            self.log("Zone of {} changed from {} to {}.".format(self.friendly_name(entity),old,new), level="DEBUG")
+            if new["state"] == self.zone:
+                self.log("Setting user_entered_zone to {}".format(last_changed))
+                self.user_entered_zone = last_changed
+            if old["state"] == self.zone:
+                if self.user_entered_zone == None or (last_changed - self.user_entered_zone >= datetime.timedelta(seconds=self.lingering_time)):
+                    self.log("Zone of {} changed from {} to {}. Wait {} seconds until notification.".format(self.friendly_name(entity),old,new,self.delay))
+                    self.timer_handle_list.append(self.run_in(self.notify_user, self.delay, old_zone = old))
 
         
 

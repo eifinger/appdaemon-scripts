@@ -12,15 +12,20 @@ global_modules:
 detectWrongStateWhenLeaving:
   module: detectWrongStateWhenLeaving
   class: DetectWrongStateWhenLeaving
-  sensor: "binary_sensor.door_window_sensor_158d000205b808,binary_sensor.door_window_sensor_158d00020499ad,\
+  app_switch: input_boolean.detectWrongStateWhenLeaving
+  sensors: "binary_sensor.door_window_sensor_158d000205b808,binary_sensor.door_window_sensor_158d00020499ad,\
   binary_sensor.door_window_sensor_158d0002059ddf,media_player.denon_avrx1300w,switch.large_lamp,\
   switch.small_lamp,switch.snowboard,light.bedroom_yeelight,light.bar_table,light.lobby_yeelight,\
   light.reading_lamp_yeelight,light.treppe_oben,light.stairs_lower_yeelight,switch.ventilator"
   isHome: input_boolean.is_home
+  global_dependencies:
+    - globals
+    - messages
 
 detectDoorOpenWhenGoingToBed:
   module: detectDoorOpenWhenGoingToBed
   class: DetectDoorOpenWhenGoingToBed
+  app_switch: input_boolean.detectDoorOpenWhenGoingToBed
   sensor: binary_sensor.door_window_sensor_158d000205b808
   entity: light.bedroom_yeelight
   after_sundown: True
@@ -32,6 +37,7 @@ detectDoorOpenWhenGoingToBed:
 notfiyOfActionWhenAway:
   module: notfiyOfActionWhenAway
   class: NotfiyOfActionWhenAway
+  app_switch: input_boolean.notfiyOfActionWhenAway
   sensor: "binary_sensor.door_window_sensor_158d000126a57b,binary_sensor.door_window_sensor_158d0001bb4d94,\
   binary_sensor.door_window_sensor_158d0001bb4dc0,binary_sensor.door_window_sensor_158d000205b808,\
   binary_sensor.door_window_sensor_158d000205b82e,binary_sensor.door_window_sensor_158d00020498b6,\
@@ -49,6 +55,7 @@ notfiyOfActionWhenAway:
 faceboxNotifier:
   module: faceboxNotifier
   class: FaceboxNotifier
+  app_switch: input_boolean.faceboxNotifier
   sensor: binary_sensor.door_window_sensor_158d000126a57b
   button: binary_sensor.switch_158d00012db9e5
   camera: camera.android_ip_webcam_door
@@ -90,6 +97,7 @@ faceboxMultipleSnapshots:
 faceboxTeacher:
   module: faceboxTeacher
   class: FaceboxTeacher
+  app_switch: input_boolean.faceboxTeacher
   folderpath: secret_facebox_folderpath
   image_processing_healthcheck: image_processing.facebox_health_check_picture
   healthcheck_face_name: secret_name_user_one
@@ -125,6 +133,7 @@ xiaomiroundButtonBedroomClicked:
 obenTreppeMotionTrigger:
   module: motionTrigger
   class: MotionTrigger
+  app_switch: input_boolean.obenTreppeMotionTrigger
   sensor: binary_sensor.motion_sensor_158d00012aab97
   entity_on: light.treppe_oben
   entity_off: light.treppe_oben
@@ -133,6 +142,7 @@ obenTreppeMotionTrigger:
 bedroomMotionTrigger:
   module: bedroomMotionTrigger
   class: BedroomMotionTrigger
+  app_switch: input_boolean.bedroomMotionTrigger
   sensor: binary_sensor.motion_sensor_158d0002006cfa
   entity_on: light.bedroom_yeelight
   after_sundown: True
@@ -148,6 +158,7 @@ bedroomMotionTrigger:
 comingHomeYeelight:
   module: comingHome
   class: ComingHome
+  app_switch: input_boolean.comingHomeYeelight
   sensor: binary_sensor.door_window_sensor_158d000126a57b
   isHome: input_boolean.is_home
   actor: light.lobby_yeelight
@@ -156,6 +167,7 @@ comingHomeYeelight:
 comingHomeAlexa:
   module: comingHome
   class: ComingHome
+  app_switch: input_boolean.comingHomeAlexa
   sensor: binary_sensor.door_window_sensor_158d000126a57b
   isHome: input_boolean.is_home
   actor: script.receiver_set_source_cbl_sat
@@ -164,6 +176,7 @@ comingHomeAlexa:
 homeArrivalNotifierUserOne:
   module: homeArrivalNotifier
   class: HomeArrivalNotifier
+  app_switch: input_boolean.homeArrivalNotifierUserOne
   input_boolean: input_boolean.user_one_home
   notify_name: group_notifications
   user_name: secret_name_user_one
@@ -176,6 +189,7 @@ homeArrivalNotifierUserOne:
 homeArrivalNotifierUserTwo:
   module: homeArrivalNotifier
   class: HomeArrivalNotifier
+  app_switch: input_boolean.homeArrivalNotifierUserTwo
   input_boolean: input_boolean.user_two_home
   notify_name: group_notifications
   user_name: secret_name_user_two
@@ -190,6 +204,7 @@ homeArrivalNotifierUserTwo:
 isHomeDeterminer:
   module: isHomeDeterminer
   class: IsHomeDeterminer
+  app_switch: input_boolean.isHomeDeterminer
   ishome: input_boolean.is_home
   input_booleans: input_boolean.user_one_home,input_boolean.user_two_home
   global_dependencies:
@@ -200,6 +215,7 @@ isHomeDeterminer:
 isUserHomeDeterminerUserOne:
   module: isUserHomeDeterminer
   class: IsUserHomeDeterminer
+  app_switch: input_boolean.isUserHomeDeterminerUserOne
   input_boolean: input_boolean.user_one_home
   device_tracker: secret_device_user_one
   door_sensor: binary_sensor.door_window_sensor_158d000126a57b
@@ -211,6 +227,7 @@ isUserHomeDeterminerUserOne:
 isUserHomeDeterminerUserTwo:
   module: isUserHomeDeterminer
   class: IsUserHomeDeterminer
+  app_switch: input_boolean.isUserHomeDeterminerUserTwo
   input_boolean: input_boolean.user_two_home
   device_tracker: secret_device_user_two
   door_sensor: binary_sensor.door_window_sensor_158d000126a57b
@@ -286,6 +303,7 @@ nextApppointmentLeaveNotifier:
 leavingWorkNotifierUserOne:
   module: leavingZoneNotifier
   class: LeavingZoneNotifier
+  app_switch: input_boolean.leavingWorkNotifierUserOne
   device: secret_device_user_one
   user_name: secret_name_user_one
   zone: Work
@@ -339,6 +357,7 @@ roomBasedLightControl:
 plantWateringNotifier:
   module: plantWateringNotifier
   class: PlantWateringNotifier
+  app_switch: input_boolean.plantWateringNotifier
   rain_precip_sensor: sensor.dark_sky_precip_probability
   rain_precip_intensity_sensor: sensor.dark_sky_precip_intensity
   precip_type_sensor: sensor.dark_sky_precip
@@ -355,9 +374,10 @@ plantWateringNotifier:
 powerUsageNotification_Dishwasher:
   module: powerUsageNotification
   class: PowerUsageNotification
+  app_switch: input_boolean.powerUsageNotification_Dishwasher
   sensor: sensor.dishwasher_power_usage
   notify_name: group_notifications
-  delay: 1260 #21 mninutes
+  delay: 1260 #21 minutes
   threshold: 2
   alternative_name: Die Spülmaschine
   global_dependencies:
@@ -366,6 +386,7 @@ powerUsageNotification_Dishwasher:
 powerUsageNotification_Washingmachine:
   module: powerUsageNotification
   class: PowerUsageNotification
+  app_switch: input_boolean.powerUsageNotification_Washingmachine
   sensor: sensor.washingmachine_power_usage
   notify_name: group_notifications
   delay: 60

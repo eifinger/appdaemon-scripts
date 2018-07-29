@@ -8,6 +8,7 @@ import datetime
 #
 # Args:
 #
+# app_switch: on/off switch for this app. example: input_boolean.turn_fan_on_when_hot
 # rain_precip_sensor: sensor which shows rain probability. example: sensor.dark_sky_precip_probability
 # rain_precip_intensity_sensor: sensor which shows rain probability. example: sensor.dark_sky_precip_intensity
 # precip_type_sensor: sensor which shows precip type. example: sensor.dark_sky_precip
@@ -17,6 +18,9 @@ import datetime
 #                        This prevents new notifications upon HA/Appdaemon restart. example: input_boolean.persistence_plantwateringnotifier_reminder_acknowledged
 #
 # Release Notes
+#
+# Version 1.3:
+#   Added app_switch
 #
 # Version 1.2:
 #   Update original message with information when the reminder was acknowledged
@@ -60,37 +64,39 @@ class PlantWateringNotifier(hass.Hass):
 
     def run_morning_callback(self, kwargs):
         """Check if it will rain and if not remind the user to water the plants"""
-        precip_propability = self.get_state(self.rain_precip_sensor)
-        self.log("Rain Propability: {}".format(float(precip_propability)))
-        precip_intensity = self.get_state(self.rain_precip_intensity_sensor)
-        self.log("Rain Intensity: {}".format(float(precip_intensity)))
-        precip_type = self.get_state(self.precip_type_sensor)
-        self.log("Precip Type: {}".format(precip_type))
+        if self.get_state(self.app_switch) == "on":
+            precip_propability = self.get_state(self.rain_precip_sensor)
+            self.log("Rain Propability: {}".format(float(precip_propability)))
+            precip_intensity = self.get_state(self.rain_precip_intensity_sensor)
+            self.log("Rain Intensity: {}".format(float(precip_intensity)))
+            precip_type = self.get_state(self.precip_type_sensor)
+            self.log("Precip Type: {}".format(precip_type))
 
-        if( precip_propability != None and precip_propability != "" and 
-        float(precip_propability) < self.propability_minimum and 
-        precip_intensity != None and precip_intensity != "" and 
-        float(precip_intensity) < self.intensity_minimum):
-            self.turn_off(self.reminder_acknowledged_entity)
-            self.log("Setting reminder_acknowledged to: {}".format("off"))
-            self.log("Reminding user")
-            keyboard = [[("Hab ich gemacht",self.keyboard_callback)]]
-            self.call_service('telegram_bot/send_message',
+            if( precip_propability != None and precip_propability != "" and 
+            float(precip_propability) < self.propability_minimum and 
+            precip_intensity != None and precip_intensity != "" and 
+            float(precip_intensity) < self.intensity_minimum):
+                self.turn_off(self.reminder_acknowledged_entity)
+                self.log("Setting reminder_acknowledged to: {}".format("off"))
+                self.log("Reminding user")
+                keyboard = [[("Hab ich gemacht",self.keyboard_callback)]]
+                self.call_service('telegram_bot/send_message',
                           target=self.user_id,
                           message=messages.plants_watering_reminder().format(precip_propability),
                           inline_keyboard=keyboard)
 
-        else:
-            self.turn_on(self.reminder_acknowledged_entity)
-            self.log("Setting reminder_acknowledged to: {}".format("off"))
-            self.log("Notifying user")
-            self.call_service("notify/" + self.notify_name,message=messages.plants_watering_not_needed().format(precip_propability, precip_intensity))
+            else:
+                self.turn_on(self.reminder_acknowledged_entity)
+                self.log("Setting reminder_acknowledged to: {}".format("off"))
+                self.log("Notifying user")
+                self.call_service("notify/" + self.notify_name,message=messages.plants_watering_not_needed().format(precip_propability, precip_intensity))
 
     def run_evening_callback(self, kwargs):
         """Remind user to water the plants he if didn't acknowledge it"""
-        if( self.get_state(self.reminder_acknowledged_entity) == "off" ):
-            self.log("Reminding user")
-            self.call_service("notify/" + self.notify_name,message=messages.plants_watering_reminder_evening())
+        if self.get_state(self.app_switch) == "on":
+            if( self.get_state(self.reminder_acknowledged_entity) == "off" ):
+                self.log("Reminding user")
+                self.call_service("notify/" + self.notify_name,message=messages.plants_watering_reminder_evening())
 
     def receive_telegram_callback(self, event_name, data, kwargs):
         """Event listener for Telegram callback queries."""

@@ -6,6 +6,7 @@ import globals
 #
 # Args:
 #
+#  app_switch: on/off switch for this app. example: input_boolean.turn_fan_on_when_hot
 #  sensor: sensor to monitor. example: sensor.upstairs_smoke
 #  isHome: input_boolean which shows if someone is home. example: input_boolean.isHome
 #  isHome_delay: delay to wait for user to come home before notifying. example: 10
@@ -20,6 +21,8 @@ import globals
 class NotfiyOfActionWhenAway(hass.Hass):
 
   def initialize(self):
+
+    self.app_switch = globals.get_arg(self.args,"app_switch")
     self.user_name = globals.get_arg(self.args,"user_name")
     self.isHome_delay = globals.get_arg(self.args,"isHome_delay")
     self.isHome = globals.get_arg(self.args,"isHome")
@@ -31,13 +34,14 @@ class NotfiyOfActionWhenAway(hass.Hass):
       self.listen_state_handle_list.append(self.listen_state(self.state_change, sensor))
     
   def state_change(self, entity, attribute, old, new, kwargs):
-    if new != "" and new != old:
-      if self.get_state(self.isHome) == "off":
-        if entity.startswith("binary_sensor.motion_sensor") and new == "off":
-          pass
-        else:
-          self.log("Waiting {} seconds for someone to come home".format(self.isHome_delay))
-          self.timer_handle_list.append(self.run_in(self.notify_if_no_one_home,self.isHome_delay, sensor = entity, new = new))
+    if self.get_state(self.app_switch) == "on":
+      if new != "" and new != old:
+        if self.get_state(self.isHome) == "off":
+          if entity.startswith("binary_sensor.motion_sensor") and new == "off":
+            pass
+          else:
+            self.log("Waiting {} seconds for someone to come home".format(self.isHome_delay))
+            self.timer_handle_list.append(self.run_in(self.notify_if_no_one_home,self.isHome_delay, sensor = entity, new = new))
 
   def notify_if_no_one_home(self, kwargs):
     if self.get_state(self.isHome) == "off":

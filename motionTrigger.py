@@ -8,6 +8,7 @@ import datetime
 #
 # Args:
 #
+# app_switch: on/off switch for this app. example: input_boolean.turn_fan_on_when_hot
 # sensor: binary sensor to use as trigger
 # entity_on : entity to turn on when detecting motion, can be a light, script, scene or anything else that can be turned on
 # entity_off (optionally): entity to turn off when detecting motion, can be a light, script or anything else that can be turned off. Can also be a scene which will be turned on
@@ -18,6 +19,9 @@ import datetime
 # constraint_entities_on (optionally): list of entities which have to be on. example: light.bedroom_yeelight,light.bar_table
 #
 # Release Notes
+#
+# Version 1.5:
+#   Added app_switch
 #
 # Version 1.4:
 #   Added options "after, constraint_entities_off and constraint_entities_on"
@@ -44,6 +48,8 @@ class MotionTrigger(hass.Hass):
         self.timer_handle_list = []
 
         self.turned_on_by_me = False #Giggedi
+
+        self.app_switch = globals.get_arg(self.args,"app_switch")
         self.sensor = globals.get_arg(self.args,"sensor")
         self.entity_on = globals.get_arg(self.args,"entity_on")
         try:
@@ -76,38 +82,39 @@ class MotionTrigger(hass.Hass):
 
     
     def motion_detected(self, event_name, data, kwargs):
-        turn_on = True
-        self.log("Motion: event_name: {}, data: {}".format(event_name,data), level = "DEBUG")
-        if data["entity_id"] != self.sensor:
-            turn_on = False
-        if self.after_sundown != None:
-            if self.after_sundown == True and not self.sun_down():
+        if self.get_state(self.app_switch) == "on":
+            turn_on = True
+            self.log("Motion: event_name: {}, data: {}".format(event_name,data), level = "DEBUG")
+            if data["entity_id"] != self.sensor:
                 turn_on = False
-        if self.after != None:
-            after_time = datetime.datetime.combine(datetime.date.today(), datetime.time(int(self.after.split(":")[0]),int(self.after.split(":")[1])))
-            if datetime.datetime.now() > after_time:
+            if self.after_sundown != None:
+                if self.after_sundown == True and not self.sun_down():
+                    turn_on = False
+            if self.after != None:
+                after_time = datetime.datetime.combine(datetime.date.today(), datetime.time(int(self.after.split(":")[0]),int(self.after.split(":")[1])))
+                if datetime.datetime.now() > after_time:
+                    turn_on = False
+            for entity in self.constraint_entities_off:
+                if self.get_state(entity) != "off":
+                    turn_on = False
+            for entity in self.constraint_entities_on:
+                if self.get_state(entity) != "on":
+                    turn_on = False
+            if self.get_state(self.entity_on) != "off":
                 turn_on = False
-        for entity in self.constraint_entities_off:
-            if self.get_state(entity) != "off":
-                turn_on = False
-        for entity in self.constraint_entities_on:
-            if self.get_state(entity) != "on":
-                turn_on = False
-        if self.get_state(self.entity_on) != "off":
-            turn_on = False
-        if turn_on:
-            self.log("Motion detected: turning {} on".format(self.entity_on))
-            self.turn_on(self.entity_on)
-            self.turned_on_by_me = True
-        if self.delay != None:
-            delay = self.delay
-        else:
-            delay = 70
-        if self.turned_on_by_me == True:
-            self.timer_handle_list.remove(self.timer_handle)
-            self.cancel_timer(self.timer_handle)
-            self.timer_handle = self.run_in(self.light_off, delay)
-            self.timer_handle_list.append(self.timer_handle)
+            if turn_on:
+                self.log("Motion detected: turning {} on".format(self.entity_on))
+                self.turn_on(self.entity_on)
+                self.turned_on_by_me = True
+            if self.delay != None:
+                delay = self.delay
+            else:
+                delay = 70
+            if self.turned_on_by_me == True:
+                self.timer_handle_list.remove(self.timer_handle)
+                self.cancel_timer(self.timer_handle)
+                self.timer_handle = self.run_in(self.light_off, delay)
+                self.timer_handle_list.append(self.timer_handle)
   
     def light_off(self, kwargs):
         if self.entity_off != None:

@@ -8,6 +8,7 @@ import os
 #
 #
 # Args:
+#  app_switch: on/off switch for this app. example: input_boolean.turn_fan_on_when_hot
 #  folderpath : Folder containing subfolders with images to train. example: /config/www/facebox
 #  image_processing_healthcheck: entity_id of the facebox entity to use for health checking. It holds the local_file image camera of one kown face. example: image_processing.facebox_health_check_picture
 #  healthcheck_face_name: name of the face. example: Viktor
@@ -29,6 +30,7 @@ class FaceboxTeacher(hass.Hass):
         self.listen_event_handle_list = []
         self.listen_state_handle_list = []
 
+        self.app_switch = globals.get_arg(self.args,"app_switch")
         self.folderpath = globals.get_arg(self.args,"folderpath")
         self.image_processing_healthcheck = globals.get_arg(self.args, "image_processing_healthcheck")
         self.healthcheck_face_name = globals.get_arg(self.args, "healthcheck_face_name")
