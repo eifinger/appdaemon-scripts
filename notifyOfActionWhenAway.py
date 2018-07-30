@@ -18,7 +18,7 @@ import globals
 # Version 1.0:
 #   Initial Version
 
-class NotfiyOfActionWhenAway(hass.Hass):
+class NotifyOfActionWhenAway(hass.Hass):
 
   def initialize(self):
 
