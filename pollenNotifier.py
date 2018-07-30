@@ -1,6 +1,7 @@
 import appdaemon.plugins.hass.hassapi as hass
 import globals
 import messages
+import datetime
 #
 # App which notifies you when there is a pollen forecast for today
 # Used with sensors getting data from https://opendata.dwd.de/climate_environment/health/alerts/s31fg.json
