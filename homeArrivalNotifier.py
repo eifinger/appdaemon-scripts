@@ -26,6 +26,7 @@ class HomeArrivalNotifier(hass.Hass):
     def initialize(self):
         self.listen_state_handle_list = []
 
+        self.app_switch = globals.get_arg(self.args,"app_switch")
         self.zone_name = globals.get_arg(self.args,"zone_name")
         self.input_boolean = globals.get_arg(self.args,"input_boolean")
         self.notify_name = globals.get_arg(self.args,"notify_name")
