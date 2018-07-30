@@ -47,7 +47,7 @@ class PollenNotifier(hass.Hass):
 
         hours = self.notify_time.split(":",1)[0]
         minutes = self.notify_time.split(":",1)[1]
-        self.timer_handle_list.append(self.run_daily(self.run_daily_callback, datetime.time(hours, minutes, 0)))
+        self.timer_handle_list.append(self.run_daily(self.run_daily_callback, datetime.time(int(hours), int(minutes), 0)))
 
     def run_daily_callback(self, kwargs):
         """Check if there is an pollen forcast and notify the user about it"""
