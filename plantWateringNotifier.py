@@ -39,6 +39,7 @@ class PlantWateringNotifier(hass.Hass):
         self.listen_event_handle_list = []
         self.listen_state_handle_list = []
 
+        self.app_switch = globals.get_arg(self.args,"app_switch")
         self.rain_precip_sensor = globals.get_arg(self.args,"rain_precip_sensor")
         self.rain_precip_intensity_sensor = globals.get_arg(self.args,"rain_precip_intensity_sensor")
         self.precip_type_sensor = globals.get_arg(self.args,"precip_type_sensor")
