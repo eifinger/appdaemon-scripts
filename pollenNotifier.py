@@ -54,7 +54,7 @@ class PollenNotifier(hass.Hass):
             pollen_sensor_state = self.get_state(self.pollen_sensor)
             self.log("{} Belastung Heute: {}".format(self.pollen_name,pollen_sensor_state))
 
-            if pollen_sensor_state == "-1"
+            if pollen_sensor_state == "-1":
                 message = messages.no_pollen_data().format("Heute", self.pollen_name)
             elif pollen_sensor_state == "0":
                 message = messages.pollen_data().format("Heute", self.mappingsdict[pollen_sensor_state], self.pollen_name) + " Genieß den Tag!"
