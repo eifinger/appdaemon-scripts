@@ -306,6 +306,8 @@ leavingWorkNotifierUserOne:
   app_switch: input_boolean.leaving_work_notifier_user_one
   device: secret_device_user_one
   user_name: secret_name_user_one
+  lingering_time: 3600
+  delay: 0
   zone: Work
   notify_name: group_notifications
   global_dependencies:

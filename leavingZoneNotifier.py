@@ -9,10 +9,15 @@ import globals
 #   app_switch: on/off switch for this app. example: input_boolean.turn_fan_on_when_hot
 #   device: Device to track
 #   user_name: Name of the user used in the notification message
+#   delay: time to wait before notifying. Maybe user returns to zone. example: 120
+#   lingering_time: time a user has to be in a zone to trigger this app. example: 3600
 #   zone: zone name from which the user is leaving
 #   notify_name: Who to notify. example: group_notifications
 #
 # Release Notes
+#
+# Version 1.3:
+#   delay and lingering_time now as args
 #
 # Version 1.2:
 #   Added app_switch
@@ -33,8 +38,8 @@ class LeavingZoneNotifier(hass.Hass):
         self.notify_name = globals.get_arg(self.args,"notify_name")
         self.device = globals.get_arg(self.args,"device")
         # 'lingering_time' the time a user has to stay in a zone for this app to trigger
-        self.lingering_time = 3600
-        self.delay = 120
+        self.lingering_time = globals.get_arg(self.args,"lingering_time")
+        self.delay = globals.get_arg(self.args,"app_switch")
 
         self.user_entered_zone = None
 
