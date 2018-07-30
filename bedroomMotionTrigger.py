@@ -80,31 +80,31 @@ class BedroomMotionTrigger(hass.Hass):
             turn_on = True
             self.log("Motion: event_name: {}, data: {}".format(event_name,data), level = "DEBUG")
             if data["entity_id"] != self.sensor:
-                self.log("Wrong sensor.")
+                self.log("Wrong sensor.", level = "DEBUG")
                 turn_on = False
             if self.after_sundown != None:
                 if self.after_sundown == True and not self.sun_down():
-                    self.log("Sun is not down")
+                    self.log("Sun is not down", level = "DEBUG")
                     turn_on = False
             if self.after != None:
                 after_time = datetime.datetime.combine(datetime.date.today(), datetime.time(int(self.after.split(":")[0]),int(self.after.split(":")[1])))
                 if datetime.datetime.now() > after_time:
-                    self.log("Now is before {}".format(self.after))
+                    self.log("Now is before {}".format(self.after), level = "DEBUG")
                     turn_on = False
             for entity in self.constraint_entities_off:
                 if self.get_state(entity) != "off":
-                    self.log("{} is {}".format(self.friendly_name(entity), self.get_state(entity)))
+                    self.log("{} is {}".format(self.friendly_name(entity), self.get_state(entity)), level = "DEBUG")
                     turn_on = False
             for entity in self.constraint_entities_on:
                 if self.get_state(entity) != "on":
-                    self.log("{} is {}".format(self.friendly_name(entity), self.get_state(entity)))
+                    self.log("{} is {}".format(self.friendly_name(entity), self.get_state(entity)), level = "DEBUG")
                     turn_on = False
             if self.get_state(self.entity_on) != "off":
-                self.log("Device is already on")
+                self.log("Device is already on", level = "DEBUG")
                 turn_on = False
             #Bedroom specifics
             if self.get_state(self.location_user_one_sensor) == self.bedroom_state and self.get_state(self.location_user_two_sensor) == self.bedroom_state:
-                self.log("Both in bedroom")
+                self.log("Both in bedroom", level = "DEBUG")
                 turn_on = False
             if turn_on:
                 self.log("Motion detected: turning {} on".format(self.entity_on))
