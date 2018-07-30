@@ -449,4 +449,40 @@ turnFanOnWhenHot:
   actor: switch.ventilator
   global_dependencies:
     - globals
+#################################################################
+## Pollen
+#################################################################
+roggenNotifier:
+  module: pollenNotifier
+  class: PollenNotifier
+  app_switch: input_boolean.roggen_notifier
+  pollen_sensor: sensor.pollen_101_roggen_today
+  pollen_name: Roggen
+  notify_name: group_notifications
+  notify_time: 08:00
+  global_dependencies:
+    - globals
+    - messages
+graeserNotifier:
+  module: pollenNotifier
+  class: PollenNotifier
+  app_switch: input_boolean.graeser_notifier
+  pollen_sensor: sensor.pollen_101_graeser_today
+  pollen_name: Gräser
+  notify_name: group_notifications
+  notify_time: 08:00
+  global_dependencies:
+    - globals
+    - messages
+birkeNotifier:
+  module: pollenNotifier
+  class: PollenNotifier
+  app_switch: input_boolean.birke_notifier
+  pollen_sensor: sensor.pollen_101_birke_today
+  pollen_name: Birke
+  notify_name: group_notifications
+  notify_time: 08:00
+  global_dependencies:
+    - globals
+    - messages
     

@@ -153,6 +153,20 @@ def alarm_triggered():
     if language == "en":
         return "Good Morning!"
     return "Good Morning!"
+
+def pollen_data():
+    if language == "de":
+        return "{} ist {} {} Belastung."
+    if language == "en":
+        return "The {} intensity {} is {}."
+    return "The {} intensity {} is {}."
+
+def no_pollen_data():
+    if language == "de":
+        return "Ich habe {} leider keine Daten für {}."
+    if language == "en":
+        return "{} I have no pollen data for {}."
+    return "{} I have no pollen data for {}."
     
     
     
