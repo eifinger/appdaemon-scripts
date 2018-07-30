@@ -43,7 +43,9 @@ class TurnFanOnWhenHot(hass.Hass):
   def state_change(self, entity, attribute, old, new, kwargs):
     if self.get_state(self.app_switch) == "on":
       turn_on = False
-      if float(self.get_state(self.temp_sensor)) > float(self.get_state(self.threshold_entity)):
+      if (self.get_state(self.temp_sensor) != None and self.get_state(self.temp_sensor) != "unkown" 
+      and self.get_state(self.threshold_entity) != None
+      and float(self.get_state(self.temp_sensor)) > float(self.get_state(self.threshold_entity))):
         for sensor in self.location_sensors:
           if self.get_state(sensor) == self.room:
             if self.get_state(self.actor) != "on":
