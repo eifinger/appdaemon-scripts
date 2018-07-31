@@ -51,7 +51,7 @@ class LeavingZoneNotifier(hass.Hass):
     def zone_state_change(self, entity, attributes, old, new, kwargs):
         if self.get_state(self.app_switch) == "on":
             last_changed = self.convert_utc(new["last_changed"])
-            self.log("Zone of {} changed from {} to {}.".format(self.friendly_name(entity),old,new), level="DEBUG")
+            self.log("Zone of {} changed from {} to {}.".format(self.friendly_name(entity),old["state"],new["state"]), level="DEBUG")
             if new["state"] == self.zone:
                 self.log("Setting user_entered_zone to {}".format(last_changed), level = "DEBUG")
                 self.user_entered_zone = last_changed
@@ -65,6 +65,7 @@ class LeavingZoneNotifier(hass.Hass):
     def notify_user(self, kwargs):
         #Check if user did not come back to the zone in the meantime
         if self.get_state(self.device) != kwargs["old_zone"]:
+            self.log("Notify user")
             self.call_service("notify/" + self.notify_name, message=messages.user_is_leaving_zone().format(self.user_name, self.zone)) 
 
 
