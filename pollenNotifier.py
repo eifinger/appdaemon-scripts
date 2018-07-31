@@ -14,8 +14,12 @@ import datetime
 # pollen_name: Name of the allergene. example: Roggen
 # notify_name: Who to notify. example: group_notifications
 # notify_time: When to notify. example: 08:00
+# notify_threshold: Minium level of pollen needed to notify. example: 1.0
 #
 # Release Notes
+#
+# Version 1.1:
+#   Added notify_threshold
 #
 # Version 1.0:
 #   Initial Version
@@ -33,6 +37,8 @@ class PollenNotifier(hass.Hass):
         self.pollen_name = globals.get_arg(self.args,"pollen_name")
         self.notify_name = globals.get_arg(self.args,"notify_name")
         self.notify_time = globals.get_arg(self.args,"notify_time")
+        self.notify_threshold = globals.get_arg(self.args,"notify_threshold")
+
 
         self.mappingsdict = {}
         self.mappingsdict["-1"] = "keine Daten"
@@ -43,6 +49,16 @@ class PollenNotifier(hass.Hass):
         self.mappingsdict["2"] = "Mittlere"
         self.mappingsdict["2-3"] = "Mittlere bis Hohe"
         self.mappingsdict["3"] = "Hohe"
+
+        self.level_mapping_dict = {}
+        self.level_mapping_dict["-1"] = -1.0
+        self.level_mapping_dict["0"] = 0.0
+        self.level_mapping_dict["0-1"] = 0.5
+        self.level_mapping_dict["1"] = 1.0
+        self.level_mapping_dict["1-2"] = 1.5
+        self.level_mapping_dict["2"] = 2.0
+        self.level_mapping_dict["2-3"] = 2.5
+        self.level_mapping_dict["3"] = 3
 
 
         hours = self.notify_time.split(":",1)[0]
@@ -62,8 +78,11 @@ class PollenNotifier(hass.Hass):
             else:
                 message = messages.pollen_data().format("Heute", self.mappingsdict[pollen_sensor_state], self.pollen_name)
 
-            self.log("Notifying user")
-            self.call_service("notify/" + self.notify_name,message=message)
+            if self.level_mapping_dict[pollen_sensor_state] >= float(self.notify_threshold):
+                self.log("Notifying user")
+                self.call_service("notify/" + self.notify_name,message=message)
+            else:
+                self.log("Threshold not met. Not notifying user")
         
     def terminate(self):
         for timer_handle in self.timer_handle_list:

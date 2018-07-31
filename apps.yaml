@@ -460,6 +460,7 @@ roggenNotifier:
   pollen_name: Roggen
   notify_name: group_notifications
   notify_time: 08:00
+  notify_threshold: 1.0
   global_dependencies:
     - globals
     - messages
@@ -471,6 +472,7 @@ graeserNotifier:
   pollen_name: Gräser
   notify_name: group_notifications
   notify_time: 08:00
+  notify_threshold: 1.0
   global_dependencies:
     - globals
     - messages
@@ -482,6 +484,7 @@ birkeNotifier:
   pollen_name: Birke
   notify_name: group_notifications
   notify_time: 08:00
+  notify_threshold: 1.0
   global_dependencies:
     - globals
     - messages
