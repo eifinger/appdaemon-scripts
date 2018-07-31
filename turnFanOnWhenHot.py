@@ -70,7 +70,7 @@ class TurnFanOnWhenHot(hass.Hass):
               self.cancel_timer(self.turn_off_timer_handle)
       if not turn_on and self.turned_on_by_me:
         if self.get_state(self.actor) != "off":
-          self.turn_off_timer_handle = self.run_in(self.turn_off_callback(),self.delay)
+          self.turn_off_timer_handle = self.run_in(self.turn_off_callback,self.delay)
           self.timer_handle_list.append(self.turn_off_timer_handle)
             
 
