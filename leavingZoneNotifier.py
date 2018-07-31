@@ -39,13 +39,12 @@ class LeavingZoneNotifier(hass.Hass):
         self.device = globals.get_arg(self.args,"device")
         # 'lingering_time' the time a user has to stay in a zone for this app to trigger
         self.lingering_time = globals.get_arg(self.args,"lingering_time")
-        self.delay = globals.get_arg(self.args,"app_switch")
+        self.delay = globals.get_arg(self.args,"delay")
 
         self.user_entered_zone = None
 
         self.listen_state_handle_list = []
         self.timer_handle_list = []
-        self.time_between_messages = datetime.timedelta(seconds=600)
 
         self.listen_state_handle_list.append(self.listen_state(self.zone_state_change, self.device, attribute = "all"))
 
