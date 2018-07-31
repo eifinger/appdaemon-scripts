@@ -447,6 +447,7 @@ turnFanOnWhenHot:
   location_sensors: sensor.location_user_one,sensor.location_user_two
   room: Wohnzimmer
   actor: switch.ventilator
+  delay: 120
   global_dependencies:
     - globals
 #################################################################
