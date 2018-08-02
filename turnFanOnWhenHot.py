@@ -66,6 +66,8 @@ class TurnFanOnWhenHot(hass.Hass):
               self.turned_on_by_me = True
             turn_on = True
             if self.turn_off_timer_handle != None:
+              self.log("handle is: {}".format(self.turn_off_timer_handle))
+              self.log("list size is: {}".format(len(self.timer_handle_list)))
               self.timer_handle_list.remove(self.turn_off_timer_handle)
               self.cancel_timer(self.turn_off_timer_handle)
       if not turn_on and self.turned_on_by_me:
