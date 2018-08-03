@@ -21,7 +21,8 @@ class TurnEntityOffInXIntent(hass.Hass):
             duration.total_seconds()
             self.timer_handle_list.append(self.run_in(self.turn_off_callback, duration.total_seconds(), entityname=entityname))
             text = self.random_arg(self.args["textLine"])
-        except:
+        except Exception as e:
+            self.log("Exception: {}".format(e))
             text = self.random_arg(self.args["Error"])
         return text
 
