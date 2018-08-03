@@ -1,7 +1,7 @@
 import appdaemon.plugins.hass.hassapi as hass
 import random
 
-class lightStateIntent(hass.Hass):
+class TurnEntityOffInXIntent(hass.Hass):
 
     def initialize(self):
         return
