@@ -2,9 +2,7 @@ turnEntityOffInXIntent:
   module: turnEntityOffInXIntent
   class: TurnEntityOffInXIntent
   language: DE
-  textLine:
-    - "OK"
-    - "Okay Homeassistant schaltet {{device}} in {{duration}} ab"
+  textLine: "Okay Homeassistant schaltet {{device}} in {} ab"
   Error: <p>Ich habe nicht richtig verstanden welches geraet soll ich ausschalten?</p>
   unreadableState: "unlesbar fuer mich"
   entities:

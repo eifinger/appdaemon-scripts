@@ -19,9 +19,24 @@ class TurnEntityOffInXIntent(hass.Hass):
             entityname = self.args["entities"][slots["device"]]
             #to upper because of https://github.com/gweis/isodate/issues/52
             duration = isodate.parse_duration(slots["duration"].upper())
-            duration.total_seconds()
             self.timer_handle_list.append(self.run_in(self.turn_off_callback, duration.total_seconds(), entityname=entityname))
-            text = self.random_arg(self.args["textLine"])
+            minutes, seconds = divmod(duration.total_seconds(), 60)
+            if minutes == 0:
+                if seconds == 1:
+                    timeText = "einer Sekunde"
+                else:
+                    timeText = "{} Sekunden".format(seconds)
+            elif minutes == 1:
+                if seconds == 1:
+                    timeText = "einer Minute und einer Sekunde"
+                else:
+                    timeText = "einer Minute und {} Sekunden".format(seconds)
+            else:
+                if seconds == 0:
+                    timeText = "{} Minuten".format(minutes)
+                else:
+                    timeText = "{} Minuten und {} Sekunden".format(minutes, seconds)
+            text = self.args["textLine"].format(timeText)
         except Exception as e:
             self.log("Exception: {}".format(e))
             text = self.random_arg(self.args["Error"])
