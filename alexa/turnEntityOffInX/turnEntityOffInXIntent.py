@@ -15,7 +15,7 @@ class TurnEntityOffInXIntent(hass.Hass):
         # but it also can be any other kind of entity
         ############################################           
         try:
-            self.log("slots: {}".format(slots))
+
             entityname = self.args["entities"][slots["device"]]
             #to upper because of https://github.com/gweis/isodate/issues/52
             duration = isodate.parse_duration(slots["duration"].upper())
@@ -23,8 +23,6 @@ class TurnEntityOffInXIntent(hass.Hass):
             minutes, seconds = divmod(duration.total_seconds(), 60)
             minutes = int(minutes)
             seconds = int(seconds)
-            self.log("minutes: {}".format(minutes))
-            self.log("seconds: {}".format(seconds))
             if minutes == 0:
                 if seconds == 1:
                     timeText = " einer Sekunde"
@@ -42,6 +40,7 @@ class TurnEntityOffInXIntent(hass.Hass):
             text = self.args["textLine"] + timeText + " ab."
         except Exception as e:
             self.log("Exception: {}".format(e))
+            self.log("slots: {}".format(slots))
             text = self.random_arg(self.args["Error"])
         return text
 
