@@ -1,0 +1,10 @@
+turnEntityOffInXIntent:
+  module: turnEntityOffInXIntent
+  class: TurnEntityOffInXIntent
+  language: DE
+  textLine:
+    - "OK"
+  Error: <p>Ich habe nicht richtig verstanden welches geraet soll ich ausschalten?</p>
+  unreadableState: "unlesbar fuer mich"
+  entities:
+    ventilator: switch.ventilator
