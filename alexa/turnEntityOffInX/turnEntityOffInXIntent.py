@@ -36,7 +36,12 @@ class TurnEntityOffInXIntent(hass.Hass):
                 else:
                     timeText = " einer Minute und {} Sekunden".format(seconds)
             else:
-                timeText = " {} Minuten und {} Sekunden".format(minutes, seconds)
+                if seconds == 1:
+                    timeText = " {} Minuten und einer Sekunde".format(minutes)
+                elif seconds == 0:
+                    timeText = " {} Minuten".format(minutes)
+                else:
+                    timeText = " {} Minuten und {} Sekunden".format(minutes, seconds)
             text = self.args["textLine"] + timeText + " ab."
         except Exception as e:
             self.log("Exception: {}".format(e))
