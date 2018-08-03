@@ -32,6 +32,16 @@ class TurnEntityOffInXIntent(hass.Hass):
         self.log("Turning off {}".format(entityname))
         self.turn_off(entityname)
 
+    def random_arg(self,argName):
+        ############################################
+        # pick a random text from a list
+        ############################################
+        if isinstance(argName,list):
+            text = random.choice(argName)
+        else:
+            text = argName
+        return text
+
     def terminate(self):
         for timer_handle in self.timer_handle_list:
             self.cancel_timer(timer_handle)
