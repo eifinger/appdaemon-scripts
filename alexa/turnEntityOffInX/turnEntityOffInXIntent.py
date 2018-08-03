@@ -12,7 +12,7 @@ class lightStateIntent(hass.Hass):
         # but it also can be any other kind of entity
         ############################################           
         try:
-            self.log("slots: {}".format(slots)
+            self.log("slots: {}".format(slots))
             entityname = self.args["entities"][slots["device"]]
             duration = [slots["duration"]]
             text = self.random_arg(self.args["textLine"]) + state            
