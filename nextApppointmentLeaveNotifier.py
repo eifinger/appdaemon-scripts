@@ -54,6 +54,7 @@ class NextApppointmentLeaveNotifier(hass.Hass):
     def state_change(self, entity, attributes, old, new, kwargs):
         try:
             self.cancel_timer(self.timer_handle)
+            self.timer_handle = None
         except AttributeError:
             #Timer was not set
             pass
