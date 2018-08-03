@@ -23,20 +23,20 @@ class TurnEntityOffInXIntent(hass.Hass):
             minutes, seconds = divmod(duration.total_seconds(), 60)
             if minutes == 0:
                 if seconds == 1:
-                    timeText = "einer Sekunde"
+                    timeText = " einer Sekunde"
                 else:
-                    timeText = "{} Sekunden".format(seconds)
+                    timeText = " {} Sekunden".format(seconds)
             elif minutes == 1:
                 if seconds == 1:
-                    timeText = "einer Minute und einer Sekunde"
+                    timeText = " einer Minute und einer Sekunde"
                 else:
-                    timeText = "einer Minute und {} Sekunden".format(seconds)
+                    timeText = " einer Minute und {} Sekunden".format(seconds)
             else:
                 if seconds == 0:
-                    timeText = "{} Minuten".format(minutes)
+                    timeText = " {} Minuten".format(minutes)
                 else:
-                    timeText = "{} Minuten und {} Sekunden".format(minutes, seconds)
-            text = self.args["textLine"].format(timeText)
+                    timeText = " {} Minuten und {} Sekunden".format(minutes, seconds)
+            text = self.args["textLine"] + timeText + " ab"
         except Exception as e:
             self.log("Exception: {}".format(e))
             text = self.random_arg(self.args["Error"])
