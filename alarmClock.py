@@ -1,6 +1,7 @@
 import appdaemon.plugins.hass.hassapi as hass
 import globals
 import datetime
+import messages
 
 #
 # Alarm Clock App
