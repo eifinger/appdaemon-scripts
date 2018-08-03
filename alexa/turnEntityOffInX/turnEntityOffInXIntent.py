@@ -33,10 +33,7 @@ class TurnEntityOffInXIntent(hass.Hass):
             elif minutes == 1:
                 if seconds == 1:
                     timeText = " einer Minute und einer Sekunde"
-                else:
-                    timeText = " einer Minute und {} Sekunden".format(seconds)
-            else:
-                if seconds == 0:
+                elif seconds == 0:
                     timeText = " {} Minuten".format(minutes)
                 else:
                     timeText = " {} Minuten und {} Sekunden".format(minutes, seconds)
