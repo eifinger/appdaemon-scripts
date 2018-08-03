@@ -21,21 +21,25 @@ class TurnEntityOffInXIntent(hass.Hass):
             duration = isodate.parse_duration(slots["duration"].upper())
             self.timer_handle_list.append(self.run_in(self.turn_off_callback, duration.total_seconds(), entityname=entityname))
             minutes, seconds = divmod(duration.total_seconds(), 60)
-            if int(minutes) == 0:
-                if int(seconds) == 1:
+            minutes = int(minutes)
+            seconds = int(seconds)
+            self.log("minutes: {}".format(minutes))
+            self.log("seconds: {}".format(seconds))
+            if minutes == 0:
+                if seconds == 1:
                     timeText = " einer Sekunde"
                 else:
-                    timeText = " {} Sekunden".format(int(seconds))
-            elif int(minutes) == 1:
-                if int(seconds) == 1:
+                    timeText = " {} Sekunden".format(seconds)
+            elif minutes == 1:
+                if seconds == 1:
                     timeText = " einer Minute und einer Sekunde"
                 else:
-                    timeText = " einer Minute und {} Sekunden".format(int(seconds))
+                    timeText = " einer Minute und {} Sekunden".format(seconds)
             else:
-                if int(seconds) == 0:
+                if seconds == 0:
                     timeText = " {} Minuten".format(minutes)
                 else:
-                    timeText = " {} Minuten und {} Sekunden".format(int(minutes), int(seconds))
+                    timeText = " {} Minuten und {} Sekunden".format(minutes, seconds)
             text = self.args["textLine"] + timeText + " ab."
         except Exception as e:
             self.log("Exception: {}".format(e))
