@@ -1,9 +1,12 @@
 import appdaemon.plugins.hass.hassapi as hass
 import random
+import isodate
+import datetime
 
 class TurnEntityOffInXIntent(hass.Hass):
 
     def initialize(self):
+        self.timer_handle_list = []
         return
 
     def getIntentResponse(self, slots, devicename):
@@ -14,16 +17,19 @@ class TurnEntityOffInXIntent(hass.Hass):
         try:
             self.log("slots: {}".format(slots))
             entityname = self.args["entities"][slots["device"]]
-            duration = [slots["duration"]]
-            text = self.random_arg(self.args["textLine"]) + state            
+            duration = isodate.parse_duration([slots["duration"]])
+            duration.total_seconds()
+            self.timer_handle_list.append(self.run_in(self.turn_off_callback, duration.total_seconds(), entityname=entityname))
+            text = self.random_arg(self.args["textLine"])
         except:
             text = self.random_arg(self.args["Error"])
         return text
 
-    def floatToStr(self,myfloat):
-        ############################################
-        # replace . with , for better speech
-        ############################################
-        floatstr = str(myfloat)
-        floatstr = floatstr.replace(".",",")
-        return floatstr
+    def turn_off_callback(self, kwargs):
+        entityname = kwargs["entityname"]
+        self.log("Turning off {}".format(entityname))
+        self.turn_off(entityname)
+
+    def terminate(self):
+        for timer_handle in self.timer_handle_list:
+            self.cancel_timer(timer_handle)

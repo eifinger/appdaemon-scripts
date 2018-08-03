@@ -4,6 +4,7 @@ turnEntityOffInXIntent:
   language: DE
   textLine:
     - "OK"
+    - "Okay Homeassistant schaltet {{device}} in {{duration}} ab"
   Error: <p>Ich habe nicht richtig verstanden welches geraet soll ich ausschalten?</p>
   unreadableState: "unlesbar fuer mich"
   entities:
