@@ -307,7 +307,7 @@ leavingWorkNotifierUserOne:
   device: secret_device_user_one
   user_name: secret_name_user_one
   lingering_time: 3600
-  delay: 0
+  delay: 60
   zone: Work
   notify_name: group_notifications
   global_dependencies:
