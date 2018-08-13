@@ -446,7 +446,7 @@ turnFanOnWhenHot:
   threshold_entity: input_number.turn_fan_on_when_hot_threshold
   location_sensors: sensor.location_user_one,sensor.location_user_two
   room: Wohnzimmer
-  actor: switch.ventilator
+  actor: switch.large_ventilator
   delay: 120
   global_dependencies:
     - globals
