@@ -5,7 +5,7 @@ comingHomeYeelight:
   app_switch: input_boolean.coming_home_yeelight
   sensor: binary_sensor.door_window_sensor_158d000126a57b
   isHome: input_boolean.is_home
-  actor: light.lobby_yeelight
+  actor: switch.large_lamp
   after_sundown: True
 
 #Turn Receiver on and set to Sat/Cbl when the first person is coming home and the sun is down
