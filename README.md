@@ -1,4 +1,7 @@
 # appdaemon-scripts
+<p align="center">
+  <img src=images/logo-round-192x192.png>
+</p>
 This is the repository containing all my Appdaemon apps.
 
 Used together with my Homeassistant config which you can find here:
