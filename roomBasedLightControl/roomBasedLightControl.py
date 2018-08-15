@@ -30,7 +30,7 @@ class RoomBasedLightControl(hass.Hass):
 
         self.room_sensor = globals.get_arg(self.args,"room_sensor")
         self.entity = globals.get_arg(self.args,"entity")
-        self.mappings = [globals.get_arg(self.args,"mappings")]
+        self.mappings = self.args["mappings"]
 
         self.mappings_dict = {}
 
