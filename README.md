@@ -7,7 +7,7 @@ Used together with my Homeassistant config which you can find here:
 
 I use Appdaemon for all my automations since I am a programmer myself and it provides me with all the possibilities of the Python world and a far better debugging experience than [HA Automations](https://www.home-assistant.io/getting-started/automation/) or [nodered](https://nodered.org/).
 
-This is a continouus work in progress and I am no real Python programmer. So any comments are highly appreciated.
+This is a continuous work in progress and I am no real Python programmer. So any comments are highly appreciated.
 
 ## General Remarks
 I tried to write each App in this repository with reusability in mind. This means that every app in here has a short documentation and is (if possible) written to be easily adjusted to your environment and your needs.
