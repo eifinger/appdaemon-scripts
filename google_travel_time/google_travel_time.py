@@ -38,7 +38,7 @@ class GoogleTravelTime(hass.Hass):
         self.notify_name = globals.get_arg(self.args,"notify_name")
         self.message = globals.get_arg(self.args,"message_DE")
         try:
-            self.acceptable_range = globals.get_arg("acceptable_range")
+            self.acceptable_range = globals.get_arg(self.args,"acceptable_range")
         except KeyError:
             self.acceptable_range = 1.2
 
