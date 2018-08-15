@@ -40,7 +40,7 @@ class AlarmClock(hass.Hass):
         self.isweekday = globals.get_arg(self.args,"isweekday")
         self.notify_name = globals.get_arg(self.args,"notify_name")
         self.wakeup_light = globals.get_arg(self.args,"wakeup_light")
-        self.message = globals.get_args(self.args, "message_DE")
+        self.message = globals.get_arg(self.args, "message_DE")
 
         self.brightness = 100
         self.rgb = (255,255,255)
