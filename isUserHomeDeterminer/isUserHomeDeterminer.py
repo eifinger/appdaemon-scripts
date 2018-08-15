@@ -18,6 +18,9 @@ import requests
 #
 # Release Notes
 #
+# Version 1.4.1:
+#   fix for 503, fix for listen callback not being cancelled correctly
+#
 # Version 1.4:
 #   message now directly in own yaml instead of message module
 #
@@ -56,6 +59,8 @@ class IsUserHomeDeterminer(hass.Hass):
                 self.timer_handle_list.append(self.run_in(self.turn_off_callback, 0, turn_off_entity = self.input_boolean))
 
         self.listen_state_handle_list.append(self.listen_state(self.state_change, self.door_sensor))
+
+        self.listen_state_handle = None
         
     def state_change(self, entity, attribute, old, new, kwargs):
         if self.get_state(self.app_switch) == "on":
@@ -73,29 +78,39 @@ class IsUserHomeDeterminer(hass.Hass):
                     #User got home: Device tracker is still not home. Wait if it changes to home in the next self.delay seconds
                     elif device_tracker_state["state"]  != "home":
                         self.log("Wait for device tracker to change to 'home'")
-                        listen_state_handle = self.listen_state(self.check_if_user_got_home, self.device_tracker)
-                        self.listen_state_handle_list.append(listen_state_handle)
-                        self.timer_handle_list.append(self.run_in(self.cancel_listen_state_callback ,self.delay, listen_state_handle=listen_state_handle))
+                        self.listen_state_handle = self.listen_state(self.check_if_user_got_home, self.device_tracker)
+                        self.listen_state_handle_list.append(self.listen_state_handle)
+                        self.timer_handle_list.append(self.run_in(self.cancel_listen_state_callback ,self.delay))
                     #User left home: Device tracker is still home.  Wait if it changes to home in the next self.delay seconds
                     elif device_tracker_state["state"]  == "home":
                         self.log("Wait for device tracker to change to 'not_home'")
-                        listen_state_handle = self.listen_state(self.check_if_user_left_home, self.device_tracker)
-                        self.listen_state_handle_list.append(listen_state_handle)
-                        self.timer_handle_list.append(self.run_in(self.cancel_listen_state_callback, self.delay, listen_state_handle=listen_state_handle))
+                        self.listen_state_handle = self.listen_state(self.check_if_user_left_home, self.device_tracker)
+                        self.listen_state_handle_list.append(self.listen_state_handle)
+                        self.timer_handle_list.append(self.run_in(self.cancel_listen_state_callback, self.delay))
 
     def cancel_listen_state_callback(self, kwargs):
-        self.log("Timeout while waiting for user to get/leave home. Cancel listen_state")
-        self.cancel_listen_state(kwargs["listen_state_handle"])
+        if self.listen_state_handle != None:
+            self.log("Timeout while waiting for user to get/leave home. Cancel listen_state")
+            self.listen_state_handle_list.remove(self.listen_state_handle)
+            self.cancel_listen_state(self.listen_state_handle)
+            self.listen_state_handle = None
 
     def check_if_user_left_home(self, entity, attribute, old, new, kwargs):
         if new != "home":
             self.log("User left home")
-            self.turn_off(self.input_boolean)
+            self.listen_state_handle_list.remove(self.listen_state_handle)
+            self.cancel_listen_state(self.listen_state_handle)
+            self.listen_state_handle = None
+            self.timer_handle_list.append(self.run_in(self.turn_off_callback, 1, turn_off_entity = self.input_boolean))
 
     def check_if_user_got_home(self, entity, attribute, old, new, kwargs):
         if new == "home":
             self.log("User got home")
-            self.turn_on(self.input_boolean)
+            self.listen_state_handle_list.remove(self.listen_state_handle)
+            self.cancel_listen_state(self.listen_state_handle)
+            self.listen_state_handle = None
+            self.timer_handle_list.append(self.run_in(self.turn_on_callback, 1, turn_on_entity = self.input_boolean))
+
 
     def turn_on_callback(self, kwargs):
         """This is needed because the turn_on command can result in a HTTP 503 when homeassistant is restarting"""
