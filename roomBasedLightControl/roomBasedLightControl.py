@@ -28,9 +28,9 @@ class RoomBasedLightControl(hass.Hass):
         self.listen_state_handle_list = []
         self.timer_handle_list = []
 
-        self.room_sensor = globals.get_arg("room_sensor")
-        self.entity = globals.get_arg("entity")
-        self.mappings = globals.get_arg_list["mappings"]
+        self.room_sensor = globals.get_arg(self.args,"room_sensor")
+        self.entity = globals.get_arg(self.args,"entity")
+        self.mappings = globals.get_arg_list(self.args,"mappings")
 
         self.mappings_dict = {}
 
