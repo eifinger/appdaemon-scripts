@@ -30,11 +30,11 @@ class NextApppointmentLeaveNotifier(hass.Hass):
         self.listen_state_handle_list = []
         
 
-        self.sensor = globals.get_arg("sensor")
-        self.notify_input_boolean = globals.get_arg("notify_input_boolean")
-        self.notify_name = globals.get_arg("notify_name")
-        self.destination_name_sensor = globals.get_arg("destination_name_sensor")
-        self.travel_time_sensor = globals.get_arg("travel_time_sensor")
+        self.sensor = globals.get_arg(self.args,"sensor")
+        self.notify_input_boolean = globals.get_arg(self.args,"notify_input_boolean")
+        self.notify_name = globals.get_arg(self.args,"notify_name")
+        self.destination_name_sensor = globals.get_arg(self.args,"destination_name_sensor")
+        self.travel_time_sensor = globals.get_arg(self.args,"travel_time_sensor")
         self.message = globals.get_arg(self.args,"message_DE")
 
         self.timer_handle = None
