@@ -1,0 +1,18 @@
+#Switch on Lobby lamp when the first person is coming home and the sun is down
+comingHomeYeelight:
+  module: comingHome
+  class: ComingHome
+  app_switch: input_boolean.coming_home_yeelight
+  sensor: binary_sensor.door_window_sensor_158d000126a57b
+  isHome: input_boolean.is_home
+  actor: light.lobby_yeelight
+  after_sundown: True
+
+#Turn Receiver on and set to Sat/Cbl when the first person is coming home and the sun is down
+comingHomeAlexa:
+  module: comingHome
+  class: ComingHome
+  app_switch: input_boolean.coming_home_alexa
+  sensor: binary_sensor.door_window_sensor_158d000126a57b
+  isHome: input_boolean.is_home
+  actor: script.receiver_set_source_cbl_sat

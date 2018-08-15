@@ -1,0 +1,45 @@
+roggenNotifier:
+  module: pollenNotifier
+  class: PollenNotifier
+  app_switch: input_boolean.roggen_notifier
+  pollen_sensor: sensor.pollen_101_roggen_today
+  pollen_name: Roggen
+  notify_name: group_notifications
+  notify_time: 08:00
+  notify_threshold: 1.0
+  message_DE: "{} ist {} {} Belastung."
+  message_EN: "The {} intensity {} is {}."
+  message_no_data_DE: "Ich habe {} leider keine Daten für {}."
+  message_no_data_EN: "{} I have no pollen data for {}."
+  global_dependencies:
+    - globals
+graeserNotifier:
+  module: pollenNotifier
+  class: PollenNotifier
+  app_switch: input_boolean.graeser_notifier
+  pollen_sensor: sensor.pollen_101_graeser_today
+  pollen_name: Gräser
+  notify_name: group_notifications
+  notify_time: 08:00
+  notify_threshold: 1.0
+  message_DE: "{} ist {} {} Belastung."
+  message_EN: "The {} intensity {} is {}."
+  message_no_data_DE: "Ich habe {} leider keine Daten für {}."
+  message_no_data_EN: "{} I have no pollen data for {}."
+  global_dependencies:
+    - globals
+birkeNotifier:
+  module: pollenNotifier
+  class: PollenNotifier
+  app_switch: input_boolean.birke_notifier
+  pollen_sensor: sensor.pollen_101_birke_today
+  pollen_name: Birke
+  notify_name: group_notifications
+  notify_time: 08:00
+  notify_threshold: 1.0
+  message_DE: "{} ist {} {} Belastung."
+  message_EN: "The {} intensity {} is {}."
+  message_no_data_DE: "Ich habe {} leider keine Daten für {}."
+  message_no_data_EN: "{} I have no pollen data for {}."
+  global_dependencies:
+    - globals

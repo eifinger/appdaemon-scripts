@@ -1,0 +1,14 @@
+leavingWorkNotifierUserOne:
+  module: leavingZoneNotifier
+  class: LeavingZoneNotifier
+  app_switch: input_boolean.leaving_work_notifier_user_one
+  device: secret_device_user_one
+  user_name: secret_name_user_one
+  lingering_time: 3600
+  delay: 120
+  zone: Work
+  notify_name: group_notifications
+  message_DE: "{} hat {} vor {} Minuten verlassen."
+  message_EN: "{} left {} {} minutes ago"
+  global_dependencies:
+    - globals

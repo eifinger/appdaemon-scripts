@@ -1,0 +1,8 @@
+newWifiDeviceNotify:
+  module: newWifiDeviceNotify
+  class: DeviceNotify
+  notify_name: group_notifications
+  message_DE: "Unbekanntes Gerät entdeckt. Hostname: {}. MAC: {}."
+  message_EN: "Unknown device connected. Hostname: {}. MAC: {}"
+  global_dependencies:
+    - globals

@@ -1,0 +1,27 @@
+#Notification if user one arrives at home
+homeArrivalNotifierUserOne:
+  module: homeArrivalNotifier
+  class: HomeArrivalNotifier
+  app_switch: input_boolean.home_arrival_notifier_user_one
+  input_boolean: input_boolean.user_one_home
+  notify_name: group_notifications
+  user_name: secret_name_user_one
+  zone_name: Home
+  message_DE: "Willkommen zu Hause {}."
+  message_EN: "Welcome Home {}."
+  global_dependencies:
+    - globals
+
+#Notification if user two arrives at home
+homeArrivalNotifierUserTwo:
+  module: homeArrivalNotifier
+  class: HomeArrivalNotifier
+  app_switch: input_boolean.home_arrival_notifier_user_two
+  input_boolean: input_boolean.user_two_home
+  notify_name: group_notifications
+  user_name: secret_name_user_two
+  zone_name: Home
+  message_DE: "Willkommen zu Hause {}."
+  message_EN: "Welcome Home {}."
+  global_dependencies:
+    - globals

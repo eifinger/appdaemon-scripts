@@ -1,0 +1,30 @@
+powerUsageNotification_Dishwasher:
+  module: powerUsageNotification
+  class: PowerUsageNotification
+  app_switch: input_boolean.power_usage_notification_dishwasher
+  sensor: sensor.dishwasher_power_usage
+  notify_name: group_notifications
+  delay: 1260 #21 minutes
+  threshold: 2
+  alternative_name: Die Spülmaschine
+  message_DE: "{} ist gestartet."
+  message_EN: "{} just started."
+  message_off_DE: "{} ist fertig."
+  message_off_EN: "{} just finished."
+  global_dependencies:
+    - globals
+powerUsageNotification_Washingmachine:
+  module: powerUsageNotification
+  class: PowerUsageNotification
+  app_switch: input_boolean.power_usage_notification_washingmachine
+  sensor: sensor.washingmachine_power_usage
+  notify_name: group_notifications
+  delay: 60
+  threshold: 2
+  alternative_name: Die Waschmaschine
+  message_DE: "{} ist gestartet."
+  message_EN: "{} just started."
+  message_off_DE: "{} ist fertig."
+  message_off_EN: "{} just finished."
+  global_dependencies:
+    - globals

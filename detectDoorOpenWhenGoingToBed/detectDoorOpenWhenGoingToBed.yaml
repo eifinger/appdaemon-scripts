@@ -1,0 +1,13 @@
+# App which sends a notification if the terrace is still open when all users are in bed
+detectDoorOpenWhenGoingToBed:
+  module: detectDoorOpenWhenGoingToBed
+  class: DetectDoorOpenWhenGoingToBed
+  app_switch: input_boolean.detect_door_open_when_going_to_bed
+  sensor: binary_sensor.door_window_sensor_158d000205b808
+  entity: input_boolean.sleepmode
+  after_sundown: True
+  notify_name: group_notifications
+  message_DE: "Du hast {} offen gelassen Dummie."
+  message_EN: "You left open {} Dummy."
+  global_dependencies:
+    - globals

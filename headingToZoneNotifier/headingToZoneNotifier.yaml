@@ -1,0 +1,11 @@
+#headingHomeNotifierUserOne:
+#  module: headingToZoneNotifier
+#  class: HeadingToZoneNotifier
+#  proximity: proximity.home_user_one
+#  device: secret_name_user_one
+#  user_name: secret_name_user_one
+#  notify_name: secret_name_user_two
+#  notify_input_boolean: input_boolean.heading_home_notifier_user_one
+#  global_dependencies:
+#    - secrets
+#    - messages

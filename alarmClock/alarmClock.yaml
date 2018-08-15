@@ -1,0 +1,17 @@
+# Alarm Clock App
+alarmClock:
+  module: alarmClock
+  class: AlarmClock
+  alarm_time: sensor.alarm_time
+  wakemeup: input_boolean.wakemeup
+  naturalwakeup: input_number.alarm_natural_wakeup_fade_in
+  alarmweekday: input_boolean.alarmweekday
+  radiowakeup: input_boolean.radiowakeup
+  #TODO radioplayer: input_select.wakeup_radioplayer
+  wakeup_light: light.bedroom_yeelight
+  isweekday: binary_sensor.workday_today
+  notify_name: group_notifications
+  message_DE: "Guten Morgen!"
+  message_EN: "Good Morning!"
+  global_dependencies:
+    - globals

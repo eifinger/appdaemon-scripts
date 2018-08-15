@@ -1,0 +1,6 @@
+turnOffBarAfterRestart:
+  module: turnOffBarAfterRestart
+  class: TurnOffBarAfterRestart
+  light: light.bar_table
+  global_dependencies:
+    - globals

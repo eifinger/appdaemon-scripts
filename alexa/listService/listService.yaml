@@ -1,0 +1,56 @@
+listService:
+  module: listService
+  class: ListService
+  switchable:
+    große lampe: switch.large_lamp
+    kleine lampe: switch.small_lamp
+    deckenlampe: light.livingroom_yeelight
+    ventilator: switch.ventilator
+    großer ventilator: switch.large_ventilator
+    markise: switch.markise
+    fernseher: switch.tv
+    schlafzimmer receiver: switch.bedroom_receiver
+    snowboard: switch.snowboard
+    receiver: media_player.denon_avrx1300w
+    wohnzimmer: group.livingroom
+    wohnung: group.all
+    treppe: group.stair_lights
+    schlafzimmer lampe: light.bedroom_yeelight
+    schlafzimmer: light.bedroom_yeelight
+    bar: light.bar_table
+    bar licht: light.bar_table
+    treppe unten: light.stairs_lower_yeelight
+    treppe oben: light.treppe_oben
+    leselampe: light.reading_lamp_yeelight
+    lese lampe: light.reading_lamp_yeelight
+    runde lampe: light.reading_lamp_yeelight
+    garderobe: light.lobby_yeelight
+    garderoben licht: light.lobby_yeelight
+    garderobenlicht: light.lobby_yeelight
+    flur: switch.lobby
+    flur licht: switch.lobby
+    bad: light.lower_bathroom_yeelight
+    bad licht: light.lower_bathroom_yeelight
+    treppe: group.stair_lights
+    treppen licht: group.stair_lights
+    treppenlicht: group.stair_lights
+
+  temperature:
+    große lampe thermostat: sensor.large_lamp_temperature
+    kleine lampe thermostat: sensor.small_lamp_temperature
+    ventilator thermostat: sensor.ventilator_temperature
+    großer ventilator thermostat: sensor.large_ventilator_temperature
+  door:
+    wohnungstuer: binary_sensor.door_window_sensor_158d000126a57b
+    terassentuer schlafzimmer: binary_sensor.door_window_sensor_158d0001bb4d94
+    terassentuer: binary_sensor.door_window_sensor_158d000205b808
+    terassentuer arbeitszimmer: binary_sensor.door_window_sensor_158d00020499ad
+  window:
+    kuechenfenster: binary_sensor.door_window_sensor_158d00020498b6
+    badfenster oben: binary_sensor.door_window_sensor_158d000204ba26
+    badfenster unten: binary_sensor.door_window_sensor_158d0002048951
+    gaestezimmerfenster: binary_sensor.door_window_sensor_158d00020455bf
+  door_partial:
+    terassentuer arbeitszimmer gekippt: binary_sensor.door_window_sensor_158d000205b82e
+    terrassentuer gekippt: binary_sensor.door_window_sensor_158d0001bb4dc0
+

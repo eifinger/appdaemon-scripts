@@ -1,0 +1,4 @@
+#eventMonitor:
+#  module: eventMonitor
+#  class: Monitor
+#  events: 

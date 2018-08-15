@@ -1,0 +1,10 @@
+obenTreppeMotionTrigger:
+  module: motionTrigger
+  class: MotionTrigger
+  app_switch: input_boolean.oben_treppe_motion_trigger
+  sensor: binary_sensor.motion_sensor_158d00012aab97
+  entity_on: light.treppe_oben
+  entity_off: light.treppe_oben
+  after_sundown: True
+  global_dependencies:
+    - globals
