@@ -5,7 +5,7 @@ Used together with my Homeassistant config which you can find here:
 
 [https://github.com/eifinger/homeassistant-config](https://github.com/eifinger/homeassistant-config)
 
-I run Appdaemon in a Docker Container alongside my Homeassistant Container. I use Appdaemon for all my automations since I am a programmer myself and it provides me with all the possibilities of the Python world and a far better debugging experience than [HA Automations](https://www.home-assistant.io/getting-started/automation/) or [nodered](https://nodered.org/).
+I use Appdaemon for all my automations since I am a programmer myself and it provides me with all the possibilities of the Python world and a far better debugging experience than [HA Automations](https://www.home-assistant.io/getting-started/automation/) or [nodered](https://nodered.org/).
 
 This is a continouus work in progress and I am no real Python programmer. So any comments are highly appreciated.
 
