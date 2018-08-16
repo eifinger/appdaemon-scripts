@@ -20,32 +20,32 @@ As there is currently no functionality for secrets like there is for the HA conf
 
 ## App list
 
-*   [Alexa Intents](#AlexaIntents)
-*   [alarmClock](#alarmClock)
-*   [bedRoomMotionTriger](#bedRoomMotionTriger)
-*   [buttonClicked](#buttonClicked)
-*   [comingHome](#comingHome)
-*   [detectDoorOpenWhenGoingToBed](#detectDoorOpenWhenGoingToBed)
-*   [detectWrongStateWhenLeaving](#detectWrongStateWhenLeaving)
-*   [eventMonitor](#eventMonitor)
+*   [Alexa Intents](#alexaintents)
+*   [alarmClock](#alarmclock)
+*   [bedRoomMotionTrigger](#bedroommotiontrigger)
+*   [buttonClicked](#buttonclicked)
+*   [comingHome](#cominghome)
+*   [detectDoorOpenWhenGoingToBed](#detectdooropenwhengoingtobed)
+*   [detectWrongStateWhenLeaving](#detectwrongstatewhenleaving)
+*   [eventMonitor](#eventmonitor)
 *   [google_travel_time](#google_travel_time)
-*   [headingToZoneNotifier](#headingToZoneNotifier)
-*   [homeArrivalNotifier](#homeArrivalNotifier)
-*   [isHomeDeterminer](#isHomeDeterminer)
-*   [isUserHomeDeterminer](#isUserHomeDeterminer)
-*   [leavingZoneNotifier](#leavingZoneNotifier)
-*   [motionTrigger](#motionTrigger)
-*   [newWifiDeviceNotify](#newWifiDeviceNotify)
-*   [nextAppointmentLeaveNotifier](#nextAppointmentLeaveNotifier)
-*   [notifyFailedLogin](#notifyFailedLogin)
-*   [notifyOfActionWhenAway](#notifyOfActionWhenAway)
-*   [plantWateringNotifier](#plantWateringNotifier)
-*   [powerUsageNotification](#powerUsageNotification)
-*   [roomBasedLightControl](#roomBasedLightControl)
-*   [sleepModeHandler](#sleepModeHandler)
-*   [standardSetter](#standardSetter)
-*   [turnFanOnWhenHot](#turnFanOnWhenHot)
-*   [turnOffBarAfterRestart](#turnOffBarAfterRestart)
+*   [headingToZoneNotifier](#headingtozonenotifier)
+*   [homeArrivalNotifier](#homearrivalnotifier)
+*   [isHomeDeterminer](#ishomedeterminer)
+*   [isUserHomeDeterminer](#isuserhomedeterminer)
+*   [leavingZoneNotifier](#leavingzonenotifier)
+*   [motionTrigger](#motiontrigger)
+*   [newWifiDeviceNotify](#newwifidevicenotify)
+*   [nextAppointmentLeaveNotifier](#nextappointmentleavenotifier)
+*   [notifyFailedLogin](#notifyfailedlogin)
+*   [notifyOfActionWhenAway](#notifyofactionwhenaway)
+*   [plantWateringNotifier](#plantwateringnotifier)
+*   [powerUsageNotification](#powerusagenotification)
+*   [roomBasedLightControl](#roombasedlightcontrol)
+*   [sleepModeHandler](#sleepmodehandler)
+*   [standardSetter](#standardsetter)
+*   [turnFanOnWhenHot](#turnfanonwhenhot)
+*   [turnOffBarAfterRestart](#turnoffbarafterrestart)
 *   [facebox](#facebox)
 
 ### AlexaIntents
@@ -56,7 +56,7 @@ Are explained [here](alexa/README.md)
 Alarm Clock App inspired by [this](https://community.home-assistant.io/t/creating-a-alarm-clock/410) forum post.
 It fades in my bedroom light and sends a notifcation. The fade in and alarm time is defined by input_number sliders in HA
 
-### bedRoomMotionTriger
+### bedRoomMotionTrigger
 Special version of Motion Trigger. Only trigger when Door is not open (dont want any mosquittos) and only trigger when not both smartphones are in bedroom
 
 ### buttonClicked
