@@ -172,6 +172,7 @@ googleTravelTime_home_from_work:
   global_dependencies:
     - globals 
 ```
+![googleTravelTimes](images/googleTravelTimes.PNG)
 ### headingToZoneNotifier
 Currently not used
 ### homeArrivalNotifier
@@ -289,6 +290,7 @@ nextApppointmentLeaveNotifier:
     - globals
 ```
 ![nextAppointmentLeaveNotifier](images/next_appoint_leave_modifier.PNG)
+![next_appoint_leave_modifier_notification](images/next_appoint_leave_modifier_notification.PNG)
 ### notifyFailedLogin
 Send a notification on a failed login.
 ```yaml
