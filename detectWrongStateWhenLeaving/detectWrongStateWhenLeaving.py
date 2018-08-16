@@ -53,6 +53,7 @@ class DetectWrongStateWhenLeaving(hass.Hass):
         #entities_off
         for entity in self.entities_off:
           state = self.get_state(entity)
+          self.log("{} is{}".format(self.friendly_name(entity),state))
           if state == "on":
             self.turn_off(entity)
             self.log(self.message.format(self.friendly_name(entity)))
