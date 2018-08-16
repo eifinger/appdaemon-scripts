@@ -1,7 +1,7 @@
 import appdaemon.plugins.hass.hassapi as hass
 import messages
 import globals
-import notify.notify
+import notify
 #
 # App to send a notification if someone arrives at home
 #
