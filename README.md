@@ -391,7 +391,7 @@ powerUsageNotification_Dishwasher:
   global_dependencies:
     - globals
 ```
-![washingMachineStart](images/washingMachineStart.PNG)
+![dishWasherNotify](images/dishWasherNotify.PNG)
 ### roomBasedLightControl
 BETA
 Turn the light on based on which room my smartphone is currently being determined by [find3](https://github.com/schollz/find3)
