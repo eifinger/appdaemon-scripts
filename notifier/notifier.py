@@ -34,7 +34,7 @@ class Notifier(hass.Hass):
             self.log(self.get_state(self.media_player, attribute = "all"))
             if self.get_state(self.media_player) == "on":
                 if self.get_state(self.media_player, attribute = "all")["attributes"]["source"] == self.source:
-                    self.call_service(self.__ALEXA_TTS__, entity=self.alexa_media_player, message=message)
+                    self.call_service(self.__ALEXA_TTS__, entity_id=self.alexa_media_player, message=message)
 
 
     
