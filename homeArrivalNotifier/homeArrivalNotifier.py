@@ -1,6 +1,7 @@
 import appdaemon.plugins.hass.hassapi as hass
 import messages
 import globals
+import notify.notify
 #
 # App to send a notification if someone arrives at home
 #
@@ -12,6 +13,9 @@ import globals
 #  zone_name: Name of the zone
 #  message_<LANG>: message to use in notification
 # Release Notes
+#
+# Version 1.4:
+#   use Notify App
 #
 # Version 1.3:
 #   message now directly in own yaml instead of message module
@@ -47,7 +51,7 @@ class HomeArrivalNotifier(hass.Hass):
                 self.log("{} changed from {} to {}".format(entity,old,new))
                 if new == "on":
                     self.log("{} arrived at {}".format(self.notify_name,self.zone_name))
-                    self.call_service("notify/" + self.notify_name, message=self.message.format(self.user_name))            
+                    notify.notify(self.notify_name, self.message.format(self.user_name))          
 
     def terminate(self):
         for listen_state_handle in self.listen_state_handle_list:

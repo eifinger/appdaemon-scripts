@@ -9,6 +9,8 @@ homeArrivalNotifierUserOne:
   zone_name: Home
   message_DE: "Willkommen zu Hause {}."
   message_EN: "Welcome Home {}."
+  dependencies: 
+    - Notify
   global_dependencies:
     - globals
 
@@ -23,5 +25,7 @@ homeArrivalNotifierUserTwo:
   zone_name: Home
   message_DE: "Willkommen zu Hause {}."
   message_EN: "Welcome Home {}."
+  dependencies: 
+    - Notify
   global_dependencies:
     - globals

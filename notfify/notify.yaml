@@ -1,0 +1,8 @@
+Notify:
+  module: notify
+  class: Notify
+  media_player: media_player.denon_avrx1300w
+  source: CBL/SAT
+  alexa_media_player: media_player.kevins_echo_dot_oben
+  global_dependencies:
+    - globals

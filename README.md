@@ -50,6 +50,7 @@ Every App has an input_boolean inside HA which turns it on/off. This is useful i
 *   [turnFanOnWhenHot](#turnfanonwhenhot)
 *   [turnOffBarAfterRestart](#turnoffbarafterrestart)
 *   [facebox](#facebox)
+*   [notify](#notify)
 
 ### AlexaIntents
 
@@ -460,6 +461,20 @@ IN DEVELOPMENT
 Use Facebox to announce who is at the door.
 Automatically send a notfication if an unkwon face is detected.
 Automatic selflearning with reinforced learning based on a telegram chatbot.
+### notify
+IN DEVELOPMENT
+Centralizes messaging. Among other things, it will determine whether a user is at home and if yes in which room. 
+Then Alexa in that room will be used additionally to Telegram
+```yaml
+Notify:
+  module: notify
+  class: Notify
+  media_player: media_player.denon_avrx1300w
+  source: CBL/SAT
+  alexa_media_player: media_player.kevins_echo_dot_oben
+  global_dependencies:
+    - globals
+```
 
 # Thanks
 First of all thanks to the Homeassistant Team and [Andrew Cockburn](https://github.com/acockburn) for making Appdaemon
