@@ -16,7 +16,7 @@ import globals
 # Version 1.0:
 #   Initial Version
 
-class Notify(hass.Hass):
+class Notifier(hass.Hass):
 
     __ALEXA_TTS__ = "media_player.alexa_tts"
     __NOTIFY__ = "notify/"

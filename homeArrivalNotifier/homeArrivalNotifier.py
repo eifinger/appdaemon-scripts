@@ -40,7 +40,7 @@ class HomeArrivalNotifier(hass.Hass):
         self.user_name = globals.get_arg(self.args,"user_name")
         self.message = globals.get_arg(self.args,"message_DE")
 
-        self.notify = self.get_app('notify')
+        self.notifier = self.get_app('Notifier')
 
         
         
@@ -52,7 +52,7 @@ class HomeArrivalNotifier(hass.Hass):
                 self.log("{} changed from {} to {}".format(entity,old,new))
                 if new == "on":
                     self.log("{} arrived at {}".format(self.notify_name,self.zone_name))
-                    self.notify.notify(self.notify_name, self.message.format(self.user_name))          
+                    self.notifier.notify(self.notify_name, self.message.format(self.user_name))          
 
     def terminate(self):
         for listen_state_handle in self.listen_state_handle_list:
