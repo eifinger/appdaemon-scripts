@@ -5,6 +5,7 @@ import globals
 # Then Alexa in that room will be used additionally to Telegram
 #
 # Args:
+#  app_switch_alexa: mutes alexa. example: 
 #  media_player: media player to which alexa is connected. example: media_player.denon_avrx1300w
 #  source: media player source of alexa. example: CBL/SAT
 #  alexa_media_player: media player entity of alexa to use. example: media_player.kevins_echo_dot_oben
@@ -24,6 +25,8 @@ class Notifier(hass.Hass):
         self.media_player = globals.get_arg(self.args,"media_player")
         self.source = globals.get_arg(self.args,"source")
         self.alexa_media_player = globals.get_arg(self.args,"alexa_media_player")
+        self.app_switch_alexa = globals.get_arg(self.args,"app_switch_alexa")
+        
 
         self.__NOTIFY__ = "notify/"
         self.__ALEXA_TTS__ = "media_player/alexa_tts"
@@ -33,7 +36,7 @@ class Notifier(hass.Hass):
         if useTelegram:
             self.log("Notifying via Telegram")
             self.call_service(self.__NOTIFY__ + notify_name,message=message)
-        if useAlexa:
+        if useAlexa and self.get_state(self.app_switch_alexa) == "on":
             self.log("Notifying via Alexa")
             media_player_state = self.get_state(self.media_player, attribute = "all")
             if media_player_state["state"] == "on":
