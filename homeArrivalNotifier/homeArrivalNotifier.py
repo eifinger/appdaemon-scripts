@@ -1,7 +1,6 @@
 import appdaemon.plugins.hass.hassapi as hass
 import messages
 import globals
-import notify
 #
 # App to send a notification if someone arrives at home
 #
@@ -41,6 +40,8 @@ class HomeArrivalNotifier(hass.Hass):
         self.user_name = globals.get_arg(self.args,"user_name")
         self.message = globals.get_arg(self.args,"message_DE")
 
+        self.notify = self.get_app('Notify')
+
         
         
         self.listen_state_handle_list.append(self.listen_state(self.state_change, self.input_boolean))
@@ -51,7 +52,7 @@ class HomeArrivalNotifier(hass.Hass):
                 self.log("{} changed from {} to {}".format(entity,old,new))
                 if new == "on":
                     self.log("{} arrived at {}".format(self.notify_name,self.zone_name))
-                    notify.notify(self.notify_name, self.message.format(self.user_name))          
+                    self.notify.notify(self.notify_name, self.message.format(self.user_name))          
 
     def terminate(self):
         for listen_state_handle in self.listen_state_handle_list:
