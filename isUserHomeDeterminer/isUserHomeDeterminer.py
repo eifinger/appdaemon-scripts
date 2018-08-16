@@ -91,14 +91,16 @@ class IsUserHomeDeterminer(hass.Hass):
     def cancel_listen_state_callback(self, kwargs):
         if self.listen_state_handle != None:
             self.log("Timeout while waiting for user to get/leave home. Cancel listen_state")
-            self.listen_state_handle_list.remove(self.listen_state_handle)
+            if self.listen_state_handle in self.listen_state_handle_list:
+                self.listen_state_handle_list.remove(self.listen_state_handle)
             self.cancel_listen_state(self.listen_state_handle)
             self.listen_state_handle = None
 
     def check_if_user_left_home(self, entity, attribute, old, new, kwargs):
         if new != "home":
             self.log("User left home")
-            self.listen_state_handle_list.remove(self.listen_state_handle)
+            if self.listen_state_handle in self.listen_state_handle_list:
+                self.listen_state_handle_list.remove(self.listen_state_handle)
             self.cancel_listen_state(self.listen_state_handle)
             self.listen_state_handle = None
             self.timer_handle_list.append(self.run_in(self.turn_off_callback, 1, turn_off_entity = self.input_boolean))
@@ -106,7 +108,8 @@ class IsUserHomeDeterminer(hass.Hass):
     def check_if_user_got_home(self, entity, attribute, old, new, kwargs):
         if new == "home":
             self.log("User got home")
-            self.listen_state_handle_list.remove(self.listen_state_handle)
+            if self.listen_state_handle in self.listen_state_handle_list:
+                self.listen_state_handle_list.remove(self.listen_state_handle)
             self.cancel_listen_state(self.listen_state_handle)
             self.listen_state_handle = None
             self.timer_handle_list.append(self.run_in(self.turn_on_callback, 1, turn_on_entity = self.input_boolean))
