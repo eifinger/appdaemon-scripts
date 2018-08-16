@@ -20,46 +20,74 @@ As there is currently no functionality for secrets like there is for the HA conf
 
 ## App list
 
-### Alexa Intents
+*   [Alexa Intents](#AlexaIntents)
+*   [alarmClock](#alarmClock)
+*   [bedRoomMotionTriger](#bedRoomMotionTriger)
+*   [buttonClicked](#buttonClicked)
+*   [comingHome](#comingHome)
+*   [detectDoorOpenWhenGoingToBed](#detectDoorOpenWhenGoingToBed)
+*   [detectWrongStateWhenLeaving](#detectWrongStateWhenLeaving)
+*   [eventMonitor](#eventMonitor)
+*   [google_travel_time](#google_travel_time)
+*   [headingToZoneNotifier](#headingToZoneNotifier)
+*   [homeArrivalNotifier](#homeArrivalNotifier)
+*   [isHomeDeterminer](#isHomeDeterminer)
+*   [isUserHomeDeterminer](#isUserHomeDeterminer)
+*   [leavingZoneNotifier](#leavingZoneNotifier)
+*   [motionTrigger](#motionTrigger)
+*   [newWifiDeviceNotify](#newWifiDeviceNotify)
+*   [nextAppointmentLeaveNotifier](#nextAppointmentLeaveNotifier)
+*   [notifyFailedLogin](#notifyFailedLogin)
+*   [notifyOfActionWhenAway](#notifyOfActionWhenAway)
+*   [plantWateringNotifier](#plantWateringNotifier)
+*   [powerUsageNotification](#powerUsageNotification)
+*   [roomBasedLightControl](#roomBasedLightControl)
+*   [sleepModeHandler](#sleepModeHandler)
+*   [standardSetter](#standardSetter)
+*   [turnFanOnWhenHot](#turnFanOnWhenHot)
+*   [turnOffBarAfterRestart](#turnOffBarAfterRestart)
+*   [facebox](#facebox)
+
+### AlexaIntents
 
 Are explained [here](alexa/README.md)
 
-### Alarm Clock
+### alarmClock
 Alarm Clock App inspired by [this](https://community.home-assistant.io/t/creating-a-alarm-clock/410) forum post.
 It fades in my bedroom light and sends a notifcation. The fade in and alarm time is defined by input_number sliders in HA
 
-### Bedroom Motiontrigger
+### bedRoomMotionTriger
 Special version of Motion Trigger. Only trigger when Door is not open (dont want any mosquittos) and only trigger when not both smartphones are in bedroom
 
-### Button Clicked
+### buttonClicked
 My multipurpose App to link any switch/light to a Xiaomi Button
 
-### Coming Home
+### comingHome
 When the front door openes and no one was home before this will turn on something. I am using it to turn on the light (if the sun is down) and turn on the receiver so I can hear Alexa
 
-### Detect Door Open When Going to Bed
+### detectDoorOpenWhenGoingToBed
 During this hot summer in Germany we somethimes forgot to close the terrace door before going to bed. This will check if the Xiaomi Door/Window Sensor reports the door being open if the [sleepmode](sleepModeHandler/sleepModeHandler.py) is turned on.
 
-### Detect Wrong State When Leaving
+### detectWrongStateWhenLeaving
 Checks a list of entities which should be on/off when everybody left the house. If something isn't right it will try to turn it off (e.g. a light) and send a notification.
 
-### Eventmonitor
+### eventMonitor
 Monitor all events. Useful for debugging and developing
 
-### Google Travel Time
+### google_travel_time
 Monitors my Google Travel Time Sensors e.g. between home and work. I can enable an input_boolean in HA which causes this App to send me a notication as soon as the traffic is in an acceptable range. I use this drive to/from work when there is the least traffic.
 
-### Heading To Zone Notifier
+### headingToZoneNotifier
 Currently not used
 
-### Home Arrival Notifier
+### homeArrivalNotifier
 Greet the person coming home with a notification
 
-### Is Home Determiner
+### isHomeDeterminer
 Controls an input_boolean "isHome" which is used as a trigger for other Apps.
 The state depends on other input_booleans controlled by the [isUserHomeDeterminer](isUserHomeDeterminer/isUserHomeDeterminer.py)
 
-### Is User Home Determiner
+### isUserHomeDeterminer
 The GPS Logger tells me where someone is. But I want to know for sure who just came in the door.
 App to toggle an input boolean when a person enters or leaves home.
 This is determined based on a combination of a GPS device tracker and the door sensor.
@@ -96,10 +124,11 @@ Remind us to water the plants in the morning when the precipiation propability i
 ### pollenNotifier
 Notify in the morning if any monitored pollen level is above a threshold.
 
-### PowerUsageNotification
+### powerUsageNotification
 Notify when the Washingmachine or Dishwasher started/finished. Using power measured by TP HS110 Plugs like [this one](https://www.amazon.de/dp/B017X72IES/ref=twister_B07CQBCZ5G)
 
-### RoomBasedLightControl - BETA
+### roomBasedLightControl
+BETA
 Turn the light on based on which room my smartphone is currently being determined by [find3](https://github.com/schollz/find3)
 
 ### sleepModeHandler
@@ -107,7 +136,7 @@ Set an input_boolean on/off. Used as a trigger for other Apps.
 
 ### standardSetter
 Set back some HA entities back to their standard values.
-Configurable in the HA frontend
+Configurable in the HA frontend. Currently used to set back the next the [nextAppointmentLeaveNotifier](#nextAppointmentLeaveNotifier) to my configured default value.
 
 ### turnFanOnWhenHot
 Turns the Fan on when the temperature is above a configurable threshold and someone is in the room ([find3](https://github.com/schollz/find3))
@@ -115,10 +144,13 @@ Turns the Fan on when the temperature is above a configurable threshold and some
 ### turnOffBarAfterRestart
 As I sometimes restart HA when working on it from remote I turn the Bar lights to red with [this script](https://github.com/eifinger/homeassistant-config/blob/master/updateHomeassistant.sh). This way everyone can see HA is currently unavailable. If it comes back up again this app will turn the light green and then off. 
 
-### facebox - IN DEVELOPMENT
+### facebox
+IN DEVELOPMENT
 Use Facebox to announce who is at the door.
 Automatically send a notfication if an unkwon face is detected.
 Automatic selflearning with reinforced learning based on a telegram chatbot.
 
 # Thanks
+First of all thanks to the Homeassistant Team and [Andrew Cockburn](https://github.com/acockburn) for making Appdaemon
+
 Some of the Apps are taken from the official examples and many based on or at least inspired by [Rene Tode](https://github.com/ReneTode). For example his absolutely fantastic [Alexa-Appdaemon-App](https://github.com/ReneTode/Alexa-Appdaemon-App).
