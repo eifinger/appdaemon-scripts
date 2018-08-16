@@ -24,7 +24,7 @@ class Notifier(hass.Hass):
         self.alexa_media_player = globals.get_arg(self.args,"alexa_media_player")
 
         self.__NOTIFY__ = "notify/"
-        self.__ALEXA_TTS__ = "media_player.alexa_tts"
+        self.__ALEXA_TTS__ = "media_player/alexa_tts"
 
     def notify(self, notify_name, message, useAlexa=True, useTelegram=True):
         if useTelegram:
