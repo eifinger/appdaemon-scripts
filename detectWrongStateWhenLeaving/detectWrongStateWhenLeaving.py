@@ -16,6 +16,9 @@ import globals
 #
 # Release Notes
 #
+# Version 1.3:
+#   use Notify App
+#
 # Version 1.2:
 #   message now directly in own yaml instead of message module
 #
@@ -44,6 +47,8 @@ class DetectWrongStateWhenLeaving(hass.Hass):
     self.message_off = globals.get_arg(self.args,"message_off_DE")
     self.message_reed = globals.get_arg(self.args,"message_reed_DE")
     self.message_reed_off = globals.get_arg(self.args,"message_reed_off_DE")
+
+    self.notifier = self.get_app('Notifier')
     
     self.listen_state_handle_list.append(self.listen_state(self.state_change, self.isHome))
     
@@ -57,20 +62,20 @@ class DetectWrongStateWhenLeaving(hass.Hass):
           if state == "on":
             self.turn_off(entity)
             self.log(self.message.format(self.friendly_name(entity)))
-            self.call_service("notify/group_notifications",message=self.message.format(self.friendly_name(entity)))
+            self.notifier.notify("group_notifications", self.message.format(self.friendly_name(entity)), useAlexa=False)
           if state == "open":
             self.log(self.message_reed.format(self.friendly_name(entity)))
-            self.call_service("notify/group_notifications",message=self.message_reed.format(self.friendly_name(entity)))
+            self.notifier.notify("group_notifications", self.message_reed.format(self.friendly_name(entity)), useAlexa=False)
         #entities_on
         for entity in self.entities_on:
           state = self.get_state(entity)
           if state == "off":
             self.turn_off(entity)
             self.log(self.message_off.format(self.friendly_name(entity)))
-            self.call_service("notify/group_notifications",message=self.message_off.format(self.friendly_name(entity)))
+            self.notifier.notify("group_notifications", message=self.message_off.format(self.friendly_name(entity)), useAlexa=False)
           if state == "closed":
             self.log(self.message_reed_off.format(self.friendly_name(entity)))
-            self.call_service("notify/group_notifications",message=self.message_reed_off.format(self.friendly_name(entity)))
+            self.notifier.notify("group_notifications", message=self.message_reed_off.format(self.friendly_name(entity)), useAlexa=False)
 
   def terminate(self):
     for listen_state_handle in self.listen_state_handle_list:

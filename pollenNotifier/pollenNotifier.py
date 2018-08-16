@@ -18,6 +18,9 @@ import datetime
 #
 # Release Notes
 #
+# Version 1.3:
+#   use Notify App
+#
 # Version 1.2:
 #   message now directly in own yaml instead of message module
 #
@@ -65,6 +68,8 @@ class PollenNotifier(hass.Hass):
         self.level_mapping_dict["2-3"] = 2.5
         self.level_mapping_dict["3"] = 3
 
+        self.notifier = self.get_app('Notifier')
+
 
         hours = self.notify_time.split(":",1)[0]
         minutes = self.notify_time.split(":",1)[1]
@@ -85,7 +90,7 @@ class PollenNotifier(hass.Hass):
 
             if self.level_mapping_dict[pollen_sensor_state] >= float(self.notify_threshold):
                 self.log("Notifying user")
-                self.call_service("notify/" + self.notify_name,message=message)
+                self.notifier.notify(self.notify_name, message)
             else:
                 self.log("Threshold not met. Not notifying user")
         

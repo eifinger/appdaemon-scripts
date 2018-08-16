@@ -11,8 +11,12 @@ import globals
 # notify_name: Who to notify. example: group_notifications
 # acceptable_range (optional): Multiplier of the normal travel time that is still acceptable. example: 1.2
 # message_<LANG>: message to use in notification
+# notify_use_Alexa: use Alexa as TTS. Defaults to True. example: False
 #
 # Release Notes
+#
+# Version 1.4:
+#   use Notify App
 #
 # Version 1.3:
 #   message now directly in own yaml instead of message module
@@ -41,6 +45,12 @@ class GoogleTravelTime(hass.Hass):
             self.acceptable_range = globals.get_arg(self.args,"acceptable_range")
         except KeyError:
             self.acceptable_range = 1.2
+        try:
+            self.notify_use_Alexa = globals.get_arg(self.args,"notify_use_Alexa")
+        except KeyError:
+            self.notify_use_Alexa = True
+
+        self.notifier = self.get_app('Notifier')
 
         self.listen_state_handle_list.append(self.listen_state(self.state_change, self.sensor, attribute = "all"))
 
@@ -60,7 +70,7 @@ class GoogleTravelTime(hass.Hass):
         if duration_in_traffic_minutes <= duration_minutes * self.acceptable_range and self.get_state(self.notify_input_boolean) == "on":
             message = self.message.format(new["attributes"]["destination_addresses"][0])
             self.log("Notify user")
-            self.call_service("notify/" + self.notify_name, message=message)
+            self.notifier.notify(self.notify_name, message, useAlexa=self.notify_use_Alexa)
             self.turn_off(self.notify_input_boolean)
 
     def terminate(self):

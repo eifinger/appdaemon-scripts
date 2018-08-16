@@ -17,6 +17,9 @@ import globals
 #
 # Release Notes
 #
+# Version 1.2:
+#   use Notify App
+#
 # Version 1.1:
 #   Using globals, message now directly in own yaml instead of message module
 #
@@ -40,6 +43,8 @@ class NextApppointmentLeaveNotifier(hass.Hass):
         self.timer_handle = None
 
         self.google_source_url = "http://maps.google.com/maps?q="
+
+        self.notifier = self.get_app('Notifier')
 
         #Used to check of user got already notified for this event
         self.location_of_last_notified_event = ""
@@ -83,7 +88,7 @@ class NextApppointmentLeaveNotifier(hass.Hass):
             else:
                 google_maps_url = self.google_source_url + location_name.replace(" ","+")
                 self.log("Notify user")
-                self.call_service("notify/" + self.notify_name, message=self.message.format(location_name,self.get_state(self.travel_time_sensor), google_maps_url))
+                self.notifier.notify(self.notify_name, self.message.format(location_name,self.get_state(self.travel_time_sensor), google_maps_url))
                 self.location_of_last_notified_event = location_name
         else:
             self.log("Notification is turned off")

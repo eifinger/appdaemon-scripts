@@ -17,6 +17,9 @@ import globals
 #
 # Release Notes
 #
+# Version 1.7:
+#   use Notify App
+#
 # Version 1.6:
 #   notify message includes delay
 #
@@ -58,7 +61,7 @@ class LeavingZoneNotifier(hass.Hass):
         self.user_entered_zone = None
         self.false_positive = False
 
-        
+        self.notifier = self.get_app('Notifier')        
 
         self.listen_state_handle_list.append(self.listen_state(self.zone_state_change, self.device, attribute = "all"))
 
@@ -82,7 +85,7 @@ class LeavingZoneNotifier(hass.Hass):
         #Check if user did not come back to the zone in the meantime
         if self.get_state(self.device) != kwargs["old_zone"]:
             self.log("Notify user")
-            self.call_service("notify/" + self.notify_name, message=self.message.format(self.user_name, self.zone, divmod(self.delay, 60)))
+            self.notifier.notify(self.notify_name, self.message.format(self.user_name, self.zone, divmod(self.delay, 60)))
             self.false_positive = False
             self.log("Setting false_positive to {}".format(self.false_positive))
             

@@ -6,6 +6,7 @@ googleTravelTime_home_from_work:
   notify_name: group_notifications
   message_DE: "Du kannst losfahren nach {}"
   message_EN: "You can start your journey to {}"
+  notify_use_Alexa: False
   global_dependencies:
     - globals
 

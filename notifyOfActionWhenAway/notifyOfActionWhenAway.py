@@ -11,6 +11,9 @@ import globals
 #  isHome_delay: delay to wait for user to come home before notifying. example: 10
 # Release Notes
 #
+# Version 1.3:
+#   use Notify App
+#
 # Version 1.2:
 #   message now directly in own yaml instead of message module
 #
@@ -24,14 +27,16 @@ class NotifyOfActionWhenAway(hass.Hass):
 
   def initialize(self):
 
+    self.listen_state_handle_list = []
+    self.timer_handle_list = []
+
     self.app_switch = globals.get_arg(self.args,"app_switch")
     self.user_name = globals.get_arg(self.args,"user_name")
     self.isHome_delay = globals.get_arg(self.args,"isHome_delay")
     self.isHome = globals.get_arg(self.args,"isHome")
     self.message = globals.get_arg(self.args,"message_DE")
 
-    self.listen_state_handle_list = []
-    self.timer_handle_list = []
+    self.notifier = self.get_app('Notifier')
 
     for sensor in globals.get_arg_list(self.args,"sensor"):
       self.listen_state_handle_list.append(self.listen_state(self.state_change, sensor))
@@ -49,7 +54,7 @@ class NotifyOfActionWhenAway(hass.Hass):
   def notify_if_no_one_home(self, kwargs):
     if self.get_state(self.isHome) == "off":
       self.log("{} changed to {}".format(self.friendly_name(kwargs["sensor"]), kwargs["new"]))
-      self.call_service("notify/" + self.user_name,message=self.message.format(self.friendly_name(kwargs["sensor"]), kwargs["new"]))
+      self.notifier.notify(self.notify_name, self.message.format(self.friendly_name(kwargs["sensor"]), kwargs["new"]), useAlexa=False)
 
   def terminate(self):
     for listen_state_handle in self.listen_state_handle_list:

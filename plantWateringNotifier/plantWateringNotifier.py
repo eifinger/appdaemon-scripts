@@ -19,6 +19,9 @@ import datetime
 #
 # Release Notes
 #
+# Version 1.5:
+#   use Notify App
+#
 # Version 1.4:
 #   message now directly in own yaml instead of message module
 #
@@ -60,6 +63,8 @@ class PlantWateringNotifier(hass.Hass):
 
         self.keyboard_callback = "/plants_watered"
 
+        self.notifier = self.get_app('Notifier')
+
         self.reminder_acknowledged = self.get_state(self.reminder_acknowledged_entity)
 
         self.listen_event_handle_list.append(self.listen_event(self.receive_telegram_callback, 'telegram_callback'))
@@ -96,7 +101,7 @@ class PlantWateringNotifier(hass.Hass):
                 self.turn_on(self.reminder_acknowledged_entity)
                 self.log("Setting reminder_acknowledged to: {}".format("off"))
                 self.log("Notifying user")
-                self.call_service("notify/" + self.notify_name,message=self.message_not_needed.format(precip_propability, precip_intensity))
+                self.notifier.notify(self.notify_name, self.message_not_needed.format(precip_propability, precip_intensity))
 
     def run_evening_callback(self, kwargs):
         """Remind user to water the plants he if didn't acknowledge it"""
@@ -113,7 +118,7 @@ class PlantWateringNotifier(hass.Hass):
         chat_id = data['chat_id']
         message_id = data["message"]["message_id"]
         text = data["message"]["text"]
-        self.log("callback data: {}".format(data))  
+        self.log("callback data: {}".format(data), level = "DEBUG")  
 
         if data_callback == self.keyboard_callback:  # Keyboard editor:
             # Answer callback query

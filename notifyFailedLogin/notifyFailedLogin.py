@@ -8,6 +8,9 @@ import globals
 #
 # Release Notes
 #
+# Version 1.3:
+#   use Notify App
+#
 # Version 1.2:
 #   message now directly in own yaml instead of message module
 #
@@ -28,6 +31,8 @@ class NotifyFailedLogin(hass.Hass):
 
     self.notify_name = globals.get_arg(self.args,"notify_name")
     self.message = globals.get_arg(self.args,"message_DE")
+
+    self.notifier = self.get_app('Notifier')
     
     self.listen_state_handle_list.append(self.listen_state(self.state_change, "persistent_notification.httplogin"))
     
@@ -35,7 +40,7 @@ class NotifyFailedLogin(hass.Hass):
     if new != "" and new == "notifying":
         message = self.get_state("persistent_notification.httplogin",attribute="message")
         self.log(message)
-        self.call_service("notify/" + self.notify_name,message=self.message.format(message))
+        self.notifier.notify(self.notify_name, self.message.format(message))
 
   def terminate(self):
     for timer_handle in self.timer_handle_list:

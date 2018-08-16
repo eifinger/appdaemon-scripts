@@ -15,6 +15,9 @@ import globals
 #
 # Release Notes
 #
+# Version 1.3:
+#   use Notify App
+#
 # Version 1.2:
 #   message now directly in own yaml instead of message module
 #
@@ -44,6 +47,8 @@ class PowerUsageNotification(hass.Hass):
         self.triggered = False
         self.isWaitingHandle = None
 
+        self.notifier = self.get_app('Notifier')
+
         # Subscribe to sensors
         self.listen_state_handle_list.append(self.listen_state(self.state_change, self.sensor))
 
@@ -55,7 +60,7 @@ class PowerUsageNotification(hass.Hass):
                 self.triggered = True
                 self.log("Power Usage is: {}".format(float(new)))
                 self.log("Setting triggered to: {}".format(self.triggered))
-                self.call_service("notify/" + self.notify_name,message=self.message.format(self.alternative_name))
+                self.notifier.notify(self.notify_name, self.message.format(self.alternative_name))
             # Power usage goes down below threshold
             elif ( new != None and new != "" and self.triggered and self.isWaitingHandle == None and float(new) <= self.threshold):
                 self.log("Waiting: {} seconds to notify.".format(self.delay))
@@ -77,7 +82,7 @@ class PowerUsageNotification(hass.Hass):
         self.isWaitingHandle = None
         self.log("Setting isWaitingHandle to: {}".format(self.isWaitingHandle))
         self.log("Notifying user")
-        self.call_service("notify/" + self.notify_name,message=self.message_off.format(self.alternative_name))
+        self.notifier.notify(self.notify_name, self.message_off.format(self.alternative_name))
         
 
     def terminate(self):

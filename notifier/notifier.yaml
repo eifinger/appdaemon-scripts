@@ -4,5 +4,14 @@ Notifier:
   media_player: media_player.denon_avrx1300w
   source: CBL/SAT
   alexa_media_player: media_player.kevins_echo_dot_oben
+  user_location_sensors:
+    kevin: sensor.location_user_one
+    sina: sensor.location_user_two
+  alexa_to_location_mapping:
+    Wohnzimmer: media_player.kevins_echo_dot_oben
+    Küche: media_player.kevins_echo_dot_oben
+    Balkon Oben: media_player.kevins_echo_dot_oben
+    Arbeitszimmer: media_player.kevins_echo_dot_unten
+    Schlafzimmer: media_player.kevins_echo_dot_unten
   global_dependencies:
     - globals

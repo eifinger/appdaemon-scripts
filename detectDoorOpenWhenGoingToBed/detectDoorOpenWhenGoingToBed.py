@@ -14,6 +14,9 @@ import globals
 #
 # Release Notes
 #
+# Version 1.3:
+#   use Notify App
+#
 # Version 1.2:
 #   message now directly in own yaml instead of message module
 #
@@ -35,6 +38,8 @@ class DetectDoorOpenWhenGoingToBed(hass.Hass):
     self.after_sundown = globals.get_arg(self.args,"after_sundown")
     self.notify_name = globals.get_arg(self.args,"notify_name")
     self.message = globals.get_arg(self.args,"message_DE")
+
+    self.notifier = self.get_app('Notifier')
     
     self.listen_state_handle_list.append(self.listen_state(self.state_change, self.entity))
     
@@ -48,7 +53,7 @@ class DetectDoorOpenWhenGoingToBed(hass.Hass):
           self.log("state: {}".format(state))
           if state == "on":
             self.log(self.message.format(self.friendly_name(self.sensor)))
-            self.call_service("notify/" + self.notify_name,message=self.message.format(self.friendly_name(self.sensor)))
+            self.notifier.notify(self.notify_name, self.message.format(self.friendly_name(self.sensor)))
 
   def terminate(self):
     for listen_state_handle in self.listen_state_handle_list:
