@@ -40,7 +40,7 @@ class Notifier(hass.Hass):
                 if media_player_state["attributes"]["source"] == self.source:
                     self.call_service(self.__ALEXA_TTS__, entity_id=self.alexa_media_player, message=message)
                 else:
-                    self.log("Source is wrong: {}".format(media_player_state["attributes"]["source"])
+                    self.log("Source is wrong: {}".format(media_player_state["attributes"]["source"]))
             else:
                 self.log("Media Player is not on")
 
