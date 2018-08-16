@@ -40,7 +40,7 @@ class HomeArrivalNotifier(hass.Hass):
         self.user_name = globals.get_arg(self.args,"user_name")
         self.message = globals.get_arg(self.args,"message_DE")
 
-        self.notify = self.get_app('Notify')
+        self.notify = self.get_app('notify')
 
         
         
