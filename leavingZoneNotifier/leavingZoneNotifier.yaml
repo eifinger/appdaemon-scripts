@@ -10,5 +10,7 @@ leavingWorkNotifierUserOne:
   notify_name: group_notifications
   message_DE: "{} hat {} vor {} Minuten verlassen."
   message_EN: "{} left {} {} minutes ago"
+  dependencies: 
+    - Notify
   global_dependencies:
     - globals

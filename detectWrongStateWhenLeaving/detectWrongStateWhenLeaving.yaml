@@ -15,5 +15,7 @@ detectWrongStateWhenLeaving:
   message_reed_off_DE: "Du hast {} zu gelassen Dummie."
   message_reed_off_EN: "You left {} closed Dummy."
   isHome: input_boolean.is_home
+  dependencies: 
+    - Notify
   global_dependencies:
     - globals

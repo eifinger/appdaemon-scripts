@@ -7,6 +7,8 @@ googleTravelTime_home_from_work:
   message_DE: "Du kannst losfahren nach {}"
   message_EN: "You can start your journey to {}"
   notify_use_Alexa: False
+  dependencies: 
+    - Notify
   global_dependencies:
     - globals
 
@@ -18,6 +20,8 @@ googleTravelTime_work_from_home:
   notify_name: group_notifications
   message_DE: "Du kannst losfahren nach {}"
   message_EN: "You can start your journey to {}"
+  dependencies: 
+    - Notify
   global_dependencies:
     - globals
 
@@ -29,5 +33,7 @@ googleTravelTime_elmo_from_home:
   notify_name: group_notifications
   message_DE: "Du kannst losfahren nach {}"
   message_EN: "You can start your journey to {}"
+  dependencies: 
+    - Notify
   global_dependencies:
     - globals

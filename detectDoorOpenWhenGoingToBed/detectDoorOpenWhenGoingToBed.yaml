@@ -9,5 +9,7 @@ detectDoorOpenWhenGoingToBed:
   notify_name: group_notifications
   message_DE: "Du hast {} offen gelassen Dummie."
   message_EN: "You left open {} Dummy."
+  dependencies: 
+    - Notify
   global_dependencies:
     - globals

@@ -14,6 +14,8 @@ notifyOfActionWhenAway:
   isHome_delay: 20
   message_DE: "Alarm: {} ist gewechselt auf {}"
   message_EN: "Alarm: {} changed to {}"
+  dependencies: 
+    - Notify
   global_dependencies:
     - messages
     - globals
