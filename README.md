@@ -2,6 +2,8 @@
 <p align="center">
   <img src=images/logo-round-192x192.png>
 </p>
+
+## About
 This is the repository containing all my Appdaemon apps.
 
 Used together with my Homeassistant config which you can find here:
@@ -12,13 +14,18 @@ I use Appdaemon for all my automations since I am a programmer myself and it pro
 
 This is a continuous work in progress and I am no real Python programmer. So any comments are highly appreciated.
 
-## General Remarks
+## How to contribute
+Just open an Issue or a Pull Request for any Comments, Questions, Requests or whatever comes to mind
+
+## How to use
+If you have never used Appdaemon before I suggest you start with the [tutorial](https://appdaemon.readthedocs.io/en/latest/TUTORIAL.html) and the [guide](https://appdaemon.readthedocs.io/en/latest/APPGUIDE.html). Both contain more links to great tutorials and examples.
+
 I tried to write each App in this repository with reusability in mind. This means that every app in here has a short documentation and is (if possible) written to be easily adjusted to your environment and your needs.
 
 ### globals and secrets
 As there is currently no functionality for secrets like there is for the HA config I am using [globals.py](globals.py) where I implemented the methods ``get_arg`` and ``get_arg_list`` which do nothing else than the standard ``self.args["argname"]`` but if the argument starts with ``secret`` it will search for actual value of the argument using a dictionary in the module ``secrets.py``. As I don't upload this file to github I included the file [travis_secrets.py](travis_secrets.py) to make it easier to retrace for others.
 
-## app_switch
+### app_switch
 Every App has an input_boolean inside HA which turns it on/off. This is useful if I don't want any notifications right now or an App is misbehaving.
 
 ## App list
