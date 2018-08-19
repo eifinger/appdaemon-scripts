@@ -31,7 +31,7 @@ class NotifyOfActionWhenAway(hass.Hass):
     self.timer_handle_list = []
 
     self.app_switch = globals.get_arg(self.args,"app_switch")
-    self.user_name = globals.get_arg(self.args,"user_name")
+    self.notify_name = globals.get_arg(self.args,"notify_name")
     self.isHome_delay = globals.get_arg(self.args,"isHome_delay")
     self.isHome = globals.get_arg(self.args,"isHome")
     self.message = globals.get_arg(self.args,"message_DE")
