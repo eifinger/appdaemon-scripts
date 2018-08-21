@@ -1,0 +1,47 @@
+detectWrongStateWhenLeaving:
+  module: notifyOfWrongState
+  class: NotifyOfWrongState
+  app_switch: input_boolean.detect_wrong_state_when_leaving
+  entities_off: "binary_sensor.door_window_sensor_158d000205b808,binary_sensor.door_window_sensor_158d00020499ad,\
+  binary_sensor.door_window_sensor_158d0002059ddf,media_player.denon_avrx1300w,switch.large_lamp,\
+  switch.small_lamp,switch.snowboard,light.bedroom_yeelight,light.bar_table,light.lobby_yeelight,\
+  light.reading_lamp_yeelight,light.treppe_oben,light.stairs_lower_yeelight,switch.ventilator"
+  trigger_entity: input_boolean.is_home
+  trigger_state: "off"
+  message_DE: "Du hast {} angelassen. Ich habe es für dich ausgemacht."
+  message_EN: "You left on {}. I turned it off for you"
+  message_off_DE: "Du hast {} vergessen anzumachen. Ich habe es für dich angemacht."
+  message_off_EN: "You forgot to turn on {}. I turned it on for you"
+  message_reed_DE: "Du hast {} offen gelassen Dummie."
+  message_reed_EN: "You left open {} Dummy."
+  message_reed_off_DE: "Du hast {} zu gelassen Dummie."
+  message_reed_off_EN: "You left {} closed Dummy."
+  notify_name: group_notifications
+  use_alexa: False
+  dependencies: 
+    - Notify
+  global_dependencies:
+    - globals
+
+detectDoorOpenWhenGoingToBed:
+  module: notifyOfWrongState
+  class: NotifyOfWrongState
+  app_switch: input_boolean.detect_door_open_when_going_to_bed
+  entities_off: binary_sensor.door_window_sensor_158d000205b808
+  after_sundown: True
+  trigger_entity: input_boolean.sleepmode
+  trigger_state: "on"
+  message_DE: "Du hast {} angelassen. Ich habe es für dich ausgemacht."
+  message_EN: "You left on {}. I turned it off for you"
+  message_off_DE: "Du hast {} vergessen anzumachen. Ich habe es für dich angemacht."
+  message_off_EN: "You forgot to turn on {}. I turned it on for you"
+  message_reed_DE: "Du hast {} offen gelassen Dummie."
+  message_reed_EN: "You left open {} Dummy."
+  message_reed_off_DE: "Du hast {} zu gelassen Dummie."
+  message_reed_off_EN: "You left {} closed Dummy."
+  notify_name: group_notifications
+  use_alexa: True
+  dependencies: 
+    - Notify
+  global_dependencies:
+    - globals
