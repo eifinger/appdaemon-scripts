@@ -17,6 +17,9 @@ import globals
 #
 # Release Notes
 #
+# Version 1.7.1:
+#   Fix delay in notify message. Only input the minutes not the tuple
+#
 # Version 1.7:
 #   use Notify App
 #
@@ -85,7 +88,7 @@ class LeavingZoneNotifier(hass.Hass):
         #Check if user did not come back to the zone in the meantime
         if self.get_state(self.device) != kwargs["old_zone"]:
             self.log("Notify user")
-            self.notifier.notify(self.notify_name, self.message.format(self.user_name, self.zone, divmod(self.delay, 60)))
+            self.notifier.notify(self.notify_name, self.message.format(self.user_name, self.zone, divmod(self.delay, 60)[0]))
             self.false_positive = False
             self.log("Setting false_positive to {}".format(self.false_positive))
             
