@@ -49,7 +49,7 @@ detectDoorOpenWhenGoingToBed:
 detectWindowsOpenWhenGoingToBed:
   module: notifyOfWrongState
   class: NotifyOfWrongState
-  app_switch: input_boolean.detect_door_open_when_going_to_bed
+  app_switch: input_boolean.detect_windows_open_when_going_to_bed
   entities_off: "binary_sensor.door_window_sensor_158d000126a57b,binary_sensor.door_window_sensor_158d0001bb4d94,binary_sensor.door_window_sensor_158d0001bb4dc0,
   binary_sensor.door_window_sensor_158d000205b808,binary_sensor.door_window_sensor_158d000205b82e,binary_sensor.door_window_sensor_158d00020498b6,
   binary_sensor.door_window_sensor_158d000204ba26,binary_sensor.door_window_sensor_158d0002059ddf,binary_sensor.door_window_sensor_158d00020499ad,
