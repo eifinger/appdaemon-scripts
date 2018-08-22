@@ -187,7 +187,10 @@ class FaceRecognitionBot(hass.Hass):
 
     def _getFaceNamesFromResult(self, result_dict_dict):
         """Return a list of names for the identified faces"""
-        return list(set([d["faces"]["id"] for d in result_dict_dict.values()]))
+        try:
+            return list(set([d["faces"]["id"] for d in result_dict_dict.values()]))
+        except TypeError:
+            return []
 
     def _getFileWithUnknownFaceFromResult(self, result_dict_dict):
         """Get the first file from the result which has an unmatched face"""
