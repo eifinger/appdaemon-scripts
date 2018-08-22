@@ -50,7 +50,7 @@ class FaceRecognitionTeacher(hass.Hass):
         self.run_in_delay = self.run_in_initial_delay
         self.run_in_error_delay = 60
 
-        self.exclude_folders = ("healthcheck", "multiple", "noface", "tmp", "unknown")
+        self.exclude_folders = ("healthcheck", "multiple", "noface", "tmp", "unknown", "new")
 
         self.timer_handle_list.append(self.run_in(self.run_in_callback, 5))
 

@@ -118,7 +118,7 @@ class FaceRecognitionBot(hass.Hass):
     def takeSnapshots(self, kwargs):
         """Take a snapshot. Save to a file."""
         file_locations = []
-        directory = self.facebox_source_directory + time.strftime("%Y%m%d%H%M%S")
+        directory = self.facebox_source_directory + "new/" + time.strftime("%Y%m%d%H%M%S")
         if not os.path.exists(directory):
                 os.makedirs(directory)
         for i in range(0,self.number_of_images-1):
@@ -135,6 +135,7 @@ class FaceRecognitionBot(hass.Hass):
             response = self.post_image(self._url_check, filename)
             if response is not None:
                 result_dict = {}
+                self.log("response is: {}".format(response.text))
                 response_json = response.json()
                 result_dict["count"] = response_json['count']
                 result_dict["faces"] = response_json['faces']
