@@ -92,7 +92,7 @@ class FaceRecognitionBot(hass.Hass):
 
         self.notifier = self.get_app('Notifier')
 
-        self._url_check = "http://{}:{}/{}".format(self.ip, self.port, CLASSIFIER)
+        self._url_check = "http://{}:{}".format(self.ip, self.port)
         self.provide_name_timeout_start = None
         self.last_identifier = None
 
