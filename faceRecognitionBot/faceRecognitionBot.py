@@ -155,8 +155,8 @@ class FaceRecognitionBot(hass.Hass):
             else:
                 self.log("Always the same face")
                 if len(faceNames) > 0 and faceNames[0] in self.known_faces:
-                    self.log(self.message_face_identified.format(self.name))
-                    self.notifier.notify(self.notify_name, self.message_face_identified.format(self.name)) 
+                    self.log(self.message_face_identified.format(faceNames[0]))
+                    self.notifier.notify(self.notify_name, self.message_face_identified.format(faceNames[0])) 
                     #TODO copy file for training
                     #directory = self.facebox_source_directory + face
                     #self.copyFile(directory, self.filename)
