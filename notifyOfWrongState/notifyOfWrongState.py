@@ -40,7 +40,7 @@ class NotifyOfWrongState(hass.Hass):
   def initialize(self):
     self.listen_state_handle_list = []
 
-    self.app_switch = globals.get_arg_list(self.args,"app_switch")
+    self.app_switch = globals.get_arg(self.args,"app_switch")
     try:
       self.entities_on = globals.get_arg_list(self.args,"entities_on")
     except KeyError as identifier:
