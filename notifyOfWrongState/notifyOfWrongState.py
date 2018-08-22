@@ -67,7 +67,8 @@ class NotifyOfWrongState(hass.Hass):
     self.listen_state_handle_list.append(self.listen_state(self.state_change, self.trigger_entity))
     
   def state_change(self, entity, attribute, old, new, kwargs):
-    self.log("app_switch is: {}".format(self.get_state(self.app_switch)))
+    self.log("app_switch is: {}".format(self.app_switch))
+    self.log("app_switch_state is: {}".format(self.get_state(self.app_switch)))
     if self.get_state(self.app_switch) == "on":
       self.log("new is: {}".format(self.get_state(self.new)))
       if new != "" and new == self.trigger_state:
