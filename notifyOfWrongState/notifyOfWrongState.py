@@ -69,7 +69,7 @@ class NotifyOfWrongState(hass.Hass):
   def state_change(self, entity, attribute, old, new, kwargs):
     if self.get_state(self.app_switch) == "on":
       if new != "" and new == self.trigger_state:
-        if self.after_sundown != None and ( ( self.after_sundown == True and self.sun_down() ) or self.after_sundown == False ):
+        if self.after_sundown == None or ( ( self.after_sundown == True and self.sun_down() ) or self.after_sundown == False ):
           #entities_off
           for entity in self.entities_off:
             state = self.get_state(entity)
