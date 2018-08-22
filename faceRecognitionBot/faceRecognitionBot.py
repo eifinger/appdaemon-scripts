@@ -242,6 +242,7 @@ class FaceRecognitionBot(hass.Hass):
     def ask_for_name(self, identifier):
         """Asks the user if he knows the face in the photo.
         The identifier is needed to link the user reply back to this message"""
+        self.log("Asking for name")
         keyboard = [("Unbekannt","/unkown" + IDENTIFIER_DELIMITER + identifier)]
         for face in self.known_faces:
             keyboard.append((face,"/" + face + IDENTIFIER_DELIMITER + identifier))
