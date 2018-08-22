@@ -32,7 +32,7 @@ class SetMediaPlayerSource(hass.Hass):
     self.media_player = globals.get_arg(self.args,"media_player")
     self.source = globals.get_arg(self.args,"source")
 
-    self.SELECT_SOURCE_SERVICE = "media_player.select_source"
+    self.SELECT_SOURCE_SERVICE = "media_player/select_source"
     
     self.listen_state_handle_list.append(self.listen_state(self.state_change, self.trigger_entity))
     
