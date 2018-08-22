@@ -17,6 +17,8 @@ faceRecognitionBot:
   facebox_noface_directory: secret_facebox_noface_directory
   number_of_images: 10
   waitBeforeSnapshot: 2.5
+  ip: secret_facebox_ip
+  port: secret_facebox_port
   message_face_identified: "Ich habe {} erkannt"
   #message_face_identified: "I have recognized {}."
   message_unkown_face: "Ich habe dieses Gesicht nicht erkannt. Kennst du es?"
