@@ -15,7 +15,7 @@ notifyOfActionWhenAway:
   message_DE: "Alarm: {} ist gewechselt auf {}"
   message_EN: "Alarm: {} changed to {}"
   dependencies: 
-    - Notify
+    - Notifier
   global_dependencies:
     - messages
     - globals

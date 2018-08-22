@@ -15,6 +15,6 @@ plantWateringNotifier:
   message_evening_DE: "Ich bin mir nicht sicher ob du vergessen hast die Pflanzen zu gießen, deswegen erinnere ich dich lieber noch einmal daran."
   message_evening_EN: "I'm not sure whether you waterd your plants, so I thought I better remind you again"
   dependencies: 
-    - Notify
+    - Notifier
   global_dependencies:
     - globals

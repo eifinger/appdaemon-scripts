@@ -12,7 +12,7 @@ powerUsageNotification_Dishwasher:
   message_off_DE: "{} ist fertig."
   message_off_EN: "{} just finished."
   dependencies: 
-    - Notify
+    - Notifier
   global_dependencies:
     - globals
 powerUsageNotification_Washingmachine:
@@ -29,6 +29,6 @@ powerUsageNotification_Washingmachine:
   message_off_DE: "{} ist fertig."
   message_off_EN: "{} just finished."
   dependencies: 
-    - Notify
+    - Notifier
   global_dependencies:
     - globals

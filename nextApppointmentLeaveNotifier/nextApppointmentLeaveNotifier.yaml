@@ -10,6 +10,6 @@ nextApppointmentLeaveNotifier:
   message_DE: "Es ist Zeit loszufahren nach {}. Du brauchst {} Minuten. Hier ist ein Google Maps Link: {}"
   message_EN: "It's time to leave to {}. It will take {} minutes. Here is a Google Maps Link: {}"
   dependencies: 
-    - Notify
+    - Notifier
   global_dependencies:
     - globals

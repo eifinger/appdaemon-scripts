@@ -5,6 +5,6 @@ notifyFailedLogin:
   message_DE: "Alarm: {}"
   message_EN: "Alarm: {}"
   dependencies: 
-    - Notify
+    - Notifier
   global_dependencies:
     - globals

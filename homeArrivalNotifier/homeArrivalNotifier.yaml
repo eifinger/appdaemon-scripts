@@ -10,7 +10,7 @@ homeArrivalNotifierUserOne:
   message_DE: "Willkommen zu Hause {}."
   message_EN: "Welcome Home {}."
   dependencies: 
-    - Notify
+    - Notifier
   global_dependencies:
     - globals
 
@@ -26,6 +26,6 @@ homeArrivalNotifierUserTwo:
   message_DE: "Willkommen zu Hause {}."
   message_EN: "Welcome Home {}."
   dependencies: 
-    - Notify
+    - Notifier
   global_dependencies:
     - globals

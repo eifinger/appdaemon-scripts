@@ -12,7 +12,7 @@ roggenNotifier:
   message_no_data_DE: "Ich habe {} leider keine Daten für {}."
   message_no_data_EN: "{} I have no pollen data for {}."
   dependencies: 
-    - Notify
+    - Notifier
   global_dependencies:
     - globals
 graeserNotifier:
@@ -29,7 +29,7 @@ graeserNotifier:
   message_no_data_DE: "Ich habe {} leider keine Daten für {}."
   message_no_data_EN: "{} I have no pollen data for {}."
   dependencies: 
-    - Notify
+    - Notifier
   global_dependencies:
     - globals
 birkeNotifier:
@@ -46,6 +46,6 @@ birkeNotifier:
   message_no_data_DE: "Ich habe {} leider keine Daten für {}."
   message_no_data_EN: "{} I have no pollen data for {}."
   dependencies: 
-    - Notify
+    - Notifier
   global_dependencies:
     - globals

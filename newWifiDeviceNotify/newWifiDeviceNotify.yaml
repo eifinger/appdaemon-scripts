@@ -5,6 +5,6 @@ newWifiDeviceNotify:
   message_DE: "Unbekanntes Gerät entdeckt. Hostname: {}. MAC: {}."
   message_EN: "Unknown device connected. Hostname: {}. MAC: {}"
   dependencies: 
-    - Notify
+    - Notifier
   global_dependencies:
     - globals

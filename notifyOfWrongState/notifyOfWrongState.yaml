@@ -19,7 +19,7 @@ detectWrongStateWhenLeaving:
   notify_name: group_notifications
   use_alexa: False
   dependencies: 
-    - Notify
+    - Notifier
   global_dependencies:
     - globals
 
@@ -42,7 +42,7 @@ detectDoorOpenWhenGoingToBed:
   notify_name: group_notifications
   use_alexa: True
   dependencies: 
-    - Notify
+    - Notifier
   global_dependencies:
     - globals
 
@@ -68,6 +68,6 @@ detectWindowsOpenWhenGoingToBed:
   notify_name: group_notifications
   use_alexa: True
   dependencies: 
-    - Notify
+    - Notifier
   global_dependencies:
     - globals
