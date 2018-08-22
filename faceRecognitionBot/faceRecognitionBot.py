@@ -183,7 +183,7 @@ class FaceRecognitionBot(hass.Hass):
 
     def _getNumberOfDistinctFaces(self, result_dict_dict):
         """Check how many distinct faces got identified"""
-        return len(set([d["faces"]["id"] for d in result_dict_dict.values()]))
+        return len(list(set([d["faces"]["id"] for d in result_dict_dict.values()])))
 
     def _getFaceNamesFromResult(self, result_dict_dict):
         """Return a list of names for the identified faces"""
