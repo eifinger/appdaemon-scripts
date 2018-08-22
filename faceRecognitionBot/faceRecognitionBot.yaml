@@ -1,0 +1,44 @@
+faceRecognitionBot:
+  module: faceRecognitionBot
+  class: FaceRecognitionBot
+  app_switch: input_boolean.facebox_notifier
+  sensor: binary_sensor.door_window_sensor_158d000126a57b
+  button: binary_sensor.switch_158d00012db9e5
+  camera: camera.android_ip_webcam_door
+  local_file_camera: camera.saved_image
+  filename: secret_facebox_notifier_filename
+  image_processing: image_processing.facebox
+  known_faces: secret_name_user_one,secret_name_user_two
+  notify_name: group_notifications
+  wol_switch: switch.facebox_wol
+  user_id: secret_telegram_user_id
+  facebox_source_directory: secret_facebox_folderpath
+  facebox_unknown_directory: secret_facebox_unknown_directory
+  facebox_noface_directory: secret_facebox_noface_directory
+  number_of_images: 10
+  waitBeforeSnapshot: 2.5
+  message_face_identified: "Ich habe {} erkannt"
+  #message_face_identified: "I have recognized {}."
+  message_unkown_face: "Ich habe dieses Gesicht nicht erkannt. Kennst du es?"
+  #message_unkown_face: "I have not recognized this face. Do you know it?"
+  message_provide_name: "Wenn du das Gesicht kennst, kannst du mir einfach innerhalb der nächsten {} Minuten den Namen schreiben. Dann merke ich ihn mir!"
+  #message_provide_name: "If you know the face you can write the name to me within the next {} minutes. I will remember it!"
+  message_name_provided: "Okay. Ich merke mir, dass das {} ist"
+  #message_name_provided: "Okay. I will remember that this is {}"
+  dependencies:
+    - Notifier
+  global_dependencies:
+    - globals
+
+
+faceRecognitionTeacher:
+  module: faceRecognitionTeacher
+  class: FaceRecognitionTeacher
+  app_switch: input_boolean.facebox_teacher
+  folderpath: secret_facebox_folderpath
+  facebox_healthcheck_filename: secret_facebox_healthcheck_filename
+  healthcheck_face_name: secret_name_user_one
+  ip: secret_facebox_ip
+  port: secret_facebox_port
+  global_dependencies:
+    - globals

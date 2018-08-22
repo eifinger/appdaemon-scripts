@@ -4,25 +4,29 @@ import requests
 import os
 
 #
-# App which runs facebox face detection and notifies the result
+# App which runs face detection and notifies the result
 #
 #
 # Args:
 #  app_switch: on/off switch for this app. example: input_boolean.turn_fan_on_when_hot
 #  folderpath : Folder containing subfolders with images to train. example: /config/www/facebox
-#  image_processing_healthcheck: entity_id of the facebox entity to use for health checking. It holds the local_file image camera of one kown face. example: image_processing.facebox_health_check_picture
+#  facebox_healthcheck_filename: entity_id of the facebox entity to use for health checking. It holds the local_file image camera of one kown face. example: image_processing.facebox_health_check_picture
 #  healthcheck_face_name: name of the face. example: Viktor
-#  ip: the ip of facebox. example: localhost
-#  port: the port of facebox. example: 8080
-#  wol_switch: Wake on Lan switch which turns on the facebox server. example: switch.facebox_wol
+#  ip: the ip of facerec_service. example: localhost
+#  port: the port of facerec_service. example: 8080
 #  
 #
 # Release Notes
 #
+# Version 1.1:
+#   Reworked to FaceRecognitionTeacher
+#
 # Version 1.0:
 #   Initial Version
 
-class FaceboxTeacher(hass.Hass):
+TIMEOUT = 2
+
+class FaceRecognitionTeacher(hass.Hass):
 
     def initialize(self):
     
@@ -32,16 +36,15 @@ class FaceboxTeacher(hass.Hass):
 
         self.app_switch = globals.get_arg(self.args,"app_switch")
         self.folderpath = globals.get_arg(self.args,"folderpath")
-        self.image_processing_healthcheck = globals.get_arg(self.args, "image_processing_healthcheck")
+        self.facebox_healthcheck_filename = globals.get_arg(self.args,"facebox_healthcheck_filename")
         self.healthcheck_face_name = globals.get_arg(self.args, "healthcheck_face_name")
-        self.wol_switch = globals.get_arg(self.args,"wol_switch")
 
         self.ip = globals.get_arg(self.args,"ip")
         self.port = globals.get_arg(self.args,"port")
         self.valid_filetypes = ('.jpg', '.png', '.jpeg')
 
-        self.teach_url = "http://{}:{}/facebox/teach".format(self.ip, self.port)
-        self.health_url = "http://{}:{}/info".format(self.ip, self.port)
+        self.teach_url = "http://{}:{}/faces".format(self.ip, self.port)
+        self.health_url = "http://{}:{}".format(self.ip, self.port)
 
         self.run_in_initial_delay = 43200
         self.run_in_delay = self.run_in_initial_delay
@@ -57,19 +60,12 @@ class FaceboxTeacher(hass.Hass):
     def run_in_callback(self, kwargs):
         """Check health"""
         try:
-            self.log("Sending WoL")
-            self.turn_on(self.wol_switch)
-            self.timer_handle_list.append(self.run_in(self.after_wol_callback,5))
+            if self.check_classifier_health():
+                self.check_if_trained(None)
+                self.timer_handle_list.append(self.run_in(self.run_in_callback,self.run_in_delay))
         except requests.exceptions.HTTPError as exception:
             self.log("Error trying to turn on entity. Will try again in 1s. Error: {}".format(exception), level = "WARNING")
             self.timer_handle_list.append(self.run_in(self.run_in_callback, 1))
-        
-        
-
-    def after_wol_callback(self, kwargs):
-        if self.check_classifier_health():
-            self.check_if_trained()
-        self.timer_handle_list.append(self.run_in(self.run_in_callback,self.run_in_delay))
 
     def event_callback(self, event_name, data, kwargs):
         """Callback function for manual trigger of face learning"""
@@ -80,9 +76,9 @@ class FaceboxTeacher(hass.Hass):
         """Teach facebox a single name using a single file."""
         file_name = file_path.split("/")[-1]
         file = {'file': open(file_path, 'rb')}
-        data = {'name': name, "id": file_name}
 
-        response = requests.post(teach_url, files=file, data=data)
+        teach_url = teach_url + "?id=" + name
+        response = requests.post(teach_url, files=file)
 
         if response.status_code == 200:
             self.log("File: {} taught with name: {}".format(file_name, name))
@@ -119,32 +115,29 @@ class FaceboxTeacher(hass.Hass):
                 self.run_in_delay = self.run_in_delay * 2
             else:
                 self.run_in_delay = self.run_in_error_delay
-            self.log("Setting run_in_delay to {}".format(self.run_in_delay))
+            self.log("Setting run_in_delay to {}".format(self.run_in_delay))        
 
-    def check_if_trained(self):
-        """Initiate healthcheck on facebox"""
-        try:
-            self.call_service("image_processing/scan", entity_id = self.image_processing_healthcheck)
-            self.timer_handle_list.append(self.run_in(self.check_if_trained_callback,5))
-        except requests.exceptions.HTTPError as exception:
-            self.log("Error trying to call service. Will try again in 1s. Error: {}".format(exception), level = "WARNING")
-            self.timer_handle_list.append(self.run_in(self.check_if_trained, 1))
-        
-
-    def check_if_trained_callback(self, kwargs):
+    def check_if_trained(self, kwargs):
         """Check if faces are trained. If not train them"""
-        image_processing_state = self.get_state(self.image_processing_healthcheck, attribute = "all")
-        matched_faces = image_processing_state["attributes"]["matched_faces"]
-        total_faces = image_processing_state["attributes"]["total_faces"]
-        face_identified = False
-        for matched_face in matched_faces:
-            if matched_face == self.healthcheck_face_name:
-                face_identified = True
-                self.log("Faces are still taught")
-        if not face_identified:
+        self.facebox_healthcheck_filename
+        response = self.post_image(self.health_url, self.facebox_healthcheck_filename)
+        if response.status_code == 200 and response.text.lower() == ("[\"" + self.healthcheck_face_name.lower() + "\"]"):
+            self.log("Faces are still taught")
+        else:
             self.log("Faces are not taught")
             self.teach_faces()
 
+    def post_image(self, url, image):
+        """Post an image to the classifier."""
+        try:
+            response = requests.post(
+                url,
+                files={"file": open(image, 'rb')},
+                timeout=TIMEOUT
+                )
+            return response
+        except requests.exceptions.ConnectionError:
+            self.log("ConnectionError")
 
     def list_folders(self, directory):
         """Returns a list of folders
