@@ -52,6 +52,7 @@ Every App has an input_boolean inside HA which turns it on/off. This is useful i
 *   [plantWateringNotifier](#plantwateringnotifier)
 *   [powerUsageNotification](#powerusagenotification)
 *   [roomBasedLightControl](#roombasedlightcontrol)
+*   [setMediaPlayerSource](#setMediaPlayerSource)
 *   [sleepModeHandler](#sleepmodehandler)
 *   [standardSetter](#standardsetter)
 *   [turnFanOnWhenHot](#turnfanonwhenhot)
@@ -424,6 +425,21 @@ roomBasedLightControl:
     bedroom:
       room: bedroom
       entity: light.bedroom_yeelight
+  global_dependencies:
+    - globals
+```
+### setMediaPlayerSource
+App which sets media player source on based on a entity state.
+I currently use this to turn on multi room audio when getting up.
+```yaml
+setMultiRoomAudioWhenSleepModeTurnsOff:
+  module: setMediaPlayerSource
+  class: SetMediaPlayerSource
+  app_switch: input_boolean.set_multiroom_audio_when_sleepmode_turns_off
+  trigger_entity: input_boolean.sleepmode
+  trigger_state: "off"
+  media_player: media_player.spotify
+  source: Wohnung
   global_dependencies:
     - globals
 ```
