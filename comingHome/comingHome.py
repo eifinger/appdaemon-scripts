@@ -39,7 +39,7 @@ class ComingHome(hass.Hass):
     self.actor = globals.get_arg(self.args,"actor")
     try:
       self.after_sundown = globals.get_arg(self.args,"after_sundown")
-    except KeyError as identifier:
+    except KeyError:
       self.after_sundown = None
 
     self.delay = 2
