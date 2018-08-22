@@ -13,5 +13,7 @@ alarmClock:
   notify_name: group_notifications
   message_DE: "Guten Morgen!"
   message_EN: "Good Morning!"
+  dependencies:
+    - Notifier
   global_dependencies:
     - globals

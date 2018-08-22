@@ -19,8 +19,12 @@ import datetime
 #
 # Release Notes
 #
+# Version 1.2:
+#   use Notify App
+#
 # Version 1.1:
 #   message now directly in own yaml instead of message module
+#
 # Version 1.0:
 #   Initial Version
 
@@ -41,6 +45,8 @@ class AlarmClock(hass.Hass):
         self.notify_name = globals.get_arg(self.args,"notify_name")
         self.wakeup_light = globals.get_arg(self.args,"wakeup_light")
         self.message = globals.get_arg(self.args, "message_DE")
+
+        self.notifier = self.get_app('Notifier')
 
         self.brightness = 100
         self.rgb = (255,255,255)
@@ -96,7 +102,7 @@ class AlarmClock(hass.Hass):
 
 
     def run_alarm(self, kwargs):
-        self.call_service("notify/" + self.notify_name,message=self.message)
+        self.notifier.notify(self.notify_name, self.message)   
         #TODO radio
 
                 
