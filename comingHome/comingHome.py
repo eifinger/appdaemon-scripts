@@ -52,7 +52,7 @@ class ComingHome(hass.Hass):
         isHome_attributes = self.get_state(self.isHome, attribute = "all")
         isHome_state = isHome_attributes["state"]
         last_changed = self.convert_utc(isHome_attributes["last_changed"])
-        if isHome_state == "off" or (datetime.datetime.now(datetime.timezone.utc) - last_changed >= datetime.timedelta(seconds=self.delay)):
+        if isHome_state == "off" or (datetime.datetime.now(datetime.timezone.utc) - last_changed <= datetime.timedelta(seconds=self.delay)):
           if self.after_sundown != None and self.after_sundown:
             if self.sun_down():
               self.log("{} changed to {}".format(self.friendly_name(entity), new))
