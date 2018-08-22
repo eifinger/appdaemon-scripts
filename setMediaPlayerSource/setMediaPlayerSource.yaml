@@ -1,0 +1,10 @@
+setMultiRoomAudioWhenSleepModeTurnsOff:
+  module: setMediaPlayerSource
+  class: SetMediaPlayerSource
+  app_switch: input_boolean.set_multiroom_audio_when_sleepmode_turns_off
+  trigger_entity: input_boolean.sleepmode
+  trigger_state: "off"
+  media_player: media_player.spotify
+  source: Wohnung
+  global_dependencies:
+    - globals
