@@ -73,7 +73,7 @@ class NotifyOfWrongState(hass.Hass):
     self.log("app_switch is: {}".format(self.app_switch))
     self.log("app_switch_state is: {}".format(self.get_state(self.app_switch)))
     if self.get_state(self.app_switch) == "on":
-      self.log("new is: {}".format(self.get_state(new)))
+      self.log("new is: {}".format(new))
       if new != "" and new == self.trigger_state:
         self.log("after_sundown is: {}".format(self.after_sundown))
         self.log("self.sun_down() is: {}".format(self.sun_down()))
