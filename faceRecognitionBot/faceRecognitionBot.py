@@ -76,6 +76,7 @@ class FaceRecognitionBot(hass.Hass):
         self.message_name_provided = globals.get_arg(self.args,"message_name_provided")
         
         self.ip = globals.get_arg(self.args,"ip")
+        self.log("ip is: {}".format(self.ip))
         self.port = globals.get_arg(self.args,"port")
         
 
