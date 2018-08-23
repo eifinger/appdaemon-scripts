@@ -45,6 +45,7 @@ class FaceRecognitionTeacher(hass.Hass):
 
         self.teach_url = "http://{}:{}/faces".format(self.ip, self.port)
         self.health_url = "http://{}:{}/faces".format(self.ip, self.port)
+        self.check_url = "http://{}:{}".format(self.ip, self.port)
 
         self.run_in_initial_delay = 43200
         self.run_in_delay = self.run_in_initial_delay
@@ -120,7 +121,7 @@ class FaceRecognitionTeacher(hass.Hass):
     def check_if_trained(self, kwargs):
         """Check if faces are trained. If not train them"""
         self.log(self.facebox_healthcheck_filename)
-        response = self.post_image(self.teach_url, self.facebox_healthcheck_filename)
+        response = self.post_image(self.check_url, self.facebox_healthcheck_filename)
         self.log("Response is: {}".format(response.text))
         if response.status_code == 200 and response.text.lower() == ("[\"" + self.healthcheck_face_name.lower() + "\"]"):
             self.log("Faces are still taught")
