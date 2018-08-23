@@ -27,6 +27,7 @@ import requests
 # message_unkown_face: Message to send if a face is unknown
 # message_provide_name
 # message_name_provided
+# message_name_provided_callback
 # ip: Ip of facerec_service. example: 192.168.0.1
 # port: port of facerec_service. example: 8080
 #
@@ -76,6 +77,7 @@ class FaceRecognitionBot(hass.Hass):
         self.message_unkown_face = globals.get_arg(self.args,"message_unkown_face")
         self.message_provide_name = globals.get_arg(self.args,"message_provide_name")
         self.message_name_provided = globals.get_arg(self.args,"message_name_provided")
+        self.message_name_provided_callback = globals.get_arg(self.args,"message_name_provided_callback")
         
         self.ip = globals.get_arg(self.args,"ip")
         self.port = globals.get_arg(self.args,"port")
@@ -96,6 +98,8 @@ class FaceRecognitionBot(hass.Hass):
         self._url_check = "http://{}:{}".format(self.ip, self.port)
         self.provide_name_timeout_start = None
         self.last_identifier = None
+        self.last_message_id = None
+        self.last_from_first = None
 
         # Subscribe to sensors
         self.listen_event_handle_list.append(self.listen_event(self.button_clicked, "click"))
@@ -268,13 +272,19 @@ class FaceRecognitionBot(hass.Hass):
         chat_id = data['chat_id']
         message_id = data["message"]["message_id"]
         text = data["message"]["text"]
+        from_first = data["from_first"]
 
         for face in self.known_faces:
-            if data_callback.startswith("/" + IDENTIFIER_DELIMITER + face):
+            if data_callback.startswith("/" + face + IDENTIFIER_DELIMITER):
                 self.log("Received Telegram Callback for {}".format(face))
                 self.call_service('telegram_bot/answer_callback_query',
                               message="Dankeschön!",
                               callback_query_id=callback_id)
+                self.call_service('telegram_bot/edit_message',
+                              chat_id=chat_id,
+                              message_id=message_id,
+                              message=self.message_name_provided_callback.format(from_first, face),
+                              inline_keyboard=[])
                 identifier = data_callback.split(IDENTIFIER_DELIMITER)[1]
                 directory = self.facebox_source_directory + face
                 self._copyFilesFromUnkownToDirectoryByIdentifier(directory, identifier)  
@@ -292,6 +302,8 @@ class FaceRecognitionBot(hass.Hass):
             self.notifier.notify(self.notify_name, self.message_provide_name.format(PROVIDE_NAME_TIMEOUT))
             self.provide_name_timeout_start = datetime.datetime.now()
             self.last_identifier = data_callback.split(IDENTIFIER_DELIMITER)[1]
+            self.last_message_id = message_id
+            self.last_from_first = from_first
 
     def receive_telegram_text(self, event_name, data, kwargs):
         """Telegram text listener"""
@@ -300,7 +312,15 @@ class FaceRecognitionBot(hass.Hass):
         text = data["text"]
 
         if self.self.provide_name_timeout_start != None and (datetime.datetime.now() - self.provide_name_timeout_start < datetime.timedelta(minutes=PROVIDE_NAME_TIMEOUT)):
+            #Edit the last ask_for_name message
+            self.call_service('telegram_bot/edit_message',
+                              chat_id=chat_id,
+                              message_id=self.last_message_id,
+                              message=self.message_name_provided_callback.format(self.last_from_first, text),
+                              inline_keyboard=[])
+            #Say thanks
             self.notifier.notify(self.notify_name, self.message_name_provided.format(text))
+            #Copy files to new directory
             directory = self.facebox_source_directory + text
             self._copyFilesFromUnkownToDirectoryByIdentifier(directory,self.last_identifier)
         else:

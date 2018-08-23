@@ -27,6 +27,8 @@ faceRecognitionBot:
   #message_provide_name: "If you know the face you can write the name to me within the next {} minutes. I will remember it!"
   message_name_provided: "Okay. Ich merke mir, dass das {} ist"
   #message_name_provided: "Okay. I will remember that this is {}"
+  message_name_provided_callback: "{} sagte, dass dies {} ist."
+  #message_name_provided_callback: "{} said that this is {}"
   dependencies:
     - Notifier
   global_dependencies:
