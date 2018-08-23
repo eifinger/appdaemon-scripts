@@ -232,7 +232,7 @@ class FaceRecognitionBot(hass.Hass):
         if not os.path.exists(directory):
             os.makedirs(directory)
         for file in os.listdir(self.facebox_unknown_directory):
-            if file.contains(identifier):
+            if identifier in file:
                 filename = os.path.join(self.facebox_unknown_directory, file)
                 new_filename = os.path.join(directory, file)
                 self.log("Copy file from {} to {}".format(filename, new_filename))
