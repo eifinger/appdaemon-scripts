@@ -120,7 +120,6 @@ class FaceRecognitionTeacher(hass.Hass):
 
     def check_if_trained(self, kwargs):
         """Check if faces are trained. If not train them"""
-        self.log(self.facebox_healthcheck_filename)
         response = self.post_image(self.check_url, self.facebox_healthcheck_filename)
         response_json = response.json()
         if response.status_code == 200 and len(response_json["faces"]) > 0 and response_json["faces"][0]["id"] == self.healthcheck_face_name:
