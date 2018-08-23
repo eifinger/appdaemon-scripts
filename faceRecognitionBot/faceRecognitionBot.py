@@ -162,7 +162,6 @@ class FaceRecognitionBot(hass.Hass):
                 else:
                     #get a file where the unknown face was detected and send it
                     filename = self._getFileWithUnknownFaceFromResult(result_dict_dict)
-                    self.notifier.notify(self.notify_name, self.message_unkown_face) 
                     #send photo
                     self.call_service("TELEGRAM_BOT/SEND_PHOTO", file=filename)
                     #copy all files where a face was detected to the unkown folder
@@ -247,7 +246,7 @@ class FaceRecognitionBot(hass.Hass):
             keyboard.append((face,"/" + face + IDENTIFIER_DELIMITER + identifier))
         self.call_service('telegram_bot/send_message',
                           target=self.user_id,
-                          message="",
+                          message=self.message_unkown_face,
                           inline_keyboard=keyboard)
 
     def receive_telegram_callback(self, event_name, data, kwargs):
