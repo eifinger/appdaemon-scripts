@@ -20,6 +20,9 @@ import globals
 #
 # Release Notes
 #
+# Version 1.5:
+#   distinguish normal and reed switches by device_class
+#
 # Version 1.4.1:
 #   fix wrong assignment of app_switch
 #
@@ -46,15 +49,15 @@ class NotifyOfWrongState(hass.Hass):
     self.app_switch = globals.get_arg(self.args,"app_switch")
     try:
       self.entities_on = globals.get_arg_list(self.args,"entities_on")
-    except KeyError as identifier:
+    except KeyError:
             self.entities_on = []
     try:
       self.entities_off = globals.get_arg_list(self.args,"entities_off")
-    except KeyError as identifier:
+    except KeyError:
             self.entities_off = []
     try:
       self.after_sundown = globals.get_arg(self.args,"after_sundown")
-    except KeyError as identifier:
+    except KeyError:
             self.after_sundown = None
     self.trigger_entity = globals.get_arg(self.args,"trigger_entity")
     self.trigger_state = globals.get_arg(self.args,"trigger_state")
@@ -70,35 +73,29 @@ class NotifyOfWrongState(hass.Hass):
     self.listen_state_handle_list.append(self.listen_state(self.state_change, self.trigger_entity))
     
   def state_change(self, entity, attribute, old, new, kwargs):
-    self.log("app_switch is: {}".format(self.app_switch))
-    self.log("app_switch_state is: {}".format(self.get_state(self.app_switch)))
     if self.get_state(self.app_switch) == "on":
-      self.log("new is: {}".format(new))
       if new != "" and new == self.trigger_state:
-        self.log("after_sundown is: {}".format(self.after_sundown))
-        self.log("self.sun_down() is: {}".format(self.sun_down()))
         if self.after_sundown == None or ( ( self.after_sundown == True and self.sun_down() ) or self.after_sundown == False ):
           #entities_off
           for entity in self.entities_off:
-            state = self.get_state(entity)
-            self.log("{} is{}".format(self.friendly_name(entity),state))
-            if state == "on":
+            attributes = self.get_state(entity, attribute="all")
+            if attributes["state"] == "on" and (attributes["device_class"] == "window" or attributes["device_class"] == "door"):
+              self.log(self.message_reed.format(self.friendly_name(entity)))
+              self.notifier.notify(self.notify_name, self.message_reed.format(self.friendly_name(entity)), useAlexa=self.use_alexa)
+            elif attributes["state"] == "on":
               self.turn_off(entity)
               self.log(self.message.format(self.friendly_name(entity)))
               self.notifier.notify(self.notify_name, self.message.format(self.friendly_name(entity)), useAlexa=self.use_alexa)
-            if state == "open":
-              self.log(self.message_reed.format(self.friendly_name(entity)))
-              self.notifier.notify(self.notify_name, self.message_reed.format(self.friendly_name(entity)), useAlexa=self.use_alexa)
           #entities_on
           for entity in self.entities_on:
-            state = self.get_state(entity)
-            if state == "off":
+            attributes = self.get_state(entity, attribute="all")
+            if attributes["state"] == "off" and (attributes["device_class"] == "window" or attributes["device_class"] == "door"):
+              self.log(self.message_reed_off.format(self.friendly_name(entity)))
+              self.notifier.notify(self.notify_name, message=self.message_reed_off.format(self.friendly_name(entity)), useAlexa=self.use_alexa)
+            elif attributes["state"] == "off":
               self.turn_on(entity)
               self.log(self.message_off.format(self.friendly_name(entity)))
               self.notifier.notify(self.notify_name, message=self.message_off.format(self.friendly_name(entity)), useAlexa=self.use_alexa)
-            if state == "closed":
-              self.log(self.message_reed_off.format(self.friendly_name(entity)))
-              self.notifier.notify(self.notify_name, message=self.message_reed_off.format(self.friendly_name(entity)), useAlexa=self.use_alexa)
 
   def terminate(self):
     for listen_state_handle in self.listen_state_handle_list:
