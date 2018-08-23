@@ -121,6 +121,7 @@ class FaceRecognitionTeacher(hass.Hass):
         """Check if faces are trained. If not train them"""
         self.facebox_healthcheck_filename
         response = self.post_image(self.health_url, self.facebox_healthcheck_filename)
+        self.log("Response is: {}".format(response))
         if response.status_code == 200 and response.text.lower() == ("[\"" + self.healthcheck_face_name.lower() + "\"]"):
             self.log("Faces are still taught")
         else:
