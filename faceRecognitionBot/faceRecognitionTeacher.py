@@ -44,7 +44,7 @@ class FaceRecognitionTeacher(hass.Hass):
         self.valid_filetypes = ('.jpg', '.png', '.jpeg')
 
         self.teach_url = "http://{}:{}/faces".format(self.ip, self.port)
-        self.health_url = "http://{}:{}/faces".format(self.ip, self.port)
+        self.health_url = "http://{}:{}".format(self.ip, self.port)
 
         self.run_in_initial_delay = 43200
         self.run_in_delay = self.run_in_initial_delay
