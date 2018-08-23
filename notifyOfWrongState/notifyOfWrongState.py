@@ -79,7 +79,7 @@ class NotifyOfWrongState(hass.Hass):
           #entities_off
           for entity in self.entities_off:
             attributes = self.get_state(entity, attribute="all")
-            if attributes["state"] == "on" and (attributes["device_class"] == "window" or attributes["device_class"] == "door"):
+            if attributes["state"] == "on" and "device_class" in attributes and (attributes["device_class"] == "window" or attributes["device_class"] == "door"):
               self.log(self.message_reed.format(self.friendly_name(entity)))
               self.notifier.notify(self.notify_name, self.message_reed.format(self.friendly_name(entity)), useAlexa=self.use_alexa)
             elif attributes["state"] == "on":
@@ -89,7 +89,7 @@ class NotifyOfWrongState(hass.Hass):
           #entities_on
           for entity in self.entities_on:
             attributes = self.get_state(entity, attribute="all")
-            if attributes["state"] == "off" and (attributes["device_class"] == "window" or attributes["device_class"] == "door"):
+            if attributes["state"] == "off" and "device_class" in attributes and (attributes["device_class"] == "window" or attributes["device_class"] == "door"):
               self.log(self.message_reed_off.format(self.friendly_name(entity)))
               self.notifier.notify(self.notify_name, message=self.message_reed_off.format(self.friendly_name(entity)), useAlexa=self.use_alexa)
             elif attributes["state"] == "off":
