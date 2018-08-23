@@ -279,9 +279,9 @@ class FaceRecognitionBot(hass.Hass):
                               message_id=message_id,
                               message=text,
                               inline_keyboard=[])
-        self.notifier.notify(self.notify_name, self.message_provide_name.format(PROVIDE_NAME_TIMEOUT))
-        self.provide_name_timeout_start = datetime.datetime.now()
-        self.last_identifier = data_callback.split(IDENTIFIER_DELIMITER)[1]
+            self.notifier.notify(self.notify_name, self.message_provide_name.format(PROVIDE_NAME_TIMEOUT))
+            self.provide_name_timeout_start = datetime.datetime.now()
+            self.last_identifier = data_callback.split(IDENTIFIER_DELIMITER)[1]
 
     def receive_telegram_text(self, event_name, data, kwargs):
         """Telegram text listener"""
