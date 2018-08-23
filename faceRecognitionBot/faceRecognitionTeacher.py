@@ -119,7 +119,7 @@ class FaceRecognitionTeacher(hass.Hass):
 
     def check_if_trained(self, kwargs):
         """Check if faces are trained. If not train them"""
-        self.facebox_healthcheck_filename
+        self.log(self.facebox_healthcheck_filename)
         response = self.post_image(self.health_url, self.facebox_healthcheck_filename)
         self.log("Response is: {}".format(response))
         if response.status_code == 200 and response.text.lower() == ("[\"" + self.healthcheck_face_name.lower() + "\"]"):
