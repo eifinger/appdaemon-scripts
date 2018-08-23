@@ -49,7 +49,7 @@ CLASSIFIER = 'faces'
 DATA_FACEBOX = 'facebox_classifiers'
 TIMEOUT = 2
 PROVIDE_NAME_TIMEOUT = 5
-IDENTIFIER_DELIMITER = ","
+IDENTIFIER_DELIMITER = "_"
 
 class FaceRecognitionBot(hass.Hass):
 
@@ -76,7 +76,6 @@ class FaceRecognitionBot(hass.Hass):
         self.message_name_provided = globals.get_arg(self.args,"message_name_provided")
         
         self.ip = globals.get_arg(self.args,"ip")
-        self.log("ip is: {}".format(self.ip))
         self.port = globals.get_arg(self.args,"port")
         
 
@@ -287,11 +286,8 @@ class FaceRecognitionBot(hass.Hass):
     def receive_telegram_text(self, event_name, data, kwargs):
         """Telegram text listener"""
         self.log("callback data: {}".format(data))
-        data_callback = data['data']
-        callback_id = data['id']
         chat_id = data['chat_id']
-        message_id = data["message"]["message_id"]
-        text = data["message"]["text"]
+        text = data["text"]
 
         if self.self.provide_name_timeout_start != None and (datetime.datetime.now() - self.provide_name_timeout_start < datetime.timedelta(minutes=PROVIDE_NAME_TIMEOUT)):
             self.notifier.notify(self.notify_name, self.message_name_provided.format(text))
