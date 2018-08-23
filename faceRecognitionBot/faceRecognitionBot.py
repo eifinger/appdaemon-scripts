@@ -50,6 +50,8 @@ DATA_FACEBOX = 'facebox_classifiers'
 TIMEOUT = 2
 PROVIDE_NAME_TIMEOUT = 5
 IDENTIFIER_DELIMITER = "_"
+MAXIMUM_DISTANCE = 0.4
+UNKNOWN_FACE_NAME = "unkown"
 
 class FaceRecognitionBot(hass.Hass):
 
@@ -146,7 +148,7 @@ class FaceRecognitionBot(hass.Hass):
             self.log("At least one time detected more than one face")
             #TODO
         elif maxCount == 1:
-            self.log("Always detected one face or none at all")
+            self.log("Always detected one face")
             #check if always the same face
             if self._getNumberOfDistinctFaces(result_dict_dict) > 1:
                 self.log("Not always the same face")
@@ -188,8 +190,16 @@ class FaceRecognitionBot(hass.Hass):
         try:
             id_list = []
             for d in result_dict_dict.values():
-                for faces in d["faces"]:
-                    id_list.append(faces["id"])
+                #check for unknown face
+                if len(d["faces"]) == 0 and d["count"] == 1:
+                    id_list.append(UNKNOWN_FACE_NAME)
+                else:
+                    for faces in d["faces"]:
+                        #if distance(similarity) too low, mark as unknown
+                        if faces["dist"] < MAXIMUM_DISTANCE:
+                            id_list.append(faces["id"])
+                        else:
+                            id_list.append(UNKNOWN_FACE_NAME)
             return list(set(id_list))
         except TypeError:
             return []
@@ -241,9 +251,10 @@ class FaceRecognitionBot(hass.Hass):
         """Asks the user if he knows the face in the photo.
         The identifier is needed to link the user reply back to this message"""
         self.log("Asking for name")
-        keyboard = [("Unbekannt","/unkown" + IDENTIFIER_DELIMITER + identifier)]
+        keyboard = [[("Unbekannt","/unkown" + IDENTIFIER_DELIMITER + identifier)]]
         for face in self.known_faces:
-            keyboard.append((face,"/" + face + IDENTIFIER_DELIMITER + identifier))
+            keyboard.append([(face,"/" + face + IDENTIFIER_DELIMITER + identifier)])
+        self.log("keyboard is: {}".format(keyboard))
         self.call_service('telegram_bot/send_message',
                           target=self.user_id,
                           message=self.message_unkown_face,
@@ -268,7 +279,7 @@ class FaceRecognitionBot(hass.Hass):
                 directory = self.facebox_source_directory + face
                 self._copyFilesFromUnkownToDirectoryByIdentifier(directory, identifier)  
 
-        if data_callback.startswith('/unkown'):  # Keyboard editor:
+        if data_callback.startswith('/unkown'):
             # Answer callback query
             self.call_service('telegram_bot/answer_callback_query',
                               message="Dankeschön!",
