@@ -48,7 +48,7 @@ ATTR_IMAGE_ID = 'image_id'
 ATTR_MATCHED = 'matched'
 CLASSIFIER = 'faces'
 DATA_FACEBOX = 'facebox_classifiers'
-TIMEOUT = 2
+TIMEOUT = 5
 PROVIDE_NAME_TIMEOUT = 5
 IDENTIFIER_DELIMITER = "_"
 MAXIMUM_DISTANCE = 0.4
@@ -249,6 +249,8 @@ class FaceRecognitionBot(hass.Hass):
             return response
         except requests.exceptions.ConnectionError:
             self.log("ConnectionError")
+        except requests.exceptions.ReadTimeout:
+            self.log("ReadTimeout")
                 
 
     def ask_for_name(self, identifier):

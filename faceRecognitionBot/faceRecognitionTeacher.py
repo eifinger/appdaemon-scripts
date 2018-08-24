@@ -23,9 +23,6 @@ import os
 #
 # Version 1.0:
 #   Initial Version
-
-TIMEOUT = 2
-
 class FaceRecognitionTeacher(hass.Hass):
 
     def initialize(self):
@@ -50,6 +47,8 @@ class FaceRecognitionTeacher(hass.Hass):
         self.run_in_initial_delay = 43200
         self.run_in_delay = self.run_in_initial_delay
         self.run_in_error_delay = 60
+
+        self.faceRecognitionBot = self.get_app("FaceRecognitionBot")
 
         self.exclude_folders = ("healthcheck", "multiple", "noface", "tmp", "unknown", "new")
 
@@ -120,25 +119,13 @@ class FaceRecognitionTeacher(hass.Hass):
 
     def check_if_trained(self, kwargs):
         """Check if faces are trained. If not train them"""
-        response = self.post_image(self.check_url, self.facebox_healthcheck_filename)
+        response = self.faceRecognitionBot.post_image(self.check_url, self.facebox_healthcheck_filename)
         response_json = response.json()
         if response.status_code == 200 and len(response_json["faces"]) > 0 and response_json["faces"][0]["id"] == self.healthcheck_face_name:
             self.log("Faces are still taught")
         else:
             self.log("Faces are not taught")
             self.teach_faces()
-
-    def post_image(self, url, image):
-        """Post an image to the classifier."""
-        try:
-            response = requests.post(
-                url,
-                files={"file": open(image, 'rb')},
-                timeout=TIMEOUT
-                )
-            return response
-        except requests.exceptions.ConnectionError:
-            self.log("ConnectionError")
 
     def list_folders(self, directory):
         """Returns a list of folders
