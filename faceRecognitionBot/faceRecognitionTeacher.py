@@ -127,19 +127,9 @@ class FaceRecognitionTeacher(hass.Hass):
             self.log("Faces are not taught")
             self.teach_faces()
 
-    def list_folders(self, directory):
-        """Returns a list of folders
-        These are not full paths, just the folder."""
-        folders = [dir for dir in os.listdir(directory)
-               if os.path.isdir(os.path.join(directory, dir))
-               and not dir.startswith(directory)
-               and not dir.startswith('.')]
-        folders.sort(key=str.lower)
-        return folders
-
     def teach_faces(self):
         self.log("Teaching faces")
-        for folder_name in self.list_folders(self.folderpath):
+        for folder_name in self.faceRecognitionBot.list_folders(self.folderpath):
             if not folder_name in self.exclude_folders:
                 folder_path = os.path.join(self.folderpath, folder_name)
                 for file in os.listdir(folder_path):

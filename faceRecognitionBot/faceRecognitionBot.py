@@ -243,6 +243,16 @@ class FaceRecognitionBot(hass.Hass):
 
     def _getKnownFaces(self):
         return self.list_folders(self.facebox_known_faces_directory)
+
+    def list_folders(self, directory):
+        """Returns a list of folders
+        These are not full paths, just the folder."""
+        folders = [dir for dir in os.listdir(directory)
+               if os.path.isdir(os.path.join(directory, dir))
+               and not dir.startswith(directory)
+               and not dir.startswith('.')]
+        folders.sort(key=str.lower)
+        return folders
         
 
     def post_image(self, url, image):
