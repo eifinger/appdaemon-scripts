@@ -17,7 +17,6 @@ import requests
 # button: xiaomi button to use as a trigger
 # camera : camera entity. example: camera.ip_webcam
 # local_file_camera: local file camera entity. example: camera.saved_image
-# known_faces: comma separated names of known faces. example: Tina,Markus
 # notify_name: Who to notify. example: group_notifications
 # wol_switch: Wake on Lan switch which turns on the facebox server. example: switch.facebox_wol
 # user_id: The user_id of the telegram user to ask whether he knows an unknown face
@@ -67,7 +66,6 @@ class FaceRecognitionBot(hass.Hass):
         self.button = globals.get_arg(self.args,"button")
         self.camera = globals.get_arg(self.args,"camera")
         self.local_file_camera = globals.get_arg(self.args,"local_file_camera")
-        self.known_faces = globals.get_arg_list(self.args,"known_faces")
         self.notify_name = globals.get_arg(self.args,"notify_name")
         self.wol_switch = globals.get_arg(self.args,"wol_switch")
         self.user_id = globals.get_arg(self.args,"user_id")
@@ -92,6 +90,11 @@ class FaceRecognitionBot(hass.Hass):
         self.facebox_noface_directory = globals.get_arg(self.args,"facebox_noface_directory") 
         if not self.facebox_noface_directory.endswith("/"):
             self.facebox_noface_directory = self.facebox_noface_directory + "/"
+        self.facebox_known_faces_directory = globals.get_arg(self.args,"facebox_known_faces_directory") 
+        if not self.facebox_known_faces_directory.endswith("/"):
+            self.facebox_known_faces_directory = self.facebox_known_faces_directory + "/"
+
+            
 
         self.notifier = self.get_app('Notifier')
 
@@ -159,7 +162,7 @@ class FaceRecognitionBot(hass.Hass):
                 #TODO
             else:
                 self.log("Always the same face")
-                if len(faceNames) > 0 and faceNames[0] in self.known_faces:
+                if len(faceNames) > 0 and faceNames[0] in self._getKnownFaces():
                     self.log(self.message_face_identified.format(faceNames[0]))
                     self.notifier.notify(self.notify_name, self.message_face_identified.format(faceNames[0])) 
                     #TODO copy file for training
@@ -238,6 +241,10 @@ class FaceRecognitionBot(hass.Hass):
                 self.log("Move file from {} to {}".format(filename, new_filename))
                 shutil.move(filename, new_filename)
 
+    def _getKnownFaces(self):
+        return self.list_folders(self.facebox_known_faces_directory)
+        
+
     def post_image(self, url, image):
         """Post an image to the classifier."""
         try:
@@ -258,7 +265,7 @@ class FaceRecognitionBot(hass.Hass):
         The identifier is needed to link the user reply back to this message"""
         self.log("Asking for name")
         keyboard = [[("Unbekannt","/unkown" + IDENTIFIER_DELIMITER + identifier)]]
-        for face in self.known_faces:
+        for face in self._getKnownFaces():
             keyboard.append([(face,"/" + face + IDENTIFIER_DELIMITER + identifier)])
         self.log("keyboard is: {}".format(keyboard))
         self.call_service('telegram_bot/send_message',
@@ -276,7 +283,7 @@ class FaceRecognitionBot(hass.Hass):
         text = data["message"]["text"]
         from_first = data["from_first"]
 
-        for face in self.known_faces:
+        for face in self._getKnownFaces():
             if data_callback.startswith("/" + face + IDENTIFIER_DELIMITER):
                 self.log("Received Telegram Callback for {}".format(face))
                 self.call_service('telegram_bot/answer_callback_query',
@@ -288,7 +295,7 @@ class FaceRecognitionBot(hass.Hass):
                               message=self.message_name_provided_callback.format(from_first, face),
                               inline_keyboard=[])
                 identifier = data_callback.split(IDENTIFIER_DELIMITER)[1]
-                directory = self.facebox_source_directory + face
+                directory = self.facebox_known_faces_directory + face
                 self._copyFilesFromUnkownToDirectoryByIdentifier(directory, identifier)  
 
         if data_callback.startswith('/unkown'):
@@ -323,7 +330,7 @@ class FaceRecognitionBot(hass.Hass):
             #Say thanks
             self.notifier.notify(self.notify_name, self.message_name_provided.format(text))
             #Copy files to new directory
-            directory = self.facebox_source_directory + text
+            directory = self.facebox_known_faces_directory + text
             self._copyFilesFromUnkownToDirectoryByIdentifier(directory,self.last_identifier)
         else:
             self.log("PROVIDE_NAME_TIMEOUT exceeded")
