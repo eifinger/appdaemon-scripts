@@ -44,5 +44,7 @@ faceRecognitionTeacher:
   healthcheck_face_name: secret_name_user_one
   ip: secret_facebox_ip
   port: secret_facebox_port
+  dependencies:
+    - faceRecognitionBot
   global_dependencies:
     - globals

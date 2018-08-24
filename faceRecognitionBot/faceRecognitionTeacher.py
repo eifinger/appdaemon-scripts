@@ -48,7 +48,7 @@ class FaceRecognitionTeacher(hass.Hass):
         self.run_in_delay = self.run_in_initial_delay
         self.run_in_error_delay = 60
 
-        self.faceRecognitionBot = self.get_app("FaceRecognitionBot")
+        self.faceRecognitionBot = self.get_app("faceRecognitionBot")
 
         self.exclude_folders = ("healthcheck", "multiple", "noface", "tmp", "unknown", "new")
 
