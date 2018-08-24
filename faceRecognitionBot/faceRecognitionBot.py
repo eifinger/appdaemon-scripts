@@ -313,7 +313,7 @@ class FaceRecognitionBot(hass.Hass):
         chat_id = data['chat_id']
         text = data["text"]
 
-        if self.self.provide_name_timeout_start != None and (datetime.datetime.now() - self.provide_name_timeout_start < datetime.timedelta(minutes=PROVIDE_NAME_TIMEOUT)):
+        if self.provide_name_timeout_start != None and (datetime.datetime.now() - self.provide_name_timeout_start < datetime.timedelta(minutes=PROVIDE_NAME_TIMEOUT)):
             #Edit the last ask_for_name message
             self.call_service('telegram_bot/edit_message',
                               chat_id=chat_id,
