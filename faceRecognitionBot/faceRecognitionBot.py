@@ -223,8 +223,8 @@ class FaceRecognitionBot(hass.Hass):
                 filename_without_path = os.path.split(filename)[1]
                 identifier = filename_without_path[:len(filename_without_path)-1]
                 new_filename = self.facebox_unknown_directory + filename_without_path
-                self.log("Copy file from {} to {}".format(filename, new_filename))
-                shutil.copyfile(filename, new_filename)
+                self.log("Move file from {} to {}".format(filename, new_filename))
+                shutil.move(filename, new_filename)
         return identifier
     
     def _copyFilesFromUnkownToDirectoryByIdentifier(self, directory, identifier):
@@ -235,8 +235,8 @@ class FaceRecognitionBot(hass.Hass):
             if identifier in file:
                 filename = os.path.join(self.facebox_unknown_directory, file)
                 new_filename = os.path.join(directory, file)
-                self.log("Copy file from {} to {}".format(filename, new_filename))
-                shutil.copyfile(filename, new_filename)
+                self.log("Move file from {} to {}".format(filename, new_filename))
+                shutil.move(filename, new_filename)
 
     def post_image(self, url, image):
         """Post an image to the classifier."""
