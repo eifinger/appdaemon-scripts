@@ -1,0 +1,17 @@
+startGoldieWhenLeaving:
+  module: runOnStateChange
+  class: RunOnStateChange
+  app_switch: input_boolean.start_goldie_when_leaving
+  turn_on: script.goldie_clean
+  trigger_entity: input_boolean.is_home
+  trigger_state: "off"
+  message_on: "Ich habe {} angeschaltet"
+  #message_on: "I turned on {}"
+  message_off: "Ich habe {} ausgeschaltet"
+  #message_off: "I turned off {}"
+  notify_name: group_notifications
+  use_alexa: False
+  dependencies: 
+    - Notifier
+  global_dependencies:
+    - globals
