@@ -78,7 +78,6 @@ class FaceRecognitionBot(hass.Hass):
         self.message_provide_name = globals.get_arg(self.args,"message_provide_name")
         self.message_name_provided = globals.get_arg(self.args,"message_name_provided")
         self.message_name_provided_callback = globals.get_arg(self.args,"message_name_provided_callback")
-        self.folderpath = globals.get_arg(self.args,"folderpath")
         self.facebox_healthcheck_filename = globals.get_arg(self.args,"facebox_healthcheck_filename")
         self.healthcheck_face_name = globals.get_arg(self.args, "healthcheck_face_name")
         self.ip = globals.get_arg(self.args,"ip")
@@ -200,7 +199,7 @@ class FaceRecognitionBot(hass.Hass):
             self.log("Faces are still taught")
         else:
             self.log("Faces are not taught")
-            self.teach_faces(self.folderpath, self.exclude_folders)
+            self.teach_faces(self.facebox_known_faces_directory, self.exclude_folders)
 
     def teach_faces(self, folderpath, exclude_folders=[]):
         self.log("Teaching faces")
