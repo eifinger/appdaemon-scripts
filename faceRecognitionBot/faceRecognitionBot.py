@@ -193,7 +193,7 @@ class FaceRecognitionBot(hass.Hass):
 
     def check_if_trained(self, kwargs):
         """Check if faces are trained. If not train them"""
-        response = self.faceRecognitionBot.post_image(self.check_url, self.facebox_healthcheck_filename)
+        response = self.post_image(self.check_url, self.facebox_healthcheck_filename)
         response_json = response.json()
         if response.status_code == 200 and len(response_json["faces"]) > 0 and response_json["faces"][0]["id"] == self.healthcheck_face_name:
             self.log("Faces are still taught")
@@ -203,7 +203,7 @@ class FaceRecognitionBot(hass.Hass):
 
     def teach_faces(self, folderpath, exclude_folders=[]):
         self.log("Teaching faces")
-        for folder_name in self.faceRecognitionBot.list_folders(folderpath):
+        for folder_name in self.list_folders(folderpath):
             if not folder_name in exclude_folders:
                 folder_path = os.path.join(folderpath, folder_name)
                 for file in os.listdir(folder_path):
@@ -409,7 +409,7 @@ class FaceRecognitionBot(hass.Hass):
                 identifier = data_callback.split(IDENTIFIER_DELIMITER)[1]
                 directory = self.facebox_known_faces_directory + face
                 self._copyFilesFromUnkownToDirectoryByIdentifier(directory, identifier)
-                self.faceRecognitionTeacher.teach_faces(directory)
+                self.teach_faces(directory)
 
         if data_callback.startswith('/unkown'):
             # Answer callback query
@@ -445,7 +445,7 @@ class FaceRecognitionBot(hass.Hass):
             #Copy files to new directory
             directory = self.facebox_known_faces_directory + text
             self._copyFilesFromUnkownToDirectoryByIdentifier(directory,self.last_identifier)
-            self.faceRecognitionTeacher.teach_faces(directory)
+            self.teach_faces(directory)
         else:
             self.log("PROVIDE_NAME_TIMEOUT exceeded")
 
