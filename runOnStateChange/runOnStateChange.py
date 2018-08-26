@@ -41,7 +41,8 @@ class RunOnStateChange(hass.Hass):
             self.after_sundown = None
     self.trigger_entity = globals.get_arg(self.args,"trigger_entity")
     self.trigger_state = globals.get_arg(self.args,"trigger_state")
-    self.message = globals.get_arg(self.args,"message_DE")
+    self.message_on = globals.get_arg(self.args,"message_on")
+    self.message_off = globals.get_arg(self.args,"message_off")
     self.notify_name = globals.get_arg(self.args,"notify_name")
     self.use_alexa = globals.get_arg(self.args,"use_alexa")
 
