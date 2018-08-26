@@ -34,18 +34,3 @@ faceRecognitionBot:
     - faceRecognitionTeacher
   global_dependencies:
     - globals
-
-
-faceRecognitionTeacher:
-  module: faceRecognitionTeacher
-  class: FaceRecognitionTeacher
-  app_switch: input_boolean.facebox_teacher
-  folderpath: secret_facebox_known_faces_directory
-  facebox_healthcheck_filename: secret_facebox_healthcheck_filename
-  healthcheck_face_name: secret_name_user_one
-  ip: secret_facebox_ip
-  port: secret_facebox_port
-  dependencies:
-    - faceRecognitionBot
-  global_dependencies:
-    - globals

@@ -78,11 +78,13 @@ class FaceRecognitionBot(hass.Hass):
         self.message_provide_name = globals.get_arg(self.args,"message_provide_name")
         self.message_name_provided = globals.get_arg(self.args,"message_name_provided")
         self.message_name_provided_callback = globals.get_arg(self.args,"message_name_provided_callback")
-        
+        self.folderpath = globals.get_arg(self.args,"folderpath")
+        self.facebox_healthcheck_filename = globals.get_arg(self.args,"facebox_healthcheck_filename")
+        self.healthcheck_face_name = globals.get_arg(self.args, "healthcheck_face_name")
         self.ip = globals.get_arg(self.args,"ip")
         self.port = globals.get_arg(self.args,"port")
-        
 
+        #optional args
         self.facebox_source_directory = globals.get_arg(self.args,"facebox_source_directory")
         if not self.facebox_source_directory.endswith("/"):
             self.facebox_source_directory = self.facebox_source_directory + "/"
@@ -98,21 +100,120 @@ class FaceRecognitionBot(hass.Hass):
 
         # App dependencies
         self.notifier = self.get_app('Notifier')
-        self.faceRecognitionTeacher = self.get_app("faceRecognitionTeacher")
+        
+        # Subscribe to sensors
+        self.listen_state_handle_list.append(self.listen_state(self.triggered,self.sensor))
+        #Subscribe to custom triggers
+        self.listen_event_handle_list.append(self.listen_event(self.button_clicked, "click"))
+        self.listen_event_handle_list.append(self.listen_event(self.learn_faces_event_callback,"eifinger_learn_faces"))
+        #subscribe to telegram events
+        self.listen_event_handle_list.append(self.listen_event(self.receive_telegram_callback, 'telegram_callback'))
+        self.listen_event_handle_list.append(self.listen_event(self.receive_telegram_text, 'telegram_text'))
+        #Teach periodic run
+        self.timer_handle_list.append(self.run_in(self.check_health_callback, 5))
 
-        self._url_check = "http://{}:{}".format(self.ip, self.port)
+        #custom variables
+
+        self.valid_filetypes = ('.jpg', '.png', '.jpeg')
+
+        self.teach_url = "http://{}:{}/faces".format(self.ip, self.port)
+        self.health_url = "http://{}:{}/faces".format(self.ip, self.port)
+        self.check_url = "http://{}:{}".format(self.ip, self.port)
+
+        self.run_in_initial_delay = 43200
+        self.run_in_delay = self.run_in_initial_delay
+        self.run_in_error_delay = 60
+
+
+        self.exclude_folders = ("healthcheck", "multiple", "noface", "tmp", "unknown", "new")
+
         self.provide_name_timeout_start = None
         self.last_identifier = None
         self.last_message_id = None
         self.last_from_first = None
 
-        # Subscribe to sensors
-        self.listen_event_handle_list.append(self.listen_event(self.button_clicked, "click"))
-        self.listen_state_handle_list.append(self.listen_state(self.triggered,self.sensor))
+    def check_health_callback(self, kwargs):
+        """Check health"""
+        try:
+            if self.check_classifier_health():
+                self.check_if_trained(None)
+                self.timer_handle_list.append(self.run_in(self.check_health_callback,self.run_in_delay))
+        except requests.exceptions.HTTPError as exception:
+            self.log("Error trying to turn on entity. Will try again in 1s. Error: {}".format(exception), level = "WARNING")
+            self.timer_handle_list.append(self.run_in(self.check_health_callback, 1))
 
-        self.listen_event_handle_list.append(self.listen_event(self.receive_telegram_callback, 'telegram_callback'))
-        self.listen_event_handle_list.append(self.listen_event(self.receive_telegram_text, 'telegram_text'))
+    def learn_faces_event_callback(self, event_name, data, kwargs):
+        """Callback function for manual trigger of face learning"""
+        self.log("Event received. Triggering Face Learning")
+        self.check_health_callback(None)
 
+    def teach_name_by_file(self, teach_url, name, file_path):
+        """Teach facebox a single name using a single file."""
+        file_name = file_path.split("/")[-1]
+        file = {'file': open(file_path, 'rb')}
+
+        teach_url = teach_url + "?id=" + name
+        response = requests.post(teach_url, files=file)
+
+        if response.status_code == 200:
+            self.log("File: {} taught with name: {}".format(file_name, name))
+            return True
+
+        elif response.status_code == 400:
+            self.log("Teaching of file: {} failed with message: {}".format(
+                file_name, response.text))
+            return False
+
+    def check_classifier_health(self):
+        """Check that classifier is reachable"""
+        try:
+            response = requests.get(self.health_url)
+            if response.status_code == 200:
+                self.log("Health-check passed")
+                self.run_in_delay = self.run_in_initial_delay
+                self.log("Setting run_in_delay to {}".format(self.run_in_delay))
+                return True
+            else:
+                self.log("Health-check failed")
+                self.log(response.status_code)
+                # check for recurring error
+                if self.run_in_delay < self.run_in_initial_delay:
+                    self.run_in_delay = self.run_in_delay * 2
+                else:
+                    self.run_in_delay = self.run_in_error_delay
+                return False
+        except requests.exceptions.RequestException as exception:
+            self.log("Server is unreachable", level = "WARNING")
+            self.log(exception, level = "WARNING")
+            # check for recurring error
+            if self.run_in_delay < self.run_in_initial_delay:
+                self.run_in_delay = self.run_in_delay * 2
+            else:
+                self.run_in_delay = self.run_in_error_delay
+            self.log("Setting run_in_delay to {}".format(self.run_in_delay))
+
+    def check_if_trained(self, kwargs):
+        """Check if faces are trained. If not train them"""
+        response = self.faceRecognitionBot.post_image(self.check_url, self.facebox_healthcheck_filename)
+        response_json = response.json()
+        if response.status_code == 200 and len(response_json["faces"]) > 0 and response_json["faces"][0]["id"] == self.healthcheck_face_name:
+            self.log("Faces are still taught")
+        else:
+            self.log("Faces are not taught")
+            self.teach_faces(self.folderpath, self.exclude_folders)
+
+    def teach_faces(self, folderpath, exclude_folders=[]):
+        self.log("Teaching faces")
+        for folder_name in self.faceRecognitionBot.list_folders(folderpath):
+            if not folder_name in exclude_folders:
+                folder_path = os.path.join(folderpath, folder_name)
+                for file in os.listdir(folder_path):
+                    if file.endswith(self.valid_filetypes):
+                        file_path = os.path.join(folder_path, file)
+                        self.teach_name_by_file(self.teach_url,
+                            folder_name,
+                            file_path)
+        
     def button_clicked(self, event_name, data, kwargs):
         """Extra callback method to trigger the face detection on demand by pressing a Xiaomi Button"""
         if data["entity_id"] == self.button:
@@ -142,7 +243,7 @@ class FaceRecognitionBot(hass.Hass):
         """Trigger image processing for all images and process the results"""
         result_dict_dict = {}
         for filename in kwargs["file_locations"]:
-            response = self.post_image(self._url_check, filename)
+            response = self.post_image(self.check_url, filename)
             if response is not None:
                 result_dict = {}
                 self.log("response is: {}".format(response.text))
