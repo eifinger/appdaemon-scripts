@@ -125,13 +125,13 @@ class FaceRecognitionTeacher(hass.Hass):
             self.log("Faces are still taught")
         else:
             self.log("Faces are not taught")
-            self.teach_faces()
+            self.teach_faces(self.folderpath, self.exclude_folders)
 
-    def teach_faces(self):
+    def teach_faces(self, folderpath, exclude_folders=[]):
         self.log("Teaching faces")
-        for folder_name in self.faceRecognitionBot.list_folders(self.folderpath):
-            if not folder_name in self.exclude_folders:
-                folder_path = os.path.join(self.folderpath, folder_name)
+        for folder_name in self.faceRecognitionBot.list_folders(folderpath):
+            if not folder_name in exclude_folders:
+                folder_path = os.path.join(folderpath, folder_name)
                 for file in os.listdir(folder_path):
                     if file.endswith(self.valid_filetypes):
                         file_path = os.path.join(folder_path, file)

@@ -56,11 +56,13 @@ UNKNOWN_FACE_NAME = "unkown"
 class FaceRecognitionBot(hass.Hass):
 
     def initialize(self):
-    
+
+        # handle lists    
         self.timer_handle_list = []
         self.listen_event_handle_list = []
         self.listen_state_handle_list = []
 
+        # args
         self.app_switch = globals.get_arg(self.args,"app_switch")
         self.sensor = globals.get_arg(self.args,"sensor")
         self.button = globals.get_arg(self.args,"button")
@@ -94,9 +96,9 @@ class FaceRecognitionBot(hass.Hass):
         if not self.facebox_known_faces_directory.endswith("/"):
             self.facebox_known_faces_directory = self.facebox_known_faces_directory + "/"
 
-            
-
+        # App dependencies
         self.notifier = self.get_app('Notifier')
+        self.faceRecognitionTeacher = self.get_app("faceRecognitionTeacher")
 
         self._url_check = "http://{}:{}".format(self.ip, self.port)
         self.provide_name_timeout_start = None
@@ -306,7 +308,8 @@ class FaceRecognitionBot(hass.Hass):
                               inline_keyboard=[])
                 identifier = data_callback.split(IDENTIFIER_DELIMITER)[1]
                 directory = self.facebox_known_faces_directory + face
-                self._copyFilesFromUnkownToDirectoryByIdentifier(directory, identifier)  
+                self._copyFilesFromUnkownToDirectoryByIdentifier(directory, identifier)
+                self.faceRecognitionTeacher.teach_faces(directory)
 
         if data_callback.startswith('/unkown'):
             # Answer callback query
@@ -342,6 +345,7 @@ class FaceRecognitionBot(hass.Hass):
             #Copy files to new directory
             directory = self.facebox_known_faces_directory + text
             self._copyFilesFromUnkownToDirectoryByIdentifier(directory,self.last_identifier)
+            self.faceRecognitionTeacher.teach_faces(directory)
         else:
             self.log("PROVIDE_NAME_TIMEOUT exceeded")
 
