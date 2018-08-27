@@ -44,6 +44,7 @@ CLASSIFIER = 'faces'
 TIMEOUT = 5
 PROVIDE_NAME_TIMEOUT = 5
 IDENTIFIER_DELIMITER = "_"
+FILENAME_DELIMITER = "-"
 MAXIMUM_DISTANCE = 0.4
 UNKNOWN_FACE_NAME = "unkown"
 
@@ -233,11 +234,12 @@ class FaceRecognitionBot(hass.Hass):
     def takeSnapshots(self, kwargs):
         """Take a snapshot. Save to a file."""
         file_locations = []
-        directory = self.facebox_source_directory + "new/" + time.strftime("%Y%m%d%H%M%S")
+        timestamp = time.strftime("%Y%m%d%H%M%S")
+        directory = self.facebox_source_directory + "new/" + timestamp
         if not os.path.exists(directory):
                 os.makedirs(directory)
         for i in range(0,self.number_of_images-1):
-            filename = directory + "/" + time.strftime("%Y%m%d%H%M%S") + str(i) + ".jpg"
+            filename = directory + "/" + timestamp + FILENAME_DELIMITER + str(i) + ".jpg"
             self.log("Calling camera/snapshot and saving it to: {}".format(filename))
             self.call_service("camera/snapshot", entity_id = self.camera, filename = filename)
             file_locations.append(filename)
@@ -332,7 +334,9 @@ class FaceRecognitionBot(hass.Hass):
         for filename in result_dict_dict.keys():
             if result_dict_dict[filename]["count"] > 0:
                 filename_without_path = os.path.split(filename)[1]
-                identifier = filename_without_path[:len(filename_without_path)-1]
+                # get the timestamp as identifier, strip everything after "-""
+                identifier = filename_without_path.split(FILENAME_DELIMITER)[0]
+                self.log("Identifier is: {}".format(identifier))
                 new_filename = self.facebox_unknown_directory + filename_without_path
                 self.log("Move file from {} to {}".format(filename, new_filename))
                 shutil.move(filename, new_filename)
