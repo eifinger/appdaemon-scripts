@@ -45,27 +45,27 @@ class BedroomMotionTrigger(hass.Hass):
         self.entity_on = globals.get_arg(self.args,"entity_on")
         try:
             self.entity_off = globals.get_arg(self.args,"entity_off")
-        except KeyError as identifier:
+        except KeyError:
             self.entity_off = None
         try:
             self.after = globals.get_arg(self.args,"after")
-        except KeyError as identifier:
+        except KeyError:
             self.after = None
         try:
             self.after_sundown = globals.get_arg(self.args,"after_sundown")
-        except KeyError as identifier:
+        except KeyError:
             self.after_sundown = None
         try:
             self.delay = globals.get_arg(self.args,"delay")
-        except KeyError as identifier:
+        except KeyError:
             self.delay = None
         try:
             self.constraint_entities_off = globals.get_arg_list(self.args,"constraint_entities_off")
-        except KeyError as identifier:
+        except KeyError:
             self.constraint_entities_off = []
         try:
             self.constraint_entities_on = globals.get_arg_list(self.args,"constraint_entities_on")
-        except KeyError as identifier:
+        except KeyError:
             self.constraint_entities_on = []
         self.location_user_one_sensor = globals.get_arg(self.args,"location_user_one_sensor")
         self.location_user_two_sensor = globals.get_arg(self.args,"location_user_two_sensor")
@@ -127,7 +127,7 @@ class BedroomMotionTrigger(hass.Hass):
             self.turn_off(self.entity_off)
             self.turned_on_by_me = False
         else:
-            self.log("No entity_off defined")
+            self.log("No entity_off defined", level="DEBUG")
         
     def terminate(self):
         for timer_handle in self.timer_handle_list:

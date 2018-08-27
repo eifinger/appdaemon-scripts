@@ -126,7 +126,7 @@ class MotionTrigger(hass.Hass):
             self.turn_off(self.entity_off)
             self.turned_on_by_me = False
         else:
-            self.log("No entity_off defined")
+            self.log("No entity_off defined", level="DEBUG")
         
     def terminate(self):
         for timer_handle in self.timer_handle_list:
