@@ -40,13 +40,7 @@ import requests
 #
 # Version 1.0:
 #   Initial Version
-
-ATTR_BOUNDING_BOX = 'bounding_box'
-ATTR_CLASSIFIER = 'classifier'
-ATTR_IMAGE_ID = 'image_id'
-ATTR_MATCHED = 'matched'
 CLASSIFIER = 'faces'
-DATA_FACEBOX = 'facebox_classifiers'
 TIMEOUT = 5
 PROVIDE_NAME_TIMEOUT = 5
 IDENTIFIER_DELIMITER = "_"
@@ -132,7 +126,11 @@ class FaceRecognitionBot(hass.Hass):
         self.last_from_first = None
 
     def check_health_callback(self, kwargs):
-        """Check health"""
+        """Check health.
+        
+        Runs repeatedly until it is veryfied that the classifier is healthy and faces are trained.
+        
+        If it is healthy and trained it will check again after run_in_initial_delay"""
         try:
             if self.check_classifier_health():
                 self.check_if_trained(None)
@@ -147,7 +145,7 @@ class FaceRecognitionBot(hass.Hass):
         self.check_health_callback(None)
 
     def teach_name_by_file(self, teach_url, name, file_path):
-        """Teach facebox a single name using a single file."""
+        """Teach the classifier a single name using a single file."""
         file_name = file_path.split("/")[-1]
         file = {'file': open(file_path, 'rb')}
 
@@ -164,7 +162,7 @@ class FaceRecognitionBot(hass.Hass):
             return False
 
     def check_classifier_health(self):
-        """Check that classifier is reachable"""
+        """Check if classifier is reachable under health_url and returns HTTP 200"""
         try:
             response = requests.get(self.health_url)
             if response.status_code == 200:
@@ -192,7 +190,10 @@ class FaceRecognitionBot(hass.Hass):
             self.log("Setting run_in_delay to {}".format(self.run_in_delay))
 
     def check_if_trained(self, kwargs):
-        """Check if faces are trained. If not train them"""
+        """Check if faces are trained. If not train them.
+        
+        Checks for a picture with a known result if the classifier returns the correct result
+        """
         response = self.post_image(self.check_url, self.facebox_healthcheck_filename)
         response_json = response.json()
         if response.status_code == 200 and len(response_json["faces"]) > 0 and response_json["faces"][0]["id"] == self.healthcheck_face_name:
@@ -202,6 +203,10 @@ class FaceRecognitionBot(hass.Hass):
             self.teach_faces(self.facebox_known_faces_directory, self.exclude_folders)
 
     def teach_faces(self, folderpath, exclude_folders=[]):
+        """Teach faces.
+
+        Will iterate over all subdirectories of 'folderpath' and teach the name within
+        that subdirectory with the name of the subdirectory"""
         self.log("Teaching faces")
         for folder_name in self.list_folders(folderpath):
             if not folder_name in exclude_folders:
@@ -344,6 +349,9 @@ class FaceRecognitionBot(hass.Hass):
                 shutil.move(filename, new_filename)
 
     def _getKnownFaces(self):
+        """Return a list of known face names.
+
+        Iterates over the subdirectory names of facebox_known_faces_directory"""
         return self.list_folders(self.facebox_known_faces_directory)
 
     def list_folders(self, directory):
@@ -421,7 +429,7 @@ class FaceRecognitionBot(hass.Hass):
                               message_id=message_id,
                               message=text,
                               inline_keyboard=[])
-            self.notifier.notify(self.notify_name, self.message_provide_name.format(PROVIDE_NAME_TIMEOUT))
+            self.notifier.notify(self.notify_name, self.message_provide_name.format(PROVIDE_NAME_TIMEOUT), useAlexa=False)
             self.provide_name_timeout_start = datetime.datetime.now()
             self.last_identifier = data_callback.split(IDENTIFIER_DELIMITER)[1]
             self.last_message_id = message_id
@@ -441,7 +449,7 @@ class FaceRecognitionBot(hass.Hass):
                               message=self.message_name_provided_callback.format(self.last_from_first, text),
                               inline_keyboard=[])
             #Say thanks
-            self.notifier.notify(self.notify_name, self.message_name_provided.format(text))
+            self.notifier.notify(self.notify_name, self.message_name_provided.format(text), useAlexa=False)
             #Copy files to new directory
             directory = self.facebox_known_faces_directory + text
             self._copyFilesFromUnkownToDirectoryByIdentifier(directory,self.last_identifier)
