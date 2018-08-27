@@ -45,7 +45,7 @@ TIMEOUT = 5
 PROVIDE_NAME_TIMEOUT = 5
 IDENTIFIER_DELIMITER = "_"
 FILENAME_DELIMITER = "-"
-MAXIMUM_DISTANCE = 0.4
+MAXIMUM_DISTANCE = 0.55
 UNKNOWN_FACE_NAME = "unkown"
 
 class FaceRecognitionBot(hass.Hass):
@@ -337,7 +337,7 @@ class FaceRecognitionBot(hass.Hass):
                 filename_without_path = os.path.split(filename)[1]
                 # get the timestamp as identifier, strip everything after "-""
                 identifier = filename_without_path.split(FILENAME_DELIMITER)[0]
-                self.log("Identifier is: {}".format(identifier))
+                self.log("Identifier is: {}".format(identifier), level="DEBUG")
                 new_filename = self.facebox_unknown_directory + filename_without_path
                 self.log("Move file from {} to {}".format(filename, new_filename))
                 shutil.move(filename, new_filename)
