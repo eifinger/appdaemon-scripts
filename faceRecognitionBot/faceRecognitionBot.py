@@ -306,16 +306,17 @@ class FaceRecognitionBot(hass.Hass):
         try:
             id_list = []
             for d in result_dict_dict.values():
+                self.log("d is: {}".format(d))
                 #check for unknown face
                 if len(d["faces"]) == 0 and d["count"] == 1:
                     id_list.append(UNKNOWN_FACE_NAME)
                 else:
                     for faces in d["faces"]:
-                        #if distance(similarity) too low, mark as unknown
                         if faces["dist"] < MAXIMUM_DISTANCE:
                             id_list.append(faces["id"])
+                        #if distance(similarity) too large, mark as unknown
                         else:
-                            self.log("Similary distance of {} is lower than threshold of {}".format(faces["dist"], MAXIMUM_DISTANCE))
+                            self.log("Similary distance of {} is larger than maximum threshold of {}".format(faces["dist"], MAXIMUM_DISTANCE))
                             id_list.append(UNKNOWN_FACE_NAME)
             return list(set(id_list))
         except TypeError:
