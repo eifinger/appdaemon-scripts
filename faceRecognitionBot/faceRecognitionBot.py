@@ -313,6 +313,7 @@ class FaceRecognitionBot(hass.Hass):
                         if faces["dist"] < MAXIMUM_DISTANCE:
                             id_list.append(faces["id"])
                         else:
+                            self.log("Similary distance of {} is lower than threshold of {}".format(faces["dist"], MAXIMUM_DISTANCE))
                             id_list.append(UNKNOWN_FACE_NAME)
             return list(set(id_list))
         except TypeError:
@@ -387,7 +388,7 @@ class FaceRecognitionBot(hass.Hass):
         keyboard = [[("Unbekannt","/unkown" + IDENTIFIER_DELIMITER + identifier)]]
         for face in self._getKnownFaces():
             keyboard.append([(face,"/" + face + IDENTIFIER_DELIMITER + identifier)])
-        self.log("keyboard is: {}".format(keyboard))
+        self.log("keyboard is: {}".format(keyboard), level="DEBUG")
         self.call_service('telegram_bot/send_message',
                           target=self.user_id,
                           message=self.message_unkown_face,
@@ -437,7 +438,7 @@ class FaceRecognitionBot(hass.Hass):
 
     def receive_telegram_text(self, event_name, data, kwargs):
         """Telegram text listener"""
-        self.log("callback data: {}".format(data))
+        self.log("callback data: {}".format(data), level="DEBUG")
         chat_id = data['chat_id']
         text = data["text"]
 
