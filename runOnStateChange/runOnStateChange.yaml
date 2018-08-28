@@ -2,7 +2,7 @@ startGoldieWhenLeaving:
   module: runOnStateChange
   class: RunOnStateChange
   app_switch: input_boolean.start_goldie_when_leaving
-  turn_on: script.goldie_clean
+  entities_on: script.goldie_clean
   trigger_entity: input_boolean.is_home
   trigger_state: "off"
   message_on: "Ich habe {} angeschaltet"

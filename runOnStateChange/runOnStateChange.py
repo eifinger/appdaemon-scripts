@@ -6,8 +6,8 @@ import globals
 # Args:
 #
 # app_switch: on/off switch for this app. example: input_boolean.turn_fan_on_when_hot
-# turn_on (optional): list of entities which should be turned on
-# turn_off (optional): list of entities which should be turned off
+# entities_on (optional): list of entities which should be turned on
+# entities_off (optional): list of entities which should be turned off
 # trigger_entity: entity which triggers this app. example: input_boolean.is_home
 # trigger_state: new state of trigger_entity which triggers this app. example: "off"
 # after_sundown (optional): Only trigger after sundown. example: True
@@ -28,13 +28,13 @@ class RunOnStateChange(hass.Hass):
 
     self.app_switch = globals.get_arg(self.args,"app_switch")
     try:
-      self.turn_on = globals.get_arg_list(self.args,"turn_on")
+      self.entities_on = globals.get_arg_list(self.args,"entities_on")
     except KeyError:
-            self.turn_on = []
+            self.entities_on = []
     try:
-      self.turn_off = globals.get_arg_list(self.args,"turn_off")
+      self.entities_off = globals.get_arg_list(self.args,"entities_off")
     except KeyError:
-            self.turn_off = []
+            self.entities_off = []
     try:
       self.after_sundown = globals.get_arg(self.args,"after_sundown")
     except KeyError:
@@ -55,12 +55,12 @@ class RunOnStateChange(hass.Hass):
       if new != "" and new == self.trigger_state:
         if self.after_sundown == None or ( ( self.after_sundown == True and self.sun_down() ) or self.after_sundown == False ):
           #turn_off
-          for entity in self.turn_off:
+          for entity in self.entities_on:
             self.turn_off(entity)
             self.log(self.message_off.format(self.friendly_name(entity)))
             self.notifier.notify(self.notify_name, self.message_off.format(self.friendly_name(entity)), useAlexa=self.use_alexa)
           #turn_on
-          for entity in self.turn_on:
+          for entity in self.entities_off:
             self.turn_on(entity)
             self.log(self.message_on.format(self.friendly_name(entity)))
             self.notifier.notify(self.notify_name, self.message_on.format(self.friendly_name(entity)), useAlexa=self.use_alexa)
