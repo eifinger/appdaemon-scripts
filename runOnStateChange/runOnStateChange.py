@@ -60,7 +60,7 @@ class RunOnStateChange(hass.Hass):
             self.log(self.message_off.format(self.friendly_name(entity)))
             self.notifier.notify(self.notify_name, self.message_off.format(self.friendly_name(entity)), useAlexa=self.use_alexa)
           #turn_on
-          for entity in self.entities_on:
+          for entity in self.turn_on:
             self.turn_on(entity)
             self.log(self.message_on.format(self.friendly_name(entity)))
             self.notifier.notify(self.notify_name, self.message_on.format(self.friendly_name(entity)), useAlexa=self.use_alexa)
