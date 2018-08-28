@@ -33,6 +33,5 @@ faceRecognitionBot:
   #message_name_provided_callback: "{} said that this is {}"
   dependencies:
     - Notifier
-    - faceRecognitionTeacher
   global_dependencies:
     - globals
