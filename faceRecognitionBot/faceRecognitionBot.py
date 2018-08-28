@@ -299,6 +299,7 @@ class FaceRecognitionBot(hass.Hass):
 
     def _getNumberOfDistinctFaces(self, result_dict_dict):
         """Check how many distinct faces got identified"""
+        self.log("Number of distinct faces: {}".format(len(self._getFaceNamesFromResult(result_dict_dict))))
         return len(self._getFaceNamesFromResult(result_dict_dict))
 
     def _getFaceNamesFromResult(self, result_dict_dict):
@@ -318,6 +319,7 @@ class FaceRecognitionBot(hass.Hass):
                         else:
                             self.log("Similary distance of {} is larger than maximum threshold of {}".format(faces["dist"], MAXIMUM_DISTANCE))
                             id_list.append(UNKNOWN_FACE_NAME)
+            self.log("FacesNames: {}".format(list(set(id_list))))
             return list(set(id_list))
         except TypeError:
             return []
