@@ -18,7 +18,10 @@ import globals
 # notify_name: who to notify. example: group_notifications
 # use_alexa: use alexa for notification. example: False
 #
-# Release Notes
+# Release Notesadd 
+#
+# Version 1.6:
+#   garage_door to device_classes of reed sensors
 #
 # Version 1.5:
 #   distinguish normal and reed switches by device_class
@@ -80,7 +83,7 @@ class NotifyOfWrongState(hass.Hass):
           for entity in self.entities_off:
             attributes = self.get_state(entity, attribute="all")
             self.log("attributes: {}".format(attributes))
-            if attributes["state"] == "on" and "device_class" in attributes and (attributes["device_class"] == "window" or attributes["device_class"] == "door"):
+            if attributes["state"] == "on" and "device_class" in attributes and (attributes["device_class"] == "window" or attributes["device_class"] == "door" or attributes["device_class"] == "garage_door"):
               self.log(self.message_reed.format(self.friendly_name(entity)))
               self.notifier.notify(self.notify_name, self.message_reed.format(self.friendly_name(entity)), useAlexa=self.use_alexa)
             elif attributes["state"] == "on":
@@ -91,7 +94,7 @@ class NotifyOfWrongState(hass.Hass):
           for entity in self.entities_on:
             attributes = self.get_state(entity, attribute="all")
             self.log("attributes: {}".format(attributes))
-            if attributes["state"] == "off" and "device_class" in attributes and (attributes["device_class"] == "window" or attributes["device_class"] == "door"):
+            if attributes["state"] == "off" and "device_class" in attributes and (attributes["device_class"] == "window" or attributes["device_class"] == "door" or attributes["device_class"] == "garage_door"):
               self.log(self.message_reed_off.format(self.friendly_name(entity)))
               self.notifier.notify(self.notify_name, message=self.message_reed_off.format(self.friendly_name(entity)), useAlexa=self.use_alexa)
             elif attributes["state"] == "off":
