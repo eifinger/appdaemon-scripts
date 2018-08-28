@@ -238,12 +238,12 @@ class FaceRecognitionBot(hass.Hass):
         directory = self.facebox_source_directory + "new/" + timestamp
         if not os.path.exists(directory):
                 os.makedirs(directory)
-        for i in range(0,self.number_of_images-1):
+        for i in range(0,self.number_of_images):
             filename = directory + "/" + timestamp + FILENAME_DELIMITER + str(i) + ".jpg"
             self.log("Calling camera/snapshot and saving it to: {}".format(filename))
             self.call_service("camera/snapshot", entity_id = self.camera, filename = filename)
             file_locations.append(filename)
-        self.timer_handle_list.append(self.run_in(self.processImages,5, file_locations=file_locations))
+        self.timer_handle_list.append(self.run_in(self.processImages,0, file_locations=file_locations))
 
     def processImages(self, kwargs):
         """Trigger image processing for all images and process the results"""
