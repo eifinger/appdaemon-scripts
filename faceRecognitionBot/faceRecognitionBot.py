@@ -260,13 +260,14 @@ class FaceRecognitionBot(hass.Hass):
                 result_dict_dict[filename] = result_dict
         maxCount = self._getMaxCountFromResult(result_dict_dict)
         faceNames = self._getFaceNamesFromResult(result_dict_dict)
+        self.log("Number of distinct faces: {}".format(len(faceNames)))
         if maxCount > 1:
             self.log("At least one time detected more than one face")
             #TODO
         elif maxCount == 1:
             self.log("Always detected one face")
             #check if always the same face
-            if self._getNumberOfDistinctFaces(result_dict_dict) > 1:
+            if len(faceNames) > 1:
                 self.log("Not always the same face")
                 #TODO
             else:
@@ -296,11 +297,6 @@ class FaceRecognitionBot(hass.Hass):
         """Get the maximum number of faces found in the pictures"""
         count_list = [d["count"] for d in result_dict_dict.values()]
         return max(count_list)
-
-    def _getNumberOfDistinctFaces(self, result_dict_dict):
-        """Check how many distinct faces got identified"""
-        self.log("Number of distinct faces: {}".format(len(self._getFaceNamesFromResult(result_dict_dict))))
-        return len(self._getFaceNamesFromResult(result_dict_dict))
 
     def _getFaceNamesFromResult(self, result_dict_dict):
         """Return a list of names for the identified faces"""
