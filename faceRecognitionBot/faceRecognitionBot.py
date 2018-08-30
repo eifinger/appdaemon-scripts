@@ -126,6 +126,9 @@ class FaceRecognitionBot(hass.Hass):
         self.last_message_id = None
         self.last_from_first = None
 
+###############################################################
+# Teacher
+###############################################################    
     def check_health_callback(self, kwargs):
         """Check health.
         
@@ -218,7 +221,19 @@ class FaceRecognitionBot(hass.Hass):
                         self.teach_name_by_file(self.teach_url,
                             folder_name,
                             file_path)
-        
+
+    def teach_name_by_directory(self, name, folderpath):
+        """Teach faces in a directory for a given anme"""
+        self.log("Teaching faces in dir: {}".format(folderpath))
+        for file in os.listdir(folder_path):
+            if file.endswith(self.valid_filetypes):
+                file_path = os.path.join(folder_path, file)
+                self.teach_name_by_file(self.teach_url,
+                    name,
+                    file_path)
+###############################################################
+# Classifier
+###############################################################        
     def button_clicked(self, event_name, data, kwargs):
         """Extra callback method to trigger the face detection on demand by pressing a Xiaomi Button"""
         if data["entity_id"] == self.button:
@@ -246,7 +261,21 @@ class FaceRecognitionBot(hass.Hass):
         self.timer_handle_list.append(self.run_in(self.processImages,0, file_locations=file_locations))
 
     def processImages(self, kwargs):
-        """Trigger image processing for all images and process the results"""
+        """Trigger image processing for all images and process the results
+        
+         Get the classifier result for each image
+         store it in a dictionary in the following format
+         {filename:
+                  {"count":int,
+                   "faces":{
+                             [
+                               {"dist":float,
+                                "id":name}
+                             ]
+                            },
+                   "matchedFacesCount":int}
+         }
+        """
         result_dict_dict = {}
         for filename in kwargs["file_locations"]:
             response = self.post_image(self.check_url, filename)
@@ -258,40 +287,72 @@ class FaceRecognitionBot(hass.Hass):
                 result_dict["faces"] = response_json['faces']
                 result_dict["matchedFacesCount"] = len(response_json['faces'])
                 result_dict_dict[filename] = result_dict
+        # get the maximum number of faces detected in one image
         maxCount = self._getMaxCountFromResult(result_dict_dict)
+        # get a list of distinct recognized face names
         faceNames = self._getFaceNamesFromResult(result_dict_dict)
         self.log("Number of distinct faces: {}".format(len(faceNames)))
         if maxCount > 1:
             self.log("At least one time detected more than one face")
-            #TODO
+            #check if it contains an unknown face
+            if UNKNOWN_FACE_NAME in faceNames:
+                #TODO
+            else:
+                for faceName in faceNames:
+                    #TODO
         elif maxCount == 1:
             self.log("Always detected one face")
             #check if always the same face
             if len(faceNames) > 1:
                 self.log("Not always the same face")
-                #TODO
+                #TODO test!
+                #at least one time detected a known face
+                #notify of who was detected
+                for faceName in faceNames:
+                    if faceName in self._getKnownFaces():
+                        self.log(self.message_face_identified.format(faceName))
+                        self.notifier.notify(self.notify_name, self.message_face_identified.format(faceName))
+                #process the unknown faces
+                self._processUnkownFaceFound(result_dict_dict)
             else:
                 self.log("Always the same face")
+                #Is it a known face?
                 if len(faceNames) > 0 and faceNames[0] in self._getKnownFaces():
+                    #always identified the same known person
                     self.log(self.message_face_identified.format(faceNames[0]))
                     self.notifier.notify(self.notify_name, self.message_face_identified.format(faceNames[0])) 
-                    #TODO copy file for training
-                    #directory = self.facebox_source_directory + face
-                    #self.copyFile(directory, self.filename)
+                    # Move files to known face subdirectory
+                    for filename in result_dict_dict:
+                        #at this time we know it is at most 1 and it is always the same known face
+                        if result_dict_dict[filename]["count"] == 1:
+                            directory = self.facebox_known_faces_directory + result_dict_dict[filename]["faces"][0]["id"]
+                            new_filename = os.path.join(directory, os.path.split(filename)[1])
+                            self.log("Move file from {} to {}".format(filename, new_filename))
+                            shutil.move(filename, new_filename)
+                    # trigger teaching on all files for this name again 
+                    self.teach_name_by_directory(result_dict_dict[filename]["faces"][0]["id"], directory)
                 else:
-                    #get a file where the unknown face was detected and send it
-                    filename = self._getFileWithUnknownFaceFromResult(result_dict_dict)
-                    #send photo
-                    self.call_service("TELEGRAM_BOT/SEND_PHOTO", file=filename)
-                    #copy all files where a face was detected to the unkown folder
-                    identifier = self._copyFilesToUnknown(result_dict_dict)
-                    if identifier == "":
-                        self.log("Identifier is empty", level="ERROR")
-                    else:
-                        self.ask_for_name(identifier)
+                    #unknown face
+                    self._processUnkownFaceFound(result_dict_dict)
         else:
             self.log("Detected no faces")
             #get directory of images and post that in telegram
+
+    def _processUnkownFaceFound(self, result_dict_dict):
+        """Store the faces for later use and ask the user if he knows the unkown face"""
+        #TODO check if the faces are similar
+        # create a temp identifier, compare and delete identifier again
+
+        #get a file where the unknown face was detected and send it
+        filename = self._getFileWithUnknownFaceFromResult(result_dict_dict)
+        #send photo
+        self.call_service("TELEGRAM_BOT/SEND_PHOTO", file=filename)
+        #copy all files where a face was detected to the unkown folder
+        identifier = self._copyFilesToUnknown(result_dict_dict)
+        if identifier == "":
+            self.log("Identifier is empty", level="ERROR")
+        else:
+            self.ask_for_name(identifier)
 
     def _getMaxCountFromResult(self, result_dict_dict):
         """Get the maximum number of faces found in the pictures"""
@@ -308,13 +369,14 @@ class FaceRecognitionBot(hass.Hass):
                 if len(d["faces"]) == 0 and d["count"] == 1:
                     id_list.append(UNKNOWN_FACE_NAME)
                 else:
-                    for faces in d["faces"]:
-                        if faces["dist"] < MAXIMUM_DISTANCE:
-                            id_list.append(faces["id"])
+                    for face in d["faces"]:
+                        if face["dist"] < MAXIMUM_DISTANCE:
+                            id_list.append(face["id"])
                         #if distance(similarity) too large, mark as unknown
                         else:
-                            self.log("Similary distance of {} is larger than maximum threshold of {}".format(faces["dist"], MAXIMUM_DISTANCE))
+                            self.log("Similary distance of {} is larger than maximum threshold of {}".format(face["dist"], MAXIMUM_DISTANCE))
                             id_list.append(UNKNOWN_FACE_NAME)
+                            face["id"] = UNKNOWN_FACE_NAME
             self.log("FacesNames: {}".format(list(set(id_list))))
             return list(set(id_list))
         except TypeError:
@@ -331,7 +393,7 @@ class FaceRecognitionBot(hass.Hass):
         Returns the timestamp under which all files can be identified"""
         identifier = ""
         for filename in result_dict_dict.keys():
-            if result_dict_dict[filename]["count"] > 0:
+            if result_dict_dict[filename]["count"] > 0 and face["id"] == UNKNOWN_FACE_NAME:
                 filename_without_path = os.path.split(filename)[1]
                 # get the timestamp as identifier, strip everything after "-""
                 identifier = filename_without_path.split(FILENAME_DELIMITER)[0]
@@ -382,7 +444,9 @@ class FaceRecognitionBot(hass.Hass):
             self.log("ConnectionError")
         except requests.exceptions.ReadTimeout:
             self.log("ReadTimeout")
-                
+###############################################################
+# Telegram Bot
+###############################################################                
 
     def ask_for_name(self, identifier):
         """Asks the user if he knows the face in the photo.
@@ -421,7 +485,7 @@ class FaceRecognitionBot(hass.Hass):
                 identifier = data_callback.split(IDENTIFIER_DELIMITER)[1]
                 directory = self.facebox_known_faces_directory + face
                 self._copyFilesFromUnkownToDirectoryByIdentifier(directory, identifier)
-                self.teach_faces(directory)
+                self.teach_name_by_directory(face, directory)
 
         if data_callback.startswith('/unkown'):
             # Answer callback query
@@ -457,7 +521,7 @@ class FaceRecognitionBot(hass.Hass):
             #Copy files to new directory
             directory = self.facebox_known_faces_directory + text
             self._copyFilesFromUnkownToDirectoryByIdentifier(directory,self.last_identifier)
-            self.teach_faces(directory)
+            self.teach_name_by_directory(text, directory)
         else:
             self.log("PROVIDE_NAME_TIMEOUT exceeded")
 
