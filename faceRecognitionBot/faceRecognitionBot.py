@@ -297,9 +297,11 @@ class FaceRecognitionBot(hass.Hass):
             #check if it contains an unknown face
             if UNKNOWN_FACE_NAME in faceNames:
                 #TODO
+                pass
             else:
                 for faceName in faceNames:
                     #TODO
+                    pass
         elif maxCount == 1:
             self.log("Always detected one face")
             #check if always the same face
