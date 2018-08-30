@@ -146,7 +146,7 @@ class FaceRecognitionBot(hass.Hass):
     def learn_faces_event_callback(self, event_name, data, kwargs):
         """Callback function for manual trigger of face learning"""
         self.log("Event received. Triggering Face Learning")
-        self.check_health_callback(None)
+        self.teach_faces(self.facebox_known_faces_directory, self.exclude_folders)
 
     def teach_name_by_file(self, teach_url, name, file_path):
         """Teach the classifier a single name using a single file."""
