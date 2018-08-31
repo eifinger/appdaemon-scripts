@@ -395,7 +395,9 @@ class FaceRecognitionBot(hass.Hass):
         Returns the timestamp under which all files can be identified"""
         identifier = ""
         for filename in result_dict_dict.keys():
-            if result_dict_dict[filename]["count"] > 0 and face["id"] == UNKNOWN_FACE_NAME:
+            if result_dict_dict[filename]["count"] > 0 and 
+            (len(result_dict_dict[filename]["faces"]) == 0 or 
+            result_dict_dict[filename]["faces"][0]["id"] == UNKNOWN_FACE_NAME):
                 filename_without_path = os.path.split(filename)[1]
                 # get the timestamp as identifier, strip everything after "-""
                 identifier = filename_without_path.split(FILENAME_DELIMITER)[0]
