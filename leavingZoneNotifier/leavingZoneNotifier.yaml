@@ -14,3 +14,20 @@ leavingWorkNotifierUserOne:
     - Notifier
   global_dependencies:
     - globals
+
+leavingElmoNotifierUserTwo:
+  module: leavingZoneNotifier
+  class: LeavingZoneNotifier
+  app_switch: input_boolean.leaving_elmo_notifier_user_two
+  device: secret_device_user_two
+  user_name: secret_name_user_two
+  lingering_time: 3600
+  delay: 120
+  zone: Elmo
+  notify_name: group_notifications
+  message_DE: "{} hat {} vor {} Minuten verlassen."
+  message_EN: "{} left {} {} minutes ago"
+  dependencies: 
+    - Notifier
+  global_dependencies:
+    - globals
