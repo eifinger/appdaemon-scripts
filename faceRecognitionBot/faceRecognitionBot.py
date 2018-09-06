@@ -200,6 +200,8 @@ class FaceRecognitionBot(hass.Hass):
         """
         response = self.post_image(self.check_url, self.facebox_healthcheck_filename)
         response_json = response.json()
+        self.log("Check_if_trained status code: {}".format(response.status_code))
+        self.log("Check_if_trained response: {}".format(response_json))
         if response.status_code == 200 and len(response_json["faces"]) > 0 and response_json["faces"][0]["id"] == self.healthcheck_face_name:
             self.log("Faces are still taught")
         else:
