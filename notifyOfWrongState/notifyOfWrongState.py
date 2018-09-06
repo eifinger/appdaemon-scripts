@@ -20,6 +20,9 @@ import globals
 #
 # Release Notesadd 
 #
+# Version 1.6.1:
+#   fix wrong key access for attributes
+#
 # Version 1.6:
 #   garage_door to device_classes of reed sensors
 #
