@@ -18,6 +18,9 @@ import globals
 #
 # Release Notes
 #
+# Version 1.1:
+#   fix switch of On/Off
+#
 # Version 1.0:
 #   Initial Version
 
@@ -56,14 +59,14 @@ class RunOnStateChange(hass.Hass):
         if self.after_sundown == None or ( ( self.after_sundown == True and self.sun_down() ) or self.after_sundown == False ):
           #turn_off
           for entity in self.entities_on:
-            self.turn_off(entity)
-            self.log(self.message_off.format(self.friendly_name(entity)))
-            self.notifier.notify(self.notify_name, self.message_off.format(self.friendly_name(entity)), useAlexa=self.use_alexa)
-          #turn_on
-          for entity in self.entities_off:
             self.turn_on(entity)
             self.log(self.message_on.format(self.friendly_name(entity)))
             self.notifier.notify(self.notify_name, self.message_on.format(self.friendly_name(entity)), useAlexa=self.use_alexa)
+          #turn_on
+          for entity in self.entities_off:
+            self.turn_off(entity)
+            self.log(self.message_off.format(self.friendly_name(entity)))
+            self.notifier.notify(self.notify_name, self.message_off.format(self.friendly_name(entity)), useAlexa=self.use_alexa)
 
   def terminate(self):
     for listen_state_handle in self.listen_state_handle_list:
