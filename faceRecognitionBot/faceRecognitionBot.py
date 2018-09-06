@@ -342,7 +342,7 @@ class FaceRecognitionBot(hass.Hass):
                             self.log("Move file from {} to {}".format(filename, new_filename))
                             shutil.move(filename, new_filename)
                             # trigger teaching
-                            self.teach_name_by_directory(result_dict_dict[filename]["faces"][0]["id"], directory)
+                            self.teach_name_by_file(self.teach_url,result_dict_dict[filename]["faces"][0]["id"],new_filename)
                 else:
                     #unknown face
                     self._processUnkownFaceFound(result_dict_dict)
