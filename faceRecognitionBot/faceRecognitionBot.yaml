@@ -25,6 +25,8 @@ faceRecognitionBot:
   #message_face_identified: "I have recognized {}."
   message_unkown_face: "Ich habe dieses Gesicht nicht erkannt. Kennst du es?"
   #message_unkown_face: "I have not recognized this face. Do you know it?"
+  message_unkown_face_with_known: "Ich habe auch ein unbekanntes Gesicht entdeckt."
+  #message_unkown_face_with_known: "I have also discovered an unknown face."
   message_provide_name: "Wenn du das Gesicht kennst, kannst du mir einfach innerhalb der nächsten {} Minuten den Namen schreiben. Dann merke ich ihn mir!"
   #message_provide_name: "If you know the face you can write the name to me within the next {} minutes. I will remember it!"
   message_name_provided: "Okay. Ich merke mir, dass das {} ist"

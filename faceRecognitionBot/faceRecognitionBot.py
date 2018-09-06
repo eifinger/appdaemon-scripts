@@ -32,6 +32,9 @@ import requests
 #
 # Release Notes
 #
+# Version 1.3.beta:
+#   Fully working
+#
 # Version 1.2:
 #   Rework to FaceRecognitionBot
 #
@@ -298,12 +301,12 @@ class FaceRecognitionBot(hass.Hass):
             self.log("At least one time detected more than one face")
             #check if it contains an unknown face
             if UNKNOWN_FACE_NAME in faceNames:
-                #TODO
-                pass
+                self._notifyUnkownFaceFound(result_dict_dict)
             else:
                 for faceName in faceNames:
-                    #TODO
-                    pass
+                    if faceName in self._getKnownFaces():
+                        self.log(self.message_face_identified.format(faceName))
+                        self.notifier.notify(self.notify_name, self.message_face_identified.format(faceName))
         elif maxCount == 1:
             self.log("Always detected one face")
             #check if always the same face
@@ -317,7 +320,8 @@ class FaceRecognitionBot(hass.Hass):
                         self.log(self.message_face_identified.format(faceName))
                         self.notifier.notify(self.notify_name, self.message_face_identified.format(faceName))
                 #process the unknown faces
-                self._processUnkownFaceFound(result_dict_dict)
+                if UNKNOWN_FACE_NAME in faceNames:
+                    self._processUnkownFaceFound(result_dict_dict)
             else:
                 self.log("Always the same face")
                 #Is it a known face?
@@ -346,7 +350,7 @@ class FaceRecognitionBot(hass.Hass):
         """Store the faces for later use and ask the user if he knows the unkown face"""
         #TODO check if the faces are similar
         # create a temp identifier, compare and delete identifier again
-
+        #self._determineIfSameUnkownFace(result_dict_dict)
         #get a file where the unknown face was detected and send it
         filename = self._getFileWithUnknownFaceFromResult(result_dict_dict)
         #send photo
@@ -357,6 +361,15 @@ class FaceRecognitionBot(hass.Hass):
             self.log("Identifier is empty", level="ERROR")
         else:
             self.ask_for_name(identifier)
+
+    def _notifyUnkownFaceFound(self, result_dict_dict):
+        """Notify of an unkown face in a image where a known face was detected"""
+        #get a file where the unknown face was detected and send it
+        filename = self._getFileWithUnknownFaceFromResult(result_dict_dict)
+        #send photo
+        self.call_service("TELEGRAM_BOT/SEND_PHOTO", file=filename)
+        self.log(self.message_unkown_face_with_known)
+        self.notifier.notify(self.notify_name, self.message_unkown_face_with_known) 
 
     def _getMaxCountFromResult(self, result_dict_dict):
         """Get the maximum number of faces found in the pictures"""
@@ -389,11 +402,39 @@ class FaceRecognitionBot(hass.Hass):
     def _getFileWithUnknownFaceFromResult(self, result_dict_dict):
         """Get the first file from the result which has an unmatched face"""
         for filename in result_dict_dict.keys():
-            if result_dict_dict[filename]["count"] > 0:
+            if result_dict_dict[filename]["count"] > 0 and result_dict_dict[filename]["faces"]["id"] == UNKNOWN_FACE_NAME:
                 return filename
+
+    def _determineIfSameUnkownFace(self, result_dict_dict):
+        """Determine if the unkown face which was detected several times is the same unknown face"""
+        #get all files with unknown faces
+        unkown_faces = []
+        for filename in result_dict_dict.keys():
+            if result_dict_dict[filename]["count"] == 1 and result_dict_dict[filename]["faces"]["id"] == UNKNOWN_FACE_NAME:
+                unkown_faces.append(filename)
+        #iterate over all files
+        for k,filename in enumerate(unkown_faces):
+            for i,filename in enumerate(unkown_faces):
+                if i<k:
+                    pass
+                elif i==k:
+                    #teach the first face
+                    filename_without_path = os.path.split(filename)[1]
+                    self.teach_name_by_file(self.teach_url, filename_without_path, filename)
+                else:
+                    response = self.post_image(self.check_url, filename)
+                    response_json = response.json()
+                    if response_json['count'] > 0:
+                        if response_json['faces'][0]["id"] == filename_without_path and response_json['faces'][0]["dist"] < MAXIMUM_DISTANCE:
+                            #same face remove it from the list
+                            unkown_faces.remove(filename)
+
+            
+            
+        
     
     def _copyFilesToUnknown(self, result_dict_dict):
-        """Copy all files where the face was detected to the unknown folder.
+        """Copy all files where the unknown face was detected to the unknown folder.
         Returns the timestamp under which all files can be identified"""
         identifier = ""
         for filename in result_dict_dict.keys():
