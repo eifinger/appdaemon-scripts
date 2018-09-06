@@ -81,23 +81,25 @@ class NotifyOfWrongState(hass.Hass):
         if self.after_sundown == None or ( ( self.after_sundown == True and self.sun_down() ) or self.after_sundown == False ):
           #entities_off
           for entity in self.entities_off:
-            attributes = self.get_state(entity, attribute="all")
-            self.log("attributes: {}".format(attributes))
-            if attributes["state"] == "on" and "device_class" in attributes and (attributes["device_class"] == "window" or attributes["device_class"] == "door" or attributes["device_class"] == "garage_door"):
+            full_state = self.get_state(entity, attribute="all")
+            attributes = full_state["attributes"]
+            self.log("full_state: {}".format(full_state))
+            if full_state["state"] == "on" and "device_class" in attributes and (attributes["device_class"] == "window" or attributes["device_class"] == "door" or attributes["device_class"] == "garage_door"):
               self.log(self.message_reed.format(self.friendly_name(entity)))
               self.notifier.notify(self.notify_name, self.message_reed.format(self.friendly_name(entity)), useAlexa=self.use_alexa)
-            elif attributes["state"] == "on":
+            elif full_state["state"] == "on":
               self.turn_off(entity)
               self.log(self.message.format(self.friendly_name(entity)))
               self.notifier.notify(self.notify_name, self.message.format(self.friendly_name(entity)), useAlexa=self.use_alexa)
           #entities_on
           for entity in self.entities_on:
-            attributes = self.get_state(entity, attribute="all")
-            self.log("attributes: {}".format(attributes))
-            if attributes["state"] == "off" and "device_class" in attributes and (attributes["device_class"] == "window" or attributes["device_class"] == "door" or attributes["device_class"] == "garage_door"):
+            full_state = self.get_state(entity, attribute="all")
+            attributes = full_state["attributes"]
+            self.log("full_state: {}".format(full_state))
+            if full_state["state"] == "off" and "device_class" in attributes and (attributes["device_class"] == "window" or attributes["device_class"] == "door" or attributes["device_class"] == "garage_door"):
               self.log(self.message_reed_off.format(self.friendly_name(entity)))
               self.notifier.notify(self.notify_name, message=self.message_reed_off.format(self.friendly_name(entity)), useAlexa=self.use_alexa)
-            elif attributes["state"] == "off":
+            elif full_state["state"] == "off":
               self.turn_on(entity)
               self.log(self.message_off.format(self.friendly_name(entity)))
               self.notifier.notify(self.notify_name, message=self.message_off.format(self.friendly_name(entity)), useAlexa=self.use_alexa)
