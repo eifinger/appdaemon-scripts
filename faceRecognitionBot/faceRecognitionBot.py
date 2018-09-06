@@ -66,6 +66,7 @@ class FaceRecognitionBot(hass.Hass):
         self.button = globals.get_arg(self.args,"button")
         self.camera = globals.get_arg(self.args,"camera")
         self.local_file_camera = globals.get_arg(self.args,"local_file_camera")
+        self.filename = globals.get_arg(self.args,"filename")
         self.notify_name = globals.get_arg(self.args,"notify_name")
         self.wol_switch = globals.get_arg(self.args,"wol_switch")
         self.user_id = globals.get_arg(self.args,"user_id")
@@ -304,6 +305,8 @@ class FaceRecognitionBot(hass.Hass):
                     if faceName in self._getKnownFaces():
                         self.log(self.message_face_identified.format(faceName))
                         self.notifier.notify(self.notify_name, self.message_face_identified.format(faceName))
+                        #copy file to saved image to display in HA
+                        shutil.copy(filename, self.filename)
         elif maxCount == 1:
             self.log("Always detected one face")
             #check if always the same face
@@ -316,6 +319,8 @@ class FaceRecognitionBot(hass.Hass):
                     if faceName in self._getKnownFaces():
                         self.log(self.message_face_identified.format(faceName))
                         self.notifier.notify(self.notify_name, self.message_face_identified.format(faceName))
+                        #copy file to saved image to display in HA
+                        shutil.copy(filename, self.filename)
                 #process the unknown faces
                 if UNKNOWN_FACE_NAME in faceNames:
                     self._processUnkownFaceFound(result_dict_dict)
@@ -334,6 +339,8 @@ class FaceRecognitionBot(hass.Hass):
                             new_filename = os.path.join(directory, os.path.split(filename)[1])
                             self.log("Move file from {} to {}".format(filename, new_filename))
                             shutil.move(filename, new_filename)
+                            #copy file to saved image to display in HA
+                            shutil.copy(filename, self.filename)
                             # trigger teaching
                             self.teach_name_by_directory(result_dict_dict[filename]["faces"][0]["id"], directory)
                 else:
@@ -350,6 +357,8 @@ class FaceRecognitionBot(hass.Hass):
         #self._determineIfSameUnkownFace(result_dict_dict)
         #get a file where the unknown face was detected and send it
         filename = self._getFileWithUnknownFaceFromResult(result_dict_dict)
+        #copy file to saved image to display in HA
+        shutil.copy(filename,self.filename)
         #send photo
         self.call_service("TELEGRAM_BOT/SEND_PHOTO", file=filename)
         #copy all files where a face was detected to the unkown folder
@@ -363,6 +372,8 @@ class FaceRecognitionBot(hass.Hass):
         """Notify of an unkown face in a image where a known face was detected"""
         #get a file where the unknown face was detected and send it
         filename = self._getFileWithUnknownFaceFromResult(result_dict_dict)
+        #copy file to saved image to display in HA
+        shutil.copy(filename,self.filename)
         #send photo
         self.call_service("TELEGRAM_BOT/SEND_PHOTO", file=filename)
         self.log(self.message_unkown_face_with_known)
