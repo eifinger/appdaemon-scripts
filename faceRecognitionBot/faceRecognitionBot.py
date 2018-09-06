@@ -228,9 +228,9 @@ class FaceRecognitionBot(hass.Hass):
     def teach_name_by_directory(self, name, folderpath):
         """Teach faces in a directory for a given anme"""
         self.log("Teaching faces in dir: {}".format(folderpath))
-        for file in os.listdir(folder_path):
+        for file in os.listdir(folderpath):
             if file.endswith(self.valid_filetypes):
-                file_path = os.path.join(folder_path, file)
+                file_path = os.path.join(folderpath, file)
                 self.teach_name_by_file(self.teach_url,
                     name,
                     file_path)
