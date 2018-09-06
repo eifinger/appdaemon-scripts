@@ -407,7 +407,7 @@ class FaceRecognitionBot(hass.Hass):
         #get all files with unknown faces
         unkown_faces = []
         for filename in result_dict_dict.keys():
-            if result_dict_dict[filename]["count"] == 1 and result_dict_dict[filename]["faces"]["id"] == UNKNOWN_FACE_NAME:
+            if result_dict_dict[filename]["count"] == 1 and result_dict_dict[filename]["faces"][0]["id"] == UNKNOWN_FACE_NAME:
                 unkown_faces.append(filename)
         #iterate over all files
         for k,filename in enumerate(unkown_faces):
