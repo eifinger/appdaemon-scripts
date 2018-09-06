@@ -389,7 +389,6 @@ class FaceRecognitionBot(hass.Hass):
         try:
             id_list = []
             for d in result_dict_dict.values():
-                self.log("d is: {}".format(d))
                 #check for unknown face
                 if len(d["faces"]) == 0 and d["count"] == 1:
                     id_list.append(UNKNOWN_FACE_NAME)
