@@ -202,6 +202,7 @@ class FaceRecognitionBot(hass.Hass):
         Checks for a picture with a known result if the classifier returns the correct result
         """
         response = self.post_image(self.check_url, self.facebox_healthcheck_filename)
+        self.log("response: {}".format(response))
         response_json = response.json()
         self.log("Check_if_trained status code: {}".format(response.status_code))
         self.log("Check_if_trained response: {}".format(response_json))
