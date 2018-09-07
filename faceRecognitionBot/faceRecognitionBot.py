@@ -409,7 +409,7 @@ class FaceRecognitionBot(hass.Hass):
     def _getFileWithUnknownFaceFromResult(self, result_dict_dict):
         """Get the first file from the result which has an unmatched face"""
         for filename in result_dict_dict.keys():
-            if result_dict_dict[filename]["count"] > 0 and result_dict_dict[filename]["faces"]["id"] == UNKNOWN_FACE_NAME:
+            if result_dict_dict[filename]["count"] > 0 and result_dict_dict[filename]["faces"][0]["id"] == UNKNOWN_FACE_NAME:
                 return filename
 
     def _determineIfSameUnkownFace(self, result_dict_dict):
