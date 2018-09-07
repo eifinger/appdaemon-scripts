@@ -84,27 +84,27 @@ class BedroomMotionTrigger(hass.Hass):
                 turn_on = False
             if self.after_sundown != None:
                 if self.after_sundown == True and not self.sun_down():
-                    self.log("Sun is not down", level = "DEBUG")
+                    self.log("Sun is not down")
                     turn_on = False
             if self.after != None:
                 after_time = datetime.datetime.combine(datetime.date.today(), datetime.time(int(self.after.split(":")[0]),int(self.after.split(":")[1])))
                 if datetime.datetime.now() > after_time:
-                    self.log("Now is before {}".format(self.after), level = "DEBUG")
+                    self.log("Now is before {}".format(self.after))
                     turn_on = False
             for entity in self.constraint_entities_off:
                 if self.get_state(entity) != "off":
-                    self.log("{} is {}".format(self.friendly_name(entity), self.get_state(entity)), level = "DEBUG")
+                    self.log("{} is {}".format(self.friendly_name(entity), self.get_state(entity)))
                     turn_on = False
             for entity in self.constraint_entities_on:
                 if self.get_state(entity) != "on":
-                    self.log("{} is {}".format(self.friendly_name(entity), self.get_state(entity)), level = "DEBUG")
+                    self.log("{} is {}".format(self.friendly_name(entity), self.get_state(entity)))
                     turn_on = False
             if self.get_state(self.entity_on) != "off":
-                self.log("Device is already on", level = "DEBUG")
+                self.log("Device is already on")
                 turn_on = False
             #Bedroom specifics
             if self.get_state(self.location_user_one_sensor) == self.bedroom_state and self.get_state(self.location_user_two_sensor) == self.bedroom_state:
-                self.log("Both in bedroom", level = "DEBUG")
+                self.log("Both in bedroom")
                 turn_on = False
             if turn_on:
                 self.log("Motion detected: turning {} on".format(self.entity_on))
