@@ -23,16 +23,16 @@ class ListService(hass.Hass):
         return
     
     def getSwitchable(self):
-        self.args["switchable"]
+        return self.args["switchable"]
 
     def getTemperature(self):
-        self.args["temperature"]
+        return self.args["temperature"]
 
     def getDoor(self):
-        self.args["door"]
+        return self.args["door"]
 
     def getWindow(self):
-        self.args["window"]
+        return self.args["window"]
 
     def getDoorPartial(self):
-        self.args["door_partial"]
+        return self.args["door_partial"]

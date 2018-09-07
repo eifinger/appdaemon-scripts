@@ -7,6 +7,7 @@ class TurnEntityOffInXIntent(hass.Hass):
 
     def initialize(self):
         self.timer_handle_list = []
+        self.listService = self.get_app("listService")
         return
 
     def getIntentResponse(self, slots, devicename):
@@ -16,7 +17,7 @@ class TurnEntityOffInXIntent(hass.Hass):
         ############################################           
         try:
 
-            entityname = self.args["entities"][slots["device"]]
+            entityname = self.listService.getSwitchable()[slots["device"]]
             #to upper because of https://github.com/gweis/isodate/issues/52
             duration = isodate.parse_duration(slots["duration"].upper())
             self.timer_handle_list.append(self.run_in(self.turn_off_callback, duration.total_seconds(), entityname=entityname))

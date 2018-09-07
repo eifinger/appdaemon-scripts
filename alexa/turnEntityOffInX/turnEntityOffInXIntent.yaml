@@ -5,5 +5,5 @@ turnEntityOffInXIntent:
   textLine: "Okay Homeassistant schaltet {{device}} in"
   Error: <p>Ich habe nicht richtig verstanden welches geraet soll ich ausschalten?</p>
   unreadableState: "unlesbar fuer mich"
-  entities:
-    ventilator: switch.ventilator
+  dependencies:
+   - listService
