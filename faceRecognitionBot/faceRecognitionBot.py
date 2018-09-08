@@ -74,6 +74,7 @@ class FaceRecognitionBot(hass.Hass):
         self.waitBeforeSnapshot = globals.get_arg(self.args,"waitBeforeSnapshot")
         self.message_face_identified = globals.get_arg(self.args,"message_face_identified")
         self.message_unkown_face = globals.get_arg(self.args,"message_unkown_face")
+        self.message_unkown_face_with_known = globals.get_arg(self.args,"message_unkown_face_with_known")
         self.message_provide_name = globals.get_arg(self.args,"message_provide_name")
         self.message_name_provided = globals.get_arg(self.args,"message_name_provided")
         self.message_name_provided_callback = globals.get_arg(self.args,"message_name_provided_callback")
