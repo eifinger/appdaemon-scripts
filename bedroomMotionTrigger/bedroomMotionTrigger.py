@@ -88,7 +88,7 @@ class BedroomMotionTrigger(hass.Hass):
                     turn_on = False
             if self.after != None:
                 after_time = datetime.datetime.combine(datetime.date.today(), datetime.time(int(self.after.split(":")[0]),int(self.after.split(":")[1])))
-                if datetime.datetime.now() > after_time:
+                if datetime.datetime.now() < after_time:
                     self.log("Now is before {}".format(after_time))
                     turn_on = False
             for entity in self.constraint_entities_off:
