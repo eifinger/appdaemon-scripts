@@ -3,7 +3,7 @@ faceRecognitionBot:
   class: FaceRecognitionBot
   app_switch: input_boolean.facebox_notifier
   sensor: binary_sensor.door_window_sensor_158d000126a57b
-  button: binary_sensor.switch_158d00012db9e5
+  button: binary_sensor.switch_158d000215aa28
   camera: camera.android_ip_webcam_door
   local_file_camera: camera.saved_image
   filename: secret_facebox_notifier_filename
