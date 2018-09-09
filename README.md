@@ -38,6 +38,7 @@ Every App has an input_boolean inside HA which turns it on/off. This is useful i
 *   [detectDoorOpenWhenGoingToBed](#detectdooropenwhengoingtobed)
 *   [detectWrongStateWhenLeaving](#detectwrongstatewhenleaving)
 *   [eventMonitor](#eventmonitor)
+*   [faceRecgonitionBot](#facerecognitionbot)
 *   [google_travel_time](#google_travel_time)
 *   [headingToZoneNotifier](#headingtozonenotifier)
 *   [homeArrivalNotifier](#homearrivalnotifier)
@@ -170,6 +171,8 @@ eventMonitor:
   class: Monitor
   events: 
 ```
+### faceRecognitionBot
+COMING SOON
 ### google_travel_time
 Monitors my Google Travel Time Sensors e.g. between home and work. I can enable an input_boolean in HA which causes this App to send me a notication as soon as the traffic is in an acceptable range. I use this drive to/from work when there is the least traffic.
 ```yaml
