@@ -1,7 +1,9 @@
-# appdaemon-scripts
-<p align="center">
-  <img src=images/logo-round-192x192.png>
-</p>
+<h1 align="center">
+  <a name="logo" href=""><img src="images/logo-round-192x192.png" alt="Home Assistant Logo" width="192"></a>
+  <br>
+  eifinger's Appdaemon Scripts
+</h1>
+<h4 align="center">Be sure to :star: my repo so you can keep up to date on the daily progress!.</h4>
 
 ## About
 This is the repository containing all my Appdaemon apps.
