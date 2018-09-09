@@ -17,7 +17,9 @@ I use Appdaemon for all my automations since I am a programmer myself and it pro
 This is a continuous work in progress and I am no real Python programmer. So any comments are highly appreciated.
 
 ## How to contribute
-Just open an Issue or a Pull Request for any Comments, Questions, Requests or whatever comes to mind
+Just open an Issue or a Pull Request for any Comments, Questions, etc.
+
+**Or you can message me on twitter :** [@eifinger](https://twitter.com/eifinger)
 
 ## How to use
 If you have never used Appdaemon before I suggest you start with the [tutorial](https://appdaemon.readthedocs.io/en/latest/TUTORIAL.html) and the [guide](https://appdaemon.readthedocs.io/en/latest/APPGUIDE.html). Both contain more links to great tutorials and examples.
