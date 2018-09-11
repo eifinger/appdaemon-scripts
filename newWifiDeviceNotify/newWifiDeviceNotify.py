@@ -36,7 +36,7 @@ class DeviceNotify(hass.Hass):
     self.listen_event_handle_list = []
 
     self.notify_name = globals.get_arg(self.args,"notify_name")
-    self.message = globals.get_arg(self.args,"message_DE")
+    self.message = globals.get_arg(self.args,"message")
     self.fritzbox_url = globals.get_arg(self.args,"fritzbox_url")
     self.fritzbox_user = globals.get_arg(self.args,"fritzbox_user")
     self.fritzbox_password = globals.get_arg(self.args,"fritzbox_password")
