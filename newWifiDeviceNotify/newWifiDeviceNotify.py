@@ -122,7 +122,7 @@ class DeviceNotify(hass.Hass):
       
       if profile_id:
         #construct the array to set the profile for the device
-        profile_for_device = device_id, profile_id]
+        profile_for_device = [device_id, profile_id]
         #set device profile
         fps.set_profiles(profile_for_device)
       else:
