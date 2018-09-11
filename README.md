@@ -276,6 +276,10 @@ obenTreppeMotionTrigger:
 ```
 ### newWifiDeviceNotify
 Actually a wrong name. This will send me a notification when any device_tracker component detects a new device. I initally thought to use this as a security feature but found it quite useful when adding new Sonoff switches and such. I get a notification if the setup was successfull.
+
+**Version 1.2:**
+Displays two buttons which let me control the internet access for the new device. My fritzbox standard profile denies internet access. With this I can easily allow my guests access to the internet without logging in to my fritzbox manually.
+
 ```yaml
 newWifiDeviceNotify:
   module: newWifiDeviceNotify
