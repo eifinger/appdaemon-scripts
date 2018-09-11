@@ -48,6 +48,8 @@ class DeviceNotify(hass.Hass):
     self.notifier = self.get_app('Notifier')
 
     self.listen_event_handle_list.append(self.listen_event(self.newDevice, "device_tracker_new_device"))
+    #subscribe to telegram events
+    self.listen_event_handle_list.append(self.listen_event(self.receive_telegram_callback, 'telegram_callback'))
 
   def newDevice(self, event_name, data, kwargs):
     self.log("event_name: {}".format(event_name))
