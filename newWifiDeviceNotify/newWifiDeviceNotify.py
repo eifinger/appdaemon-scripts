@@ -8,6 +8,7 @@ import globals
 # Args:
 #
 # notify_name: Who to notify. example: group_notifications
+# user_id: Who to notify. example: -217831
 # fritzbox_url: The url of your fritzbox. example: http://fritz.box
 # fritzbox_user: The user to login to your fritzbox. example: ''
 # fritzbox_password: The password to login to your fritzbox. example: 'mysecurepassword'
@@ -36,6 +37,7 @@ class DeviceNotify(hass.Hass):
     self.listen_event_handle_list = []
 
     self.notify_name = globals.get_arg(self.args,"notify_name")
+    self.user_id = globals.get_arg(self.args,"user_id")
     self.message = globals.get_arg(self.args,"message")
     self.fritzbox_url = globals.get_arg(self.args,"fritzbox_url")
     self.fritzbox_user = globals.get_arg(self.args,"fritzbox_user")
@@ -66,7 +68,7 @@ class DeviceNotify(hass.Hass):
     keyboard = [[("Zulassen",ALLOW_CALLBACK_IDENTIFIER + IDENTIFIER_DELIMITER + host_name)],[("Sperren",BLOCK_CALLBACK_IDENTIFIER + IDENTIFIER_DELIMITER + host_name)]]
     self.log("keyboard is: {}".format(keyboard), level="DEBUG")
     self.call_service('telegram_bot/send_message',
-                      target=self.notify_name,
+                      target=self.user_id,
                       message=self.message_allow_access,
                       inline_keyboard=keyboard)
 

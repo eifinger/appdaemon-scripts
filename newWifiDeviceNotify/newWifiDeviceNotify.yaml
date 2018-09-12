@@ -2,6 +2,7 @@ newWifiDeviceNotify:
   module: newWifiDeviceNotify
   class: DeviceNotify
   notify_name: group_notifications
+  user_id: secret_telegram_user_id
   fritzbox_url: secret_fritzbox_url
   fritzbox_user: ''
   fritzbox_password: secret_fritzbox_password
