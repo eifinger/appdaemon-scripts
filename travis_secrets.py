@@ -19,4 +19,5 @@ secret_dict = {
     "secret_facebox_healthcheck_filename": "/config/www/facebox/tmp/image.jpg",
     "secret_telegram_user_id": -21415521,
     "secret_facebox_folderpath_multiple": "/config/www/facebox/multiple",
-    "secret_fritzbox_password":'mysecurepassword'}
+    "secret_fritzbox_password":'mysecurepassword',
+    "secret_fritzbox_url": 'http://fritz.box'}

@@ -2,7 +2,7 @@ newWifiDeviceNotify:
   module: newWifiDeviceNotify
   class: DeviceNotify
   notify_name: group_notifications
-  fritzbox_url: 'http://fritz.box'
+  fritzbox_url: secret_fritzbox_url
   fritzbox_user: ''
   fritzbox_password: secret_fritzbox_password
   fritzbox_profile_name: 'Unbeschränkt'
