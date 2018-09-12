@@ -1,1 +1,1 @@
-fritz_switch_profiles >= 0.0.2
+fritz_switch_profiles >= 1.0.0
