@@ -52,10 +52,12 @@ class DeviceNotify(hass.Hass):
     self.listen_event_handle_list.append(self.listen_event(self.receive_telegram_callback, 'telegram_callback'))
 
   def newDevice(self, event_name, data, kwargs):
+    """Callback method for device_tracker_new_device event"""
     self.log("event_name: {}".format(event_name))
     self.log("data: {}".format(data))
     message = self.message.format(data["host_name"],data["mac"])
     self.notifier.notify(self.notify_name, message)
+    self.askForProfileChange(data["host_name"])
 
 
   def askForProfileChange(self, host_name):
