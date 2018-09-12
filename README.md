@@ -62,7 +62,6 @@ Every App has an input_boolean inside HA which turns it on/off. This is useful i
 *   [standardSetter](#standardsetter)
 *   [turnFanOnWhenHot](#turnfanonwhenhot)
 *   [turnOffBarAfterRestart](#turnoffbarafterrestart)
-*   [facebox](#facebox)
 *   [notify](#notify)
 
 ### AlexaIntents
@@ -490,11 +489,6 @@ turnFanOnWhenHot:
 ![ventilatorAutomation](images/ventilatorAutomation.PNG)
 ### turnOffBarAfterRestart
 As I sometimes restart HA when working on it from remote I turn the Bar lights to red with [this script](https://github.com/eifinger/homeassistant-config/blob/master/updateHomeassistant.sh). This way everyone can see HA is currently unavailable. If it comes back up again this app will turn the light green and then off. 
-### facebox
-IN DEVELOPMENT
-Use Facebox to announce who is at the door.
-Automatically send a notfication if an unkwon face is detected.
-Automatic selflearning with reinforced learning based on a telegram chatbot.
 ### notify
 IN DEVELOPMENT
 Centralizes messaging. Among other things, it will determine whether a user is at home and if yes in which room. 
