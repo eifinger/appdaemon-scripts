@@ -16,6 +16,8 @@ import globals
 # notify_use_Alexa: use Alexa as TTS. Defaults to True. example: False
 #
 # Release Notes
+# Version 1.1:
+#   implement unknown check
 #
 # Version 1.0:
 #   Ported from googel_travel_time
@@ -53,18 +55,24 @@ class WazeTravelTime(hass.Hass):
             self.log("new: {}".format(new), level = "DEBUG")
 
             duration_in_traffic = new["attributes"]["duration"]
-            duration_in_traffic_minutes = float(duration_in_traffic)
-            self.log("duration_in_traffic_minutes: {}".format(duration_in_traffic_minutes), level = "DEBUG")
+            if duration_in_traffic == "unknown":
+                self.log("duration_in_traffic is unknown".format(),level = "ERROR")
+            else:
+                duration_in_traffic_minutes = float(duration_in_traffic)
+                self.log("duration_in_traffic_minutes: {}".format(duration_in_traffic_minutes), level = "DEBUG")
 
-            duration = self.get_state(self.sensor, attribute = "all")["attributes"]["duration"]
-            duration_minutes = float(duration)
-            self.log("duration_minutes: {}".format(duration_minutes), level = "DEBUG")
+                duration = self.get_state(self.sensor, attribute = "all")["attributes"]["duration"]
+                if duration == "unknown":
+                    self.log("duration is unknown".format(),level = "ERROR")
+                else:
+                    duration_minutes = float(duration)
+                    self.log("duration_minutes: {}".format(duration_minutes), level = "DEBUG")
 
-            if duration_in_traffic_minutes <= duration_minutes * self.acceptable_range:
-                message = self.message.format(self.destination_name)
-                self.log("Notify user")
-                self.notifier.notify(self.notify_name, message, useAlexa=self.notify_use_Alexa)
-                self.turn_off(self.notify_input_boolean)
+                    if duration_in_traffic_minutes <= duration_minutes * self.acceptable_range:
+                        message = self.message.format(self.destination_name)
+                        self.log("Notify user")
+                        self.notifier.notify(self.notify_name, message, useAlexa=self.notify_use_Alexa)
+                        self.turn_off(self.notify_input_boolean)
 
     def terminate(self):
         for listen_state_handle in self.listen_state_handle_list:
