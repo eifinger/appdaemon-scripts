@@ -84,7 +84,7 @@ class DeviceNotify(hass.Hass):
     from_first = data["from_first"]
 
     if data_callback.startswith(ALLOW_CALLBACK_IDENTIFIER):
-        host_name = data_callback.split(IDENTIFIER_DELIMITER)[1]
+        host_name = data_callback.split(IDENTIFIER_DELIMITER, maxsplit=1)[1]
         self.log("Received Telegram Callback to allow internet access for: {}".format(host_name))
         self.call_service('telegram_bot/answer_callback_query',
                       message="Dankeschön!",
@@ -96,7 +96,7 @@ class DeviceNotify(hass.Hass):
                       inline_keyboard=[])
         self.allowDevice(host_name)
     elif data_callback.startswith(BLOCK_CALLBACK_IDENTIFIER):
-        host_name = data_callback.split(IDENTIFIER_DELIMITER)[1]
+        host_name = data_callback.split(IDENTIFIER_DELIMITER, maxsplit=1)[1]
         self.log("Received Telegram Callback to block internet access for: {}".format(host_name))
         self.call_service('telegram_bot/answer_callback_query',
                       message="Dankeschön!",
