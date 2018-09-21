@@ -18,6 +18,9 @@ import globals
 #
 # Release Notes
 #
+# Version 1.3:
+#   Fix for hostnames containing "-"
+#
 # Version 1.2:
 #   Make us of fritz_switch_profiles to control Internet access
 #
