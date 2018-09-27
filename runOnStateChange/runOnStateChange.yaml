@@ -15,3 +15,21 @@ startGoldieWhenLeaving:
     - Notifier
   global_dependencies:
     - globals
+
+startSnowieWhenLeaving:
+  module: runOnStateChange
+  class: RunOnStateChange
+  app_switch: input_boolean.start_snowie_when_leaving
+  entities_on: vacuum.xiaomi_vacuum_cleaner
+  trigger_entity: input_boolean.is_home
+  trigger_state: "off"
+  message_on: "Ich habe {} angeschaltet"
+  #message_on: "I turned on {}"
+  message_off: "Ich habe {} ausgeschaltet"
+  #message_off: "I turned off {}"
+  notify_name: group_notifications
+  use_alexa: False
+  dependencies: 
+    - Notifier
+  global_dependencies:
+    - globals
