@@ -18,6 +18,9 @@ import requests
 #
 # Release Notes
 #
+# Version 1.4.2:
+#   cancel listen callback only when its not None
+#
 # Version 1.4.1:
 #   fix for 503, fix for listen callback not being cancelled correctly
 #
@@ -101,18 +104,20 @@ class IsUserHomeDeterminer(hass.Hass):
             self.log("User left home")
             if self.listen_state_handle in self.listen_state_handle_list:
                 self.listen_state_handle_list.remove(self.listen_state_handle)
-            self.cancel_listen_state(self.listen_state_handle)
-            self.listen_state_handle = None
-            self.timer_handle_list.append(self.run_in(self.turn_off_callback, 1, turn_off_entity = self.input_boolean))
+            if self.listen_state_handle != None:
+                self.cancel_listen_state(self.listen_state_handle)
+                self.listen_state_handle = None
+                self.timer_handle_list.append(self.run_in(self.turn_off_callback, 1, turn_off_entity = self.input_boolean))
 
     def check_if_user_got_home(self, entity, attribute, old, new, kwargs):
         if new == "home":
             self.log("User got home")
             if self.listen_state_handle in self.listen_state_handle_list:
                 self.listen_state_handle_list.remove(self.listen_state_handle)
-            self.cancel_listen_state(self.listen_state_handle)
-            self.listen_state_handle = None
-            self.timer_handle_list.append(self.run_in(self.turn_on_callback, 1, turn_on_entity = self.input_boolean))
+            if self.listen_state_handle != None:
+                self.cancel_listen_state(self.listen_state_handle)
+                self.listen_state_handle = None
+                self.timer_handle_list.append(self.run_in(self.turn_on_callback, 1, turn_on_entity = self.input_boolean))
 
 
     def turn_on_callback(self, kwargs):
