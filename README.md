@@ -35,6 +35,7 @@ Every App has an input_boolean inside HA which turns it on/off. This is useful i
 ## App list
 
 *   [Alexa Intents](#alexaintents)
+*   [AlexaSpeakerConnector](#alexaspeakerconnector)
 *   [alarmClock](#alarmclock)
 *   [bedRoomMotionTrigger](#bedroommotiontrigger)
 *   [buttonClicked](#buttonclicked)
@@ -67,6 +68,21 @@ Every App has an input_boolean inside HA which turns it on/off. This is useful i
 ### AlexaIntents
 
 Are explained [here](alexa/README.md)
+### AlexaSpeakerConnector
+App to Turn on Receiver Bluetooth when Alexa is playing something so it plays on the big speakers.
+Uses a [custom_component](https://community.home-assistant.io/t/echo-devices-alexa-as-media-player-testers-needed/58639) for control alexa as a media player.
+```yaml
+alexaSpeakerConnector:
+  module: alexaSpeakerConnector
+  class: AlexaSpeakerConnector
+  app_switch: input_boolean.alexaSpeakerConnector
+  alexa_entity: media_player.kevins_echo_dot_oben
+  alexa_entity_source: Denon AVR-X1300W
+  receiver: media_player.denon_avrx1300w
+  receiver_source: Bluetooth
+  global_dependencies:
+    - globals
+```
 ### alarmClock
 Alarm Clock App inspired by [this](https://community.home-assistant.io/t/creating-a-alarm-clock/410) forum post.
 It fades in my bedroom light and sends a notifcation. The fade in and alarm time is defined by input_number sliders in HA
