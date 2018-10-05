@@ -30,7 +30,7 @@ class AlexaSpeakerConnector(hass.Hass):
     
   def state_change(self, entity, attribute, old, new, kwargs):
     if self.get_state(self.app_switch) == "on":
-      if new == "Playing":
+      if new.lower() == "playing":
         self.log("{} changed to {}".format(self.alexa_entity, new))
         # Only trigger when the receiver is off. Otherwise its propably playing something
         if self.get_state(self.receiver) == "off":
