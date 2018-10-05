@@ -15,4 +15,4 @@ comingHomeAlexa:
   app_switch: input_boolean.coming_home_alexa
   sensor: binary_sensor.door_window_sensor_158d000126a57b
   isHome: input_boolean.is_home
-  actor: script.receiver_set_source_cbl_sat
+  actor: script.receiver_set_source_bluetooth
