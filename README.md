@@ -58,6 +58,7 @@ Every App has an input_boolean inside HA which turns it on/off. This is useful i
 *   [plantWateringNotifier](#plantwateringnotifier)
 *   [powerUsageNotification](#powerusagenotification)
 *   [roomBasedLightControl](#roombasedlightcontrol)
+*   [setThermostat](#setthermostat)
 *   [setMediaPlayerSource](#setMediaPlayerSource)
 *   [sleepModeHandler](#sleepmodehandler)
 *   [standardSetter](#standardsetter)
@@ -466,6 +467,27 @@ setMultiRoomAudioWhenSleepModeTurnsOff:
   trigger_state: "off"
   media_player: media_player.spotify
   source: Wohnung
+  global_dependencies:
+    - globals
+```
+### setThermostat
+App which sets a thermostat to a target temperature based on a time from an entity
+```yaml
+warm_bath_before_wakeup:
+  module: setThermostat
+  class: SetThermostat
+  app_switch: input_boolean.warm_bath_before_wakeup
+  time_entity: sensor.alarm_time
+  upfront_time: 60
+  duration: 60
+  climat_entity: climate.bad_thermostat
+  target_entity: input_number.warm_bath_before_wakeup
+  message: "Ich habe {} auf {} gestellt"
+  #message: "I have set {} to {}"
+  notify_name: group_notifications
+  use_alexa: False
+  dependencies: 
+    - Notifier
   global_dependencies:
     - globals
 ```
