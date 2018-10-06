@@ -43,6 +43,8 @@ class SetThermostat(hass.Hass):
     
   def state_change(self, entity, attribute, old, new, kwargs):
     if new != "":
+      if self.run_timer != None:
+        self.cancel_timer(self.run_timer)
       time_entity_state = self.get_state(self.time_entity)
       runtime = datetime.time(int(time_entity_state.split(":")[0]),int(time_entity_state.split(":")[1]))
       today = datetime.date.today()
@@ -53,8 +55,8 @@ class SetThermostat(hass.Hass):
       if datetime.datetime.now() > event_time:
           event_time = event_time + datetime.timedelta(days=1)
 
-      self.alarm_timer = self.run_at(self.trigger_thermostat, event_time)
-      self.timer_handle_list.append(self.alarm_timer)
+      self.run_timer = self.run_at(self.trigger_thermostat, event_time)
+      self.timer_handle_list.append(self.run_timer)
       self.log("Theromstat will trigger at {}".format(event_time))
 
   def trigger_thermostat(self, kwargs):
@@ -66,7 +68,7 @@ class SetThermostat(hass.Hass):
       self.previous_temp = self.get_state(self.climat_entity, attribute="all")["attributes"]["temperature"]
       self.call_service("climate/set_temperature", entity_id=self.climat_entity, temperature=self.get_state(self.target_entity))
       self.log("Resetting Thermostat in {} minutes.".format(self.duration))
-      self.timer_handle_list.append(self.run_in(self.reset_thermostat, float(self.duration)))
+      self.timer_handle_list.append(self.run_in(self.reset_thermostat, float(self.duration)*60))
 
   def reset_thermostat(self, kwargs):
     if self.previous_temp != None:
