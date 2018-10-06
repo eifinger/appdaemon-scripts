@@ -43,7 +43,7 @@ class SetThermostat(hass.Hass):
     
   def state_change(self, entity, attribute, old, new, kwargs):
     if new != "":
-      if self.run_timer != None:
+      if self.run_timer and self.run_timer != None:
         self.cancel_timer(self.run_timer)
       time_entity_state = self.get_state(self.time_entity)
       runtime = datetime.time(int(time_entity_state.split(":")[0]),int(time_entity_state.split(":")[1]))
