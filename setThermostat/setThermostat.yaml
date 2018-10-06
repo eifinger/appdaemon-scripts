@@ -7,7 +7,7 @@ warm_bath_before_wakeup:
   duration: 60
   climat_entity: climate.bad_thermostat
   target_entity: input_number.warm_bath_before_wakeup
-  message: "Ich habe {} auf {} gestellt"
+  message: "Ich habe {} auf {} °C gestellt"
   #message: "I have set {} to {}"
   notify_name: group_notifications
   use_alexa: False
