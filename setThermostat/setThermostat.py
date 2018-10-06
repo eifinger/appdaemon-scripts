@@ -40,6 +40,7 @@ class SetThermostat(hass.Hass):
     self.notifier = self.get_app('Notifier')
     
     self.listen_state_handle_list.append(self.listen_state(self.state_change, self.time_entity))
+    self.state_change(None,None,None,"Run",None)
     
   def state_change(self, entity, attribute, old, new, kwargs):
     if new != "":
