@@ -38,13 +38,15 @@ class SetThermostat(hass.Hass):
     self.use_alexa = globals.get_arg(self.args,"use_alexa")
 
     self.notifier = self.get_app('Notifier')
+
+    self.run_timer = None
     
     self.listen_state_handle_list.append(self.listen_state(self.state_change, self.time_entity))
     self.state_change(None,None,None,"Run",None)
     
   def state_change(self, entity, attribute, old, new, kwargs):
     if new != "":
-      if self.run_timer and self.run_timer != None:
+      if self.run_timer != None:
         self.cancel_timer(self.run_timer)
       time_entity_state = self.get_state(self.time_entity)
       runtime = datetime.time(int(time_entity_state.split(":")[0]),int(time_entity_state.split(":")[1]))
