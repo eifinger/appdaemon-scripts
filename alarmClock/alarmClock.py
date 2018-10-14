@@ -44,6 +44,7 @@ class AlarmClock(hass.Hass):
         self.isweekday = globals.get_arg(self.args,"isweekday")
         self.notify_name = globals.get_arg(self.args,"notify_name")
         self.wakeup_light = globals.get_arg(self.args,"wakeup_light")
+        self.fade_in_time_multiplicator = globals.get_arg(self.args, "fade_in_time_multiplicator")
         self.message = globals.get_arg(self.args, "message_DE")
 
         self.notifier = self.get_app('Notifier')
@@ -97,7 +98,7 @@ class AlarmClock(hass.Hass):
         if self.get_state(self.wakemeup) == "on":
             if self.get_state(self.alarmweekday) == "off" or (self.get_state(self.alarmweekday) == "on" and self.get_state(self.isweekday) == "on"):
                 if float(self.cached_fade_in_time) > 0:
-                    self.call_service("light/turn_on", entity_id = self.wakeup_light, transition = self.cached_fade_in_time, brightness = self.brightness)
+                    self.call_service("light/turn_on", entity_id = self.wakeup_light, transition = self.cached_fade_in_time*int(self.fade_in_time_multiplicator), brightness = self.brightness)
                 self.timer_handle_list.append(self.run_in(self.run_alarm, float(self.cached_fade_in_time)))
 
 
