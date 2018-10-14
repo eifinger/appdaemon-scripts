@@ -1,0 +1,267 @@
+{
+    "interactionModel": {
+        "languageModel": {
+            "invocationName": "home assistant",
+            "intents": [
+                {
+                    "name": "AMAZON.CancelIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.HelpIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.StopIntent",
+                    "samples": []
+                },
+                {
+                    "name": "temperatureStateIntent",
+                    "slots": [
+                        {
+                            "name": "location",
+                            "type": "room",
+                            "samples": [
+                                "Vom Schlafzimmer",
+                                "Vom Wohnzimmer",
+                                "Wohnzimmer"
+                            ]
+                        }
+                    ],
+                    "samples": [
+                        "wie viel grad ist es in {location}",
+                        "was ist die temperatur in {location}"
+                    ]
+                },
+                {
+                    "name": "lightStateIntent",
+                    "slots": [
+                        {
+                            "name": "device",
+                            "type": "device",
+                            "samples": [
+                                "Von {device}",
+                                "{device}"
+                            ]
+                        }
+                    ],
+                    "samples": [
+                        "Ist {device} aus",
+                        "Ist {device} an",
+                        "Was ist der Status von {device}"
+                    ]
+                },
+                {
+                    "name": "turnEntityOffInXIntent",
+                    "slots": [
+                        {
+                            "name": "device",
+                            "type": "device",
+                            "samples": [
+                                "die {device}",
+                                "der {device}",
+                                "Das {device}",
+                                "{device}"
+                            ]
+                        },
+                        {
+                            "name": "duration",
+                            "type": "AMAZON.DURATION",
+                            "samples": [
+                                "In {duration}"
+                            ]
+                        }
+                    ],
+                    "samples": [
+                        "In {duration} {device} ausschalten",
+                        "{device} in {duration} ausschalten",
+                        "er soll {device} in {duration} ausschalten",
+                        "es soll {device} in {duration} ausschalten",
+                        "Schalte {device} in {duration} aus"
+                    ]
+                },
+                {
+                    "name": "windowsOpenIntent",
+                    "slots": [],
+                    "samples": [
+                        "ob alles zu ist",
+                        "ob noch etwas offen ist",
+                        "ist noch etwas offen",
+                        "ist alles zu",
+                        "sind alle türen zu",
+                        "ob noch türen offen sind",
+                        "ob alle türen zu sind",
+                        "ob alle fenster zu sind",
+                        "ob noch Fenster offen sind",
+                        "ob die Fenster zu sind",
+                        "Sind die Fenster zu",
+                        "Sind alle Fenster zu",
+                        "Welche Fenster sind offen"
+                    ]
+                },
+                {
+                    "name": "AMAZON.NavigateHomeIntent",
+                    "samples": []
+                }
+            ],
+            "types": [
+                {
+                    "name": "room",
+                    "values": [
+                        {
+                            "name": {
+                                "value": "oben"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "küche"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "schlafzimmer"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "wohnzimmer"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "device",
+                    "values": [
+                        {
+                            "name": {
+                                "value": "Deckenlampe"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Ventilator"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Wohnzimmer Temperatur"
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        "dialog": {
+            "intents": [
+                {
+                    "name": "temperatureStateIntent",
+                    "confirmationRequired": false,
+                    "prompts": {},
+                    "slots": [
+                        {
+                            "name": "location",
+                            "type": "room",
+                            "confirmationRequired": false,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "elicitation": "Elicit.Slot.748362018084.1289245209680"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "lightStateIntent",
+                    "confirmationRequired": false,
+                    "prompts": {},
+                    "slots": [
+                        {
+                            "name": "device",
+                            "type": "device",
+                            "confirmationRequired": false,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "elicitation": "Elicit.Slot.314395877784.987687730608"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "turnEntityOffInXIntent",
+                    "confirmationRequired": false,
+                    "prompts": {},
+                    "slots": [
+                        {
+                            "name": "device",
+                            "type": "device",
+                            "confirmationRequired": false,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "elicitation": "Elicit.Slot.208682348144.1260609041167"
+                            }
+                        },
+                        {
+                            "name": "duration",
+                            "type": "AMAZON.DURATION",
+                            "confirmationRequired": false,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "elicitation": "Elicit.Slot.208682348144.1375070683830"
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        "prompts": [
+            {
+                "id": "Elicit.Slot.748362018084.1289245209680",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "Von welchem Raum willst du die Temperatur wissen?"
+                    }
+                ]
+            },
+            {
+                "id": "Elicit.Slot.314395877784.987687730608",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "Von was willst du den Status wissen?"
+                    },
+                    {
+                        "type": "PlainText",
+                        "value": "Entschuldigung. Welches Gerät meintest du?"
+                    }
+                ]
+            },
+            {
+                "id": "Elicit.Slot.208682348144.1260609041167",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "Entschuldigung. Welches Gerät soll ich ausschalten?"
+                    },
+                    {
+                        "type": "PlainText",
+                        "value": "Welches Gerät meinst du?"
+                    }
+                ]
+            },
+            {
+                "id": "Elicit.Slot.208682348144.1375070683830",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "Entschuldigung. Wann soll ich {device} ausschalten?"
+                    },
+                    {
+                        "type": "PlainText",
+                        "value": "Wann soll ich {device} ausschalten?"
+                    }
+                ]
+            }
+        ]
+    }
+}
