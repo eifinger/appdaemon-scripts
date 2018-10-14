@@ -38,7 +38,7 @@ turnOffBathThermostatWhenWindowOpen:
   module: runOnStateChange
   class: RunOnStateChange
   app_switch: input_boolean.turn_off_bath_thermostat_when_window_open
-  entities_on: climate.bad_thermostat
+  entities_off: climate.bad_thermostat
   trigger_entity: binary_sensor.door_window_sensor_158d0002048951
   trigger_state: "off"
   message_on: "Ich habe {} angeschaltet"
