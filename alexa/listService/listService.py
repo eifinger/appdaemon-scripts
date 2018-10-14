@@ -8,7 +8,7 @@ import appdaemon.plugins.hass.hassapi as hass
 # switchable: dict of switchable entities
 # temperature: dict of temperature sensors
 # door: dict of reed sensors showing if the door is completely open
-# door_partial: dict of reed sensors showing if a door is partially/leaning open
+# door_tilted: dict of reed sensors showing if a door is partially/leaning open
 # window: dict of reed sensors showing if a window is open
 # 
 #
@@ -34,5 +34,5 @@ class ListService(hass.Hass):
     def getWindow(self):
         return self.args["window"]
 
-    def getDoorPartial(self):
-        return self.args["door_partial"]
+    def getDoorTilted(self):
+        return self.args["door_tilted"]

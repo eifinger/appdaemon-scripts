@@ -2,10 +2,14 @@ windowsOpenIntent:
   module: windowsOpenIntent
   class: WindowsOpenIntent
   language: DE
-  textLineClosed: "Alle Fenster sind zu"
-  #textLineClosed: "All windows are closed"
-  textLineOpen: "Folgende Fenster sind noch offen"
-  #textLineOpen: "The following windows are stil open..."
+  textLineClosed: "Alle Fenster und Türen sind zu"
+  #textLineClosed: "All windows and doors are closed"
+  textLineWindowOpen: "Folgende Fenster sind noch offen"
+  #textLineWindowOpen: "The following windows are stil open..."
+  textLineDoorOpen: "Folgende Türen sind noch offen"
+  #textLineDoorOpen: "The following doors are still open"
+  textLineDoorTilted: "Die folgenden Türen sind noch gekippt"
+  #textLineDoorTilted: "The following doors are tilted"
   Error: <p>Ich habe dich nicht richtig verstanden</p>
   unreadableState: "unlesbar fuer mich"
   dependencies:

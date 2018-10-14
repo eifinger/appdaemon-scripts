@@ -50,7 +50,7 @@ listService:
     badfenster oben: binary_sensor.door_window_sensor_158d000204ba26
     badfenster unten: binary_sensor.door_window_sensor_158d0002048951
     gaestezimmerfenster: binary_sensor.door_window_sensor_158d00020455bf
-  door_partial:
+  door_tilted:
     terassentuer arbeitszimmer gekippt: binary_sensor.door_window_sensor_158d000205b82e
     terrassentuer gekippt: binary_sensor.door_window_sensor_158d0001bb4dc0
 

@@ -15,19 +15,52 @@ class WindowsOpenIntent(hass.Hass):
         ############################################           
         try:
             windows_dict = self.listService.getWindow()
-            open_list = []
+            doors_dict = self.listService.getDoor()
+            doors_tilted_dict = self.listService.getDoorTilted()
+            window_open_list = []
+            door_open_list = []
+            door_tilted_list = []
             #iterate over all window entities
             for key, value in windows_dict.items():
-                #if a window is open ("on") add it to the open_list
+                #if a window is open ("on") add it to the window_open_list
                 if self.get_state(value) == "on":
-                    open_list.append(value)
+                    window_open_list.append(value)
+            #iterate over all door entities
+            for key, value in doors_dict.items():
+                #if a door is open ("on") add it to the door_open_list
+                if self.get_state(value) == "on":
+                    door_open_list.append(value)
+            #iterate over all door_tilted entities
+            for key, value in doors_tilted_dict.items():
+                #if a door is tilted ("on") add it to the door_tilted_list
+                if self.get_state(value) == "on":
+                    door_tilted_list.append(value)
 
-            if len(open_list) == 0:
-                text = self.args["textLineClosed"]
-            else:
-                text = self.args["textLineOpen"]
-                for entity in open_list:
+            text = ""
+            # add open windows to response
+            if len(window_open_list) > 0:
+                if text != "":
+                    text = text + "<break strength=\"weak\"/>"
+                text = text + self.args["textLineWindowOpen"]
+                for entity in window_open_list:
                     text = text + "<break strength=\"weak\"/>" + self.friendly_name(entity)
+            # add open doors to response
+            if len(door_open_list) > 0:
+                if text != "":
+                    text = text + "<break strength=\"weak\"/>"
+                text = text + self.args["textLineDoorOpen"]
+                for entity in door_open_list:
+                    text = text + "<break strength=\"weak\"/>" + self.friendly_name(entity)
+            # add tilted doors to reponse
+            if len(door_tilted_list) > 0:
+                if text != "":
+                    text = text + "<break strength=\"weak\"/>"
+                text = text + self.args["textLineDoorTilted"]
+                for entity in door_tilted_list:
+                    text = text + "<break strength=\"weak\"/>" + self.friendly_name(entity)
+            # if all closed response
+            if text == "":
+                text = self.args["textLineClosed"]
         except Exception as e:
             self.log("Exception: {}".format(e))
             self.log("slots: {}".format(slots))
