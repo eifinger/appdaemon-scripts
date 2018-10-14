@@ -4,7 +4,7 @@ windowsOpenIntent:
   language: DE
   textLineClosed: "Alle Fenster sind zu"
   #textLineClosed: "All windows are closed"
-  textLineOpen: "Folgende Fenster sind noch offen <break strength=\"weak\"/>"
+  textLineOpen: "Folgende Fenster sind noch offen"
   #textLineOpen: "The following windows are stil open..."
   Error: <p>Ich habe dich nicht richtig verstanden</p>
   unreadableState: "unlesbar fuer mich"
