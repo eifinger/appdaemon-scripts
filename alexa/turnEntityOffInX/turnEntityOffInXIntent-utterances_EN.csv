@@ -1,0 +1,3 @@
+In {duration} turn off {device}
+turn off {device} in {duration}
+it should turn off {device} in {duration}
