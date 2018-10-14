@@ -57,6 +57,10 @@ class WindowsOpenIntent(hass.Hass):
                     text = text + " <break strength=\"weak\"/>"
                 text = text + self.args["textLineDoorTilted"]
                 for entity in door_tilted_list:
+                    friendly_name = self.friendly_name(entity)
+                    # remove "gekippt" (german for tilted) from the friendly name
+                    friendly_name = friendly_name.replace(" gekippt","")
+                    friendly_name = friendly_name.replace(" Gekippt","")
                     text = text + " <break strength=\"weak\"/>" + self.friendly_name(entity)
             # if all closed response
             if text == "":
