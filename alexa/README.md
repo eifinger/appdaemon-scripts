@@ -10,13 +10,13 @@ This is needed as this is a custom Alexa App and has nothing to do with HA Cloud
 ## turnEntityOffInX
 Ask Alexa to turn something off in a set amount of minutes.
 
-Only works with entities defined in under *switchable* in [listService.yaml](https://github.com/eifinger/appdaemon-scripts/blob/master/alexa/listService/listService.yaml)
+Only works with entities defined under *switchable* in [listService.yaml](https://github.com/eifinger/appdaemon-scripts/blob/master/alexa/listService/listService.yaml)
 
 ``Alexa tell Home Assistant to turn off Ventilator in 10 Minutes``
 
 ## windowsOpen
 Will tell you if any windows / doors are open and/or tilted
 
-Only works with entities defined in under *window*/*door*/*door_tilted* in [listService.yaml](https://github.com/eifinger/appdaemon-scripts/blob/master/alexa/listService/listService.yaml)
+Only works with entities defined under *window*/*door*/*door_tilted* in [listService.yaml](https://github.com/eifinger/appdaemon-scripts/blob/master/alexa/listService/listService.yaml)
 
 ``Alexa ask Home Assistant whether all windows are closed``
