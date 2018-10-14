@@ -61,7 +61,7 @@ class WindowsOpenIntent(hass.Hass):
                     # remove "gekippt" (german for tilted) from the friendly name
                     friendly_name = friendly_name.replace(" gekippt","")
                     friendly_name = friendly_name.replace(" Gekippt","")
-                    text = text + " <break strength=\"weak\"/>" + self.friendly_name(entity)
+                    text = text + " <break strength=\"weak\"/>" + friendly_name
             # if all closed response
             if text == "":
                 text = self.args["textLineClosed"]
