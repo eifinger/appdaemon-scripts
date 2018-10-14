@@ -40,24 +40,24 @@ class WindowsOpenIntent(hass.Hass):
             # add open windows to response
             if len(window_open_list) > 0:
                 if text != "":
-                    text = text + "<break strength=\"weak\"/>"
+                    text = text + " <break strength=\"weak\"/>"
                 text = text + self.args["textLineWindowOpen"]
                 for entity in window_open_list:
-                    text = text + "<break strength=\"weak\"/>" + self.friendly_name(entity)
+                    text = text + " <break strength=\"weak\"/>" + self.friendly_name(entity)
             # add open doors to response
             if len(door_open_list) > 0:
                 if text != "":
-                    text = text + "<break strength=\"weak\"/>"
+                    text = text + " <break strength=\"weak\"/>"
                 text = text + self.args["textLineDoorOpen"]
                 for entity in door_open_list:
-                    text = text + "<break strength=\"weak\"/>" + self.friendly_name(entity)
+                    text = text + " <break strength=\"weak\"/>" + self.friendly_name(entity)
             # add tilted doors to reponse
             if len(door_tilted_list) > 0:
                 if text != "":
-                    text = text + "<break strength=\"weak\"/>"
+                    text = text + " <break strength=\"weak\"/>"
                 text = text + self.args["textLineDoorTilted"]
                 for entity in door_tilted_list:
-                    text = text + "<break strength=\"weak\"/>" + self.friendly_name(entity)
+                    text = text + " <break strength=\"weak\"/>" + self.friendly_name(entity)
             # if all closed response
             if text == "":
                 text = self.args["textLineClosed"]
