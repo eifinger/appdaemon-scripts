@@ -18,6 +18,9 @@ import globals
 #
 # Release Notes
 #
+# Version 1.2:
+#   only run on actual state change
+#
 # Version 1.1:
 #   fix switch of On/Off
 #
@@ -55,7 +58,7 @@ class RunOnStateChange(hass.Hass):
     
   def state_change(self, entity, attribute, old, new, kwargs):
     if self.get_state(self.app_switch) == "on":
-      if new != "" and new == self.trigger_state:
+      if new != "" and new == self.trigger_state and old != new:
         if self.after_sundown == None or ( ( self.after_sundown == True and self.sun_down() ) or self.after_sundown == False ):
           #turn_off
           for entity in self.entities_on:
