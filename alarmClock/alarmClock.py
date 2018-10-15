@@ -98,6 +98,7 @@ class AlarmClock(hass.Hass):
         if self.get_state(self.wakemeup) == "on":
             if self.get_state(self.alarmweekday) == "off" or (self.get_state(self.alarmweekday) == "on" and self.get_state(self.isweekday) == "on"):
                 if float(self.cached_fade_in_time) > 0:
+                    self.log("Turning on {}".format(self.friendly_name(self.wakeup_light)))
                     self.call_service("light/turn_on", entity_id = self.wakeup_light, transition = self.cached_fade_in_time*int(self.fade_in_time_multiplicator), brightness = self.brightness)
                 self.timer_handle_list.append(self.run_in(self.run_alarm, float(self.cached_fade_in_time)))
 
