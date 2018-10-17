@@ -40,7 +40,7 @@ class NotifyFailedLogin(hass.Hass):
     if new != "" and new == "notifying":
         message = self.get_state("persistent_notification.httplogin",attribute="message")
         self.log(message)
-        self.notifier.notify(self.notify_name, self.message.format(message))
+        self.notifier.notify(self.notify_name, self.message.format(message), useAlexa=False)
 
   def terminate(self):
     for timer_handle in self.timer_handle_list:
