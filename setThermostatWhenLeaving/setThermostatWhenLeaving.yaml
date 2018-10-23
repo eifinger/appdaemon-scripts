@@ -1,0 +1,15 @@
+setThermostatWhenLeaving:
+  module: setThermostatWhenLeaving
+  class: SetThermostatWhenLeaving
+  app_switch: input_boolean.set_thermostat_when_leaving
+  sensor: binary_sensor.door_window_sensor_158d000126a57b
+  climate_entity: climate.wohnzimmer_thermostat
+  target_entity: input_number.set_thermostat_when_leaving
+  message: "Ich habe {} auf {} °C gestellt"
+  #message: "I have set {} to {}"
+  notify_name: group_notifications
+  use_alexa: False
+  dependencies: 
+    - Notifier
+  global_dependencies:
+    - globals
