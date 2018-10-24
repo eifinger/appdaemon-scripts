@@ -15,6 +15,7 @@ class nextBusIntent(hass.Hass):
         ############################################
         try:
             state = self.get_state(self.sensor, attribute="all")
+            self.log("state: {}".format(state))
             line = state["line"]
             minutes = state["minutes"]
             text = self.textLine.format(line, minutes)
