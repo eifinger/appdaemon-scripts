@@ -15,11 +15,9 @@ class nextBusIntent(hass.Hass):
         ############################################
         try:
             state = self.get_state(self.sensor, attribute="all")
-            self.log("state: {}".format(state))
-            line = state["line"]
-            minutes = state["minutes"]
+            line = state["attributes"]["line"]
+            minutes = state["attributes"]["minutes"]
             text = self.textLine.format(line, minutes)
-        except Exception as e:
-            self.log(e)
+        except:
             text = self.Error
         return text
