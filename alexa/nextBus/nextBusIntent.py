@@ -18,6 +18,7 @@ class nextBusIntent(hass.Hass):
             line = state["line"]
             minutes = state["minutes"]
             text = self.textLine.format(line, minutes)
-        except:
+        except Exception as e:
+            self.log(e)
             text = self.Error
         return text
