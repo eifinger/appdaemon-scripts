@@ -33,5 +33,5 @@ alexa_api: # appdaemon skill
     - <say-as interpret-as='interjection'>viel glueck</say-as>
     - Schoen mit dir gesprochen zu haben
   responseError:
-    - Es tuet mir leit aber etwas ist falsch gegangen
+    - Es tut mir leit aber etwas ist falsch gegangen
     - Leider meldet home assistant einen Fehler 
