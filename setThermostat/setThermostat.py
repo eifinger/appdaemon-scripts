@@ -18,6 +18,9 @@ import datetime
 #
 # Release Notes
 #
+# Version 1.1:
+#   Actually set the previous temp
+#
 # Version 1.0:
 #   Initial Version
 
@@ -77,8 +80,7 @@ class SetThermostat(hass.Hass):
     if self.previous_temp != None:
       self.log(self.message.format(self.friendly_name(self.climat_entity), self.previous_temp))
       self.notifier.notify(self.notify_name, self.message.format(self.friendly_name(self.climat_entity), self.previous_temp), useAlexa=self.use_alexa)
-      self.previous_temp = self.get_state(self.climat_entity)
-      self.call_service("climate/set_temperature", entity_id=self.climat_entity, temperature=self.get_state(self.target_entity))
+      self.call_service("climate/set_temperature", entity_id=self.climat_entity, temperature=self.previous_temp)
 
     
 
