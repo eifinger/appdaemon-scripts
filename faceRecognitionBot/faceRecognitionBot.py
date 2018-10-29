@@ -44,7 +44,7 @@ import requests
 # Version 1.0:
 #   Initial Version
 CLASSIFIER = 'faces'
-TIMEOUT = 10
+TIMEOUT = 20
 PROVIDE_NAME_TIMEOUT = 5
 IDENTIFIER_DELIMITER = "_"
 FILENAME_DELIMITER = "-"
