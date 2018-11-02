@@ -2,6 +2,7 @@ warm_bath_before_wakeup:
   module: setThermostat
   class: SetThermostat
   app_switch: input_boolean.warm_bath_before_wakeup
+  isHome: input_boolean.is_home
   time_entity: sensor.alarm_time
   upfront_time: 60
   duration: 60

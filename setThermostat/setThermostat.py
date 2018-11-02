@@ -7,6 +7,7 @@ import datetime
 # Args:
 #
 # app_switch: on/off switch for this app. example: input_boolean.warm_bath_before_wakeup
+# isHome: entity which shows if someone is home. example: input_boolean.is_home
 # time_entity: sensor which determines when to run in the format 14:30. example: sensor.alarm_time
 # upfront_time: how many minutes before the time_sensor to run. example: 60
 # duration: After how many minutes should the thermostat be set back to its previous value. example: 60
@@ -17,6 +18,9 @@ import datetime
 # use_alexa: use alexa for notification. example: False
 #
 # Release Notes
+#
+# Version 1.2:
+#   Added isHome. Only run when someone is home
 #
 # Version 1.1:
 #   Actually set the previous temp
@@ -39,6 +43,7 @@ class SetThermostat(hass.Hass):
     self.message = globals.get_arg(self.args,"message")
     self.notify_name = globals.get_arg(self.args,"notify_name")
     self.use_alexa = globals.get_arg(self.args,"use_alexa")
+    self.isHome = globals.get_arg(self.args,"isHome")
 
     self.notifier = self.get_app('Notifier')
 
@@ -66,7 +71,7 @@ class SetThermostat(hass.Hass):
       self.log("Theromstat will trigger at {}".format(event_time))
 
   def trigger_thermostat(self, kwargs):
-    if self.get_state(self.app_switch) == "on":
+    if self.get_state(self.app_switch) == "on" and self.get_state(self.isHome) == "on":
       self.log(self.message.format(self.friendly_name(self.climat_entity), self.get_state(self.target_entity)))
       self.notifier.notify(self.notify_name, self.message.format(self.friendly_name(self.climat_entity), self.get_state(self.target_entity)), useAlexa=self.use_alexa)
       self.log("Turning {} on".format(self.climat_entity))
