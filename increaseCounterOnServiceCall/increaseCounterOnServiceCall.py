@@ -31,6 +31,7 @@ class IncreaseCounterOnServiceCall(hass.Hass):
     self.listen_event_handle_list.append(self.listen_event(self.call_service_callback, "call_service"))
     
   def call_service_callback(self, event_name, data, kwargs):
+    self.log(event_name + ': ' + str(data))
     if (self.get_state(self.app_switch) == "on" and data["domain"] == self.domain 
     and data["service"] == self.service and data["service_data"]["entity_id"] == self.entity_id):
       self.call_service("counter/increment", entity_id=self.counter)
