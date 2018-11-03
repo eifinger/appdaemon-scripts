@@ -14,8 +14,13 @@ import globals
 #   zone: zone name from which the user is leaving
 #   notify_name: Who to notify. example: group_notifications
 #   message_<LANG>: localized message to use in notification
+#   travel_time_sensor (optional): Sensor showing the travel time home. example: sensor.travel_time_home_user_one
+#   travel_time_sensor_message (optional): Additional notify message.
 #
 # Release Notes
+#
+# Version 1.8:
+#   Add travel time in notification message
 #
 # Version 1.7.1:
 #   Fix delay in notify message. Only input the minutes not the tuple
@@ -60,6 +65,14 @@ class LeavingZoneNotifier(hass.Hass):
         self.lingering_time = globals.get_arg(self.args,"lingering_time")
         self.delay = globals.get_arg(self.args,"delay")
         self.message = globals.get_arg(self.args,"message_DE")
+        try:
+            self.travel_time_sensor = globals.get_arg(self.args,"travel_time_sensor")
+        except KeyError:
+            self.travel_time_sensor = None
+        try:
+            self.travel_time_sensor_message = globals.get_arg(self.args,"travel_time_sensor_message")
+        except KeyError:
+            self.travel_time_sensor_message = None
 
         self.user_entered_zone = None
         self.false_positive = False
@@ -87,10 +100,21 @@ class LeavingZoneNotifier(hass.Hass):
     def notify_user(self, kwargs):
         #Check if user did not come back to the zone in the meantime
         if self.get_state(self.device) != kwargs["old_zone"]:
-            self.log("Notify user")
-            self.notifier.notify(self.notify_name, self.message.format(self.user_name, self.zone, divmod(self.delay, 60)[0]))
-            self.false_positive = False
-            self.log("Setting false_positive to {}".format(self.false_positive))
+            if self.travel_time_sensor != None:
+                self.call_service("homeassistant/update_entity", entity_id=self.travel_time_sensor)
+                self.timer_handle_list.append(self.run_in(self.notify_user_callback, 2))
+            else:
+                self.log("Notify user")
+                self.notifier.notify(self.notify_name, self.message.format(self.user_name, self.zone, divmod(self.delay, 60)[0]))
+                self.false_positive = False
+                self.log("Setting false_positive to {}".format(self.false_positive))
+
+    def notify_user_callback(self, kwargs):
+        self.log("Notify user")
+        self.notifier.notify(self.notify_name, self.message.format(self.user_name, self.zone, divmod(self.delay, 60)[0]) + 
+            self.travel_time_sensor_message.format(self.get_state(self.travel_time_sensor)))
+        self.false_positive = False
+        self.log("Setting false_positive to {}".format(self.false_positive))
             
 
 
