@@ -282,8 +282,11 @@ isUserHomeDeterminerUserOne:
   global_dependencies:
     - globals
 ```
+
 ### leavingZoneNotifier
+
 Notify if a user is leaving a zone after being there for a certain amount of time. I use this to notify my SO that I am leaving work and driving home
+
 ```yaml
 leavingWorkNotifierUserOne:
   module: leavingZoneNotifier
@@ -293,15 +296,21 @@ leavingWorkNotifierUserOne:
   user_name: secret_name_user_one
   lingering_time: 3600
   delay: 120
-  zone: Work
+  zone: Arbeit
   notify_name: group_notifications
-  message_DE: "{} hat {} vor {} Minuten verlassen."
-  message_EN: "{} left {} {} minutes ago"
+  message: "{} hat {} vor {} Minuten verlassen."
+  travel_time_sensor: sensor.travel_time_home_user_one
+  travel_time_sensor_message: "Die momentane Reisezeit beträgt {}."
+  dependencies:
+    - Notifier
   global_dependencies:
     - globals
 ```
+
 ### motionTrigger
+
 Turn something on/off when a motion sensor turns on. Automatically turn it off again after a delay.
+
 ```yaml
 obenTreppeMotionTrigger:
   module: motionTrigger
@@ -314,7 +323,9 @@ obenTreppeMotionTrigger:
   global_dependencies:
     - globals
 ```
+
 ### newWifiDeviceNotify
+
 Actually a wrong name. This will send me a notification when any device_tracker component detects a new device. I initally thought to use this as a security feature but found it quite useful when adding new Sonoff switches and such. I get a notification if the setup was successfull.
 
 **Version 1.2:**
