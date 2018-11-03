@@ -5,6 +5,7 @@ updateTravelTimeHomeUserOne:
   entity_to_update: sensor.travel_time_home_user_one
   input_number: input_number.travel_time_home_user_one_update_interval
   counter: counter.google_maps_api_calls
+  max_counter: 18000
   dependencies: 
     - Notifier
   global_dependencies:

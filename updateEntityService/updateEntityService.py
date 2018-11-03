@@ -8,7 +8,8 @@ import globals
 # app_switch: on/off switch for this app. example: input_boolean.warm_bath_before_wakeup
 # entity_to_update: entity which should get updated : example: sensor.google_travel_time
 # input_number: input_number which holds the interval. example: input_number.google_travel_time_update_interval
-# counter (optional): increase a counter each time the service gets called. example: counter.google_maps_api_calls 
+# counter (optional): counter entity which shows amount of service calls example: counter.google_maps_api_calls
+# max_counter (optional): maximum amount of service calls. if it is exceeded no service will get called. example: 18000 
 #
 # Release Notes
 #
@@ -28,6 +29,10 @@ class UpdateEntityService(hass.Hass):
       self.counter = globals.get_arg(self.args,"counter")
     except KeyError:
       self.counter = None
+    try:
+      self.max_counter = globals.get_arg(self.args,"max_counter")
+    except KeyError:
+      self.max_counter = None
 
     self.run_timer = self.run_in(self.update_entity_callback, float(self.get_state(self.input_number))*60)
     self.timer_handle_list.append(self.run_timer)
@@ -46,12 +51,12 @@ class UpdateEntityService(hass.Hass):
 
   def update_entity_callback(self, kwargs):
     if self.get_state(self.app_switch) == "on":
-      self.call_service("homeassistant/update_entity", entity_id=self.entity_to_update)
-      self.log("Updated {}.".format(self.friendly_name(self.entity_to_update)))
-      self.run_timer = self.run_in(self.update_entity_callback, float(self.get_state(self.input_number))*60)
-      if self.counter != None:
-        self.call_service("counter/increment", entity_id=self.counter)
-        self.log("Incremented {}".format(self.friendly_name(self.counter)))
+      if self.counter != None and self.max_counter != None and self.get_state(self.counter) >= int(self.max_counter):
+        self.error("Maximum amount of {} exceeded on counter: {}".format(self.max_counter, self.friendly_name(self.counter)))
+      else:
+        self.call_service("homeassistant/update_entity", entity_id=self.entity_to_update)
+        self.log("Updated {}.".format(self.friendly_name(self.entity_to_update)))
+        self.run_timer = self.run_in(self.update_entity_callback, float(self.get_state(self.input_number))*60)
 
   def terminate(self):
     for timer_handle in self.timer_handle_list:

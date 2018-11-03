@@ -208,10 +208,15 @@ googleTravelTime_home_from_work:
     - globals 
 ```
 ![googleTravelTimes](images/googleTravelTimes.PNG)
+
 ### headingToZoneNotifier
+
 Currently not used
+
 ### homeArrivalNotifier
+
 Greet the person coming home with a notification
+
 ```yaml
 homeArrivalNotifierUserOne:
   module: homeArrivalNotifier
@@ -226,7 +231,26 @@ homeArrivalNotifierUserOne:
   global_dependencies:
     - globals
 ```
+
+### increaseCounterOnServiceCall
+
+Increase a counter entity on a specified service call. I use it to keep track of all Google Maps Service Calls so I don't exceed my limit.
+
+```yaml
+increaseCounterOnGoogleMapsUpdate:
+  module: increaseCounterOnServiceCall
+  class: IncreaseCounterOnServiceCall
+  app_switch: input_boolean.increase_counter_on_google_maps_update
+  domain: homeassistant
+  service: update_entity
+  entity_id: sensor.travel_time_home_user_one
+  counter: counter.google_maps_api_calls
+  global_dependencies:
+    - globals
+```
+
 ### isHomeDeterminer
+
 Controls an input_boolean "isHome" which is used as a trigger for other Apps.
 The state depends on other input_booleans controlled by the [isUserHomeDeterminer](isUserHomeDeterminer/isUserHomeDeterminer.py)
 ```yaml
@@ -413,8 +437,11 @@ roggenNotifier:
     - globals
 ```
 ![roggenNotify](images/roggenNotify.PNG)
+
 ### powerUsageNotification
+
 Notify when the Washingmachine or Dishwasher started/finished. Using power measured by TP HS110 Plugs like[![](https://static.tp-link.com/res/images/products/HS110_us_V1_1133_normal_0_20151017154946.jpg)](https://www.amazon.de/dp/B017X72IES/ref=twister_B07CQBCZ5G)
+
 ```yaml
 powerUsageNotification_Dishwasher:
   module: powerUsageNotification
@@ -432,10 +459,30 @@ powerUsageNotification_Dishwasher:
   global_dependencies:
     - globals
 ```
+
 ![dishWasherNotify](images/dishWasherNotify.PNG)
+
+### resetCounterOnLastDayOfMonth
+
+App which resets a counter on the last day of month
+
+```yaml
+resetGoogleMapsApiCounterOnLastDayOfMonth:
+  module: resetCounterOnLastDayOfMonth
+  class: ResetCounterOnLastDayOfMonth
+  app_switch: input_boolean.reset_googlemapsapicounter_on_last_day_of_month
+  time: "9:00"
+  counter: counter.google_maps_api_calls
+  global_dependencies:
+    - globals
+
+```
+
 ### roomBasedLightControl
+
 BETA
 Turn the light on based on which room my smartphone is currently being determined by [find3](https://github.com/schollz/find3)
+
 ```yaml
 roomBasedLightControl:
   module: roomBasedLightControl
@@ -498,6 +545,7 @@ Currently only controlled by ``Alexa, guten Morgen`` ``Alexa, gute Nacht``
 ### standardSetter
 Set back some HA entities back to their standard values.
 Configurable in the HA frontend. Currently used to set back the next the [nextAppointmentLeaveNotifier](#nextAppointmentLeaveNotifier) to my configured default value.
+
 ```yaml
 standardSetterTravelModeNextAppointment:
   module: standardSetter
@@ -508,6 +556,7 @@ standardSetterTravelModeNextAppointment:
   global_dependencies:
     - globals
 ```
+
 ![standardSetter](images/standard_setter.PNG)
 ### turnFanOnWhenHot
 Turns the Fan on when the temperature is above a configurable threshold and someone is in the room ([find3](https://github.com/schollz/find3))

@@ -1,0 +1,10 @@
+increaseCounterOnGoogleMapsUpdate:
+  module: increaseCounterOnServiceCall
+  class: IncreaseCounterOnServiceCall
+  app_switch: input_boolean.increase_counter_on_google_maps_update
+  domain: homeassistant
+  service: update_entity
+  entity_id: sensor.travel_time_home_user_one
+  counter: counter.google_maps_api_calls
+  global_dependencies:
+    - globals
