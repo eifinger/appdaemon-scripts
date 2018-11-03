@@ -13,7 +13,7 @@ import globals
 #   lingering_time: time a user has to be in a zone to trigger this app. example: 3600
 #   zone: zone name from which the user is leaving
 #   notify_name: Who to notify. example: group_notifications
-#   message_<LANG>: localized message to use in notification
+#   message: localized message to use in notification
 #   travel_time_sensor (optional): Sensor showing the travel time home. example: sensor.travel_time_home_user_one
 #   travel_time_sensor_message (optional): Additional notify message.
 #
@@ -64,7 +64,7 @@ class LeavingZoneNotifier(hass.Hass):
         # 'lingering_time' the time a user has to stay in a zone for this app to trigger
         self.lingering_time = globals.get_arg(self.args,"lingering_time")
         self.delay = globals.get_arg(self.args,"delay")
-        self.message = globals.get_arg(self.args,"message_DE")
+        self.message = globals.get_arg(self.args,"message")
         try:
             self.travel_time_sensor = globals.get_arg(self.args,"travel_time_sensor")
         except KeyError:
