@@ -47,11 +47,11 @@ class UpdateEntityService(hass.Hass):
   def update_entity_callback(self, kwargs):
     if self.get_state(self.app_switch) == "on":
       self.call_service("homeassistant/update_entity", entity_id=self.entity_to_update)
+      self.log("Updated {}.".format(self.friendly_name(self.entity_to_update)))
+      self.run_timer = self.run_in(self.update_entity_callback, float(self.get_state(self.input_number))*60)
       if self.counter != None:
         self.call_service("counter/increment", entity_id=self.counter)
         self.log("Incremented {}".format(self.friendly_name(self.counter)))
-      self.log("Updating {}.".format(self.friendly_name(self.entity_to_update)))
-    
 
   def terminate(self):
     for timer_handle in self.timer_handle_list:
