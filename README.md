@@ -525,13 +525,24 @@ turnFanOnWhenHot:
   global_dependencies:
     - globals
 ```
+
 ![ventilatorAutomation](images/ventilatorAutomation.PNG)
+
 ### turnOffBarAfterRestart
-As I sometimes restart HA when working on it from remote I turn the Bar lights to red with [this script](https://github.com/eifinger/homeassistant-config/blob/master/updateHomeassistant.sh). This way everyone can see HA is currently unavailable. If it comes back up again this app will turn the light green and then off. 
+
+As I sometimes restart HA when working on it from remote I turn the Bar lights to red with [this script](https://github.com/eifinger/homeassistant-config/blob/master/updateHomeassistant.sh). This way everyone can see HA is currently unavailable. If it comes back up again this app will turn the light green and then off.
+
+### updateEntityService
+
+App which calls ``homeassistant.update_entity`` at an interval controlled by an input_boolean. I use it in combination with [schedy](https://hass-apps.readthedocs.io/en/latest/apps/schedy/index.html) to schedule the interval.
+
 ### notify
+
 IN DEVELOPMENT
-Centralizes messaging. Among other things, it will determine whether a user is at home and if yes in which room. 
+Centralizes messaging. Among other things, it will determine whether a user is at home and if yes in which room.
+
 Then Alexa in that room will be used additionally to Telegram
+
 ```yaml
 Notify:
   module: notify
@@ -544,6 +555,7 @@ Notify:
 ```
 
 # Thanks
+
 First of all thanks to the Homeassistant Team and [Andrew Cockburn](https://github.com/acockburn) for making Appdaemon
 
 Some of the Apps are taken from the official examples and many based on or at least inspired by [Rene Tode](https://github.com/ReneTode). For example his absolutely fantastic [Alexa-Appdaemon-App](https://github.com/ReneTode/Alexa-Appdaemon-App).
