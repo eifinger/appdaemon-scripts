@@ -19,6 +19,9 @@ import datetime
 #
 # Release Notes
 #
+# Version 1.2.1:
+#   Reschedule timer after first run
+#
 # Version 1.2:
 #   Added isHome. Only run when someone is home
 #
@@ -49,10 +52,10 @@ class SetThermostat(hass.Hass):
 
     self.run_timer = None
     
-    self.listen_state_handle_list.append(self.listen_state(self.state_change, self.time_entity))
-    self.state_change(None,None,None,"Run",None)
+    self.listen_state_handle_list.append(self.listen_state(self.schedule_trigger, self.time_entity))
+    self.schedule_trigger(None,None,None,"Run",None)
     
-  def state_change(self, entity, attribute, old, new, kwargs):
+  def schedule_trigger(self, entity, attribute, old, new, kwargs):
     if new != "":
       if self.run_timer != None:
         self.cancel_timer(self.run_timer)
@@ -80,12 +83,15 @@ class SetThermostat(hass.Hass):
       self.call_service("climate/set_temperature", entity_id=self.climat_entity, temperature=self.get_state(self.target_entity))
       self.log("Resetting Thermostat in {} minutes.".format(self.duration))
       self.timer_handle_list.append(self.run_in(self.reset_thermostat, float(self.duration)*60))
+      if self.run_timer != None:
+        self.cancel_timer(self.run_timer)
 
   def reset_thermostat(self, kwargs):
     if self.previous_temp != None:
       self.log(self.message.format(self.friendly_name(self.climat_entity), self.previous_temp))
       self.notifier.notify(self.notify_name, self.message.format(self.friendly_name(self.climat_entity), self.previous_temp), useAlexa=self.use_alexa)
       self.call_service("climate/set_temperature", entity_id=self.climat_entity, temperature=self.previous_temp)
+      self.schedule_trigger(None,None,None,"Run",None)
 
     
 
