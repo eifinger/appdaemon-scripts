@@ -6,7 +6,7 @@ import globals
 # Args:
 #
 # app_switch: on/off switch for this app. example: input_boolean.warm_bath_before_wakeup
-# sensor: door sensor
+# isHome: input_boolean showing if someone is home. example: input_boolean.isHome
 # climate_entity: climate entity to set. example: climate.bad_thermostat
 # target_entity: the entity holding the target temp. example: warm_bath_before_wakeup
 # message (optional): message to use in notification
@@ -14,6 +14,9 @@ import globals
 # use_alexa (optional): use alexa for notification. example: False
 #
 # Release Notes
+#
+# Version 1.1:
+#   Use isHome as trigger
 #
 # Version 1.0:
 #   Initial Version
@@ -25,7 +28,7 @@ class SetThermostatWhenLeaving(hass.Hass):
     self.listen_state_handle_list = []
 
     self.app_switch = globals.get_arg(self.args,"app_switch")
-    self.sensor = globals.get_arg(self.args,"sensor")
+    self.isHome = globals.get_arg(self.args,"isHome")
     self.climate_entity = globals.get_arg(self.args,"climate_entity")
     self.target_entity = globals.get_arg(self.args,"target_entity")
     try:
@@ -43,17 +46,17 @@ class SetThermostatWhenLeaving(hass.Hass):
 
     self.notifier = self.get_app('Notifier')
 
-    self.listen_state_handle_list.append(self.listen_state(self.state_change, self.sensor))
+    self.listen_state_handle_list.append(self.listen_state(self.state_change, self.isHome))
     
   def state_change(self, entity, attribute, old, new, kwargs):
     if self.get_state(self.app_switch) == "on":
       if new == "off" and old != new:
         if self.message != None:
           self.log(self.message.format(self.friendly_name(self.climate_entity), self.get_state(self.target_entity)))
-        if self.notify_name != None:
-          self.notifier.notify(self.notify_name, self.message.format(self.friendly_name(self.climate_entity), self.get_state(self.target_entity)), useAlexa=self.use_alexa)
         self.call_service("climate/turn_on", entity_id=self.climate_entity)
         self.call_service("climate/set_temperature", entity_id=self.climate_entity, temperature=self.get_state(self.target_entity))
+        if self.notify_name != None:
+          self.notifier.notify(self.notify_name, self.message.format(self.friendly_name(self.climate_entity), self.get_state(self.target_entity)), useAlexa=self.use_alexa)
 
   def terminate(self):
     for timer_handle in self.timer_handle_list:
