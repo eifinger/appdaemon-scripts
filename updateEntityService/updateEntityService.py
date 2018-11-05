@@ -13,8 +13,13 @@ import globals
 #
 # Release Notes
 #
+# Version 1.1:
+#   Add warning if counter exceeds threshold
+#
 # Version 1.0:
 #   Initial Version
+
+THRESHOLD_PERCENTAGE = 0.9
 
 class UpdateEntityService(hass.Hass):
 
@@ -53,6 +58,8 @@ class UpdateEntityService(hass.Hass):
     if self.get_state(self.app_switch) == "on":
       if self.counter != None and self.max_counter != None and self.get_state(self.counter) >= int(self.max_counter):
         self.error("Maximum amount of {} exceeded on counter: {}".format(self.max_counter, self.friendly_name(self.counter)))
+      else if self.counter != None and self.max_counter != None and self.get_state(self.counter) >= int(self.max_counter)*THRESHOLD_PERCENTAGE:
+        self.log("Threshold amount of {} exceeded on counter: {}".format(THRESHOLD_PERCENTAGE, self.friendly_name(self.counter)), level="WARNING")
       else:
         self.call_service("homeassistant/update_entity", entity_id=self.entity_to_update)
         self.log("Updated {}.".format(self.friendly_name(self.entity_to_update)))
