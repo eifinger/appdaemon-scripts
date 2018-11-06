@@ -17,6 +17,9 @@ import globals
 #
 # Release Notes
 #
+# Version 1.3:
+#   Also notify when Notification time is in the past
+#
 # Version 1.2:
 #   use Notify App
 #
@@ -79,6 +82,10 @@ class NextApppointmentLeaveNotifier(hass.Hass):
                     self.log("Will notify at {}".format(notification_time))
                 except ValueError:
                     self.log("Notification time is in the past")
+                    google_maps_url = self.google_source_url + location_name.replace(" ","+")
+                    self.log("Notify user")
+                    self.notifier.notify(self.notify_name, self.message.format(location_name,self.get_state(self.travel_time_sensor), google_maps_url))
+                    self.location_of_last_notified_event = location_name
 
     def notify_user(self, *kwargs):
         if self.get_state(self.notify_input_boolean) == "on":
