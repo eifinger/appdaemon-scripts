@@ -2,7 +2,7 @@ setThermostatWhenLeaving:
   module: setThermostatWhenLeaving
   class: SetThermostatWhenLeaving
   app_switch: input_boolean.set_thermostat_when_leaving
-  isHome: input_boolean.isHome
+  isHome: input_boolean.is_home
   climate_entity: climate.wohnzimmer_thermostat
   target_entity: input_number.set_thermostat_when_leaving
   message: "Ich habe {} auf {} °C gestellt"
