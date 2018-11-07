@@ -30,7 +30,7 @@ class RemindMeOfXWhenZoneIntent(hass.Hass):
                 if key == slots["zone"].lower():
                     zone_name = value
             # listen to a state change of the zone
-            if zone_name = None:
+            if zone_name == None:
                 raise Exception("Could not find zonemapping for: {}".format(slots["zone"].lower()))
             else:
                 self.listen_state_handle_list.append(self.listen_state(self.remind_callback, self.device_tracker, zone=slots["zone"], zoneAction=slots["zoneAction"], reminder=slots["reminder"]))
