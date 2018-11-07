@@ -84,9 +84,12 @@ alexaSpeakerConnector:
   global_dependencies:
     - globals
 ```
+
 ### alarmClock
+
 Alarm Clock App inspired by [this](https://community.home-assistant.io/t/creating-a-alarm-clock/410) forum post.
 It fades in my bedroom light and sends a notifcation. The fade in and alarm time is defined by input_number sliders in HA
+
 ```yaml
 alarmClock:
   module: alarmClock
@@ -105,9 +108,13 @@ alarmClock:
   global_dependencies:
     - globals
 ```
+
 ![alarmClock](images/alarmClock.PNG)
+
 ### bedRoomMotionTrigger
+
 Special version of Motion Trigger. Only trigger when Door is not open (dont want any mosquittos) and only trigger when not both smartphones are in bedroom
+
 ```yaml
 bedroomMotionTrigger:
   module: bedroomMotionTrigger
@@ -122,8 +129,15 @@ bedroomMotionTrigger:
   location_user_two_sensor: sensor.location_user_two
   bedroom_state: Schlafzimmer
 ```
+
 ### buttonClicked
-My multipurpose App to link any switch/light to a Xiaomi Button
+
+My multipurpose App to link any switch/light to a Xiaomi Button.
+
+You can map different entities to the click types ``single`` and ``double``.
+
+For the 1st Generation Button you can hold the button to use it as a light dimmer.
+
 ```yaml
 xiaomiroundButtonBedroomClicked:
   module: buttonClicked
@@ -131,9 +145,17 @@ xiaomiroundButtonBedroomClicked:
   sensor: binary_sensor.switch_158d0001b12a12
   actor_single: light.bedroom_yeelight
   actor_double: group.all
+  actor_hold: light.bedroom_yeelight
+  dependencies: 
+    - Notifier
+  global_dependencies:
+    - globals
 ```
+
 ### comingHome
+
 When the front door openes and no one was home before this will turn on something. I am using it to turn on the light (if the sun is down) and turn on the receiver so I can hear Alexa
+
 ```yaml
 comingHomeYeelight:
   module: comingHome
@@ -144,8 +166,11 @@ comingHomeYeelight:
   actor: switch.large_lamp
   after_sundown: True
 ```
+
 ### detectDoorOpenWhenGoingToBed
+
 During this hot summer in Germany we somethimes forgot to close the terrace door before going to bed. This will check if the Xiaomi Door/Window Sensor reports the door being open if the [sleepmode](sleepModeHandler/sleepModeHandler.py) is turned on.
+
 ```yaml
 detectDoorOpenWhenGoingToBed:
   module: detectDoorOpenWhenGoingToBed
@@ -160,8 +185,11 @@ detectDoorOpenWhenGoingToBed:
   global_dependencies:
     - globals
 ```
+
 ### detectWrongStateWhenLeaving
+
 Checks a list of entities which should be on/off when everybody left the house. If something isn't right it will try to turn it off (e.g. a light) and send a notification.
+
 ```yaml
 detectWrongStateWhenLeaving:
   module: detectWrongStateWhenLeaving
@@ -183,18 +211,26 @@ detectWrongStateWhenLeaving:
   global_dependencies:
     - globals
 ```
+
 ### eventMonitor
+
 Monitor all events. Useful for debugging and developing
+
 ```yaml
 eventMonitor:
   module: eventMonitor
   class: Monitor
-  events: 
+  events:
 ```
+
 ### faceRecognitionBot
+
 COMING SOON
+
 ### google_travel_time
+
 Monitors my Google Travel Time Sensors e.g. between home and work. I can enable an input_boolean in HA which causes this App to send me a notication as soon as the traffic is in an acceptable range. I use this drive to/from work when there is the least traffic.
+
 ```yaml
 googleTravelTime_home_from_work:
   module: google_travel_time
@@ -205,8 +241,9 @@ googleTravelTime_home_from_work:
   message_DE: "Du kannst losfahren nach {}"
   message_EN: "You can start your journey to {}"
   global_dependencies:
-    - globals 
+    - globals
 ```
+
 ![googleTravelTimes](images/googleTravelTimes.PNG)
 
 ### headingToZoneNotifier
