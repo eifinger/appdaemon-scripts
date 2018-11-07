@@ -146,7 +146,7 @@ xiaomiroundButtonBedroomClicked:
   actor_single: light.bedroom_yeelight
   actor_double: group.all
   actor_hold: light.bedroom_yeelight
-  dependencies: 
+  dependencies:
     - Notifier
   global_dependencies:
     - globals

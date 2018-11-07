@@ -18,7 +18,10 @@ import globals
 # notify_name: who to notify. example: group_notifications
 # use_alexa: use alexa for notification. example: False
 #
-# Release Notesadd 
+# Release Notes
+#
+# Version 1.7:
+#   check for != off instead of == on
 #
 # Version 1.6.1:
 #   fix wrong key access for attributes
@@ -87,10 +90,10 @@ class NotifyOfWrongState(hass.Hass):
             full_state = self.get_state(entity, attribute="all")
             attributes = full_state["attributes"]
             self.log("full_state: {}".format(full_state))
-            if full_state["state"] == "on" and "device_class" in attributes and (attributes["device_class"] == "window" or attributes["device_class"] == "door" or attributes["device_class"] == "garage_door"):
+            if full_state["state"] != "off" and "device_class" in attributes and (attributes["device_class"] == "window" or attributes["device_class"] == "door" or attributes["device_class"] == "garage_door"):
               self.log(self.message_reed.format(self.friendly_name(entity)))
               self.notifier.notify(self.notify_name, self.message_reed.format(self.friendly_name(entity)), useAlexa=self.use_alexa)
-            elif full_state["state"] == "on":
+            elif full_state["state"] != "off":
               self.turn_off(entity)
               self.log(self.message.format(self.friendly_name(entity)))
               self.notifier.notify(self.notify_name, self.message.format(self.friendly_name(entity)), useAlexa=self.use_alexa)
