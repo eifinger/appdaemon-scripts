@@ -76,6 +76,8 @@ nextBusIntent:
 
 ## remindMeOfXWhenZoneIntent
 
+CURRENTLY DOES NOT WORK BECAUSE ALEXA DOES NOT ALLOW INTENTS CONTAINING REMINDERS
+
 Will send you a reminder over the notification service when you leave/enter a zone.
 
 ``Alexa tell Home Assistant to remind me of <> when entering work``
