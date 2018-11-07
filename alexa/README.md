@@ -73,3 +73,30 @@ nextBusIntent:
   global_dependencies:
     - globals
 ```
+
+## remindMeOfXWhenZoneIntent
+
+Will send you a reminder over the notification service when you leave/enter a zone.
+
+``Alexa tell Home Assistant to remind me of <> when entering work``
+
+```yaml
+remindMeOfXWhenZoneIntent:
+  module: remindMeOfXWhenZoneIntent
+  class: RemindMeOfXWhenZoneIntent
+  device_tracker: secret_device_user_one
+  notify_name: group_notifications
+  Error: <p>Es ist etwas schief gegangen</p>
+  textLine: "Okay ich erinnere dich an {{reminder}} wenn du {{zone}} "
+  textEnter: "erreichst"
+  textLeave: "verlässt"
+  remindMessageSkeleton: "Ich sollte dich erinnern an "
+  zoneMapping:
+    arbeit: work
+    hause: home
+    elmo: elmo
+  dependencies:
+    - Notifier
+  global_dependencies:
+    - globals
+```
