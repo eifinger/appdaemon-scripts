@@ -20,6 +20,9 @@ import globals
 #
 # Release Notes
 #
+# Version 1.8:
+#   check None when using get_state
+#
 # Version 1.7:
 #   check for != off instead of == on
 #
@@ -88,15 +91,16 @@ class NotifyOfWrongState(hass.Hass):
           #entities_off
           for entity in self.entities_off:
             full_state = self.get_state(entity, attribute="all")
-            attributes = full_state["attributes"]
-            self.log("full_state: {}".format(full_state))
-            if full_state["state"] != "off" and "device_class" in attributes and (attributes["device_class"] == "window" or attributes["device_class"] == "door" or attributes["device_class"] == "garage_door"):
-              self.log(self.message_reed.format(self.friendly_name(entity)))
-              self.notifier.notify(self.notify_name, self.message_reed.format(self.friendly_name(entity)), useAlexa=self.use_alexa)
-            elif full_state["state"] != "off":
-              self.turn_off(entity)
-              self.log(self.message.format(self.friendly_name(entity)))
-              self.notifier.notify(self.notify_name, self.message.format(self.friendly_name(entity)), useAlexa=self.use_alexa)
+            if full_state != None:
+              attributes = full_state["attributes"]
+              self.log("full_state: {}".format(full_state))
+              if full_state["state"] != "off" and "device_class" in attributes and (attributes["device_class"] == "window" or attributes["device_class"] == "door" or attributes["device_class"] == "garage_door"):
+                self.log(self.message_reed.format(self.friendly_name(entity)))
+                self.notifier.notify(self.notify_name, self.message_reed.format(self.friendly_name(entity)), useAlexa=self.use_alexa)
+              elif full_state["state"] != "off":
+                self.turn_off(entity)
+                self.log(self.message.format(self.friendly_name(entity)))
+                self.notifier.notify(self.notify_name, self.message.format(self.friendly_name(entity)), useAlexa=self.use_alexa)
           #entities_on
           for entity in self.entities_on:
             full_state = self.get_state(entity, attribute="all")
