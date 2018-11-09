@@ -7,8 +7,10 @@ nextApppointmentLeaveNotifier:
   input_number: input_number.leave_time_offset
   destination_name_sensor: sensor.cal_next_appointment_location
   travel_time_sensor: sensor.travel_time_next_appointment_location
-  message_DE: "Es ist Zeit loszufahren nach {}. Du brauchst {} Minuten. Hier ist ein Google Maps Link: {}"
-  message_EN: "It's time to leave to {}. It will take {} minutes. Here is a Google Maps Link: {}"
+  #message: "Es ist Zeit loszufahren nach {}. Du brauchst {} Minuten."
+  message: "It's time to leave to {}. It will take {} minutes."
+  message_google_link: " Hier ist ein Google Maps Link: {}"
+  #message_google_link: " Here is a Google Maps Link: {}"
   dependencies: 
     - Notifier
   global_dependencies:
