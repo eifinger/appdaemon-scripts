@@ -30,7 +30,7 @@ import globals
 __GROUP_NOTIFICATIONS__ = "group_notifications"
 __ALEXA_TTS__ = "media_player/alexa_tts"
 __NOTIFY__ = "notify/"
-__WAIT_TIME__ = 3 # seconds
+__WAIT_TIME__ = 5 # seconds
 
 class Notifier(hass.Hass):
 
