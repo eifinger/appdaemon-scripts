@@ -10,3 +10,25 @@ xiaomiroundButtonBedroomClicked:
     - Notifier
   global_dependencies:
     - globals
+xiaomisquareButtonLobbyClicked:
+  module: buttonClicked
+  class: ButtonClicked
+  sensor: binary_sensor.switch_158d00021329bc
+  actor_single: switch.lobby
+  actor_double: switch.lobby
+  dependencies: 
+    - Notifier
+  global_dependencies:
+    - globals
+xiaomiroundButtonBathroomClicked:
+  module: buttonClicked
+  class: ButtonClicked
+  sensor: binary_sensor.switch_158d00012db9e5
+  actor_single: light.lower_bathroom_yeelight
+  actor_double: light.lower_bathroom_yeelight
+  actor_hold: light.lower_bathroom_yeelight
+  dependencies: 
+    - Notifier
+  global_dependencies:
+    - globals
+    
