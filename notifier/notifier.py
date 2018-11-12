@@ -15,6 +15,9 @@ import globals
 #
 # Release Notes
 #
+# Version 1.2.1:
+#   Fix: Enqueue alexa messages
+#
 # Version 1.2:
 #   Enqueue alexa messages
 #
@@ -38,7 +41,8 @@ class Notifier(hass.Hass):
         self.app_switch_alexa = globals.get_arg(self.args,"app_switch_alexa")
 
         self.last_alexa_notification_time = None
-        
+    
+
     def notify(self, notify_name, message, useAlexa=True, useTelegram=True):
         if useTelegram:
             self.log("Notifying via Telegram")
@@ -47,14 +51,16 @@ class Notifier(hass.Hass):
             self.log("Notifying via Alexa")
             # check last message
             if self.last_alexa_notification_time != None and (datetime.datetime.now() - self.last_alexa_notification_time < datetime.timedelta(seconds=__WAIT_TIME__)):
-                self.timer_handle_list.append(self.run_in(self.notify_callback,__WAIT_TIME__), message=message)
+                self.timer_handle_list.append(self.run_in(self.notify_callback, __WAIT_TIME__, message=message))
             else:
                 self.last_alexa_notification_time = datetime.datetime.now()
                 self.call_service(__ALEXA_TTS__, entity_id=self.alexa_media_player, message=message)
 
+
     def notify_callback(self, kwargs):
         self.last_alexa_notification_time = datetime.datetime.now()
         self.call_service(__ALEXA_TTS__, entity_id=self.alexa_media_player, message=kwargs["message"])
+
 
     def getAlexaDeviceForUserLocation(self, notify_name):
         if notify_name == __GROUP_NOTIFICATIONS__:
@@ -68,8 +74,8 @@ class Notifier(hass.Hass):
         else:
             self.log("Unknown notify_name: {}".format(notify_name))
             return None
-    
+
+
     def terminate(self):
         for timer_handle in self.timer_handle_list:
             self.cancel_timer(timer_handle)
-
