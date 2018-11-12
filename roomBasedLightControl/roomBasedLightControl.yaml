@@ -13,5 +13,8 @@ roomBasedLightControl:
     bedroom:
       room: bedroom
       entity: light.bedroom_yeelight
+    studyroom:
+      room: studyroom
+      entity: light.bedroom_yeelight
   global_dependencies:
     - globals

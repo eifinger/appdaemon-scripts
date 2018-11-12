@@ -43,15 +43,15 @@ class RoomBasedLightControl(hass.Hass):
         self.log("{} turned {}".format(self.friendly_name(self.entity),new))
         room = self.get_state(self.room_sensor)
         self.log("User is in room {}".format(room))
-        entity = self.mappings_dict.get(room)
-        self.log("Entity for that room is: {}".format(entity))
-
-        if new == "on":
-            self.log("Turning {} on".format(entity))
-            self.turn_on(entity)
-        elif new == "off":
-            self.log("Turning {} off".format(entity))
-            self.turn_off(entity)
+        mapped_entity = self.mappings_dict.get(room)
+        self.log("Entity for that room is: {}".format(mapped_entity))
+        if mapped_entity != None:
+            if new == "on":
+                self.log("Turning {} on".format(mapped_entity))
+                self.turn_on(mapped_entity)
+            elif new == "off":
+                self.log("Turning {} off".format(mapped_entity))
+                self.turn_off(mapped_entity)
 
     def terminate(self):
         for listen_state_handle in self.listen_state_handle_list:
