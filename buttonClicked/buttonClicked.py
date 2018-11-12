@@ -12,6 +12,9 @@ import datetime
 # actor_hold: actor to dim on hold
 # Release Notes
 #
+# Version 1.2:
+#   All actors optional
+#
 # Version 1.1:
 #   added actor_hold
 #
@@ -24,9 +27,18 @@ class ButtonClicked(hass.Hass):
         self.listen_event_handle_list = []
         self.timer_handle_list = []
 
-        self.actor_single = globals.get_arg(self.args,"actor_single")
-        self.actor_double = globals.get_arg(self.args,"actor_double")
-        self.actor_hold = globals.get_arg(self.args,"actor_hold")
+        try:
+            self.actor_single = globals.get_arg(self.args,"actor_single")
+        except KeyError:
+            self.actor_single = None
+        try:
+            self.actor_double = globals.get_arg(self.args,"actor_double")
+        except KeyError:
+            self.actor_double = None
+        try:
+            self.actor_hold = globals.get_arg(self.args,"actor_hold")
+        except KeyError:
+            self.actor_hold = None
 
         self.dimmer_timer_handle = None
 
@@ -34,7 +46,7 @@ class ButtonClicked(hass.Hass):
     
     def event_detected(self, event_name, data, kwargs):
         if data["entity_id"] == self.args["sensor"]:
-            if data["click_type"] == "single":
+            if data["click_type"] == "single" and self.actor_single != None:
                 self.log("ButtonClicked: {}".format(data["entity_id"]))
                 # Is on
                 if self.get_state(self.actor_single) == "on":
@@ -53,7 +65,7 @@ class ButtonClicked(hass.Hass):
                     else:
                         self.turn_on(self.actor_single)
 
-            if data["click_type"] == "double":
+            if data["click_type"] == "double" and self.actor_double != None:
                 self.log("Double Button Click: {}".format(data["entity_id"]))
                 self.log("Toggling {}".format(self.actor_double))
                 # Is on
@@ -72,13 +84,13 @@ class ButtonClicked(hass.Hass):
                     else:
                         self.turn_on(self.actor_single)
 
-            if data["click_type"] == "long_click_press":
+            if data["click_type"] == "long_click_press" and self.actor_hold != None:
                 self.log("Long Button Click: {}".format(data["entity_id"]))
                 self.log("Starting Dimmer")
                 self.dimmer_timer_handle = self.run_every(self.dimmer_callback, datetime.datetime.now(), 0.5, entity_id=self.actor_hold)
                 self.timer_handle_list.append(self.dimmer_timer_handle)
 
-            if data["click_type"] == "hold":
+            if data["click_type"] == "hold" and self.actor_hold != None:
                 self.log("Button Release: {}".format(data["entity_id"]))
                 self.log("Stopping Dimmer")
                 if self.dimmer_timer_handle != None:
