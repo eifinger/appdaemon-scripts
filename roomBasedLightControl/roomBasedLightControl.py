@@ -15,6 +15,9 @@ import globals
 #
 # Release Notes
 #
+# Version 1.2:
+#   None Check
+#
 # Version 1.1:
 #   Using globals
 #
