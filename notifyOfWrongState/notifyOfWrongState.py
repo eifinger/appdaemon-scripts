@@ -20,6 +20,9 @@ import globals
 #
 # Release Notes
 #
+# Version 1.9:
+#   check unavailable when using get_state
+#
 # Version 1.8:
 #   check None when using get_state
 #
@@ -94,10 +97,10 @@ class NotifyOfWrongState(hass.Hass):
             if full_state != None:
               attributes = full_state["attributes"]
               self.log("full_state: {}".format(full_state))
-              if full_state["state"] != "off" and "device_class" in attributes and (attributes["device_class"] == "window" or attributes["device_class"] == "door" or attributes["device_class"] == "garage_door"):
+              if full_state["state"] != "off" and full_state["state"] != "unavailable" and "device_class" in attributes and (attributes["device_class"] == "window" or attributes["device_class"] == "door" or attributes["device_class"] == "garage_door"):
                 self.log(self.message_reed.format(self.friendly_name(entity)))
                 self.notifier.notify(self.notify_name, self.message_reed.format(self.friendly_name(entity)), useAlexa=self.use_alexa)
-              elif full_state["state"] != "off":
+              elif full_state["state"] != "off" and full_state["state"] != "unavailable":
                 self.turn_off(entity)
                 self.log(self.message.format(self.friendly_name(entity)))
                 self.notifier.notify(self.notify_name, self.message.format(self.friendly_name(entity)), useAlexa=self.use_alexa)
