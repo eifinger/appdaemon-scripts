@@ -17,6 +17,9 @@ import globals
 #
 # Release Notes
 #
+# Version 1.4.1:
+#   Fix google maps url message
+#
 # Version 1.4:
 #   Don't include Google Maps Link in Notification for Alexa
 #
@@ -96,7 +99,7 @@ class NextApppointmentLeaveNotifier(hass.Hass):
                 google_maps_url = self.google_source_url + location_name.replace(" ","+")
                 self.log("Notify user")
                 self.notifier.notify(self.notify_name, self.message.format(location_name,self.get_state(self.travel_time_sensor)))
-                self.notifier.notify(self.notify_name, self.message.format(google_maps_url), useAlexa=False)
+                self.notifier.notify(self.notify_name, self.message_google_link.format(google_maps_url), useAlexa=False)
                 self.location_of_last_notified_event = location_name
         else:
             self.log("Notification is turned off")
