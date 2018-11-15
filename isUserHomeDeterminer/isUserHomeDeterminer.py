@@ -72,7 +72,7 @@ class IsUserHomeDeterminer(hass.Hass):
         if self.get_state(self.app_switch) == "on":
             if new != "" and new != old:
                 self.log("{} changed from {} to {}".format(entity,old,new), level = "DEBUG")
-                if new == "off" and old == "on" and listen_state_handle == None:
+                if new == "off" and old == "on" and self.listen_state_handle == None:
                     device_tracker_state = self.get_state(self.device_tracker, attribute = "all")
                     self.log("device_tracker_state: {}".format(device_tracker_state), level = "DEBUG")
                     last_changed = device_tracker_state["last_changed"]
@@ -86,7 +86,7 @@ class IsUserHomeDeterminer(hass.Hass):
                         self.log("Wait for device tracker to change to 'home'")
                         self.listen_state_handle = self.listen_state(self.check_if_user_got_home, self.device_tracker)
                         self.listen_state_handle_list.append(self.listen_state_handle)
-                        self.timer_handle_list.append(self.run_in(self.cancel_listen_state_callback ,self.delay))
+                        self.timer_handle_list.append(self.run_in(self.cancel_listen_state_callback, self.delay))
                     #User left home: Device tracker is still home.  Wait if it changes to home in the next self.delay seconds
                     elif device_tracker_state["state"]  == "home":
                         self.log("Wait for device tracker to change to 'not_home'")
