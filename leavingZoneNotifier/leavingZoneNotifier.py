@@ -26,6 +26,9 @@ import globals
 #
 # Release Notes
 #
+# Version 1.9:
+#   PEP8 style and log message when updating travel_time_sensor
+#
 # Version 1.8:
 #   Add travel time in notification message
 #
