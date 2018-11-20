@@ -167,6 +167,7 @@ class LeavingZoneNotifier(hass.Hass):
                     self.run_in(self.notify_user_callback, 2)
                 )
             else:
+                self.log("self.travel_time_sensor is not None")
                 self.log("Notify user")
                 self.notifier.notify(
                     self.notify_name,
