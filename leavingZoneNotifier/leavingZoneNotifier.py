@@ -131,8 +131,7 @@ class LeavingZoneNotifier(hass.Hass):
                         )
                 ):
                     self.log(
-                        "Zone of {} changed from {} to {}. \
-                        Wait {} seconds until notification."
+                        "Zone of {} changed from {} to {}. Wait {} seconds until notification."
                         .format(
                             self.friendly_name(entity),
                             old["state"],
