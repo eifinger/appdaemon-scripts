@@ -4,7 +4,7 @@ increaseCounterOnGoogleMapsUpdate:
   app_switch: input_boolean.increase_counter_on_google_maps_update
   domain: homeassistant
   service: update_entity
-  entity_id: sensor.travel_time_home_user_one
+  entity_id: sensor.travel_time_home_user_one,sensor.travel_time_home_user_two
   counter: counter.google_maps_api_calls
   global_dependencies:
     - globals
