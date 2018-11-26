@@ -35,7 +35,7 @@ class IncreaseCounterOnServiceCall(hass.Hass):
         self.listen_event_handle_list.append(self.listen_event(self.call_service_callback, "call_service"))
     
     def call_service_callback(self, event_name, data, kwargs):
-        self.log(event_name + ': ' + str(data))
+        self.log(event_name + ': ' + str(data), level="DEBUG")
         if (
                 self.get_state(self.app_switch) == "on"
                 and data["domain"] == self.domain
