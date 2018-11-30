@@ -17,7 +17,7 @@ class ButtonClicked(hass.Hass):
     def initialize(self):
         self.listen_event_handle_list = []
 
-        self.listen_event_handle_list.append(self.listen_event(self.event_detected, "click"))
+        self.listen_event_handle_list.append(self.listen_event(self.event_detected, "xiaomi_aqara.click"))
         
     
     def event_detected(self, event_name, data, kwargs):

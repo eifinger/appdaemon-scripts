@@ -103,7 +103,7 @@ class FaceRecognitionBot(hass.Hass):
         # Subscribe to sensors
         self.listen_state_handle_list.append(self.listen_state(self.triggered,self.sensor))
         #Subscribe to custom triggers
-        self.listen_event_handle_list.append(self.listen_event(self.button_clicked, "click"))
+        self.listen_event_handle_list.append(self.listen_event(self.button_clicked, "xiaomi_aqara.click"))
         self.listen_event_handle_list.append(self.listen_event(self.learn_faces_event_callback,"eifinger_learn_faces"))
         #subscribe to telegram events
         self.listen_event_handle_list.append(self.listen_event(self.receive_telegram_callback, 'telegram_callback'))

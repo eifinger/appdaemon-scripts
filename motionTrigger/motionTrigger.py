@@ -81,7 +81,7 @@ class MotionTrigger(hass.Hass):
             self.constraint_entities_on = []
 
         # Subscribe to sensors
-        self.listen_event_handle_list.append(self.listen_event(self.motion_detected, "motion"))
+        self.listen_event_handle_list.append(self.listen_event(self.motion_detected, "xiaomi_aqara.motion"))
 
     
     def motion_detected(self, event_name, data, kwargs):

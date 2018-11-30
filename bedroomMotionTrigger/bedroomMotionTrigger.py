@@ -75,7 +75,7 @@ class BedroomMotionTrigger(hass.Hass):
         self.bedroom_state = globals.get_arg(self.args,"bedroom_state")
 
         # Subscribe to sensors
-        self.listen_event_handle_list.append(self.listen_event(self.motion_detected, "motion"))
+        self.listen_event_handle_list.append(self.listen_event(self.motion_detected, "xiaomi_aqara.motion"))
 
     
     def motion_detected(self, event_name, data, kwargs):
