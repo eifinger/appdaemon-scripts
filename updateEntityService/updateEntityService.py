@@ -56,9 +56,9 @@ class UpdateEntityService(hass.Hass):
 
   def update_entity_callback(self, kwargs):
     if self.get_state(self.app_switch) == "on":
-      if self.counter != None and self.max_counter != None and self.get_state(self.counter) >= int(self.max_counter):
+      if self.counter != None and self.max_counter != None and int(self.get_state(self.counter)) >= int(self.max_counter):
         self.error("Maximum amount of {} exceeded on counter: {}".format(self.max_counter, self.friendly_name(self.counter)))
-      elif self.counter != None and self.max_counter != None and self.get_state(self.counter) >= int(self.max_counter)*THRESHOLD_PERCENTAGE:
+      elif self.counter != None and self.max_counter != None and int(self.get_state(self.counter)) >= int(self.max_counter)*THRESHOLD_PERCENTAGE:
         self.log("Threshold amount of {} exceeded on counter: {}".format(THRESHOLD_PERCENTAGE, self.friendly_name(self.counter)), level="WARNING")
       else:
         self.call_service("homeassistant/update_entity", entity_id=self.entity_to_update)
