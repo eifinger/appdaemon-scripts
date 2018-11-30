@@ -1,0 +1,25 @@
+updateTravelTimeHomeUserOne:
+  module: updateEntityService
+  class: UpdateEntityService
+  app_switch: input_boolean.travel_time_home_user_one_update
+  entity_to_update: sensor.travel_time_home_user_one
+  input_number: input_number.travel_time_home_user_one_update_interval
+  counter: counter.google_maps_api_calls
+  max_counter: 18000
+  dependencies: 
+    - Notifier
+  global_dependencies:
+    - globals
+
+updateTravelTimeHomeUserTwo:
+  module: updateEntityService
+  class: UpdateEntityService
+  app_switch: input_boolean.travel_time_home_user_two_update
+  entity_to_update: sensor.travel_time_home_user_two
+  input_number: input_number.travel_time_home_user_two_update_interval
+  counter: counter.google_maps_api_calls
+  max_counter: 18000
+  dependencies: 
+    - Notifier
+  global_dependencies:
+    - globals

@@ -108,3 +108,6 @@ secrets.py
 
 #VS Code
 .vscode
+
+#PyCharm
+.idea

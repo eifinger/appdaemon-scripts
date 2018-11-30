@@ -9,7 +9,7 @@ alarmClock:
   radiowakeup: input_boolean.radiowakeup
   #TODO radioplayer: input_select.wakeup_radioplayer
   wakeup_light: light.bedroom_yeelight
-  fade_in_time_multiplicator: 60000
+  fade_in_time_multiplicator: 60
   isweekday: binary_sensor.workday_today
   notify_name: group_notifications
   message_DE: "Guten Morgen!"

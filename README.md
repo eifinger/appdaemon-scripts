@@ -84,9 +84,12 @@ alexaSpeakerConnector:
   global_dependencies:
     - globals
 ```
+
 ### alarmClock
+
 Alarm Clock App inspired by [this](https://community.home-assistant.io/t/creating-a-alarm-clock/410) forum post.
 It fades in my bedroom light and sends a notifcation. The fade in and alarm time is defined by input_number sliders in HA
+
 ```yaml
 alarmClock:
   module: alarmClock
@@ -105,9 +108,13 @@ alarmClock:
   global_dependencies:
     - globals
 ```
+
 ![alarmClock](images/alarmClock.PNG)
+
 ### bedRoomMotionTrigger
+
 Special version of Motion Trigger. Only trigger when Door is not open (dont want any mosquittos) and only trigger when not both smartphones are in bedroom
+
 ```yaml
 bedroomMotionTrigger:
   module: bedroomMotionTrigger
@@ -122,8 +129,15 @@ bedroomMotionTrigger:
   location_user_two_sensor: sensor.location_user_two
   bedroom_state: Schlafzimmer
 ```
+
 ### buttonClicked
-My multipurpose App to link any switch/light to a Xiaomi Button
+
+My multipurpose App to link any switch/light to a Xiaomi Button.
+
+You can map different entities to the click types ``single`` and ``double``.
+
+For the 1st Generation Button you can hold the button to use it as a light dimmer.
+
 ```yaml
 xiaomiroundButtonBedroomClicked:
   module: buttonClicked
@@ -131,9 +145,17 @@ xiaomiroundButtonBedroomClicked:
   sensor: binary_sensor.switch_158d0001b12a12
   actor_single: light.bedroom_yeelight
   actor_double: group.all
+  actor_hold: light.bedroom_yeelight
+  dependencies:
+    - Notifier
+  global_dependencies:
+    - globals
 ```
+
 ### comingHome
+
 When the front door openes and no one was home before this will turn on something. I am using it to turn on the light (if the sun is down) and turn on the receiver so I can hear Alexa
+
 ```yaml
 comingHomeYeelight:
   module: comingHome
@@ -144,8 +166,11 @@ comingHomeYeelight:
   actor: switch.large_lamp
   after_sundown: True
 ```
+
 ### detectDoorOpenWhenGoingToBed
+
 During this hot summer in Germany we somethimes forgot to close the terrace door before going to bed. This will check if the Xiaomi Door/Window Sensor reports the door being open if the [sleepmode](sleepModeHandler/sleepModeHandler.py) is turned on.
+
 ```yaml
 detectDoorOpenWhenGoingToBed:
   module: detectDoorOpenWhenGoingToBed
@@ -160,8 +185,11 @@ detectDoorOpenWhenGoingToBed:
   global_dependencies:
     - globals
 ```
+
 ### detectWrongStateWhenLeaving
+
 Checks a list of entities which should be on/off when everybody left the house. If something isn't right it will try to turn it off (e.g. a light) and send a notification.
+
 ```yaml
 detectWrongStateWhenLeaving:
   module: detectWrongStateWhenLeaving
@@ -183,18 +211,26 @@ detectWrongStateWhenLeaving:
   global_dependencies:
     - globals
 ```
+
 ### eventMonitor
+
 Monitor all events. Useful for debugging and developing
+
 ```yaml
 eventMonitor:
   module: eventMonitor
   class: Monitor
-  events: 
+  events:
 ```
+
 ### faceRecognitionBot
+
 COMING SOON
+
 ### google_travel_time
+
 Monitors my Google Travel Time Sensors e.g. between home and work. I can enable an input_boolean in HA which causes this App to send me a notication as soon as the traffic is in an acceptable range. I use this drive to/from work when there is the least traffic.
+
 ```yaml
 googleTravelTime_home_from_work:
   module: google_travel_time
@@ -205,13 +241,19 @@ googleTravelTime_home_from_work:
   message_DE: "Du kannst losfahren nach {}"
   message_EN: "You can start your journey to {}"
   global_dependencies:
-    - globals 
+    - globals
 ```
+
 ![googleTravelTimes](images/googleTravelTimes.PNG)
+
 ### headingToZoneNotifier
+
 Currently not used
+
 ### homeArrivalNotifier
+
 Greet the person coming home with a notification
+
 ```yaml
 homeArrivalNotifierUserOne:
   module: homeArrivalNotifier
@@ -226,7 +268,26 @@ homeArrivalNotifierUserOne:
   global_dependencies:
     - globals
 ```
+
+### increaseCounterOnServiceCall
+
+Increase a counter entity on a specified service call. I use it to keep track of all Google Maps Service Calls so I don't exceed my limit.
+
+```yaml
+increaseCounterOnGoogleMapsUpdate:
+  module: increaseCounterOnServiceCall
+  class: IncreaseCounterOnServiceCall
+  app_switch: input_boolean.increase_counter_on_google_maps_update
+  domain: homeassistant
+  service: update_entity
+  entity_id: sensor.travel_time_home_user_one
+  counter: counter.google_maps_api_calls
+  global_dependencies:
+    - globals
+```
+
 ### isHomeDeterminer
+
 Controls an input_boolean "isHome" which is used as a trigger for other Apps.
 The state depends on other input_booleans controlled by the [isUserHomeDeterminer](isUserHomeDeterminer/isUserHomeDeterminer.py)
 ```yaml
@@ -258,8 +319,11 @@ isUserHomeDeterminerUserOne:
   global_dependencies:
     - globals
 ```
+
 ### leavingZoneNotifier
+
 Notify if a user is leaving a zone after being there for a certain amount of time. I use this to notify my SO that I am leaving work and driving home
+
 ```yaml
 leavingWorkNotifierUserOne:
   module: leavingZoneNotifier
@@ -269,15 +333,21 @@ leavingWorkNotifierUserOne:
   user_name: secret_name_user_one
   lingering_time: 3600
   delay: 120
-  zone: Work
+  zone: Arbeit
   notify_name: group_notifications
-  message_DE: "{} hat {} vor {} Minuten verlassen."
-  message_EN: "{} left {} {} minutes ago"
+  message: "{} hat {} vor {} Minuten verlassen."
+  travel_time_sensor: sensor.travel_time_home_user_one
+  travel_time_sensor_message: "Die momentane Reisezeit beträgt {}."
+  dependencies:
+    - Notifier
   global_dependencies:
     - globals
 ```
+
 ### motionTrigger
+
 Turn something on/off when a motion sensor turns on. Automatically turn it off again after a delay.
+
 ```yaml
 obenTreppeMotionTrigger:
   module: motionTrigger
@@ -290,7 +360,9 @@ obenTreppeMotionTrigger:
   global_dependencies:
     - globals
 ```
+
 ### newWifiDeviceNotify
+
 Actually a wrong name. This will send me a notification when any device_tracker component detects a new device. I initally thought to use this as a security feature but found it quite useful when adding new Sonoff switches and such. I get a notification if the setup was successfull.
 
 **Version 1.2:**
@@ -413,8 +485,11 @@ roggenNotifier:
     - globals
 ```
 ![roggenNotify](images/roggenNotify.PNG)
+
 ### powerUsageNotification
+
 Notify when the Washingmachine or Dishwasher started/finished. Using power measured by TP HS110 Plugs like[![](https://static.tp-link.com/res/images/products/HS110_us_V1_1133_normal_0_20151017154946.jpg)](https://www.amazon.de/dp/B017X72IES/ref=twister_B07CQBCZ5G)
+
 ```yaml
 powerUsageNotification_Dishwasher:
   module: powerUsageNotification
@@ -432,10 +507,30 @@ powerUsageNotification_Dishwasher:
   global_dependencies:
     - globals
 ```
+
 ![dishWasherNotify](images/dishWasherNotify.PNG)
+
+### resetCounterOnLastDayOfMonth
+
+App which resets a counter on the last day of month
+
+```yaml
+resetGoogleMapsApiCounterOnLastDayOfMonth:
+  module: resetCounterOnLastDayOfMonth
+  class: ResetCounterOnLastDayOfMonth
+  app_switch: input_boolean.reset_googlemapsapicounter_on_last_day_of_month
+  time: "9:00"
+  counter: counter.google_maps_api_calls
+  global_dependencies:
+    - globals
+
+```
+
 ### roomBasedLightControl
+
 BETA
 Turn the light on based on which room my smartphone is currently being determined by [find3](https://github.com/schollz/find3)
+
 ```yaml
 roomBasedLightControl:
   module: roomBasedLightControl
@@ -477,6 +572,7 @@ warm_bath_before_wakeup:
   module: setThermostat
   class: SetThermostat
   app_switch: input_boolean.warm_bath_before_wakeup
+  isHome: input_boolean.is_home
   time_entity: sensor.alarm_time
   upfront_time: 60
   duration: 60
@@ -497,6 +593,7 @@ Currently only controlled by ``Alexa, guten Morgen`` ``Alexa, gute Nacht``
 ### standardSetter
 Set back some HA entities back to their standard values.
 Configurable in the HA frontend. Currently used to set back the next the [nextAppointmentLeaveNotifier](#nextAppointmentLeaveNotifier) to my configured default value.
+
 ```yaml
 standardSetterTravelModeNextAppointment:
   module: standardSetter
@@ -507,6 +604,7 @@ standardSetterTravelModeNextAppointment:
   global_dependencies:
     - globals
 ```
+
 ![standardSetter](images/standard_setter.PNG)
 ### turnFanOnWhenHot
 Turns the Fan on when the temperature is above a configurable threshold and someone is in the room ([find3](https://github.com/schollz/find3))
@@ -524,13 +622,24 @@ turnFanOnWhenHot:
   global_dependencies:
     - globals
 ```
+
 ![ventilatorAutomation](images/ventilatorAutomation.PNG)
+
 ### turnOffBarAfterRestart
-As I sometimes restart HA when working on it from remote I turn the Bar lights to red with [this script](https://github.com/eifinger/homeassistant-config/blob/master/updateHomeassistant.sh). This way everyone can see HA is currently unavailable. If it comes back up again this app will turn the light green and then off. 
+
+As I sometimes restart HA when working on it from remote I turn the Bar lights to red with [this script](https://github.com/eifinger/homeassistant-config/blob/master/updateHomeassistant.sh). This way everyone can see HA is currently unavailable. If it comes back up again this app will turn the light green and then off.
+
+### updateEntityService
+
+App which calls ``homeassistant.update_entity`` at an interval controlled by an input_boolean. I use it in combination with [schedy](https://hass-apps.readthedocs.io/en/latest/apps/schedy/index.html) to schedule the interval.
+
 ### notify
+
 IN DEVELOPMENT
-Centralizes messaging. Among other things, it will determine whether a user is at home and if yes in which room. 
+Centralizes messaging. Among other things, it will determine whether a user is at home and if yes in which room.
+
 Then Alexa in that room will be used additionally to Telegram
+
 ```yaml
 Notify:
   module: notify
@@ -543,6 +652,7 @@ Notify:
 ```
 
 # Thanks
+
 First of all thanks to the Homeassistant Team and [Andrew Cockburn](https://github.com/acockburn) for making Appdaemon
 
 Some of the Apps are taken from the official examples and many based on or at least inspired by [Rene Tode](https://github.com/ReneTode). For example his absolutely fantastic [Alexa-Appdaemon-App](https://github.com/ReneTode/Alexa-Appdaemon-App).

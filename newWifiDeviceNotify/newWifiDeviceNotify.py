@@ -18,6 +18,9 @@ import globals
 #
 # Release Notes
 #
+# Version 1.4:
+#   Don't use Alexa for Notifications
+#
 # Version 1.3:
 #   Fix for hostnames containing "-"
 #
@@ -61,7 +64,7 @@ class DeviceNotify(hass.Hass):
     self.log("event_name: {}".format(event_name))
     self.log("data: {}".format(data))
     message = self.message.format(data["host_name"],data["mac"])
-    self.notifier.notify(self.notify_name, message)
+    self.notifier.notify(self.notify_name, message, useAlexa=False)
     self.askForProfileChange(data["host_name"])
 
 
