@@ -114,10 +114,12 @@ class LeavingZoneNotifier(hass.Hass):
                 ),
                 level="DEBUG"
             )
+            self.log("Attributes: {}".format(attributes))
             if (
                     new["state"] == self.zone
                     and old["state"] != self.zone
-                    and self.false_positive is False):
+                    and self.false_positive is False
+            ):
                 self.log(
                     "Setting user_entered_zone to {}".format(last_changed)
                 )
