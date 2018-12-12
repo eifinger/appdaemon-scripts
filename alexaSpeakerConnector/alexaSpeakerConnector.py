@@ -36,7 +36,7 @@ class AlexaSpeakerConnector(hass.Hass):
         if self.get_state(self.receiver) == "off":
           self.log("Setting source of {} to: {}". format(self.receiver, self.receiver_source))
           self.call_service("media_player/select_source", entity_id=self.receiver, source=self.receiver_source)
-          self.log("Setting source of {} to: {}". format(self.receiver, self.receiver_source))
+          self.log("Setting source of {} to: {}". format(self.alexa_entity, self.alexa_entity_source))
           self.call_service("media_player/select_source", entity_id=self.alexa_entity, source=self.alexa_entity_source)
 
   def terminate(self):
