@@ -6,7 +6,7 @@ detectWrongStateWhenLeaving:
   binary_sensor.door_window_sensor_158d0002059ddf,media_player.denon_avrx1300w,switch.large_lamp,\
   switch.small_lamp,switch.snowboard,light.bedroom_yeelight,light.bar_table,light.lobby_yeelight,\
   light.reading_lamp_yeelight,light.treppe_oben,light.stairs_lower_yeelight,switch.ventilator,light.livingroom_yeelight,\
-  switch.tv"
+  switch.tv, switch.weihnachtslichter,media_player.denon_avrx1300w"
   trigger_entity: input_boolean.is_home
   trigger_state: "off"
   message_DE: "Du hast {} angelassen. Ich habe es für dich ausgemacht."
@@ -81,7 +81,7 @@ detectDevicesOnWhenGoingToBed:
   binary_sensor.door_window_sensor_158d0002059ddf,media_player.denon_avrx1300w,switch.large_lamp,\
   switch.small_lamp,switch.snowboard,light.bedroom_yeelight,light.bar_table,light.lobby_yeelight,\
   light.reading_lamp_yeelight,light.treppe_oben,light.stairs_lower_yeelight,switch.ventilator,light.livingroom_yeelight,\
-  switch.tv"
+  switch.tv, switch.weihnachtslichter,media_player.denon_avrx1300w"
   trigger_entity: input_boolean.sleepmode
   trigger_state: "on"
   dependencies:
