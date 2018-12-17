@@ -16,3 +16,23 @@ warm_bath_before_wakeup:
     - Notifier
   global_dependencies:
     - globals
+
+warm_upper_bath_before_wakeup:
+  module: setThermostat
+  class: SetThermostat
+  app_switch: input_boolean.warm_upper_bath_before_wakeup
+  isHome: input_boolean.is_home
+  time_entity: sensor.alarm_time
+  upfront_time: 60
+  duration: 90
+  climat_entity: climate.bad_oben_thermostat
+  target_entity: input_number.warm_upper_bath_before_wakeup
+  message: "Ich habe {} auf {} °C gestellt"
+  #message: "I have set {} to {}"
+  notify_name: group_notifications
+  use_alexa: False
+  dependencies:
+    - Notifier
+  global_dependencies:
+    - globals
+
