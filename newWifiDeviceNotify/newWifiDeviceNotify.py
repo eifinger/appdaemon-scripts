@@ -71,6 +71,8 @@ class DeviceNotify(hass.Hass):
   def askForProfileChange(self, host_name):
     """Asks the user if he wants to allow the new device to have internet access"""
     self.log("Asking for profile change")
+    if host_name is None:
+        host_name = ""
     keyboard = [[("Zulassen",ALLOW_CALLBACK_IDENTIFIER + IDENTIFIER_DELIMITER + host_name)],[("Sperren",BLOCK_CALLBACK_IDENTIFIER + IDENTIFIER_DELIMITER + host_name)]]
     self.log("keyboard is: {}".format(keyboard), level="DEBUG")
     self.call_service('telegram_bot/send_message',
