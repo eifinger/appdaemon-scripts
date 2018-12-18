@@ -13,6 +13,7 @@ class guestInformIntent(hass.Hass):
         try:
             text = "Das weiß ich leider im Moment nicht"
             self.log("Slots: {}".format(slots))
+            self.log("Entities: {}".format(self.entities))
         except:
             text = self.random_arg(self.args["Error"])
         return text
