@@ -1,0 +1,118 @@
+setWohnzimmerThermostatWhenLeaving:
+  module: setThermostatOnStateChange
+  class: SetThermostatOnStateChange
+  app_switch: input_boolean.set_thermostat_when_leaving
+  trigger_entity: input_boolean.is_home
+  trigger_state: "off"
+  climate_entity: climate.wohnzimmer_thermostat
+  target_entity: input_number.set_thermostat_when_leaving
+  message: "Ich habe {} auf {} °C gestellt"
+  #message: "I have set {} to {}"
+  notify_name: group_notifications
+  use_alexa: False
+  dependencies: 
+    - Notifier
+  global_dependencies:
+    - globals
+
+setBadObenThermostatWhenLeaving:
+  module: setThermostatOnStateChange
+  class: SetThermostatOnStateChange
+  app_switch: input_boolean.set_thermostat_when_leaving
+  trigger_entity: input_boolean.is_home
+  trigger_state: "off"
+  climate_entity: climate.bad_oben_thermostat
+  target_entity: input_number.set_thermostat_when_leaving
+  message: "Ich habe {} auf {} °C gestellt"
+  #message: "I have set {} to {}"
+  notify_name: group_notifications
+  use_alexa: False
+  dependencies:
+    - Notifier
+  global_dependencies:
+    - globals
+
+setKitchenThermostatWhenLeaving:
+  module: setThermostatOnStateChange
+  class: SetThermostatOnStateChange
+  app_switch: input_boolean.set_thermostat_when_leaving
+  trigger_entity: input_boolean.is_home
+  trigger_state: "off"
+  climate_entity: climate.kuche_thermostat
+  target_entity: input_number.set_thermostat_when_leaving
+  message: "Ich habe {} auf {} °C gestellt"
+  #message: "I have set {} to {}"
+  notify_name: group_notifications
+  use_alexa: False
+  dependencies:
+    - Notifier
+  global_dependencies:
+    - globals
+
+setThermostatWhenSleeping:
+  module: setThermostatOnStateChange
+  class: SetThermostatOnStateChange
+  app_switch: input_boolean.set_thermostat_when_sleeping
+  trigger_entity: input_boolean.sleepmode
+  trigger_state: "on"
+  climate_entity: climate.wohnzimmer_thermostat
+  target_entity: input_number.set_thermostat_when_sleeping
+  message: "Ich habe {} auf {} °C gestellt"
+  #message: "I have set {} to {}"
+  notify_name: group_notifications
+  use_alexa: False
+  dependencies:
+    - Notifier
+  global_dependencies:
+    - globals
+
+setBadObenThermostatWhenSleeping:
+  module: setThermostatOnStateChange
+  class: SetThermostatOnStateChange
+  app_switch: input_boolean.set_thermostat_when_sleeping
+  trigger_entity: input_boolean.sleepmode
+  trigger_state: "on"
+  climate_entity: climate.bad_oben_thermostat
+  target_entity: input_number.set_thermostat_when_sleeping
+  message: "Ich habe {} auf {} °C gestellt"
+  #message: "I have set {} to {}"
+  notify_name: group_notifications
+  use_alexa: False
+  dependencies:
+    - Notifier
+  global_dependencies:
+    - globals
+
+setKitchenThermostatWhenSleeping:
+  module: setThermostatOnStateChange
+  class: SetThermostatOnStateChange
+  app_switch: input_boolean.set_thermostat_when_sleeping
+  trigger_entity: input_boolean.sleepmode
+  trigger_state: "on"
+  climate_entity: climate.kuche_thermostat
+  target_entity: input_number.set_thermostat_when_sleeping
+  message: "Ich habe {} auf {} °C gestellt"
+  #message: "I have set {} to {}"
+  notify_name: group_notifications
+  use_alexa: False
+  dependencies:
+    - Notifier
+  global_dependencies:
+    - globals
+
+setLivingroomThermostatWhenWakingUp:
+  module: setThermostatOnStateChange
+  class: SetThermostatOnStateChange
+  app_switch: input_boolean.set_livingroom_thermostat_when_waking_up
+  trigger_entity: input_boolean.sleepmode
+  trigger_state: "off"
+  climate_entity: climate.wohnzimmer_thermostat
+  target_entity: input_number.set_livingroom_thermostat_when_waking_up
+  message: "Ich habe {} auf {} °C gestellt"
+  #message: "I have set {} to {}"
+  notify_name: group_notifications
+  use_alexa: False
+  dependencies:
+    - Notifier
+  global_dependencies:
+    - globals

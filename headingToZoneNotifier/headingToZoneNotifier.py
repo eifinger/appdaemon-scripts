@@ -38,7 +38,8 @@ class HeadingToZoneNotifier(hass.Hass):
         self.last_triggered = 0
         self.time_between_messages = datetime.timedelta(seconds=600)
 
-        self.listen_state_handle_list.append(self.listen_state(self.state_change, self.args["proximity"], attribute = "all"))
+        self.listen_state_handle_list.append(
+            self.listen_state(self.state_change, self.args["proximity"], attribute="all"))
     
     def state_change(self, entity, attributes, old, new, kwargs):
         device = self.args["device"]
