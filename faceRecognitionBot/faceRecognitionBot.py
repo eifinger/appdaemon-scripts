@@ -1,6 +1,8 @@
+import json
+from json import JSONDecodeError
+
 import appdaemon.plugins.hass.hassapi as hass # pylint: disable=import-error
 import globals
-import messages
 import shutil
 import os
 import time
@@ -286,11 +288,14 @@ class FaceRecognitionBot(hass.Hass):
             if response is not None:
                 result_dict = {}
                 self.log("response is: {}".format(response.text))
-                response_json = response.json()
-                result_dict["count"] = response_json['count']
-                result_dict["faces"] = response_json['faces']
-                result_dict["matchedFacesCount"] = len(response_json['faces'])
-                result_dict_dict[filename] = result_dict
+                try:
+                    response_json = response.json()
+                    result_dict["count"] = response_json['count']
+                    result_dict["faces"] = response_json['faces']
+                    result_dict["matchedFacesCount"] = len(response_json['faces'])
+                    result_dict_dict[filename] = result_dict
+                except JSONDecodeError:
+                    self.log("JSONDecodeError. Skipping response")
         # get the maximum number of faces detected in one image
         maxCount = self._getMaxCountFromResult(result_dict_dict)
         # get a list of distinct recognized face names
