@@ -64,11 +64,11 @@ class SetThermostat(hass.Hass):
             if self.run_timer is not None:
                 self.cancel_timer(self.run_timer)
             time_entity_state = self.get_state(self.time_entity)
-            event_time = datetime.datetime.strptime(time_entity_state, "%Y-%m-%d %H:%M:%S")
-
-            self.run_timer = self.run_at(self.trigger_thermostat, event_time)
-            self.timer_handle_list.append(self.run_timer)
-            self.log("Theromstat will trigger at {}".format(event_time))
+            if time_entity_state is not None and time_entity_state != "":
+                event_time = datetime.datetime.strptime(time_entity_state, "%Y-%m-%d %H:%M:%S")
+                self.run_timer = self.run_at(self.trigger_thermostat, event_time)
+                self.timer_handle_list.append(self.run_timer)
+                self.log("Theromstat will trigger at {}".format(event_time))
 
     def trigger_thermostat(self, kwargs):
         if self.get_state(self.app_switch) == "on" and self.get_state(self.isHome) == "on":
