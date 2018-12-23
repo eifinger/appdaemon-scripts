@@ -19,6 +19,9 @@ import datetime
 #
 # Release Notes
 #
+# Version 1.3:
+#   Use new formatted alarm_time
+#
 # Version 1.2:
 #   use Notify App
 #
@@ -28,6 +31,7 @@ import datetime
 # Version 1.0:
 #   Initial Version
 
+
 class AlarmClock(hass.Hass):
 
     def initialize(self):
@@ -36,21 +40,21 @@ class AlarmClock(hass.Hass):
         self.listen_event_handle_list = []
         self.listen_state_handle_list = []
 
-        self.alarm_time = globals.get_arg(self.args,"alarm_time")
-        self.wakemeup = globals.get_arg(self.args,"wakemeup")
-        self.naturalwakeup = globals.get_arg(self.args,"naturalwakeup")
-        self.alarmweekday = globals.get_arg(self.args,"alarmweekday")
-        self.radiowakeup = globals.get_arg(self.args,"radiowakeup")
-        self.isweekday = globals.get_arg(self.args,"isweekday")
-        self.notify_name = globals.get_arg(self.args,"notify_name")
-        self.wakeup_light = globals.get_arg(self.args,"wakeup_light")
+        self.alarm_time = globals.get_arg(self.args, "alarm_time")
+        self.wakemeup = globals.get_arg(self.args, "wakemeup")
+        self.naturalwakeup = globals.get_arg(self.args, "naturalwakeup")
+        self.alarmweekday = globals.get_arg(self.args, "alarmweekday")
+        self.radiowakeup = globals.get_arg(self.args, "radiowakeup")
+        self.isweekday = globals.get_arg(self.args, "isweekday")
+        self.notify_name = globals.get_arg(self.args, "notify_name")
+        self.wakeup_light = globals.get_arg(self.args, "wakeup_light")
         self.fade_in_time_multiplicator = globals.get_arg(self.args, "fade_in_time_multiplicator")
         self.message = globals.get_arg(self.args, "message_DE")
 
         self.notifier = self.get_app('Notifier')
 
         self.brightness = 100
-        self.rgb = (255,255,255)
+        self.rgb = (255, 255, 255)
         
 
         self.cached_alarm_time = self.get_state(self.alarm_time)
@@ -61,7 +65,7 @@ class AlarmClock(hass.Hass):
         self.listen_state_handle_list.append(self.listen_state(self.state_change, self.naturalwakeup))
     
     def state_change(self, entity, attributes, old, new, kwargs):
-        if new != None and new != old:
+        if new is not None and new != old:
             self.timer_handle_list.remove(self.alarm_timer)
             self.cancel_timer(self.alarm_timer)
             if entity == self.alarm_time:
@@ -75,20 +79,10 @@ class AlarmClock(hass.Hass):
     def add_timer(self):
         self.log("cached_alarm_time: {}".format(self.cached_alarm_time))
         self.log("cached_fade_in_time: {}".format(self.cached_fade_in_time))
-        hours = self.cached_alarm_time.split(":",1)[0]
-        self.log("hours: {}".format(hours))
-        minutes = self.cached_alarm_time.split(":",1)[1]
-        self.log("minutes: {}".format(minutes))
-        offset = self.cached_fade_in_time.split(".",1)[0]
+        offset = self.cached_fade_in_time.split(".", 1)[0]
 
-        runtime = datetime.time(int(hours),int(minutes))
-        today = datetime.date.today()
-        rundatetime = datetime.datetime.combine(today, runtime)
+        rundatetime = datetime.datetime.strptime(self.cached_alarm_time, "%Y-%m-%d %H:%M:%S")
         event_time = rundatetime - datetime.timedelta(minutes=int(offset))
-
-        #check if event is in the past
-        if datetime.datetime.now() > event_time:
-            event_time = event_time + datetime.timedelta(days=1)
 
         self.alarm_timer = self.run_at(self.trigger_alarm, event_time)
         self.timer_handle_list.append(self.alarm_timer)
@@ -96,19 +90,26 @@ class AlarmClock(hass.Hass):
 
     def trigger_alarm(self, kwargs):
         if self.get_state(self.wakemeup) == "on":
-            if self.get_state(self.alarmweekday) == "off" or (self.get_state(self.alarmweekday) == "on" and self.get_state(self.isweekday) == "on"):
+            if(
+                    self.get_state(self.alarmweekday) == "off"
+                    or(
+                        self.get_state(self.alarmweekday) == "on"
+                        and self.get_state(self.isweekday) == "on"
+                    )
+            ):
                 if float(self.cached_fade_in_time) > 0:
                     self.log("Turning on {}".format(self.friendly_name(self.wakeup_light)))
-                    self.call_service("light/turn_on", entity_id = self.wakeup_light, transition = self.cached_fade_in_time*int(self.fade_in_time_multiplicator), brightness = self.brightness)
+                    self.call_service(
+                        "light/turn_on",
+                        entity_id=self.wakeup_light,
+                        transition=self.cached_fade_in_time*int(self.fade_in_time_multiplicator),
+                        brightness=self.brightness)
                 self.timer_handle_list.append(self.run_in(self.run_alarm, float(self.cached_fade_in_time)))
-
 
     def run_alarm(self, kwargs):
         self.notifier.notify(self.notify_name, self.message)   
         #TODO radio
 
-                
-     
     def terminate(self):
         for timer_handle in self.timer_handle_list:
             self.cancel_timer(timer_handle)
@@ -119,4 +120,3 @@ class AlarmClock(hass.Hass):
         for listen_state_handle in self.listen_state_handle_list:
             self.cancel_listen_state(listen_state_handle)
 
-    
