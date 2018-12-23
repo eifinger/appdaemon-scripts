@@ -19,6 +19,9 @@ import datetime
 #
 # Release Notes
 #
+# Version 1.3:
+#   Use new formatted alarm_time
+#
 # Version 1.2.1:
 #   Reschedule timer after first run
 #
@@ -31,74 +34,79 @@ import datetime
 # Version 1.0:
 #   Initial Version
 
+
 class SetThermostat(hass.Hass):
 
-  def initialize(self):
-    self.timer_handle_list = []
-    self.listen_state_handle_list = []
+    def initialize(self):
+        self.timer_handle_list = []
+        self.listen_state_handle_list = []
 
-    self.app_switch = globals.get_arg(self.args,"app_switch")
-    self.time_entity = globals.get_arg(self.args,"time_entity")
-    self.upfront_time = globals.get_arg(self.args,"upfront_time")
-    self.duration = globals.get_arg(self.args,"duration")
-    self.climat_entity = globals.get_arg(self.args,"climat_entity")
-    self.target_entity = globals.get_arg(self.args,"target_entity")
-    self.message = globals.get_arg(self.args,"message")
-    self.notify_name = globals.get_arg(self.args,"notify_name")
-    self.use_alexa = globals.get_arg(self.args,"use_alexa")
-    self.isHome = globals.get_arg(self.args,"isHome")
+        self.app_switch = globals.get_arg(self.args, "app_switch")
+        self.time_entity = globals.get_arg(self.args, "time_entity")
+        self.upfront_time = globals.get_arg(self.args, "upfront_time")
+        self.duration = globals.get_arg(self.args, "duration")
+        self.climat_entity = globals.get_arg(self.args, "climat_entity")
+        self.target_entity = globals.get_arg(self.args, "target_entity")
+        self.message = globals.get_arg(self.args, "message")
+        self.notify_name = globals.get_arg(self.args, "notify_name")
+        self.use_alexa = globals.get_arg(self.args, "use_alexa")
+        self.isHome = globals.get_arg(self.args, "isHome")
 
-    self.notifier = self.get_app('Notifier')
+        self.notifier = self.get_app('Notifier')
 
-    self.run_timer = None
-    
-    self.listen_state_handle_list.append(self.listen_state(self.schedule_trigger, self.time_entity))
-    self.schedule_trigger(None,None,None,"Run",None)
-    
-  def schedule_trigger(self, entity, attribute, old, new, kwargs):
-    if new != "":
-      if self.run_timer != None:
-        self.cancel_timer(self.run_timer)
-      time_entity_state = self.get_state(self.time_entity)
-      runtime = datetime.time(int(time_entity_state.split(":")[0]),int(time_entity_state.split(":")[1]))
-      today = datetime.date.today()
-      rundatetime = datetime.datetime.combine(today, runtime)
-      event_time = rundatetime - datetime.timedelta(minutes=int(self.upfront_time))
+        self.run_timer = None
 
-      #check if event is in the past
-      if datetime.datetime.now() > event_time:
-          event_time = event_time + datetime.timedelta(days=1)
+        self.listen_state_handle_list.append(self.listen_state(self.schedule_trigger, self.time_entity))
+        self.schedule_trigger(None, None, None, "Run", None)
 
-      self.run_timer = self.run_at(self.trigger_thermostat, event_time)
-      self.timer_handle_list.append(self.run_timer)
-      self.log("Theromstat will trigger at {}".format(event_time))
+    def schedule_trigger(self, entity, attribute, old, new, kwargs):
+        if new != "":
+            if self.run_timer is not None:
+                self.cancel_timer(self.run_timer)
+            time_entity_state = self.get_state(self.time_entity)
+            event_time = datetime.datetime.strptime(time_entity_state, "%Y-%m-%d %H:%M:%S")
 
-  def trigger_thermostat(self, kwargs):
-    if self.get_state(self.app_switch) == "on" and self.get_state(self.isHome) == "on":
-      self.log(self.message.format(self.friendly_name(self.climat_entity), self.get_state(self.target_entity)))
-      self.notifier.notify(self.notify_name, self.message.format(self.friendly_name(self.climat_entity), self.get_state(self.target_entity)), useAlexa=self.use_alexa)
-      self.log("Turning {} on".format(self.climat_entity))
-      self.call_service("climate/turn_on", entity_id=self.climat_entity)
-      self.previous_temp = self.get_state(self.climat_entity, attribute="all")["attributes"]["temperature"]
-      self.call_service("climate/set_temperature", entity_id=self.climat_entity, temperature=self.get_state(self.target_entity))
-      self.log("Resetting Thermostat in {} minutes.".format(self.duration))
-      self.timer_handle_list.append(self.run_in(self.reset_thermostat, float(self.duration)*60))
-      if self.run_timer != None:
-        self.cancel_timer(self.run_timer)
+            self.run_timer = self.run_at(self.trigger_thermostat, event_time)
+            self.timer_handle_list.append(self.run_timer)
+            self.log("Theromstat will trigger at {}".format(event_time))
 
-  def reset_thermostat(self, kwargs):
-    if self.previous_temp != None:
-      self.log(self.message.format(self.friendly_name(self.climat_entity), self.previous_temp))
-      self.notifier.notify(self.notify_name, self.message.format(self.friendly_name(self.climat_entity), self.previous_temp), useAlexa=self.use_alexa)
-      self.call_service("climate/set_temperature", entity_id=self.climat_entity, temperature=self.previous_temp)
-      self.schedule_trigger(None,None,None,"Run",None)
+    def trigger_thermostat(self, kwargs):
+        if self.get_state(self.app_switch) == "on" and self.get_state(self.isHome) == "on":
+            self.log(self.message.format(self.friendly_name(self.climat_entity), self.get_state(self.target_entity)))
+            self.notifier.notify(
+                self.notify_name,
+                self.message.format(
+                    self.friendly_name(self.climat_entity),
+                    self.get_state(self.target_entity)),
+                useAlexa=self.use_alexa)
+            self.log("Turning {} on".format(self.climat_entity))
+            self.call_service("climate/turn_on", entity_id=self.climat_entity)
+            self.previous_temp = self.get_state(self.climat_entity, attribute="all")["attributes"]["temperature"]
+            self.call_service(
+                "climate/set_temperature",
+                entity_id=self.climat_entity,
+                temperature=self.get_state(self.target_entity))
+            self.log("Resetting Thermostat in {} minutes.".format(self.duration))
+            self.timer_handle_list.append(self.run_in(self.reset_thermostat, float(self.duration)*60))
+            if self.run_timer is not None:
+                self.cancel_timer(self.run_timer)
 
-    
+    def reset_thermostat(self, kwargs):
+        if self.previous_temp is not None:
+            self.log(self.message.format(self.friendly_name(self.climat_entity), self.previous_temp))
+            self.notifier.notify(
+                self.notify_name,
+                self.message.format(
+                    self.friendly_name(self.climat_entity),
+                    self.previous_temp),
+                useAlexa=self.use_alexa)
+            self.call_service("climate/set_temperature", entity_id=self.climat_entity, temperature=self.previous_temp)
+            self.schedule_trigger(None, None, None, "Run", None)
 
-  def terminate(self):
-    for timer_handle in self.timer_handle_list:
-      self.cancel_timer(timer_handle)
+    def terminate(self):
+        for timer_handle in self.timer_handle_list:
+            self.cancel_timer(timer_handle)
 
-    for listen_state_handle in self.listen_state_handle_list:
-      self.cancel_listen_state(listen_state_handle)
-      
+        for listen_state_handle in self.listen_state_handle_list:
+            self.cancel_listen_state(listen_state_handle)
+
