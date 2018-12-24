@@ -40,10 +40,9 @@ Every App has an input_boolean inside HA which turns it on/off. This is useful i
 *   [bedRoomMotionTrigger](#bedroommotiontrigger)
 *   [buttonClicked](#buttonclicked)
 *   [comingHome](#cominghome)
-*   [detectDoorOpenWhenGoingToBed](#detectdooropenwhengoingtobed)
-*   [detectWrongStateWhenLeaving](#detectwrongstatewhenleaving)
+*   [detectWrongState](#detectwrongstate)
 *   [eventMonitor](#eventmonitor)
-*   [faceRecgonitionBot](#facerecognitionbot)
+*   [faceRecognitionBot](#facerecognitionbot)
 *   [google_travel_time](#google_travel_time)
 *   [headingToZoneNotifier](#headingtozonenotifier)
 *   [homeArrivalNotifier](#homearrivalnotifier)
@@ -56,14 +55,17 @@ Every App has an input_boolean inside HA which turns it on/off. This is useful i
 *   [notifyFailedLogin](#notifyfailedlogin)
 *   [notifyOfActionWhenAway](#notifyofactionwhenaway)
 *   [plantWateringNotifier](#plantwateringnotifier)
-*   [powerUsageNotification](#powerusagenotification)
+*   [powerUsageNotification](#powerusagenotification)b
 *   [roomBasedLightControl](#roombasedlightcontrol)
+*   [runOnStateChange](#runonstatechange)
+*   [sensorWatcher](#sensorwatcher)
 *   [setThermostat](#setthermostat)
 *   [setMediaPlayerSource](#setMediaPlayerSource)
 *   [sleepModeHandler](#sleepmodehandler)
 *   [standardSetter](#standardsetter)
 *   [turnFanOnWhenHot](#turnfanonwhenhot)
 *   [turnOffBarAfterRestart](#turnoffbarafterrestart)
+*   [updateEntityService](#updateentityservice)
 *   [notify](#notify)
 
 ### AlexaIntents
@@ -167,26 +169,7 @@ comingHomeYeelight:
   after_sundown: True
 ```
 
-### detectDoorOpenWhenGoingToBed
-
-During this hot summer in Germany we somethimes forgot to close the terrace door before going to bed. This will check if the Xiaomi Door/Window Sensor reports the door being open if the [sleepmode](sleepModeHandler/sleepModeHandler.py) is turned on.
-
-```yaml
-detectDoorOpenWhenGoingToBed:
-  module: detectDoorOpenWhenGoingToBed
-  class: DetectDoorOpenWhenGoingToBed
-  app_switch: input_boolean.detect_door_open_when_going_to_bed
-  sensor: binary_sensor.door_window_sensor_158d000205b808
-  entity: input_boolean.sleepmode
-  after_sundown: True
-  notify_name: group_notifications
-  message_DE: "Du hast {} offen gelassen Dummie."
-  message_EN: "You left open {} Dummy."
-  global_dependencies:
-    - globals
-```
-
-### detectWrongStateWhenLeaving
+### detectWrongState
 
 Checks a list of entities which should be on/off when everybody left the house. If something isn't right it will try to turn it off (e.g. a light) and send a notification.
 
@@ -302,7 +285,9 @@ isHomeDeterminer:
   global_dependencies:
     - globals
 ```
+
 ### isUserHomeDeterminer
+
 The GPS Logger tells me where someone is. But I want to know for sure who just came in the door.
 App to toggle an input boolean when a person enters or leaves home.
 This is determined based on a combination of a GPS device tracker and the door sensor.
@@ -378,7 +363,9 @@ newWifiDeviceNotify:
   global_dependencies:
     - globals
 ```
+
 ### nextAppointmentLeaveNotifier
+
 Send me a notification when it is time to leave for my next appointment based on my current location. Inspired by [this](https://community.home-assistant.io/t/text-to-speech-notification-to-leave-for-appointment/8689) blog post.
 - Selectable travel mode (car/bus/walk/bike)
 - Only for google calendar events which have a location
@@ -402,7 +389,9 @@ nextApppointmentLeaveNotifier:
 ```
 ![nextAppointmentLeaveNotifier](images/next_appoint_leave_modifier.PNG)
 ![next_appoint_leave_modifier_notification](images/next_appoint_leave_modifier_notification.PNG)
+
 ### notifyFailedLogin
+
 Send a notification on a failed login.
 ```yaml
 notifyFailedLogin:
@@ -415,7 +404,9 @@ notifyFailedLogin:
     - globals
 ```
 ![failedLogin](images/failedLogin.PNG)
+
 ### notifyOfActionWhenAway
+
 Notify me of any event for a list of entities when no one is at home.
 For example a door being openend or a motion sensor triggered
 ```yaml
@@ -440,7 +431,9 @@ notifyOfActionWhenAway:
     - globals
 ```
 ![notifyOfActionWhenAway](images/notifyOfActionWhenAway.PNG)
+
 ### plantWateringNotifier
+
 Remind us to water the plants in the morning when the precipiation propability is too low. This uses a Telegram Chatbot. We can press a button in the notification to tell the App that we watered the plants. If we don't do that we get reminded again in the evening.
 ```yaml
 plantWateringNotifier:
@@ -465,7 +458,9 @@ plantWateringNotifier:
 ```
 ![plantWateringReminder](images/plantWateringReminder.PNG)
 ![plantWateringReminderAcknowledged](images/plantWateringReminderAcknowledged.PNG)
+
 ### pollenNotifier
+
 Notify in the morning if any monitored pollen level is above a threshold.
 ```yaml
 roggenNotifier:
@@ -550,7 +545,61 @@ roomBasedLightControl:
   global_dependencies:
     - globals
 ```
+
+### runOnStateChange
+
+App which runs something based on a state change
+```yaml
+turnOffUpperBathThermostatWhenWindowOpen:
+  module: runOnStateChange
+  class: RunOnStateChange
+  app_switch: input_boolean.turn_off_upper_bath_thermostat_when_window_open
+  entities_off: climate.bad_oben_thermostat
+  trigger_entity: binary_sensor.door_window_sensor_158d000204ba26
+  trigger_state: "on"
+  message_on: "Ich habe {} angeschaltet"
+  #message_on: "I turned on {}"
+  message_off: "Ich habe {} ausgeschaltet"
+  #message_off: "I turned off {}"
+  notify_name: group_notifications
+  use_alexa: False
+  dependencies:
+    - Notifier
+  global_dependencies:
+    - globals
+```
+
+### sensorWatcher
+
+Notify me if sensors are offline. This can be the case when batteries are empty.
+```yaml
+sensorWatcher:
+  module: sensorWatcher
+  class: SensorWatcher
+  app_switch: input_boolean.sensor_watcher
+  watch_list: "binary_sensor.door_window_sensor_158d000126a57b, binary_sensor.door_window_sensor_158d0001bb4d94, \
+  binary_sensor.door_window_sensor_158d0001bb4dc0, binary_sensor.door_window_sensor_158d000205b808, \
+  binary_sensor.door_window_sensor_158d000205b82e, binary_sensor.door_window_sensor_158d00020498b6, \
+  binary_sensor.door_window_sensor_158d000204ba26, binary_sensor.door_window_sensor_158d0002059ddf, \
+  binary_sensor.door_window_sensor_158d00020499ad, binary_sensor.door_window_sensor_158d0002048951, \
+  binary_sensor.door_window_sensor_158d00020455bf, binary_sensor.motion_sensor_158d00012aab97, \
+  binary_sensor.motion_sensor_158d0001fa464b, binary_sensor.motion_sensor_158d0002006cfa, \
+  binary_sensor.motion_sensor_158d000236d83c, binary_sensor.motion_sensor_158d000236d982, \
+  binary_sensor.motion_sensor_158d000204c95d, sensor.humidity_158d0002320b3f, sensor.humidity_158d000245a938"
+  message: "Alarm. Ich kann {} nicht mehr finden."
+  # message: "Alarm. I cannot find {} anymore."
+  message_back_online: "Alles gut. {} ist wieder da."
+  # message_back_online: "All is good. {} ist back online."
+  notify_name: group_notifications
+  use_alexa: False
+  dependencies: 
+    - Notifier
+  global_dependencies:
+    - globals
+```
+
 ### setMediaPlayerSource
+
 App which sets media player source on based on a entity state.
 I currently use this to turn on multi room audio when getting up.
 ```yaml
@@ -565,8 +614,10 @@ setMultiRoomAudioWhenSleepModeTurnsOff:
   global_dependencies:
     - globals
 ```
+
 ### setThermostat
-App which sets a thermostat to a target temperature based on a time from an entity
+
+App which sets a thermostat to a target temperature for a specific duration
 ```yaml
 warm_bath_before_wakeup:
   module: setThermostat
@@ -587,10 +638,14 @@ warm_bath_before_wakeup:
   global_dependencies:
     - globals
 ```
+
 ### sleepModeHandler
+
 Set an input_boolean on/off. Used as a trigger for other Apps.
 Currently only controlled by ``Alexa, guten Morgen`` ``Alexa, gute Nacht``
+
 ### standardSetter
+
 Set back some HA entities back to their standard values.
 Configurable in the HA frontend. Currently used to set back the next the [nextAppointmentLeaveNotifier](#nextAppointmentLeaveNotifier) to my configured default value.
 
@@ -606,7 +661,9 @@ standardSetterTravelModeNextAppointment:
 ```
 
 ![standardSetter](images/standard_setter.PNG)
+
 ### turnFanOnWhenHot
+
 Turns the Fan on when the temperature is above a configurable threshold and someone is in the room ([find3](https://github.com/schollz/find3))
 ```yaml
 turnFanOnWhenHot:
