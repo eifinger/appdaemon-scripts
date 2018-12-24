@@ -55,7 +55,7 @@ Every App has an input_boolean inside HA which turns it on/off. This is useful i
 *   [notifyFailedLogin](#notifyfailedlogin)
 *   [notifyOfActionWhenAway](#notifyofactionwhenaway)
 *   [plantWateringNotifier](#plantwateringnotifier)
-*   [powerUsageNotification](#powerusagenotification)b
+*   [powerUsageNotification](#powerusagenotification)
 *   [roomBasedLightControl](#roombasedlightcontrol)
 *   [runOnStateChange](#runonstatechange)
 *   [sensorWatcher](#sensorwatcher)

@@ -34,12 +34,13 @@ class SensorWatcher(hass.Hass):
 
         self.notifier = self.get_app('Notifier')
 
-        for sensor in self.watch_list:
-            if self.get_state(sensor) is None or self.get_state(sensor).lower() == "unknown":
-                self.notifier.notify(
-                    self.notify_name,
-                    self.message.format(self.friendly_name(sensor)),
-                    useAlexa=self.use_alexa)
+        if self.get_state(self.app_switch) == "on":
+            for sensor in self.watch_list:
+                if self.get_state(sensor) is None or self.get_state(sensor).lower() == "unknown":
+                    self.notifier.notify(
+                        self.notify_name,
+                        self.message.format(self.friendly_name(sensor)),
+                        useAlexa=self.use_alexa)
 
         for sensor in self.watch_list:
             self.listen_state_handle_list.append(self.listen_state(self.state_change, sensor))
