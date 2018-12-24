@@ -66,8 +66,9 @@ class AlarmClock(hass.Hass):
     
     def state_change(self, entity, attributes, old, new, kwargs):
         if new is not None and new != old:
-            self.timer_handle_list.remove(self.alarm_timer)
-            self.cancel_timer(self.alarm_timer)
+            if self.alarm_timer is not None:
+                self.timer_handle_list.remove(self.alarm_timer)
+                self.cancel_timer(self.alarm_timer)
             if entity == self.alarm_time:
                 self.log("Alarm time change: {}".format(new))
                 self.cached_alarm_time = new
