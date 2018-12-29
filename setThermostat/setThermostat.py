@@ -67,6 +67,8 @@ class SetThermostat(hass.Hass):
     def schedule_trigger(self, entity, attribute, old, new, kwargs):
         if self.run_timer is not None:
             self.cancel_timer(self.run_timer)
+            self.log("Cancelled scheduled trigger")
+            self.run_timer = None
         # Not using 'new' so this function can be triggered during initialize
         time_entity_state = self.get_state(self.time_entity)
         if time_entity_state is not None and time_entity_state != "":
