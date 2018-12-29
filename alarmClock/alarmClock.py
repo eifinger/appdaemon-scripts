@@ -55,6 +55,7 @@ class AlarmClock(hass.Hass):
 
         self.brightness = 100
         self.rgb = (255, 255, 255)
+        self.alarm_timer = None
         
 
         self.cached_alarm_time = self.get_state(self.alarm_time)
