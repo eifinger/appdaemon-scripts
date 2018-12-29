@@ -8,6 +8,7 @@ import datetime
 #
 # app_switch: on/off switch for this app. example: input_boolean.warm_bath_before_wakeup
 # isHome: entity which shows if someone is home. example: input_boolean.is_home
+# sleepMode: entity which shows if users are sleeping. example: input_boolean.sleepmode
 # time_entity: sensor which determines when to run in the format 14:30. example: sensor.alarm_time
 # upfront_time: how many minutes before the time_sensor to run. example: 60
 # duration: After how many minutes should the thermostat be set back to its previous value. example: 60
@@ -18,6 +19,9 @@ import datetime
 # use_alexa: use alexa for notification. example: False
 #
 # Release Notes
+#
+# Version 1.4:
+#   Use sleepmode
 #
 # Version 1.3:
 #   Use new formatted alarm_time
@@ -51,6 +55,7 @@ class SetThermostat(hass.Hass):
         self.notify_name = globals.get_arg(self.args, "notify_name")
         self.use_alexa = globals.get_arg(self.args, "use_alexa")
         self.isHome = globals.get_arg(self.args, "isHome")
+        self.sleepMode = globals.get_arg(self.args, "sleepMode")
 
         self.notifier = self.get_app('Notifier')
 
@@ -60,18 +65,22 @@ class SetThermostat(hass.Hass):
         self.schedule_trigger(None, None, None, "Run", None)
 
     def schedule_trigger(self, entity, attribute, old, new, kwargs):
-        if new != "":
-            if self.run_timer is not None:
-                self.cancel_timer(self.run_timer)
-            time_entity_state = self.get_state(self.time_entity)
-            if time_entity_state is not None and time_entity_state != "":
-                event_time = datetime.datetime.strptime(time_entity_state, "%Y-%m-%d %H:%M:%S")
-                self.run_timer = self.run_at(self.trigger_thermostat, event_time)
-                self.timer_handle_list.append(self.run_timer)
-                self.log("Theromstat will trigger at {}".format(event_time))
+        if self.run_timer is not None:
+            self.cancel_timer(self.run_timer)
+        # Not using 'new' so this function can be triggered during initialize
+        time_entity_state = self.get_state(self.time_entity)
+        if time_entity_state is not None and time_entity_state != "":
+            event_time = datetime.datetime.strptime(time_entity_state, "%Y-%m-%d %H:%M:%S")
+            self.run_timer = self.run_at(self.trigger_thermostat, event_time)
+            self.timer_handle_list.append(self.run_timer)
+            self.log("Thermostat will trigger at {}".format(event_time))
 
     def trigger_thermostat(self, kwargs):
-        if self.get_state(self.app_switch) == "on" and self.get_state(self.isHome) == "on":
+        if(
+                self.get_state(self.app_switch) == "on"
+                and self.get_state(self.isHome) == "on"
+                and self.get_state(self.sleepMode) == "on"
+        ):
             self.log(self.message.format(self.friendly_name(self.climat_entity), self.get_state(self.target_entity)))
             self.notifier.notify(
                 self.notify_name,
