@@ -73,7 +73,7 @@ class SetThermostat(hass.Hass):
         time_entity_state = self.get_state(self.time_entity)
         if time_entity_state is not None and time_entity_state != "":
             event_time = datetime.datetime.strptime(time_entity_state, "%Y-%m-%d %H:%M:%S")
-            event_time = event_time + datetime.timedelta(minutes=self.upfront_time)
+            event_time = event_time - datetime.timedelta(minutes=self.upfront_time)
             self.run_timer = self.run_at(self.trigger_thermostat, event_time)
             self.timer_handle_list.append(self.run_timer)
             self.log("Thermostat will trigger at {}".format(event_time))
