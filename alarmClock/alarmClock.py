@@ -53,7 +53,7 @@ class AlarmClock(hass.Hass):
 
         self.notifier = self.get_app('Notifier')
 
-        self.brightness = 100
+        self.brightness = 255
         self.rgb = (255, 255, 255)
         self.alarm_timer = None
         
@@ -104,7 +104,7 @@ class AlarmClock(hass.Hass):
                     self.log("Turning on {}".format(self.friendly_name(self.wakeup_light)))
                     self.call_service(
                         "light/turn_on",
-                        entity_id=self.wakeup_light,
+                        entity_id=str(self.wakeup_light),
                         transition=self.cached_fade_in_time*int(self.fade_in_time_multiplicator),
                         brightness=self.brightness)
                 self.timer_handle_list.append(self.run_in(self.run_alarm, float(self.cached_fade_in_time)))
