@@ -50,10 +50,11 @@ class AlarmClock(hass.Hass):
         self.wakeup_light = globals.get_arg(self.args, "wakeup_light")
         self.fade_in_time_multiplicator = globals.get_arg(self.args, "fade_in_time_multiplicator")
         self.message = globals.get_arg(self.args, "message_DE")
+        self.button = globals.get_arg(self.args, "button")
 
         self.notifier = self.get_app('Notifier')
 
-        self.brightness = 255
+        self.brightness = 100
         self.rgb = (255, 255, 255)
         self.alarm_timer = None
         
@@ -64,6 +65,8 @@ class AlarmClock(hass.Hass):
 
         self.listen_state_handle_list.append(self.listen_state(self.state_change, self.alarm_time))
         self.listen_state_handle_list.append(self.listen_state(self.state_change, self.naturalwakeup))
+
+        self.listen_event_handle_list.append(self.listen_event(self.button_clicked, "xiaomi_aqara.click"))
     
     def state_change(self, entity, attributes, old, new, kwargs):
         if new is not None and new != old:
@@ -108,6 +111,19 @@ class AlarmClock(hass.Hass):
                         transition=self.cached_fade_in_time*int(self.fade_in_time_multiplicator),
                         brightness=self.brightness)
                 self.timer_handle_list.append(self.run_in(self.run_alarm, float(self.cached_fade_in_time)))
+
+    def button_clicked(self, event_name, data, kwargs):
+        """Extra callback method to trigger the wakeup light on demand by pressing a Xiaomi Button"""
+        if data["entity_id"] == self.button:
+            if data["click_type"] == "single":
+                if float(self.cached_fade_in_time) > 0:
+                    self.log("Turning on {}".format(self.friendly_name(self.wakeup_light)))
+                    self.call_service(
+                        "light/turn_on",
+                        entity_id=self.wakeup_light,
+                        transition=self.cached_fade_in_time * int(self.fade_in_time_multiplicator),
+                        brightness_pct=self.brightness)
+
 
     def run_alarm(self, kwargs):
         self.notifier.notify(self.notify_name, self.message)   

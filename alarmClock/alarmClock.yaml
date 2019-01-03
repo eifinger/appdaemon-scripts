@@ -14,6 +14,7 @@ alarmClock:
   notify_name: group_notifications
   message_DE: "Guten Morgen!"
   message_EN: "Good Morning!"
+  button: binary_sensor.switch_158d000215aa28
   dependencies:
     - Notifier
   global_dependencies:
