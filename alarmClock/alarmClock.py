@@ -1,6 +1,9 @@
 import appdaemon.plugins.hass.hassapi as hass
 import globals
 import datetime
+import math
+
+
 #
 # Alarm Clock App
 #
@@ -35,7 +38,7 @@ import datetime
 class AlarmClock(hass.Hass):
 
     def initialize(self):
-    
+
         self.timer_handle_list = []
         self.listen_event_handle_list = []
         self.listen_state_handle_list = []
@@ -55,9 +58,8 @@ class AlarmClock(hass.Hass):
         self.notifier = self.get_app('Notifier')
 
         self.brightness = 100
-        self.rgb = (255, 255, 255)
+        self.rgb_color = [255, 120, 0]
         self.alarm_timer = None
-        
 
         self.cached_alarm_time = self.get_state(self.alarm_time)
         self.cached_fade_in_time = self.get_state(self.naturalwakeup)
@@ -67,7 +69,7 @@ class AlarmClock(hass.Hass):
         self.listen_state_handle_list.append(self.listen_state(self.state_change, self.naturalwakeup))
 
         self.listen_event_handle_list.append(self.listen_event(self.button_clicked, "xiaomi_aqara.click"))
-    
+
     def state_change(self, entity, attributes, old, new, kwargs):
         if new is not None and new != old:
             if self.alarm_timer is not None:
@@ -96,20 +98,23 @@ class AlarmClock(hass.Hass):
 
     def trigger_alarm(self, kwargs):
         if self.get_state(self.wakemeup) == "on":
-            if(
+            if (
                     self.get_state(self.alarmweekday) == "off"
-                    or(
-                        self.get_state(self.alarmweekday) == "on"
-                        and self.get_state(self.isweekday) == "on"
-                    )
+                    or (
+                    self.get_state(self.alarmweekday) == "on"
+                    and self.get_state(self.isweekday) == "on"
+            )
             ):
                 if float(self.cached_fade_in_time) > 0:
                     self.log("Turning on {}".format(self.friendly_name(self.wakeup_light)))
                     self.call_service(
                         "light/turn_on",
-                        entity_id=str(self.wakeup_light),
-                        transition=self.cached_fade_in_time*int(self.fade_in_time_multiplicator),
-                        brightness=self.brightness)
+                        entity_id=self.wakeup_light,
+                        brightness_pct=1)
+                    transition = int(float(self.cached_fade_in_time) * int(self.fade_in_time_multiplicator))
+                    self.log("Transitioning light in over {} seconds".format(transition))
+                    self.timer_handle_list.append(
+                        self.run_in(self.run_fade_in, 1, transition=transition, brightness_pct=1))
                 self.timer_handle_list.append(self.run_in(self.run_alarm, float(self.cached_fade_in_time)))
 
     def button_clicked(self, event_name, data, kwargs):
@@ -121,13 +126,44 @@ class AlarmClock(hass.Hass):
                     self.call_service(
                         "light/turn_on",
                         entity_id=self.wakeup_light,
-                        transition=self.cached_fade_in_time * int(self.fade_in_time_multiplicator),
-                        brightness_pct=self.brightness)
+                        brightness_pct=1)
+                    transition = int(float(self.cached_fade_in_time) * int(self.fade_in_time_multiplicator))
+                    self.log("Transitioning light in over {} seconds".format(transition))
+                    self.timer_handle_list.append(
+                        self.run_in(self.run_fade_in, 1, transition=transition, brightness_pct=1))
 
+    def run_fade_in(self, kwargs):
+        """
+        Callback / recursion style because the transition feature does not seem to work well with Yeelight for
+        transition values greater than 10s.
+        :param kwargs:
+        :return:
+        """
+        wait_factor = 1
+        transition = kwargs["transition"]
+        brightness_pct = kwargs["brightness_pct"]
+        pct_increase = 1 / transition
+        self.log("pct_increase: {}".format(pct_increase), level="DEBUG")
+        if pct_increase < 0.01:
+            wait_factor = math.ceil(0.01 / pct_increase)
+            pct_increase = 0.01
+            self.log("pct_increase smaller than 1% next run_in in {} seconds".format(wait_factor), level="DEBUG")
+        brightness_pct_old = brightness_pct
+        self.log("brightness_pct_old: {}".format(brightness_pct_old), level="DEBUG")
+        brightness_pct_new = int((brightness_pct_old + pct_increase * 100))
+        self.log("brightness_pct_new: {}".format(brightness_pct_new), level="DEBUG")
+        if brightness_pct_new < 100:
+            self.call_service(
+                "light/turn_on",
+                entity_id=self.wakeup_light,
+                rgb_color=self.rgb_color,
+                brightness_pct=brightness_pct_new)
+            self.timer_handle_list.append(
+                self.run_in(self.run_fade_in, wait_factor, transition=transition, brightness_pct=brightness_pct_new))
 
     def run_alarm(self, kwargs):
-        self.notifier.notify(self.notify_name, self.message)   
-        #TODO radio
+        self.notifier.notify(self.notify_name, self.message)
+        # TODO radio
 
     def terminate(self):
         for timer_handle in self.timer_handle_list:
