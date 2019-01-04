@@ -5,8 +5,8 @@ warm_bath_before_wakeup:
   isHome: input_boolean.is_home
   sleepMode: input_boolean.sleepmode
   time_entity: sensor.alarm_time
-  upfront_time: 60
-  duration: 90
+  upfront_time: 120
+  duration: 150
   climat_entity: climate.bad_thermostat
   target_entity: input_number.warm_bath_before_wakeup
   message: "Ich habe {} auf {} °C gestellt"
