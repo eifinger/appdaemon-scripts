@@ -92,10 +92,12 @@ class AlarmClock(hass.Hass):
         if self.cached_alarm_time is not None and self.cached_alarm_time != "":
             rundatetime = datetime.datetime.strptime(self.cached_alarm_time, "%Y-%m-%d %H:%M:%S")
             event_time = rundatetime - datetime.timedelta(minutes=int(offset))
-
-            self.alarm_timer = self.run_at(self.trigger_alarm, event_time)
-            self.timer_handle_list.append(self.alarm_timer)
-            self.log("Alarm will trigger at {}".format(event_time))
+            try:
+                self.alarm_timer = self.run_at(self.trigger_alarm, event_time)
+                self.timer_handle_list.append(self.alarm_timer)
+                self.log("Alarm will trigger at {}".format(event_time))
+            except ValueError:
+                self.log("New trigger time would be in the future")
 
     def trigger_alarm(self, kwargs):
         if self.get_state(self.wakemeup) == "on":
