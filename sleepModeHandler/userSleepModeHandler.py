@@ -28,31 +28,35 @@ class UserSleepModeHandler(hass.Hass):
         self.input_boolean = globals.get_arg(self.args, "input_boolean")
 
         self.listen_state_handle_list.append(
-            self.listen_state(self.state_change, self.location_sensor, duration=self.duration))
+            self.listen_state(self.asleep, self.location_sensor, new=self.room, duration=self.duration))
+        self.listen_state_handle_list.append(
+            self.listen_state(self.awake, self.location_sensor, old=self.room, duration=self.duration))
     
-    def state_change(self, entity, attribute, old, new, kwargs):
+    def asleep(self, entity, attribute, old, new, kwargs):
         if self.get_state(self.app_switch) == "on":
             if new != "" and new != old:
-                if new == self.room:
-                    self.log(
-                        "{} is in {} for more than {}s. Turning {} on".format(
-                            self.friendly_name(self.location_sensor),
-                            self.room,
-                            self.duration,
-                            self.input_boolean
-                        )
+                self.log(
+                    "{} is in {} for more than {}s. Turning {} on".format(
+                        self.friendly_name(self.location_sensor),
+                        self.room,
+                        self.duration,
+                        self.input_boolean
                     )
-                    self.turn_on(self.input_boolean)
-                elif new != self.room:
-                    self.log(
-                        "{} is outside {} for more than {}s. Turning {} off".format(
-                            self.friendly_name(self.location_sensor),
-                            self.room,
-                            self.duration,
-                            self.input_boolean
-                        )
+                )
+                self.turn_on(self.input_boolean)
+
+    def awake(self, entity, attribute, old, new, kwargs):
+        if self.get_state(self.app_switch) == "on":
+            if new != "" and new != old:
+                self.log(
+                    "{} is outside {} for more than {}s. Turning {} off".format(
+                        self.friendly_name(self.location_sensor),
+                        self.room,
+                        self.duration,
+                        self.input_boolean
                     )
-                    self.turn_off(self.input_boolean)
+                )
+                self.turn_off(self.input_boolean)
 
     def terminate(self):
         for listen_state_handle in self.listen_state_handle_list:
