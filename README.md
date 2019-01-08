@@ -642,7 +642,54 @@ warm_bath_before_wakeup:
 ### sleepModeHandler
 
 Set an input_boolean on/off. Used as a trigger for other Apps.
-Currently only controlled by ``Alexa, guten Morgen`` ``Alexa, gute Nacht``
+Also controlled by ``Alexa, guten Morgen`` ``Alexa, gute Nacht``
+
+Will watch room sensor of users
+````yaml
+sleepModeHandler:
+  module: sleepModeHandler
+  class: SleepModeHandler
+  app_switch: input_boolean.sleep_mode_handler
+  sleepmode: input_boolean.sleepmode
+  notify_name: group_notifications
+  message_sleeping: "Alle zu Hause sind im Bett"
+  #message_sleeping: "All home are in bed"
+  message_awake: "Alle zu Hause sind wach"
+  #message_awake: "All home are awake"
+  users:
+    - sleep_mode: input_boolean.user_one_sleep
+      isHome: input_boolean.user_one_home
+    - sleep_mode: input_boolean.user_two_sleep
+      isHome: input_boolean.user_two_home
+  dependencies:
+    - Notifier
+  global_dependencies:
+    - globals
+````
+
+````yaml
+userSleepModeHandlerUserOne:
+  module: userSleepModeHandler
+  class: UserSleepModeHandler
+  app_switch: input_boolean.user_sleep_mode_handler_user_one
+  input_boolean: input_boolean.user_one_sleep
+  location_sensor: secret_device_user_one
+  room: bedroom
+  duration: 600
+  global_dependencies:
+    - globals
+
+userSleepModeHandlerUserTwo:
+  module: userSleepModeHandler
+  class: UserSleepModeHandler
+  app_switch: input_boolean.user_sleep_mode_handler_user_two
+  input_boolean: input_boolean.user_two_sleep
+  location_sensor: sensor.mqtt_room_user_two
+  room: bedroom
+  duration: 600
+  global_dependencies:
+    - globals
+````
 
 ### standardSetter
 
