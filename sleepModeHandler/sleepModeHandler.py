@@ -1,12 +1,14 @@
 import appdaemon.plugins.hass.hassapi as hass
 import globals
+
+
 #
 # App which sets the sleep mode on/off
 #
 # Args:
 #   app_switch: on/off switch for this app. example: input_boolean.turn_fan_on_when_hot
-#   input_boolean: input_boolean holding the sleepmode. example: input_boolean.sleepmode
-#
+#   sleepmode: input_boolean holding the sleepmode. example: input_boolean.sleepmode
+#   users: configuration for users
 # Release Notes
 #
 # Version 1.0:
@@ -21,20 +23,43 @@ class SleepModeHandler(hass.Hass):
         self.app_switch = globals.get_arg(self.args, "app_switch")
         self.sleepmode = globals.get_arg(self.args, "sleepmode")
         self.users = globals.get_arg(self.args, "users")
+        self.notify_name = globals.get_arg(self.args, "notify_name")
+        self.message_sleeping = globals.get_arg(self.args, "message_sleeping")
+        self.message_awake = globals.get_arg(self.args, "message_awake")
 
+        self.notifier = self.get_app('Notifier')
 
-        for user,user_config in self.users:
+        for user in self.users:
             self.listen_state_handle_list.append(
-                self.listen_state(self.state_change, user_config.sleep_mode), user_config=user_config)
-    
+                self.listen_state(self.state_change, user["sleep_mode"]))
+
     def state_change(self, entity, attribute, old, new, kwargs):
         if self.get_state(self.app_switch) == "on":
             if new != "" and new != old:
-                if new != "off":
-                    # is home
-                    user_config = kwargs["user_config"]
-                    self.log(user_config)
-                    # are others home and sleeping
+                if new == "on":
+                    if self.are_all_that_are_home_sleeping():
+                        self.log("All at home are sleeping")
+                        self.turn_on(self.sleepmode)
+                        self.notifier.notify(self.notify_name, self.message_sleeping)
+                elif new == "off":
+                    if self.are_all_that_are_home_awake():
+                        self.log("All at home are awake")
+                        self.turn_off(self.sleepmode)
+                        self.notifier.notify(self.notify_name, self.message_awake)
+
+    def are_all_that_are_home_sleeping(self):
+        for user in self.users:
+            if self.get_state(user["isHome"]) == "on":
+                if self.get_state(user["sleep_mode"]) != "on":
+                    return False
+        return True
+
+    def are_all_that_are_home_awake(self):
+        for user in self.users:
+            if self.get_state(user["isHome"]) == "on":
+                if self.get_state(user["sleep_mode"]) == "on":
+                    return False
+        return True
 
     def terminate(self):
         for listen_state_handle in self.listen_state_handle_list:
