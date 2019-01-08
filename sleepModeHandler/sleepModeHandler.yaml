@@ -1,0 +1,14 @@
+sleepModeHandler:
+  module: sleepModeHandler
+  class: sleepModeHandler
+  app_switch: input_boolean.sleep_mode_handler
+  sleepmode: input_boolean.sleepmode
+  users:
+    one:
+      sleep_mode: input_boolean.user_one_sleep
+      isHome: input_boolean.user_one_home
+    two:
+      sleep_mode: input_boolean.user_two_sleep
+      isHome: input_boolean.user_two_home
+  global_dependencies:
+    - globals
