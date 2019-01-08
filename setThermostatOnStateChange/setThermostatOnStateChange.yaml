@@ -116,3 +116,20 @@ setLivingroomThermostatWhenWakingUp:
     - Notifier
   global_dependencies:
     - globals
+
+setKitchenThermostatWhenWakingUp:
+  module: setThermostatOnStateChange
+  class: SetThermostatOnStateChange
+  app_switch: input_boolean.set_kitchen_thermostat_when_waking_up
+  trigger_entity: input_boolean.sleepmode
+  trigger_state: "off"
+  climate_entity: climate.kuche_thermostat
+  target_entity: input_number.set_kitchen_thermostat_when_waking_up
+  message: "Ich habe {} auf {} °C gestellt"
+  #message: "I have set {} to {}"
+  notify_name: group_notifications
+  use_alexa: False
+  dependencies:
+    - Notifier
+  global_dependencies:
+    - globals
