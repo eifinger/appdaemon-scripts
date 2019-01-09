@@ -124,7 +124,7 @@ class DetectWrongState(hass.Hass):
                         full_state = self.get_state(entity, attribute="all")
                         if full_state is not None:
                             attributes = full_state["attributes"]
-                            self.log("full_state: {}".format(full_state))
+                            self.log("full_state: {}".format(full_state), level="DEBUG")
                             if(
                                 full_state["state"] != "off"
                                 and full_state["state"] != "unavailable"
