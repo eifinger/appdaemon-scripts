@@ -97,7 +97,7 @@ class AlarmClock(hass.Hass):
                 self.timer_handle_list.append(self.alarm_timer)
                 self.log("Alarm will trigger at {}".format(event_time))
             except ValueError:
-                self.log("New trigger time would be in the future")
+                self.log("New trigger time would be in the future: {}".format(event_time))
 
     def trigger_alarm(self, kwargs):
         if self.get_state(self.wakemeup) == "on":

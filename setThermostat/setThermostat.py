@@ -79,7 +79,7 @@ class SetThermostat(hass.Hass):
                 self.timer_handle_list.append(self.run_timer)
                 self.log("Thermostat will trigger at {}".format(event_time))
             except ValueError:
-                self.log("New trigger time would be in the future")
+                self.log("New trigger time would be in the future: {}".format(event_time))
 
     def trigger_thermostat(self, kwargs):
         if(
