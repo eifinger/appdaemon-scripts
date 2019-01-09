@@ -32,6 +32,7 @@ import datetime
 # Version 1.0:
 #   Initial Version
 
+
 class BedroomMotionTrigger(hass.Hass):
 
     def initialize(self):
@@ -43,81 +44,86 @@ class BedroomMotionTrigger(hass.Hass):
 
         self.turned_on_by_me = False #Giggedi
 
-        self.app_switch = globals.get_arg(self.args,"app_switch")
-        self.sensor = globals.get_arg(self.args,"sensor")
-        self.entity_on = globals.get_arg(self.args,"entity_on")
+        self.app_switch = globals.get_arg(self.args, "app_switch")
+        self.sensor = globals.get_arg(self.args, "sensor")
+        self.entity_on = globals.get_arg(self.args, "entity_on")
         try:
-            self.entity_off = globals.get_arg(self.args,"entity_off")
+            self.entity_off = globals.get_arg(self.args, "entity_off")
         except KeyError:
             self.entity_off = None
         try:
-            self.after = globals.get_arg(self.args,"after")
+            self.after = globals.get_arg(self.args, "after")
         except KeyError:
             self.after = None
         try:
-            self.after_sundown = globals.get_arg(self.args,"after_sundown")
+            self.after_sundown = globals.get_arg(self.args, "after_sundown")
         except KeyError:
             self.after_sundown = None
         try:
-            self.delay = globals.get_arg(self.args,"delay")
+            self.delay = globals.get_arg(self.args, "delay")
         except KeyError:
             self.delay = None
         try:
-            self.constraint_entities_off = globals.get_arg_list(self.args,"constraint_entities_off")
+            self.constraint_entities_off = globals.get_arg_list(self.args, "constraint_entities_off")
         except KeyError:
             self.constraint_entities_off = []
         try:
-            self.constraint_entities_on = globals.get_arg_list(self.args,"constraint_entities_on")
+            self.constraint_entities_on = globals.get_arg_list(self.args, "constraint_entities_on")
         except KeyError:
             self.constraint_entities_on = []
-        self.location_user_one_sensor = globals.get_arg(self.args,"location_user_one_sensor")
-        self.location_user_two_sensor = globals.get_arg(self.args,"location_user_two_sensor")
-        self.bedroom_state = globals.get_arg(self.args,"bedroom_state")
+        self.location_user_one_sensor = globals.get_arg(self.args, "location_user_one_sensor")
+        self.location_user_two_sensor = globals.get_arg(self.args, "location_user_two_sensor")
+        self.bedroom_state = globals.get_arg(self.args, "bedroom_state")
 
         # Subscribe to sensors
         self.listen_event_handle_list.append(self.listen_event(self.motion_detected, "xiaomi_aqara.motion"))
 
-    
     def motion_detected(self, event_name, data, kwargs):
         if self.get_state(self.app_switch) == "on":
             turn_on = True
-            self.log("Motion: event_name: {}, data: {}".format(event_name,data), level = "DEBUG")
+            self.log("Motion: event_name: {}, data: {}".format(event_name, data), level="DEBUG")
             if data["entity_id"] != self.sensor:
-                self.log("Wrong sensor.", level = "DEBUG")
+                self.log("Wrong sensor.", level="DEBUG")
                 turn_on = False
-            if self.after_sundown != None:
-                if self.after_sundown == True and not self.sun_down():
-                    self.log("Sun is not down", level="DEBUG")
+            else:
+                if self.after_sundown is not None:
+                    if self.after_sundown and not self.sun_down():
+                        self.log("Sun is not down")
+                        turn_on = False
+                if self.after is not None:
+                    after_time = datetime.datetime.combine(datetime.date.today(),
+                                                           datetime.time(int(self.after.split(":")[0]),
+                                                                         int(self.after.split(":")[1])
+                                                                         )
+                                                           )
+                    if datetime.datetime.now() < after_time:
+                        self.log("Now is before {}".format(after_time))
+                        turn_on = False
+                for entity in self.constraint_entities_off:
+                    if self.get_state(entity) != "off":
+                        self.log("{} is {}".format(self.friendly_name(entity), self.get_state(entity)))
+                        turn_on = False
+                for entity in self.constraint_entities_on:
+                    if self.get_state(entity) != "on":
+                        self.log("{} is {}".format(self.friendly_name(entity), self.get_state(entity)))
+                        turn_on = False
+                if self.get_state(self.entity_on) != "off":
+                    self.log("Device is already on")
                     turn_on = False
-            if self.after != None:
-                after_time = datetime.datetime.combine(datetime.date.today(), datetime.time(int(self.after.split(":")[0]),int(self.after.split(":")[1])))
-                if datetime.datetime.now() < after_time:
-                    self.log("Now is before {}".format(after_time), level="DEBUG")
+                # Bedroom specifics
+                if self.get_state(self.location_user_one_sensor) == self.bedroom_state \
+                        and self.get_state(self.location_user_two_sensor) == self.bedroom_state:
+                    self.log("Both in bedroom")
                     turn_on = False
-            for entity in self.constraint_entities_off:
-                if self.get_state(entity) != "off":
-                    self.log("{} is {}".format(self.friendly_name(entity), self.get_state(entity)), level="DEBUG")
-                    turn_on = False
-            for entity in self.constraint_entities_on:
-                if self.get_state(entity) != "on":
-                    self.log("{} is {}".format(self.friendly_name(entity), self.get_state(entity)), level="DEBUG")
-                    turn_on = False
-            if self.get_state(self.entity_on) != "off":
-                self.log("Device is already on", level="DEBUG")
-                turn_on = False
-            #Bedroom specifics
-            if self.get_state(self.location_user_one_sensor) == self.bedroom_state and self.get_state(self.location_user_two_sensor) == self.bedroom_state:
-                self.log("Both in bedroom", level="DEBUG")
-                turn_on = False
             if turn_on:
                 self.log("Motion detected: turning {} on".format(self.entity_on))
                 self.turn_on(self.entity_on)
                 self.turned_on_by_me = True
-            if self.delay != None:
+            if self.delay is not None:
                 delay = self.delay
             else:
                 delay = 70
-            if self.turned_on_by_me == True:
+            if self.turned_on_by_me:
                 if self.timer_handle is not None:
                     if self.timer_handle in self.timer_handle_list:
                         self.timer_handle_list.remove(self.timer_handle)
@@ -126,12 +132,12 @@ class BedroomMotionTrigger(hass.Hass):
                 self.timer_handle_list.append(self.timer_handle)
   
     def light_off(self, kwargs):
-        if self.entity_off != None:
+        if self.entity_off is not None:
             self.log("Turning {} off".format(self.entity_off))
             self.turn_off(self.entity_off)
             self.turned_on_by_me = False
         else:
-            self.log("No entity_off defined", level="DEBUG")
+            self.log("No entity_off defined")
         
     def terminate(self):
         for timer_handle in self.timer_handle_list:
