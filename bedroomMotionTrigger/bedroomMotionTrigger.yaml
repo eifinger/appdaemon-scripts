@@ -6,7 +6,6 @@ bedroomMotionTrigger:
   sensor: binary_sensor.motion_sensor_158d0002006cfa
   entity_on: light.bedroom_yeelight
   after_sundown: True
-  after: "22:00"
   constraint_entities_off: binary_sensor.door_window_sensor_158d0001bb4d94
   location_user_one_sensor: sensor.location_user_one
   location_user_two_sensor: sensor.location_user_two
