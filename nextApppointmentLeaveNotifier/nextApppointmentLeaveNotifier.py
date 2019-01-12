@@ -94,7 +94,7 @@ class NextApppointmentLeaveNotifier(hass.Hass):
         if self.get_state(self.notify_input_boolean) == "on":
             location_name = self.get_state(self.destination_name_sensor)
             if self.location_of_last_notified_event == location_name:
-                self.log("User already got notified for {}".format())
+                self.log("User already got notified for {}".format(location_name))
             else:
                 google_maps_url = self.google_source_url + location_name.replace(" ","+")
                 self.log("Notify user")
