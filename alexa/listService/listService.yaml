@@ -11,10 +11,9 @@ listService:
     fernseher: switch.tv
     schlafzimmer receiver: switch.bedroom_receiver
     snowboard: switch.snowboard
-    receiver: media_player.denon_avrx1300w
+    receiver: media_player.denon_avr_x1300w
     wohnzimmer: group.livingroom
     wohnung: group.all
-    treppe: group.stair_lights
     schlafzimmer lampe: light.bedroom_yeelight
     schlafzimmer: light.bedroom_yeelight
     bar: light.bar_table

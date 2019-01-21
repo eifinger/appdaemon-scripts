@@ -8,7 +8,7 @@ import globals
 # app_switch: on/off switch for this app. example: input_boolean.turn_fan_on_when_hot
 # alexa_entity: the alexa media player entity. example: media_player.kevins_echo_dot_oben
 # alexa_entity_source: source to set alexa to. example: Denon AVR-X1300W
-# receiver: Receiver to turn on. example: media_player.denon_avrx1300w
+# receiver: Receiver to turn on. example: media_player.denon_avr_x1300w
 # receiver_source: source to set receiver to. example: Bluetooth
 #
 # Release Notes

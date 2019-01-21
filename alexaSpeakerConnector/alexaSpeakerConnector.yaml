@@ -5,7 +5,7 @@ alexaSpeakerConnector:
   app_switch: input_boolean.alexa_speaker_connector
   alexa_entity: media_player.kevins_echo_dot_oben
   alexa_entity_source: Denon AVR-X1300W
-  receiver: media_player.denon_avrx1300w
+  receiver: media_player.denon_avr_x1300w
   receiver_source: Bluetooth
   global_dependencies:
     - globals

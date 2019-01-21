@@ -81,7 +81,7 @@ alexaSpeakerConnector:
   app_switch: input_boolean.alexaSpeakerConnector
   alexa_entity: media_player.kevins_echo_dot_oben
   alexa_entity_source: Denon AVR-X1300W
-  receiver: media_player.denon_avrx1300w
+  receiver: media_player.denon_avr_x1300w
   receiver_source: Bluetooth
   global_dependencies:
     - globals
@@ -179,7 +179,7 @@ detectWrongStateWhenLeaving:
   class: DetectWrongStateWhenLeaving
   app_switch: input_boolean.detect_wrong_state_when_leaving
   entities_off: "binary_sensor.door_window_sensor_158d000205b808,binary_sensor.door_window_sensor_158d00020499ad,\
-  binary_sensor.door_window_sensor_158d0002059ddf,media_player.denon_avrx1300w,switch.large_lamp,\
+  binary_sensor.door_window_sensor_158d0002059ddf,media_player.denon_avr_x1300w,switch.large_lamp,\
   switch.small_lamp,switch.snowboard,light.bedroom_yeelight,light.bar_table,light.lobby_yeelight,\
   light.reading_lamp_yeelight,light.treppe_oben,light.stairs_lower_yeelight,switch.ventilator"
   message_DE: "Du hast {} angelassen. Ich habe es für dich ausgemacht."
@@ -748,7 +748,7 @@ Then Alexa in that room will be used additionally to Telegram
 Notify:
   module: notify
   class: Notify
-  media_player: media_player.denon_avrx1300w
+  media_player: media_player.denon_avr_x1300w
   source: CBL/SAT
   alexa_media_player: media_player.kevins_echo_dot_oben
   global_dependencies:
