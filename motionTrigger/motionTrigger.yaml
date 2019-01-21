@@ -8,3 +8,14 @@ obenTreppeMotionTrigger:
   after_sundown: True
   global_dependencies:
     - globals
+
+bathMotionTrigger:
+  module: motionTrigger
+  class: MotionTrigger
+  app_switch: input_boolean.bath_motion_trigger
+  sensor: binary_sensor.motion_sensor_158d000204c95d
+  entity_on: light.lower_bathroom_yeelight
+  entity_off: light.lower_bathroom_yeelight
+  after_sundown: True
+  global_dependencies:
+    - globals
