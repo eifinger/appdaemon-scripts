@@ -19,3 +19,19 @@ bathMotionTrigger:
   after_sundown: True
   global_dependencies:
     - globals
+
+bedroomMotionTrigger:
+  module: motionTrigger
+  class: MotionTrigger
+  app_switch: input_boolean.bedroom_motion_trigger
+  sensor: binary_sensor.motion_sensor_158d0002006cfa
+  entity_on: light.bedroom_yeelight
+  after_sundown: True
+  constraint_entities_off: binary_sensor.door_window_sensor_158d0001bb4d94,input_boolean.sleepmode
+  global_dependencies:
+    - globals
+
+
+
+
+

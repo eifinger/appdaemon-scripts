@@ -1,12 +1,12 @@
 # Special version of Motion Trigger. Only trigger when Door is not open (dont want any mosquittos) and only trigger when not both smartphones are in bedroom
-bedroomMotionTrigger:
-  module: bedroomMotionTrigger
-  class: BedroomMotionTrigger
-  app_switch: input_boolean.bedroom_motion_trigger
-  sensor: binary_sensor.motion_sensor_158d0002006cfa
-  entity_on: light.bedroom_yeelight
-  after_sundown: True
-  constraint_entities_off: binary_sensor.door_window_sensor_158d0001bb4d94
-  location_user_one_sensor: sensor.location_user_one
-  location_user_two_sensor: sensor.location_user_two
-  bedroom_state: Schlafzimmer
+#bedroomMotionTrigger:
+#  module: bedroomMotionTrigger
+#  class: BedroomMotionTrigger
+#  app_switch: input_boolean.bedroom_motion_trigger
+#  sensor: binary_sensor.motion_sensor_158d0002006cfa
+#  entity_on: light.bedroom_yeelight
+#  after_sundown: True
+#  constraint_entities_off: binary_sensor.door_window_sensor_158d0001bb4d94
+#  location_user_one_sensor: sensor.location_user_one
+#  location_user_two_sensor: sensor.location_user_two
+#  bedroom_state: Schlafzimmer
