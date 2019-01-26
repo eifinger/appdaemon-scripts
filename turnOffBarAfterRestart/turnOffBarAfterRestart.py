@@ -22,7 +22,7 @@ class TurnOffBarAfterRestart(hass.Hass):
         self.listen_event_handle_list = []
         self.listen_state_handle_list = []
 
-        self.light = globals.get_arg(self.args,"light")
+        self.light = globals.get_arg(self.args, "light")
 
         self.timer_handle_list.append(self.run_in(self.turn_green_callback,1))
 
@@ -32,7 +32,7 @@ class TurnOffBarAfterRestart(hass.Hass):
             self.log("Turning {} off".format(self.friendly_name(self.light)))
             self.turn_off(self.light)
         except requests.exceptions.HTTPError as exception:
-            self.log("Error trying to turn off entity. Will try again in 1s. Error: {}".format(exception), level = "WARNING")
+            self.log("Error trying to turn off entity. Will try again in 1s. Error: {}".format(exception), level="WARNING")
             self.timer_handle_list.append(self.run_in(self.turn_off_callback, 1))
 
     def turn_green_callback(self, kwargs):
@@ -42,7 +42,7 @@ class TurnOffBarAfterRestart(hass.Hass):
             self.log("Turning {} green".format(self.friendly_name(self.light)))
             self.timer_handle_list.append(self.run_in(self.turn_off_callback(None),5))
         except requests.exceptions.HTTPError as exception:
-            self.log("Error trying to turn on entity. Will try again in 1s. Error: {}".format(exception), level = "WARNING")
+            self.log("Error trying to turn on entity. Will try again in 1s. Error: {}".format(exception), level="WARNING")
             self.timer_handle_list.append(self.run_in(self.turn_green_callback, 1))
  
     def terminate(self):

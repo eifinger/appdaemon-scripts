@@ -55,7 +55,7 @@ class ButtonClicked(hass.Hass):
                     #Workaround for Yeelight see https://community.home-assistant.io/t/transition-for-turn-off-service-doesnt-work-for-yeelight-lightstrip/25333/4
                     if self.actor_single.startswith("light"):
                         self.call_service("light/turn_on", entity_id = self.actor_single, transition = 1, brightness_pct = 1)
-                        self.run_in(self.turn_off_workaround,2)
+                        self.timer_handle_list.append(self.run_in(self.turn_off_workaround,2))
                     else:
                         self.turn_off(self.actor_single)
                 # Is off
@@ -74,7 +74,7 @@ class ButtonClicked(hass.Hass):
                     #Workaround for Yeelight see https://community.home-assistant.io/t/transition-for-turn-off-service-doesnt-work-for-yeelight-lightstrip/25333/4
                     if self.actor_single.startswith("light"):
                         self.call_service("light/turn_on", entity_id = self.actor_single, transition = 1, brightness_pct = 1)
-                        self.run_in(self.turn_off_workaround,2)
+                        self.timer_handle_list.append(self.run_in(self.turn_off_workaround,2))
                     else:
                         self.turn_off(self.actor_single)
                 # Is off

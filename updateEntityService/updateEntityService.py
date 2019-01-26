@@ -64,6 +64,7 @@ class UpdateEntityService(hass.Hass):
         self.call_service("homeassistant/update_entity", entity_id=self.entity_to_update)
         self.log("Updated {}.".format(self.friendly_name(self.entity_to_update)))
         self.run_timer = self.run_in(self.update_entity_callback, float(self.get_state(self.input_number))*60)
+        self.timer_handle_list.append(self.run_timer)
 
   def terminate(self):
     for timer_handle in self.timer_handle_list:
@@ -71,4 +72,3 @@ class UpdateEntityService(hass.Hass):
 
     for listen_state_handle in self.listen_state_handle_list:
       self.cancel_listen_state(listen_state_handle)
-      

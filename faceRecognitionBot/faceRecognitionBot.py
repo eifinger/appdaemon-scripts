@@ -125,7 +125,6 @@ class FaceRecognitionBot(hass.Hass):
         self.run_in_delay = self.run_in_initial_delay
         self.run_in_error_delay = 60
 
-
         self.exclude_folders = ("healthcheck", "multiple", "noface", "tmp", "unknown", "new")
 
         self.provide_name_timeout_start = None
@@ -145,9 +144,9 @@ class FaceRecognitionBot(hass.Hass):
         try:
             if self.check_classifier_health():
                 self.check_if_trained(None)
-                self.timer_handle_list.append(self.run_in(self.check_health_callback,self.run_in_delay))
+                self.timer_handle_list.append(self.run_in(self.check_health_callback, self.run_in_delay))
         except requests.exceptions.HTTPError as exception:
-            self.log("Error trying to turn on entity. Will try again in 1s. Error: {}".format(exception), level = "WARNING")
+            self.log("Error trying to turn on entity. Will try again in 1s. Error: {}".format(exception), level="WARNING")
             self.timer_handle_list.append(self.run_in(self.check_health_callback, 1))
 
     def learn_faces_event_callback(self, event_name, data, kwargs):

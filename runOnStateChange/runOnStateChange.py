@@ -74,4 +74,3 @@ class RunOnStateChange(hass.Hass):
   def terminate(self):
     for listen_state_handle in self.listen_state_handle_list:
       self.cancel_listen_state(listen_state_handle)
-      

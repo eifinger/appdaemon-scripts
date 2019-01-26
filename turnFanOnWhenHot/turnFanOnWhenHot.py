@@ -89,4 +89,3 @@ class TurnFanOnWhenHot(hass.Hass):
 
     for timer_handle in self.timer_handle_list:
             self.cancel_timer(timer_handle)
-      
