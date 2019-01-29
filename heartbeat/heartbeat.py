@@ -22,7 +22,7 @@ class Heartbeat(hass.Hass):
         self.timer_handle_list.append(self.run_minutely(self.heartbeat))
 
     def heartbeat(self, kwargs):
-        self.set_state(self.sensor, state=self.time())
+        self.set_state(self.sensor, start=None, state=self.time())
         self.log("Heartbeat")
 
     def terminate(self):
