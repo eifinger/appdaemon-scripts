@@ -1,4 +1,4 @@
-heartbeat:
+appWatcher:
   module: appWatcher
   class: AppWatcher
   notify_name: kevin
