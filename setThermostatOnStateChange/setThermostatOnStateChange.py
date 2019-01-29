@@ -38,15 +38,15 @@ class SetThermostatOnStateChange(hass.Hass):
         self.climate_entity = globals.get_arg(self.args, "climate_entity")
         self.target_entity = globals.get_arg(self.args, "target_entity")
         try:
-            self.message = globals.get_arg(self.args,"message")
+            self.message = globals.get_arg(self.args, "message")
         except KeyError:
             self.message = None
         try:
-            self.notify_name = globals.get_arg(self.args,"notify_name")
+            self.notify_name = globals.get_arg(self.args, "notify_name")
         except KeyError:
             self.notify_name = None
         try:
-            self.use_alexa = globals.get_arg(self.args,"use_alexa")
+            self.use_alexa = globals.get_arg(self.args, "use_alexa")
         except KeyError:
             self.use_alexa = False
 

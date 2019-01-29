@@ -8,8 +8,6 @@ setWohnzimmerThermostatWhenLeaving:
   target_entity: input_number.set_thermostat_when_leaving
   message: "Ich habe {} auf {} °C gestellt"
   #message: "I have set {} to {}"
-  notify_name: group_notifications
-  use_alexa: False
   dependencies: 
     - Notifier
   global_dependencies:
@@ -25,8 +23,6 @@ setBadObenThermostatWhenLeaving:
   target_entity: input_number.set_thermostat_when_leaving
   message: "Ich habe {} auf {} °C gestellt"
   #message: "I have set {} to {}"
-  notify_name: group_notifications
-  use_alexa: False
   dependencies:
     - Notifier
   global_dependencies:
@@ -42,8 +38,6 @@ setKitchenThermostatWhenLeaving:
   target_entity: input_number.set_thermostat_when_leaving
   message: "Ich habe {} auf {} °C gestellt"
   #message: "I have set {} to {}"
-  notify_name: group_notifications
-  use_alexa: False
   dependencies:
     - Notifier
   global_dependencies:
@@ -59,8 +53,6 @@ setThermostatWhenSleeping:
   target_entity: input_number.set_thermostat_when_sleeping
   message: "Ich habe {} auf {} °C gestellt"
   #message: "I have set {} to {}"
-  notify_name: group_notifications
-  use_alexa: False
   dependencies:
     - Notifier
   global_dependencies:
@@ -76,8 +68,6 @@ setBadObenThermostatWhenSleeping:
   target_entity: input_number.set_thermostat_when_sleeping
   message: "Ich habe {} auf {} °C gestellt"
   #message: "I have set {} to {}"
-  notify_name: group_notifications
-  use_alexa: False
   dependencies:
     - Notifier
   global_dependencies:
@@ -93,8 +83,6 @@ setKitchenThermostatWhenSleeping:
   target_entity: input_number.set_thermostat_when_sleeping
   message: "Ich habe {} auf {} °C gestellt"
   #message: "I have set {} to {}"
-  notify_name: group_notifications
-  use_alexa: False
   dependencies:
     - Notifier
   global_dependencies:
