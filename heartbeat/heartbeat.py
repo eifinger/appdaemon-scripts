@@ -25,7 +25,7 @@ class Heartbeat(hass.Hass):
 
     def heartbeat(self, kwargs):
         self.set_state(self.sensor, state=str(self.time()))
-        self.log("Heartbeat")
+        self.log("Heartbeat", level="DEBUG")
 
     def terminate(self):
         for timer_handle in self.timer_handle_list:
