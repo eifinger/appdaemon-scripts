@@ -17,6 +17,7 @@ bathMotionTrigger:
   entity_on: light.lower_bathroom_yeelight
   entity_off: light.lower_bathroom_yeelight
   after_sundown: True
+  delay: 300
   global_dependencies:
     - globals
 
