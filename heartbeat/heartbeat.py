@@ -21,7 +21,7 @@ class Heartbeat(hass.Hass):
 
         self.heartbeat()
 
-        self.timer_handle_list.append(self.run_minutely(self.heartbeat, start=None))
+        self.timer_handle_list.append(self.run_minutely(self.heartbeat, start=self.time()))
 
     def heartbeat(self, kwargs):
         self.set_state(self.sensor, state=self.time())
