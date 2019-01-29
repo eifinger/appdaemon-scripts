@@ -19,7 +19,7 @@ class Heartbeat(hass.Hass):
 
         self.sensor = globals.get_arg(self.args, "sensor")
 
-        self.heartbeat()
+        self.heartbeat(None)
 
         self.timer_handle_list.append(self.run_minutely(self.heartbeat, start=self.time()))
 
