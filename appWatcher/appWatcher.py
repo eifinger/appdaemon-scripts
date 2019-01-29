@@ -30,6 +30,7 @@ class AppWatcher(hass.Hass):
     def log_message_callback(self, name, ts, level, message):
         if level == "WARNING" or level == "ERROR" or level == "CRITICAL":
             self.log("Correct level: {}".format(level))
+            self.log("name: {}".format(name))
             if name == "Appdaemon":
                 self.log("Is Appdaemon message")
                 # check if this is a warning for an app
