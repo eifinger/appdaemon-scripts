@@ -45,6 +45,7 @@ Every App has an input_boolean inside HA which turns it on/off. This is useful i
 *   [faceRecognitionBot](#facerecognitionbot)
 *   [google_travel_time](#google_travel_time)
 *   [headingToZoneNotifier](#headingtozonenotifier)
+*   [heartbeat](#heartbeat)
 *   [homeArrivalNotifier](#homearrivalnotifier)
 *   [isHomeDeterminer](#ishomedeterminer)
 *   [isUserHomeDeterminer](#isuserhomedeterminer)
@@ -232,6 +233,12 @@ googleTravelTime_home_from_work:
 ### headingToZoneNotifier
 
 Currently not used
+
+### heartbeat
+
+Sets a sensor in Homeassistant which is checked by an automation.
+The [automation](https://github.com/eifinger/homeassistant-config/blob/master/automation.yaml) sends out a notification if appdaemon does not respond.
+
 
 ### homeArrivalNotifier
 
