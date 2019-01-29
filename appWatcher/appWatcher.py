@@ -29,13 +29,17 @@ class AppWatcher(hass.Hass):
 
     def log_message_callback(self, name, ts, level, message):
         if level == "WARNING" or level == "ERROR" or level == "CRITICAL":
+            self.log("Correct level: {}".format(level))
             if name == "Appdaemon":
+                self.log("Is Appdaemon message")
                 # check if this is a warning for an app
                 try:
                     app_message_start_index = message.index(":", 11) + 2
                 except ValueError:
                     app_message_start_index = None
+                self.log("app_message_start_index is: {}".format(app_message_start_index))
                 first_space_index = message.index(" ", 11)
+                self.log("first_space_index is: {}".format(first_space_index))
                 if app_message_start_index is not None:
                     if app_message_start_index > first_space_index:
                         app_name = message[11, message.index(":", 11)]
