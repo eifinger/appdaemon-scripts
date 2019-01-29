@@ -36,6 +36,7 @@ Every App has an input_boolean inside HA which turns it on/off. This is useful i
 
 *   [Alexa Intents](#alexaintents)
 *   [AlexaSpeakerConnector](#alexaspeakerconnector)
+*   [appWatcher](#appWatcher)
 *   [alarmClock](#alarmclock)
 *   [bedRoomMotionTrigger](#bedroommotiontrigger)
 *   [buttonClicked](#buttonclicked)
@@ -72,9 +73,12 @@ Every App has an input_boolean inside HA which turns it on/off. This is useful i
 ### AlexaIntents
 
 Are explained [here](alexa/README.md)
+
 ### AlexaSpeakerConnector
+
 App to Turn on Receiver Bluetooth when Alexa is playing something so it plays on the big speakers.
 Uses a [custom_component](https://community.home-assistant.io/t/echo-devices-alexa-as-media-player-testers-needed/58639) for control alexa as a media player.
+
 ```yaml
 alexaSpeakerConnector:
   module: alexaSpeakerConnector
@@ -84,6 +88,24 @@ alexaSpeakerConnector:
   alexa_entity_source: Denon AVR-X1300W
   receiver: media_player.denon_avr_x1300w
   receiver_source: Bluetooth
+  global_dependencies:
+    - globals
+```
+
+### appWatcher
+
+Sends a notification if a WARNING or ERROR is logged in Appdaemon
+
+```yaml
+heartbeat:
+  module: appWatcher
+  class: AppWatcher
+  notify_name: kevin
+  include_log_message_in_notification: True
+  notify_message: "Es ist ein Fehler aufgetreten in App: {}"
+  #notify_message: "An Error occurred in App: {}"
+  dependencies:
+    - Notifier
   global_dependencies:
     - globals
 ```
