@@ -19,10 +19,10 @@ class Heartbeat(hass.Hass):
 
         self.sensor = globals.get_arg(self.args, "sensor")
 
-        self.timer_handle_list.append(self.run_minutely(self.heartbeat))
+        self.timer_handle_list.append(self.run_minutely(self.heartbeat, start=None))
 
     def heartbeat(self, kwargs):
-        self.set_state(self.sensor, start=None, state=self.time())
+        self.set_state(self.sensor, state=self.time())
         self.log("Heartbeat")
 
     def terminate(self):
