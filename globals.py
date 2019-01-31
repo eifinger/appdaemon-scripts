@@ -15,7 +15,11 @@ def get_arg(args, key):
 
 def get_arg_list(args, key):
     arg_list = []
-    for key in (args[key]).split(","):
+    if isinstance(args[key], list):
+        arg = args[key]
+    else:
+        arg = (args[key]).split(",")
+    for key in arg:
         if type(key) is str and key.startswith("secret_"):
             if key in secrets.secret_dict:
                 arg_list.append(secrets.secret_dict[key])
