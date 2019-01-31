@@ -41,12 +41,12 @@ turnOffBathThermostatWhenWindowOpen:
   entities_off: climate.bad_thermostat
   trigger_entity: binary_sensor.door_window_sensor_158d0002048951
   trigger_state: "on"
-  message_on: "Ich habe {} angeschaltet"
+  #message_on: "Ich habe {} angeschaltet"
   #message_on: "I turned on {}"
-  message_off: "Ich habe {} ausgeschaltet"
+  #message_off: "Ich habe {} ausgeschaltet"
   #message_off: "I turned off {}"
-  notify_name: group_notifications
-  use_alexa: False
+  #notify_name: group_notifications
+  #use_alexa: False
   dependencies: 
     - Notifier
   global_dependencies:
@@ -59,12 +59,12 @@ turnOnBathThermostatWhenWindowClosed:
   entities_on: climate.bad_thermostat
   trigger_entity: binary_sensor.door_window_sensor_158d0002048951
   trigger_state: "off"
-  message_on: "Ich habe {} angeschaltet"
+  #message_on: "Ich habe {} angeschaltet"
   #message_on: "I turned on {}"
-  message_off: "Ich habe {} ausgeschaltet"
+  #message_off: "Ich habe {} ausgeschaltet"
   #message_off: "I turned off {}"
-  notify_name: group_notifications
-  use_alexa: False
+  #notify_name: group_notifications
+  #use_alexa: False
   dependencies: 
     - Notifier
   global_dependencies:
@@ -77,12 +77,12 @@ turnOffUpperBathThermostatWhenWindowOpen:
   entities_off: climate.bad_oben_thermostat
   trigger_entity: binary_sensor.door_window_sensor_158d000204ba26
   trigger_state: "on"
-  message_on: "Ich habe {} angeschaltet"
+  #message_on: "Ich habe {} angeschaltet"
   #message_on: "I turned on {}"
-  message_off: "Ich habe {} ausgeschaltet"
+  #message_off: "Ich habe {} ausgeschaltet"
   #message_off: "I turned off {}"
-  notify_name: group_notifications
-  use_alexa: False
+  #notify_name: group_notifications
+  #use_alexa: False
   dependencies:
     - Notifier
   global_dependencies:
@@ -95,12 +95,12 @@ turnOnUpperBathThermostatWhenWindowClosed:
   entities_on: climate.bad_oben_thermostat
   trigger_entity: binary_sensor.door_window_sensor_158d000204ba26
   trigger_state: "off"
-  message_on: "Ich habe {} angeschaltet"
+  #message_on: "Ich habe {} angeschaltet"
   #message_on: "I turned on {}"
-  message_off: "Ich habe {} ausgeschaltet"
+  #message_off: "Ich habe {} ausgeschaltet"
   #message_off: "I turned off {}"
-  notify_name: group_notifications
-  use_alexa: False
+  #notify_name: group_notifications
+  #use_alexa: False
   dependencies:
     - Notifier
   global_dependencies:
