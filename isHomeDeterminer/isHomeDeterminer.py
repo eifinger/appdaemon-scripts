@@ -52,7 +52,7 @@ class IsHomeDeterminer(hass.Hass):
     def state_change(self, entity, attribute, old, new, kwargs):
         if self.get_state(self.app_switch) == "on":
             if new != "" and new != old:
-                self.log("{} changed from {} to {}".format(entity,old,new))
+                self.log("{} changed from {} to {}".format(entity, old, new))
                 if new == "on":
                     self.turn_on(self.ishome)
                     self.log("Setting {} to on".format(self.ishome))
@@ -60,12 +60,14 @@ class IsHomeDeterminer(hass.Hass):
                     if self.are_others_away(entity):
                         self.turn_off(self.ishome)
                         self.log("Setting {} to off".format(self.ishome))
-                        self.call_service("notify/group_notifications",message=self.message)
+                        notify_message = globals.random_arg(self.message)
+                        self.log("notify_messsage: {}".format(notify_message))
+                        self.call_service("notify/group_notifications", message=notify_message)
 
     def are_others_away(self, entity):
         self.log("Entity: {}".format(entity))
         for input_boolean in self.input_booleans:
-            self.log("{} is {}".format(input_boolean,self.get_state(input_boolean)))
+            self.log("{} is {}".format(input_boolean, self.get_state(input_boolean)))
             if input_boolean == entity:
                 pass
             elif self.get_state(input_boolean) == "on":
