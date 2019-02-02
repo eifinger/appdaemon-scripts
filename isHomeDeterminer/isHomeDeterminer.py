@@ -45,7 +45,9 @@ class IsHomeDeterminer(hass.Hass):
                     if self.are_others_away(input_boolean):
                         self.turn_off(self.ishome)
                         self.log("Setting {} to off".format(self.ishome))
-                        self.call_service("notify/group_notifications", message=globals.random_arg(self.message))
+                        notify_message = globals.random_arg(self.message)
+                        self.log("notify_messsage: {}".format(notify_message))
+                        self.call_service("notify/group_notifications", message=notify_message)
     
     def state_change(self, entity, attribute, old, new, kwargs):
         if self.get_state(self.app_switch) == "on":

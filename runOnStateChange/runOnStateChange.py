@@ -76,14 +76,16 @@ class RunOnStateChange(hass.Hass):
                     #turn_off
                     for entity in self.entities_on:
                         self.turn_on(entity)
-                        self.log(self.message_on.format(self.friendly_name(entity)))
+                        self.log("Turning on {}".format(entity))
                         if self.notify_name is not None and self.message_on is not None:
+                            self.log(self.message_on.format(self.friendly_name(entity)))
                             self.notifier.notify(self.notify_name, self.message_on.format(self.friendly_name(entity)), useAlexa=self.use_alexa)
                     #turn_on
                     for entity in self.entities_off:
                         self.turn_off(entity)
-                        self.log(self.message_off.format(self.friendly_name(entity)))
+                        self.log("Turning off {}".format(entity))
                         if self.notify_name is not None and self.message_off is not None:
+                            self.log(self.message_off.format(self.friendly_name(entity)))
                             self.notifier.notify(self.notify_name, self.message_off.format(self.friendly_name(entity)), useAlexa=self.use_alexa)
 
     def terminate(self):
