@@ -30,12 +30,12 @@ def get_arg_list(args, key):
     return arg_list
 
 
-def random_arg(self, argName):
+def random_arg(argList):
     ############################################
     # pick a random text from a list
     ############################################
-    if isinstance(argName, list):
-        text = random.choice(argName)
+    if isinstance(argList, list):
+        text = random.choice(argList)
     else:
-        text = argName
+        text = argList
     return text
