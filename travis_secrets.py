@@ -20,4 +20,5 @@ secret_dict = {
     "secret_telegram_user_id": -21415521,
     "secret_facebox_folderpath_multiple": "/config/www/facebox/multiple",
     "secret_fritzbox_password":'mysecurepassword',
-    "secret_fritzbox_url": 'http://fritz.box'}
+    "secret_fritzbox_url": 'http://fritz.box',
+    "secret_friendly_name_work_user_two": "WorkWork"}

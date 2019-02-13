@@ -18,6 +18,26 @@ leavingWorkNotifierUserOne:
   global_dependencies:
     - globals
 
+leavingWorkNotifierUserTwo:
+  module: leavingZoneNotifier
+  class: LeavingZoneNotifier
+  app_switch: input_boolean.leaving_work_notifier_user_two
+  device: secret_device_user_two
+  user_name: secret_name_user_two
+  lingering_time: 3600
+  delay: 120
+  zone: secret_friendly_name_work_user_two
+  notify_name: group_notifications
+  message: "{} hat {} vor {} Minuten verlassen."
+  #message: "{} left {} {} minutes ago"
+  travel_time_sensor: sensor.travel_time_home_user_two
+  travel_time_sensor_message: "Es dauert circa {} Minuten bis nach Hause."
+  #travel_time_sensor_message: "The travel time is {}."
+  dependencies:
+    - Notifier
+  global_dependencies:
+    - globals
+
 leavingElmoNotifierUserTwo:
   module: leavingZoneNotifier
   class: LeavingZoneNotifier
