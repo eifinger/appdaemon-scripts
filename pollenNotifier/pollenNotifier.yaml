@@ -15,6 +15,8 @@ roggenNotifier:
     - Notifier
   global_dependencies:
     - globals
+    - secrets
+
 graeserNotifier:
   module: pollenNotifier
   class: PollenNotifier
@@ -32,6 +34,8 @@ graeserNotifier:
     - Notifier
   global_dependencies:
     - globals
+    - secrets
+
 birkeNotifier:
   module: pollenNotifier
   class: PollenNotifier
@@ -49,3 +53,4 @@ birkeNotifier:
     - Notifier
   global_dependencies:
     - globals
+    - secrets

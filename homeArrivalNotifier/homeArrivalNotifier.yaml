@@ -13,6 +13,7 @@ homeArrivalNotifierUserOne:
     - Notifier
   global_dependencies:
     - globals
+    - secrets
 
 #Notification if user two arrives at home
 homeArrivalNotifierUserTwo:
@@ -29,3 +30,4 @@ homeArrivalNotifierUserTwo:
     - Notifier
   global_dependencies:
     - globals
+    - secrets

@@ -8,3 +8,4 @@ increaseCounterOnGoogleMapsUpdate:
   counter: counter.google_maps_api_calls
   global_dependencies:
     - globals
+    - secrets

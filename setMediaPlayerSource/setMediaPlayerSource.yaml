@@ -8,3 +8,4 @@ setMultiRoomAudioWhenSleepModeTurnsOff:
   source: Wohnung
   global_dependencies:
     - globals
+    - secrets

@@ -72,6 +72,7 @@ detectWindowsOpenWhenGoingToBed:
     - Notifier
   global_dependencies:
     - globals
+    - secrets
 
 detectDevicesOnWhenGoingToBed:
   module: detectWrongState
@@ -88,3 +89,4 @@ detectDevicesOnWhenGoingToBed:
     - Notifier
   global_dependencies:
     - globals
+    - secrets

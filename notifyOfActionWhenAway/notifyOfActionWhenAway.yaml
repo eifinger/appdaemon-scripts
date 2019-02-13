@@ -19,3 +19,4 @@ notifyOfActionWhenAway:
   global_dependencies:
     - messages
     - globals
+    - secrets

@@ -10,6 +10,7 @@ turnLargeFanOnWhenHot:
   delay: 120
   global_dependencies:
     - globals
+    - secrets
 
 turnSmallFanOnWhenHot:
   module: turnFanOnWhenHot
@@ -23,3 +24,4 @@ turnSmallFanOnWhenHot:
   delay: 120
   global_dependencies:
     - globals
+    - secrets

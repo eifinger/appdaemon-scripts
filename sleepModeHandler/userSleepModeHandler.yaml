@@ -19,3 +19,4 @@ userSleepModeHandlerUserTwo:
   duration: 600
   global_dependencies:
     - globals
+    - secrets

@@ -13,6 +13,7 @@ wazeTravelTime_home_from_work:
     - Notifier
   global_dependencies:
     - globals
+    - secrets
 
 wazeTravelTime_work_from_home:
   module: wazeTravelTime
@@ -28,6 +29,7 @@ wazeTravelTime_work_from_home:
     - Notifier
   global_dependencies:
     - globals
+    - secrets
 
 wazeTravelTime_elmo_from_home:
   module: wazeTravelTime
@@ -43,3 +45,4 @@ wazeTravelTime_elmo_from_home:
     - Notifier
   global_dependencies:
     - globals
+    - secrets

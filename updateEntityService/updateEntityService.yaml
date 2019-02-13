@@ -10,6 +10,7 @@ updateTravelTimeHomeUserOne:
     - Notifier
   global_dependencies:
     - globals
+    - secrets
 
 updateTravelTimeHomeUserTwo:
   module: updateEntityService
@@ -23,3 +24,4 @@ updateTravelTimeHomeUserTwo:
     - Notifier
   global_dependencies:
     - globals
+    - secrets

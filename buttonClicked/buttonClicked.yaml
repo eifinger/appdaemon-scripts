@@ -10,6 +10,8 @@ xiaomiroundButtonBedroomClicked:
     - Notifier
   global_dependencies:
     - globals
+    - secrets
+
 xiaomisquareButtonLobbyClicked:
   module: buttonClicked
   class: ButtonClicked
@@ -20,6 +22,8 @@ xiaomisquareButtonLobbyClicked:
     - Notifier
   global_dependencies:
     - globals
+    - secrets
+
 xiaomiroundButtonBathroomClicked:
   module: buttonClicked
   class: ButtonClicked
@@ -31,4 +35,5 @@ xiaomiroundButtonBathroomClicked:
     - Notifier
   global_dependencies:
     - globals
+    - secrets
     

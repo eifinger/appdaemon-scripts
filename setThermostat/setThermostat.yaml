@@ -17,6 +17,7 @@ warm_bath_before_wakeup:
     - Notifier
   global_dependencies:
     - globals
+    - secrets
 
 warm_upper_bath_before_wakeup:
   module: setThermostat
@@ -37,4 +38,5 @@ warm_upper_bath_before_wakeup:
     - Notifier
   global_dependencies:
     - globals
+    - secrets
 

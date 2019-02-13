@@ -6,3 +6,4 @@ standardSetterTravelModeNextAppointment:
   trigger_entity: sensor.cal_next_appointment_title
   global_dependencies:
     - globals
+    - secrets

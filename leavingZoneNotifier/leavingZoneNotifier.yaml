@@ -17,6 +17,7 @@ leavingWorkNotifierUserOne:
     - Notifier
   global_dependencies:
     - globals
+    - secrets
 
 leavingWorkNotifierUserTwo:
   module: leavingZoneNotifier
@@ -37,6 +38,7 @@ leavingWorkNotifierUserTwo:
     - Notifier
   global_dependencies:
     - globals
+    - secrets
 
 leavingElmoNotifierUserTwo:
   module: leavingZoneNotifier
@@ -57,3 +59,4 @@ leavingElmoNotifierUserTwo:
     - Notifier
   global_dependencies:
     - globals
+    - secrets

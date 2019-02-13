@@ -19,3 +19,4 @@ isUserHomeDeterminerUserTwo:
   door_sensor: binary_sensor.door_window_sensor_158d000126a57b
   global_dependencies:
     - globals
+    - secrets

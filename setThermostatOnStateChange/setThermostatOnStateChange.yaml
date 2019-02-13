@@ -12,6 +12,7 @@ setWohnzimmerThermostatWhenLeaving:
     - Notifier
   global_dependencies:
     - globals
+    - secrets
 
 setBadObenThermostatWhenLeaving:
   module: setThermostatOnStateChange
@@ -27,6 +28,7 @@ setBadObenThermostatWhenLeaving:
     - Notifier
   global_dependencies:
     - globals
+    - secrets
 
 setKitchenThermostatWhenLeaving:
   module: setThermostatOnStateChange
@@ -42,6 +44,7 @@ setKitchenThermostatWhenLeaving:
     - Notifier
   global_dependencies:
     - globals
+    - secrets
 
 setThermostatWhenSleeping:
   module: setThermostatOnStateChange
@@ -57,6 +60,7 @@ setThermostatWhenSleeping:
     - Notifier
   global_dependencies:
     - globals
+    - secrets
 
 setBadObenThermostatWhenSleeping:
   module: setThermostatOnStateChange
@@ -72,6 +76,7 @@ setBadObenThermostatWhenSleeping:
     - Notifier
   global_dependencies:
     - globals
+    - secrets
 
 setKitchenThermostatWhenSleeping:
   module: setThermostatOnStateChange
@@ -87,6 +92,7 @@ setKitchenThermostatWhenSleeping:
     - Notifier
   global_dependencies:
     - globals
+    - secrets
 
 setLivingroomThermostatWhenWakingUp:
   module: setThermostatOnStateChange
@@ -104,6 +110,7 @@ setLivingroomThermostatWhenWakingUp:
     - Notifier
   global_dependencies:
     - globals
+    - secrets
 
 setKitchenThermostatWhenWakingUp:
   module: setThermostatOnStateChange
@@ -121,3 +128,4 @@ setKitchenThermostatWhenWakingUp:
     - Notifier
   global_dependencies:
     - globals
+    - secrets

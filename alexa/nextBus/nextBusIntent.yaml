@@ -7,3 +7,4 @@ nextBusIntent:
   sensor: sensor.nach_bruckenkopf
   global_dependencies:
     - globals
+    - secrets

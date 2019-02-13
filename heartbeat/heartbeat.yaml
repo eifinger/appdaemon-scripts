@@ -4,3 +4,4 @@ heartbeat:
   sensor: sensor.appdaemon_heartbeat
   global_dependencies:
     - globals
+    - secrets

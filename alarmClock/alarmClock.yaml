@@ -19,3 +19,4 @@ alarmClock:
     - Notifier
   global_dependencies:
     - globals
+    - secrets

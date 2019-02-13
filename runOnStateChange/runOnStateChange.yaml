@@ -15,6 +15,7 @@ startGoldieWhenLeaving:
     - Notifier
   global_dependencies:
     - globals
+    - secrets
 
 startSnowieWhenLeaving:
   module: runOnStateChange
@@ -33,6 +34,7 @@ startSnowieWhenLeaving:
     - Notifier
   global_dependencies:
     - globals
+    - secrets
 
 turnOffBathThermostatWhenWindowOpen:
   module: runOnStateChange
@@ -51,6 +53,7 @@ turnOffBathThermostatWhenWindowOpen:
     - Notifier
   global_dependencies:
     - globals
+    - secrets
 
 turnOnBathThermostatWhenWindowClosed:
   module: runOnStateChange
@@ -69,6 +72,7 @@ turnOnBathThermostatWhenWindowClosed:
     - Notifier
   global_dependencies:
     - globals
+    - secrets
 
 turnOffUpperBathThermostatWhenWindowOpen:
   module: runOnStateChange
@@ -87,6 +91,7 @@ turnOffUpperBathThermostatWhenWindowOpen:
     - Notifier
   global_dependencies:
     - globals
+    - secrets
 
 turnOnUpperBathThermostatWhenWindowClosed:
   module: runOnStateChange
@@ -105,3 +110,4 @@ turnOnUpperBathThermostatWhenWindowClosed:
     - Notifier
   global_dependencies:
     - globals
+    - secrets

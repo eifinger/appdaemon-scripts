@@ -14,3 +14,4 @@ Notifier:
     Schlafzimmer: media_player.kevins_echo_dot_unten
   global_dependencies:
     - globals
+    - secrets

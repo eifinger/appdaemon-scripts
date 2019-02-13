@@ -9,3 +9,4 @@ alexaSpeakerConnector:
   receiver_source: Bluetooth
   global_dependencies:
     - globals
+    - secrets

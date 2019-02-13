@@ -13,3 +13,4 @@ isHomeDeterminer:
   #message: "Everyone left home. Setting isHome to off"
   global_dependencies:
     - globals
+    - secrets
