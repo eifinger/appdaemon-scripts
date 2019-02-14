@@ -61,25 +61,26 @@ class SetThermostat(hass.Hass):
 
         self.run_timer = None
 
+        self.cached_alarm_time = self.get_state(self.time_entity)
+
         self.listen_state_handle_list.append(self.listen_state(self.schedule_trigger, self.time_entity))
-        self.schedule_trigger(None, None, None, "Run", None)
+        self.schedule_trigger(self.time_entity, None, None, self.get_state(self.time_entity), None)
 
     def schedule_trigger(self, entity, attribute, old, new, kwargs):
-        if self.run_timer is not None:
-            self.cancel_timer(self.run_timer)
-            self.log("Cancelled scheduled trigger")
-            self.run_timer = None
-        # Not using 'new' so this function can be triggered during initialize
-        time_entity_state = self.get_state(self.time_entity)
-        if time_entity_state is not None and time_entity_state != "":
-            event_time = datetime.datetime.strptime(time_entity_state, "%Y-%m-%d %H:%M:%S")
+        if new is not None and new != old and new != "" and new != self.cached_alarm_time:
+            if self.run_timer is not None:
+                self.cancel_timer(self.run_timer)
+                self.log("Cancelled scheduled trigger")
+                self.run_timer = None
+            self.cached_alarm_time = new
+            event_time = datetime.datetime.strptime(new, "%Y-%m-%d %H:%M:%S")
             event_time = event_time - datetime.timedelta(minutes=self.upfront_time)
             try:
                 self.run_timer = self.run_at(self.trigger_thermostat, event_time)
                 self.timer_handle_list.append(self.run_timer)
                 self.log("Thermostat will trigger at {}".format(event_time))
             except ValueError:
-                self.log("New trigger time would be in the future: {}".format(event_time))
+                self.log("New trigger time would be in the past: {}".format(event_time))
 
     def trigger_thermostat(self, kwargs):
         if(

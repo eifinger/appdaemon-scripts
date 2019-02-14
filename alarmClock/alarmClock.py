@@ -65,23 +65,29 @@ class AlarmClock(hass.Hass):
         self.cached_fade_in_time = self.get_state(self.naturalwakeup)
         self.add_timer()
 
-        self.listen_state_handle_list.append(self.listen_state(self.state_change, self.alarm_time))
-        self.listen_state_handle_list.append(self.listen_state(self.state_change, self.naturalwakeup))
+        self.listen_state_handle_list.append(self.listen_state(self.alarm_change, self.alarm_time))
+        self.listen_state_handle_list.append(self.listen_state(self.naturalwakeup_change, self.naturalwakeup))
 
         self.listen_event_handle_list.append(self.listen_event(self.button_clicked, "xiaomi_aqara.click"))
 
-    def state_change(self, entity, attributes, old, new, kwargs):
-        if new is not None and new != old:
+    def alarm_change(self, entity, attributes, old, new, kwargs):
+        if new is not None and new != old and new != self.cached_alarm_time:
             if self.alarm_timer is not None:
                 if self.alarm_timer in self.timer_handle_list:
                     self.timer_handle_list.remove(self.alarm_timer)
                 self.cancel_timer(self.alarm_timer)
-            if entity == self.alarm_time:
-                self.log("Alarm time change: {}".format(new))
-                self.cached_alarm_time = new
-            elif entity == self.naturalwakeup:
-                self.log("Fade-In time change: {}".format(new))
-                self.cached_fade_in_time = new
+            self.log("Alarm time change: {}".format(new))
+            self.cached_alarm_time = new
+            self.add_timer()
+
+    def naturalwakeup_change(self, entity, attributes, old, new, kwargs):
+        if new is not None and new != old and new != self.cached_fade_in_time:
+            if self.alarm_timer is not None:
+                if self.alarm_timer in self.timer_handle_list:
+                    self.timer_handle_list.remove(self.alarm_timer)
+                self.cancel_timer(self.alarm_timer)
+            self.log("Fade-In time change: {}".format(new))
+            self.cached_fade_in_time = new
             self.add_timer()
 
     def add_timer(self):
@@ -97,7 +103,7 @@ class AlarmClock(hass.Hass):
                 self.timer_handle_list.append(self.alarm_timer)
                 self.log("Alarm will trigger at {}".format(event_time))
             except ValueError:
-                self.log("New trigger time would be in the future: {}".format(event_time))
+                self.log("New trigger time would be in the past: {}".format(event_time))
 
     def trigger_alarm(self, kwargs):
         if self.get_state(self.wakemeup) == "on":
