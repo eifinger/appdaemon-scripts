@@ -47,26 +47,26 @@ class PowerUsageNotification(hass.Hass):
 
         self.app_switch = globals.get_arg(self.args, "app_switch")
         try:
-            self.input_boolean = globals.get_arg_list(self.args, "input_boolean")
+            self.input_boolean = globals.get_arg(self.args, "input_boolean")
         except KeyError:
             self.input_boolean = None
         self.sensor = globals.get_arg(self.args, "sensor")
         self.alternative_name = globals.get_arg(self.args, "alternative_name")
         self.notify_name = globals.get_arg(self.args, "notify_name")
         try:
-            self.notify_start = globals.get_arg_list(self.args, "notify_start")
+            self.notify_start = globals.get_arg(self.args, "notify_start")
         except KeyError:
             self.notify_start = True
         try:
-            self.notify_start_use_alexa = globals.get_arg_list(self.args, "notify_start_use_alexa")
+            self.notify_start_use_alexa = globals.get_arg(self.args, "notify_start_use_alexa")
         except KeyError:
             self.notify_start = True
         try:
-            self.notify_end = globals.get_arg_list(self.args, "notify_end")
+            self.notify_end = globals.get_arg(self.args, "notify_end")
         except KeyError:
             self.notify_end = True
         try:
-            self.notify_end_use_alexa = globals.get_arg_list(self.args, "notify_end_use_alexa")
+            self.notify_end_use_alexa = globals.get_arg(self.args, "notify_end_use_alexa")
         except KeyError:
             self.notify_end_use_alexa = True
         self.delay = globals.get_arg(self.args, "delay")
