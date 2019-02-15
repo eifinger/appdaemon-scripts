@@ -1,6 +1,6 @@
-nextApppointmentLeaveNotifier:
-  module: nextApppointmentLeaveNotifier
-  class: NextApppointmentLeaveNotifier
+nextAppointmentLeaveNotifier:
+  module: nextAppointmentLeaveNotifier
+  class: NextAppointmentLeaveNotifier
   sensor: sensor.calc_leave_time
   notify_input_boolean: input_boolean.announce_time_to_leave
   notify_name: group_notifications

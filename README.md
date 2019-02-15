@@ -402,9 +402,9 @@ Send me a notification when it is time to leave for my next appointment based on
 - Includes a direct Google Maps Navigation Link in Notification Message
 Saved my ass quite a few times
 ```yaml
-nextApppointmentLeaveNotifier:
-  module: nextApppointmentLeaveNotifier
-  class: NextApppointmentLeaveNotifier
+nextAppointmentLeaveNotifier:
+  module: nextAppointmentLeaveNotifier
+  class: NextAppointmentLeaveNotifier
   sensor: sensor.calc_leave_time
   notify_input_boolean: input_boolean.announce_time_to_leave
   notify_name: group_notifications
