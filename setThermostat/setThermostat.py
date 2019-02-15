@@ -61,7 +61,7 @@ class SetThermostat(hass.Hass):
 
         self.run_timer = None
 
-        self.cached_alarm_time = self.get_state(self.time_entity)
+        self.cached_alarm_time = None
 
         self.listen_state_handle_list.append(self.listen_state(self.schedule_trigger, self.time_entity))
         self.schedule_trigger(self.time_entity, None, None, self.get_state(self.time_entity), None)
