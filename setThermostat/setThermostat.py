@@ -117,7 +117,7 @@ class SetThermostat(hass.Hass):
                     self.previous_temp),
                 useAlexa=self.use_alexa)
             self.call_service("climate/set_temperature", entity_id=self.climat_entity, temperature=self.previous_temp)
-            self.schedule_trigger(None, None, None, "Run", None)
+            self.schedule_trigger(self.time_entity, None, None, self.get_state(self.time_entity), None)
 
     def terminate(self):
         for timer_handle in self.timer_handle_list:
