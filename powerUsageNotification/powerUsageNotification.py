@@ -60,7 +60,7 @@ class PowerUsageNotification(hass.Hass):
         try:
             self.notify_start_use_alexa = globals.get_arg(self.args, "notify_start_use_alexa")
         except KeyError:
-            self.notify_start = True
+            self.notify_start_use_alexa = True
         try:
             self.notify_end = globals.get_arg(self.args, "notify_end")
         except KeyError:
