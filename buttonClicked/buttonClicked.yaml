@@ -27,7 +27,7 @@ xiaomisquareButtonLobbyClicked:
 xiaomiroundButtonBathroomClicked:
   module: buttonClicked
   class: ButtonClicked
-  sensor: binary_sensor.switch_158d00012db9e5
+  sensor: sensor.0x00158d00012db9e5_click
   actor_single: light.lower_bathroom_yeelight
   actor_double: light.lower_bathroom_yeelight
   actor_hold: light.lower_bathroom_yeelight

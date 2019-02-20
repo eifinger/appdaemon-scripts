@@ -2,7 +2,7 @@ obenTreppeMotionTrigger:
   module: motionTrigger
   class: MotionTrigger
   app_switch: input_boolean.oben_treppe_motion_trigger
-  sensor: binary_sensor.motion_sensor_158d00012aab97
+  sensor: binary_sensor.0x00158d00012aab97_occupancy
   entity_on: light.treppe_oben
   entity_off: light.treppe_oben
   after_sundown: True
@@ -14,7 +14,7 @@ bathMotionTrigger:
   module: motionTrigger
   class: MotionTrigger
   app_switch: input_boolean.bath_motion_trigger
-  sensor: binary_sensor.motion_sensor_158d000204c95d
+  sensor: binary_sensor.0x00158d000236b801_occupancy
   entity_on: light.lower_bathroom_yeelight
   entity_off: light.lower_bathroom_yeelight
   after_sundown: True
@@ -27,7 +27,7 @@ bedroomMotionTrigger:
   module: motionTrigger
   class: MotionTrigger
   app_switch: input_boolean.bedroom_motion_trigger
-  sensor: binary_sensor.motion_sensor_158d0002006cfa
+  sensor: binary_sensor.0x00158d0002006cfa_occupancy
   entity_on: light.bedroom_yeelight
   after_sundown: True
   constraint_entities_off: binary_sensor.door_window_sensor_158d0001bb4d94,input_boolean.sleepmode
