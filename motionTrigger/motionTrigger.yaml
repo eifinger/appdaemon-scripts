@@ -3,8 +3,8 @@ obenTreppeMotionTrigger:
   class: MotionTrigger
   app_switch: input_boolean.oben_treppe_motion_trigger
   sensor: binary_sensor.0x00158d00012aab97_occupancy
-  entity_on: light.treppe_oben
-  entity_off: light.treppe_oben
+  entity_on: light.upper_stairs_yeelight
+  entity_off: light.upper_stairs_yeelight
   after_sundown: True
   global_dependencies:
     - globals
