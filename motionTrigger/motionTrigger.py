@@ -93,9 +93,9 @@ class MotionTrigger(hass.Hass):
             self.constraint_entities_on = []
 
         # Subscribe to sensors
-        if self.sensor_type == SENSOR_TYPE_ZIGBEE2MQTT:
+        if self.sensor_type == SENSOR_TYPE_XIAOMI:
             self.listen_event_handle_list.append(self.listen_event(self.motion_event_detected, "xiaomi_aqara.motion"))
-        elif self.sensor_type == SENSOR_TYPE_XIAOMI:
+        elif self.sensor_type == SENSOR_TYPE_ZIGBEE2MQTT:
             self.listen_state_handle_list.append(self.listen_state(self.state_changed, self.sensor))
         else:
             self.log("Unknown sensor_type: {}".format(self.sensor_type), level="ERROR")
