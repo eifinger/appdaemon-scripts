@@ -142,8 +142,8 @@ class MotionTrigger(hass.Hass):
     def state_changed(self, entity, attribute, old, new, kwargs):
         if new != old:
             if self.get_state(self.app_switch) == "on":
-                self.log("Motion detected on sensor: {}".format(self.friendly_name(self.sensor)))
                 if new == "on":
+                    self.log("Motion detected on sensor: {}".format(self.friendly_name(self.sensor)), level="DEBUG")
                     turn_on = True
                     if self.after_sundown is not None:
                         if self.after_sundown and not self.sun_down():
