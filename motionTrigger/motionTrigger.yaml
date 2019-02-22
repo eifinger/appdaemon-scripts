@@ -5,6 +5,7 @@ obenTreppeMotionTrigger:
   sensor: binary_sensor.0x00158d00012aab97_occupancy
   entity_on: light.upper_stairs_yeelight
   entity_off: light.upper_stairs_yeelight
+  sensor_type: zigbee2mqtt
   after_sundown: True
   global_dependencies:
     - globals
@@ -17,6 +18,7 @@ bathMotionTrigger:
   sensor: binary_sensor.0x00158d000236b801_occupancy
   entity_on: light.lower_bathroom_yeelight
   entity_off: light.lower_bathroom_yeelight
+  sensor_type: zigbee2mqtt
   after_sundown: True
   delay: 300
   global_dependencies:
@@ -29,6 +31,7 @@ bedroomMotionTrigger:
   app_switch: input_boolean.bedroom_motion_trigger
   sensor: binary_sensor.0x00158d0002006cfa_occupancy
   entity_on: light.bedroom_yeelight
+  sensor_type: zigbee2mqtt
   after_sundown: True
   constraint_entities_off: binary_sensor.door_window_sensor_158d0001bb4d94,input_boolean.sleepmode
   global_dependencies:

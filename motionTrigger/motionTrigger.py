@@ -12,6 +12,7 @@ import datetime
 # sensor: binary sensor to use as trigger
 # entity_on : entity to turn on when detecting motion, can be a light, script, scene or anything else that can be turned on
 # entity_off (optionally): entity to turn off when detecting motion, can be a light, script or anything else that can be turned off. Can also be a scene which will be turned on
+# sensor_type: Possible values: xiaomi,zigbee2mqtt. Default: xiaomi
 # after (optionally): Only trigger after a certain time. example: 22:00
 # after_sundown (optionally): true 
 # delay (optionally): amount of time after turning on to turn off again. If not specified defaults to 70 seconds.
@@ -19,6 +20,9 @@ import datetime
 # constraint_entities_on (optionally): list of entities which have to be on. example: light.bedroom_yeelight,light.bar_table
 #
 # Release Notes
+#
+# Version 1.7:
+#   support for zigbee2mqtt and xiaomi motion sensors
 #
 # Version 1.6:
 #   message now directly in own yaml instead of message module
@@ -41,6 +45,9 @@ import datetime
 # Version 1.0:
 #   Initial Version
 
+SENSOR_TYPE_XIAOMI = "xiaomi"
+SENSOR_TYPE_ZIGBEE2MQTT = "zigbee2mqtt"
+
 
 class MotionTrigger(hass.Hass):
 
@@ -60,6 +67,10 @@ class MotionTrigger(hass.Hass):
             self.entity_off = globals.get_arg(self.args, "entity_off")
         except KeyError as identifier:
             self.entity_off = None
+        try:
+            self.sensor_type = globals.get_arg(self.args, "sensor_type")
+        except KeyError as identifier:
+            self.sensor_type = SENSOR_TYPE_ZIGBEE2MQTT
         try:
             self.after = globals.get_arg(self.args, "after")
         except KeyError as identifier:
@@ -82,19 +93,27 @@ class MotionTrigger(hass.Hass):
             self.constraint_entities_on = []
 
         # Subscribe to sensors
-        self.listen_event_handle_list.append(self.listen_event(self.motion_detected, "xiaomi_aqara.motion"))
+        if self.sensor_type == SENSOR_TYPE_ZIGBEE2MQTT:
+            self.listen_event_handle_list.append(self.listen_event(self.motion_event_detected, "xiaomi_aqara.motion"))
+        elif self.sensor_type == SENSOR_TYPE_XIAOMI:
+            self.listen_state_handle_list.append(self.listen_state(self.state_changed, self.sensor))
+        else:
+            self.log("Unknown sensor_type: {}".format(self.sensor_type), level="ERROR")
 
-    def motion_detected(self, event_name, data, kwargs):
+    def motion_event_detected(self, event_name, data, kwargs):
         if self.get_state(self.app_switch) == "on":
             turn_on = True
-            self.log("Motion: event_name: {}, data: {}".format(event_name,data), level = "DEBUG")
+            self.log("Motion: event_name: {}, data: {}".format(event_name, data), level="DEBUG")
             if data["entity_id"] != self.sensor:
                 turn_on = False
             if self.after_sundown is not None:
-                if self.after_sundown == True and not self.sun_down():
+                if self.after_sundown and not self.sun_down():
                     turn_on = False
             if self.after is not None:
-                after_time = datetime.datetime.combine(datetime.date.today(), datetime.time(int(self.after.split(":")[0]),int(self.after.split(":")[1])))
+                after_time = datetime.datetime.combine(
+                    datetime.date.today(),
+                    datetime.time(int(self.after.split(":")[0]), int(self.after.split(":")[1]))
+                )
                 if datetime.datetime.now() > after_time:
                     turn_on = False
             for entity in self.constraint_entities_off:
@@ -117,10 +136,49 @@ class MotionTrigger(hass.Hass):
                 if self.timer_handle is not None:
                     self.timer_handle_list.remove(self.timer_handle)
                     self.cancel_timer(self.timer_handle)
-                self.timer_handle = self.run_in(self.light_off, delay)
+                self.timer_handle = self.run_in(self.turn_off_callback, delay)
                 self.timer_handle_list.append(self.timer_handle)
+
+    def state_changed(self, entity, attribute, old, new, kwargs):
+        if new != old:
+            if self.get_state(self.app_switch) == "on":
+                if new == "on":
+                    turn_on = True
+                    if self.after_sundown is not None:
+                        if self.after_sundown and not self.sun_down():
+                            turn_on = False
+                    if self.after is not None:
+                        after_time = datetime.datetime.combine(
+                            datetime.date.today(),
+                            datetime.time(int(self.after.split(":")[0]), int(self.after.split(":")[1]))
+                        )
+                        if datetime.datetime.now() > after_time:
+                            turn_on = False
+                    for entity in self.constraint_entities_off:
+                        if self.get_state(entity) != "off":
+                            turn_on = False
+                    for entity in self.constraint_entities_on:
+                        if self.get_state(entity) != "on":
+                            turn_on = False
+                    if self.get_state(self.entity_on) != "off":
+                        turn_on = False
+                    if turn_on:
+                        self.log("Motion detected: turning {} on".format(self.entity_on))
+                        self.turn_on(self.entity_on)
+                        self.turned_on_by_me = True
+                elif new == "off":
+                    if self.delay is not None:
+                        delay = self.delay
+                    else:
+                        delay = 70
+                    if self.turned_on_by_me and self.get_state(self.entity_on) == "on":
+                        if self.timer_handle is not None:
+                            self.timer_handle_list.remove(self.timer_handle)
+                            self.cancel_timer(self.timer_handle)
+                        self.timer_handle = self.run_in(self.turn_off_callback, delay)
+                        self.timer_handle_list.append(self.timer_handle)
   
-    def light_off(self, kwargs):
+    def turn_off_callback(self, kwargs):
         if self.entity_off is not None:
             self.log("Turning {} off".format(self.entity_off))
             self.turn_off(self.entity_off)

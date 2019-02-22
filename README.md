@@ -38,7 +38,6 @@ Every App has an input_boolean inside HA which turns it on/off. This is useful i
 *   [AlexaSpeakerConnector](#alexaspeakerconnector)
 *   [appWatcher](#appWatcher)
 *   [alarmClock](#alarmclock)
-*   [bedRoomMotionTrigger](#bedroommotiontrigger)
 *   [buttonClicked](#buttonclicked)
 *   [comingHome](#cominghome)
 *   [detectWrongState](#detectwrongstate)
@@ -135,25 +134,6 @@ alarmClock:
 ```
 
 ![alarmClock](images/alarmClock.PNG)
-
-### bedRoomMotionTrigger
-
-Special version of Motion Trigger. Only trigger when Door is not open (dont want any mosquittos) and only trigger when not both smartphones are in bedroom
-
-```yaml
-bedroomMotionTrigger:
-  module: bedroomMotionTrigger
-  class: BedroomMotionTrigger
-  app_switch: input_boolean.bedroom_motion_trigger
-  sensor: binary_sensor.motion_sensor_158d0002006cfa
-  entity_on: light.bedroom_yeelight
-  after_sundown: True
-  after: "22:00"
-  constraint_entities_off: binary_sensor.door_window_sensor_158d0001bb4d94
-  location_user_one_sensor: sensor.location_user_one
-  location_user_two_sensor: sensor.location_user_two
-  bedroom_state: Schlafzimmer
-```
 
 ### buttonClicked
 
@@ -370,6 +350,7 @@ obenTreppeMotionTrigger:
   sensor: binary_sensor.motion_sensor_158d00012aab97
   entity_on: light.treppe_oben
   entity_off: light.treppe_oben
+  sensor_type: zigbee2mqtt
   after_sundown: True
   global_dependencies:
     - globals
