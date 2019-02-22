@@ -129,3 +129,39 @@ setKitchenThermostatWhenWakingUp:
   global_dependencies:
     - globals
     - secrets
+
+setLivingroomThermostatWhenComingHome:
+  module: setThermostatOnStateChange
+  class: SetThermostatOnStateChange
+  app_switch: input_boolean.set_livingroom_thermostat_when_coming_home
+  trigger_entity: input_boolean.is_home
+  trigger_state: "on"
+  climate_entity: climate.wohnzimmer_thermostat
+  target_entity: input_number.set_livingroom_thermostat_when_coming_home
+  message: "Ich habe {} auf {} °C gestellt"
+  #message: "I have set {} to {}"
+  notify_name: group_notifications
+  use_alexa: False
+  dependencies:
+    - Notifier
+  global_dependencies:
+    - globals
+    - secrets
+
+setKitchenThermostatWhenComingHome:
+  module: setThermostatOnStateChange
+  class: SetThermostatOnStateChange
+  app_switch: input_boolean.set_kitchen_thermostat_when_coming_home
+  trigger_entity: input_boolean.is_home
+  trigger_state: "on"
+  climate_entity: climate.kuche_thermostat
+  target_entity: input_number.set_kitchen_thermostat_when_coming_home
+  message: "Ich habe {} auf {} °C gestellt"
+  #message: "I have set {} to {}"
+  notify_name: group_notifications
+  use_alexa: False
+  dependencies:
+    - Notifier
+  global_dependencies:
+    - globals
+    - secrets
