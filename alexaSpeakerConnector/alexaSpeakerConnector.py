@@ -13,6 +13,9 @@ import globals
 #
 # Release Notes
 #
+# Version 1.1.1:
+#   Fix WAITING_TIME
+#
 # Version 1.1:
 #   Introduce WAITING_TIME
 #
@@ -45,7 +48,7 @@ class AlexaSpeakerConnector(hass.Hass):
                     self.log("Setting source of {} to: {}". format(self.receiver, self.receiver_source))
                     self.call_service(
                         "media_player/select_source", entity_id=self.receiver, source=self.receiver_source)
-                    self.timer_handle_list.append(self.run_in(self.run_in_callback(), WAITING_TIME))
+                    self.timer_handle_list.append(self.run_in(self.run_in_callback, WAITING_TIME))
 
     def run_in_callback(self):
         """
