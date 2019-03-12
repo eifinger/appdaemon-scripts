@@ -33,7 +33,7 @@ bedroomMotionTrigger:
   entity_on: light.bedroom_yeelight
   sensor_type: zigbee2mqtt
   after_sundown: True
-  constraint_entities_off: binary_sensor.door_window_sensor_158d0001bb4d94,input_boolean.sleepmode
+  constraint_entities_off: input_boolean.sleepmode
   global_dependencies:
     - globals
     - secrets
