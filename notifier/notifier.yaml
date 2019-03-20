@@ -11,8 +11,8 @@ Notifier:
     Wohnzimmer: media_player.kevins_echo_dot_oben
     Küche: media_player.kevins_echo_dot_oben
     Balkon Oben: media_player.kevins_echo_dot_oben
-    Arbeitszimmer: media_player.kevins_echo_dot_unten
-    Schlafzimmer: media_player.kevins_echo_dot_unten
+    Arbeitszimmer: media_player.kevin_s_echo_dot_unten
+    Schlafzimmer: media_player.kevin_s_echo_dot_unten
   global_dependencies:
     - globals
     - secrets
