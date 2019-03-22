@@ -85,10 +85,13 @@ class MotionTrigger(hass.Hass):
             self.after_sundown = None
         try:
             self.delay = globals.get_arg(self.args, "delay")
-            if self.delay.startswith("input_number"):
-                self.delay_entity = self.delay
-                self.delay = int(self.get_state(self.delay_entity).split(".")[0])
-                self.listen_state_handle_list.append(self.listen_state(self.delay_changed, self.delay_entity))
+            try:
+                if self.delay.startswith("input_number"):
+                    self.delay_entity = self.delay
+                    self.delay = int(self.get_state(self.delay_entity).split(".")[0])
+                    self.listen_state_handle_list.append(self.listen_state(self.delay_changed, self.delay_entity))
+            except AttributeError:  # does not have attribute 'startswith' -> is not of type string
+                pass
         except KeyError:
             self.delay = None
         try:
