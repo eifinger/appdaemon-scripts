@@ -7,6 +7,7 @@ obenTreppeMotionTrigger:
   entity_off: light.upper_stairs_yeelight
   sensor_type: zigbee2mqtt
   after_sundown: True
+  delay: input_number.oben_treppe_motion_trigger_delay
   global_dependencies:
     - globals
     - secrets
@@ -29,7 +30,7 @@ bedroomMotionTrigger:
   module: motionTrigger
   class: MotionTrigger
   app_switch: input_boolean.bedroom_motion_trigger
-  sensor: binary_sensor.0x00158d0002006cfa_occupancy
+  sensor: binary_sensor.0x00158d000204c95d_occupancy
   entity_on: light.bedroom_yeelight
   sensor_type: zigbee2mqtt
   after_sundown: True

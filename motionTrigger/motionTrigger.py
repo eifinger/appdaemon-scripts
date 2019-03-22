@@ -15,11 +15,15 @@ import datetime
 # sensor_type: Possible values: xiaomi,zigbee2mqtt. Default: xiaomi
 # after (optionally): Only trigger after a certain time. example: 22:00
 # after_sundown (optionally): true 
-# delay (optionally): amount of time after turning on to turn off again. If not specified defaults to 70 seconds.
+# delay (optionally): amount of time after turning on to turn off again. If not specified defaults to 70 seconds. example: 10
+#                     if an input_number is defined it will automatically take the delay from there. example: input_number.motionTrigger_delay
 # constraint_entities_off (optionally): list of entities which have to be off. example: light.bedroom_yeelight,light.bar_table
 # constraint_entities_on (optionally): list of entities which have to be on. example: light.bedroom_yeelight,light.bar_table
 #
 # Release Notes
+#
+# Version 1.8:
+#   support for input_number as delay and delay starts on last motion not when state changes to off
 #
 # Version 1.7:
 #   support for zigbee2mqtt and xiaomi motion sensors
@@ -58,38 +62,42 @@ class MotionTrigger(hass.Hass):
         self.listen_state_handle_list = []
         self.timer_handle_list = []
 
-        self.turned_on_by_me = False #Giggedi
+        self.turned_on_by_me = False  # Giggedi
 
         self.app_switch = globals.get_arg(self.args, "app_switch")
         self.sensor = globals.get_arg(self.args, "sensor")
         self.entity_on = globals.get_arg(self.args, "entity_on")
         try:
             self.entity_off = globals.get_arg(self.args, "entity_off")
-        except KeyError as identifier:
+        except KeyError:
             self.entity_off = None
         try:
             self.sensor_type = globals.get_arg(self.args, "sensor_type")
-        except KeyError as identifier:
+        except KeyError:
             self.sensor_type = SENSOR_TYPE_ZIGBEE2MQTT
         try:
             self.after = globals.get_arg(self.args, "after")
-        except KeyError as identifier:
+        except KeyError:
             self.after = None
         try:
             self.after_sundown = globals.get_arg(self.args, "after_sundown")
-        except KeyError as identifier:
+        except KeyError:
             self.after_sundown = None
         try:
             self.delay = globals.get_arg(self.args, "delay")
-        except KeyError as identifier:
+            if self.delay.startswith("input_number"):
+                self.delay_entity = self.delay
+                self.delay = int(self.get_state(self.delay_entity).split(".")[0])
+                self.listen_state_handle_list.append(self.listen_state(self.delay_changed, self.delay_entity))
+        except KeyError:
             self.delay = None
         try:
             self.constraint_entities_off = globals.get_arg_list(self.args, "constraint_entities_off")
-        except KeyError as identifier:
+        except KeyError:
             self.constraint_entities_off = []
         try:
             self.constraint_entities_on = globals.get_arg_list(self.args, "constraint_entities_on")
-        except KeyError as identifier:
+        except KeyError:
             self.constraint_entities_on = []
 
         # Subscribe to sensors
@@ -100,84 +108,55 @@ class MotionTrigger(hass.Hass):
         else:
             self.log("Unknown sensor_type: {}".format(self.sensor_type), level="ERROR")
 
+    def delay_changed(self, entity, attribute, old, new, kwargs):
+        self.delay = int(self.get_state(self.delay_entity).split(".")[0])
+
     def motion_event_detected(self, event_name, data, kwargs):
         if self.get_state(self.app_switch) == "on":
-            turn_on = True
             self.log("Motion: event_name: {}, data: {}".format(event_name, data), level="DEBUG")
-            if data["entity_id"] != self.sensor:
-                turn_on = False
-            if self.after_sundown is not None:
-                if self.after_sundown and not self.sun_down():
-                    turn_on = False
-            if self.after is not None:
-                after_time = datetime.datetime.combine(
-                    datetime.date.today(),
-                    datetime.time(int(self.after.split(":")[0]), int(self.after.split(":")[1]))
-                )
-                if datetime.datetime.now() > after_time:
-                    turn_on = False
-            for entity in self.constraint_entities_off:
-                if self.get_state(entity) != "off":
-                    turn_on = False
-            for entity in self.constraint_entities_on:
-                if self.get_state(entity) != "on":
-                    turn_on = False
-            if self.get_state(self.entity_on) != "off":
-                turn_on = False
-            if turn_on:
-                self.log("Motion detected: turning {} on".format(self.entity_on))
-                self.turn_on(self.entity_on)
-                self.turned_on_by_me = True
-            if self.delay is not None:
-                delay = self.delay
-            else:
-                delay = 70
-            if self.turned_on_by_me and turn_on:
-                if self.timer_handle is not None:
-                    self.timer_handle_list.remove(self.timer_handle)
-                    self.cancel_timer(self.timer_handle)
-                self.timer_handle = self.run_in(self.turn_off_callback, delay)
-                self.timer_handle_list.append(self.timer_handle)
+            if data["entity_id"] == self.sensor:
+                self.turn_on_callback(None)
 
     def state_changed(self, entity, attribute, old, new, kwargs):
-        if new != old:
-            if self.get_state(self.app_switch) == "on":
-                if new == "on":
-                    self.log("Motion detected on sensor: {}".format(self.friendly_name(self.sensor)), level="DEBUG")
-                    turn_on = True
-                    if self.after_sundown is not None:
-                        if self.after_sundown and not self.sun_down():
-                            turn_on = False
-                    if self.after is not None:
-                        after_time = datetime.datetime.combine(
-                            datetime.date.today(),
-                            datetime.time(int(self.after.split(":")[0]), int(self.after.split(":")[1]))
-                        )
-                        if datetime.datetime.now() > after_time:
-                            turn_on = False
-                    for entity in self.constraint_entities_off:
-                        if self.get_state(entity) != "off":
-                            turn_on = False
-                    for entity in self.constraint_entities_on:
-                        if self.get_state(entity) != "on":
-                            turn_on = False
-                    if self.get_state(self.entity_on) != "off":
-                        turn_on = False
-                    if turn_on:
-                        self.log("Motion detected: turning {} on".format(self.entity_on))
-                        self.turn_on(self.entity_on)
-                        self.turned_on_by_me = True
-                elif new == "off":
-                    if self.delay is not None:
-                        delay = self.delay
-                    else:
-                        delay = 70
-                    if self.turned_on_by_me and self.get_state(self.entity_on) == "on":
-                        if self.timer_handle is not None:
-                            self.timer_handle_list.remove(self.timer_handle)
-                            self.cancel_timer(self.timer_handle)
-                        self.timer_handle = self.run_in(self.turn_off_callback, delay)
-                        self.timer_handle_list.append(self.timer_handle)
+        if self.get_state(self.app_switch) == "on":
+            if new == "on":
+                self.log("Motion detected on sensor: {}".format(self.friendly_name(self.sensor)), level="DEBUG")
+                self.turn_on_callback(None)
+
+    def turn_on_callback(self, kwargs):
+        turn_on = True
+        if self.after_sundown is not None:
+            if self.after_sundown and not self.sun_down():
+                turn_on = False
+        if self.after is not None:
+            after_time = datetime.datetime.combine(
+                datetime.date.today(),
+                datetime.time(int(self.after.split(":")[0]), int(self.after.split(":")[1]))
+            )
+            if datetime.datetime.now() > after_time:
+                turn_on = False
+        for entity in self.constraint_entities_off:
+            if self.get_state(entity) != "off":
+                turn_on = False
+        for entity in self.constraint_entities_on:
+            if self.get_state(entity) != "on":
+                turn_on = False
+        if self.get_state(self.entity_on) != "off":
+            turn_on = False
+        if turn_on and self.get_state(self.entity_on) == "on":
+            self.log("Motion detected: turning {} on".format(self.entity_on))
+            self.turn_on(self.entity_on)
+            self.turned_on_by_me = True
+        if self.delay is not None:
+            delay = self.delay
+        else:
+            delay = 70
+        if self.turned_on_by_me and turn_on:
+            if self.timer_handle is not None:
+                self.timer_handle_list.remove(self.timer_handle)
+                self.cancel_timer(self.timer_handle)
+            self.timer_handle = self.run_in(self.turn_off_callback, delay)
+            self.timer_handle_list.append(self.timer_handle)
   
     def turn_off_callback(self, kwargs):
         if self.entity_off is not None:
