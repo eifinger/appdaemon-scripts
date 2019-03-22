@@ -92,6 +92,7 @@ class MotionTrigger(hass.Hass):
                     self.listen_state_handle_list.append(self.listen_state(self.delay_changed, self.delay_entity))
             except AttributeError:  # does not have attribute 'startswith' -> is not of type string
                 pass
+            self.log("Delay changed to : {}".format(self.delay))
         except KeyError:
             self.delay = None
         try:
@@ -113,20 +114,20 @@ class MotionTrigger(hass.Hass):
 
     def delay_changed(self, entity, attribute, old, new, kwargs):
         self.delay = int(self.get_state(self.delay_entity).split(".")[0])
+        self.log("Delay changed to : {}".format(self.delay))
 
     def motion_event_detected(self, event_name, data, kwargs):
         if self.get_state(self.app_switch) == "on":
-            self.log("Motion: event_name: {}, data: {}".format(event_name, data), level="DEBUG")
             if data["entity_id"] == self.sensor:
                 self.turn_on_callback(None)
 
     def state_changed(self, entity, attribute, old, new, kwargs):
         if self.get_state(self.app_switch) == "on":
             if new == "on":
-                self.log("Motion detected on sensor: {}".format(self.friendly_name(self.sensor)), level="DEBUG")
                 self.turn_on_callback(None)
 
     def turn_on_callback(self, kwargs):
+        self.log("Motion detected on sensor: {}".format(self.friendly_name(self.sensor)), level="DEBUG")
         turn_on = True
         if self.after_sundown is not None:
             if self.after_sundown and not self.sun_down():
@@ -144,9 +145,7 @@ class MotionTrigger(hass.Hass):
         for entity in self.constraint_entities_on:
             if self.get_state(entity) != "on":
                 turn_on = False
-        if self.get_state(self.entity_on) != "off":
-            turn_on = False
-        if turn_on and self.get_state(self.entity_on) == "on":
+        if turn_on and self.get_state(self.entity_on) == "off":
             self.log("Motion detected: turning {} on".format(self.entity_on))
             self.turn_on(self.entity_on)
             self.turned_on_by_me = True
