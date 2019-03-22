@@ -40,16 +40,17 @@ listService:
     ventilator thermostat: sensor.ventilator_temperature
     großer ventilator thermostat: sensor.large_ventilator_temperature
   door:
-    wohnungstuer: binary_sensor.door_window_sensor_158d000126a57b
-    terassentuer schlafzimmer: binary_sensor.door_window_sensor_158d0001bb4d94
-    terassentuer: binary_sensor.door_window_sensor_158d000205b808
-    terassentuer arbeitszimmer: binary_sensor.door_window_sensor_158d00020499ad
+    wohnungstuer: binary_sensor.0x00158d000126a57b_contact
+    terassentuer schlafzimmer: binary_sensor.0x00158d000232c4e7_contact
+    terassentuer:  binary_sensor.0x00158d000205b808_contact
+    terassentuer arbeitszimmer: binary_sensor.0x00158d00020499ad_contact
   window:
-    kuechenfenster: binary_sensor.door_window_sensor_158d00020498b6
-    badfenster oben: binary_sensor.door_window_sensor_158d000204ba26
-    badfenster unten: binary_sensor.door_window_sensor_158d0002048951
-    gaestezimmerfenster: binary_sensor.door_window_sensor_158d00020455bf
+    kuechenfenster:  binary_sensor.0x00158d00020498b6_contact
+    badfenster oben: binary_sensor.0x00158d000204ba26_contact
+    badfenster unten: binary_sensor.0x00158d0002048951_contact
+    gaestezimmerfenster: binary_sensor.0x00158d00020455bf_contact
   door_tilted:
-    terassentuer arbeitszimmer gekippt: binary_sensor.door_window_sensor_158d000205b82e
-    terrassentuer gekippt: binary_sensor.door_window_sensor_158d0001bb4dc0
+    terassentuer arbeitszimmer gekippt: binary_sensor.0x00158d000205b82e_contact
+    terassentuer schlafzimmer gekippt: binary_sensor.0x00158d000232c3d1_contact
+    terrassentuer gekippt: binary_sensor.0x00158d0001bb4dc0_contact
 

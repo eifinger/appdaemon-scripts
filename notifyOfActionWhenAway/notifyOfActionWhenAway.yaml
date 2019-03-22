@@ -2,13 +2,14 @@ notifyOfActionWhenAway:
   module: notifyOfActionWhenAway
   class: NotifyOfActionWhenAway
   app_switch: input_boolean.notify_of_action_when_away
-  sensor: "binary_sensor.door_window_sensor_158d000126a57b,binary_sensor.door_window_sensor_158d0001bb4d94,\
-  binary_sensor.door_window_sensor_158d0001bb4dc0,binary_sensor.door_window_sensor_158d000205b808,\
-  binary_sensor.door_window_sensor_158d000205b82e,binary_sensor.door_window_sensor_158d00020498b6,\
-  binary_sensor.door_window_sensor_158d000204ba26,binary_sensor.door_window_sensor_158d0002059ddf,\
-  binary_sensor.door_window_sensor_158d00020499ad,binary_sensor.door_window_sensor_158d0002048951,\
-  binary_sensor.door_window_sensor_158d00020455bf,binary_sensor.motion_sensor_158d00012aab97,\
-  binary_sensor.motion_sensor_158d0001fa464b,binary_sensor.motion_sensor_158d0002006cfa"
+  sensor: "binary_sensor.0x00158d000126a57b_contact,binary_sensor.0x00158d000232c4e7_contact,\
+  binary_sensor.0x00158d000205b808_contact,binary_sensor.0x00158d00020499ad_contact,\
+  binary_sensor.0x00158d00020498b6_contact,binary_sensor.0x00158d000204ba26_contact,\
+  binary_sensor.0x00158d0002048951_contact,binary_sensor.0x00158d00020455bf_contact,\
+  binary_sensor.0x00158d000205b82e_contact,binary_sensor.0x00158d000232c3d1_contact,\
+  binary_sensor.0x00158d0001bb4dc0_contact,binary_sensor.0x00158d000236d982_occupancy,\
+  binary_sensor.0x00158d000236d83c_occupancy,binary_sensor.0x00158d000236b801_occupancy,\
+  binary_sensor.0x00158d0001fa464b_occupancy,binary_sensor.0x00158d00012aab97_occupancy"
   isHome: input_boolean.is_home
   notify_name: group_notifications
   isHome_delay: 20
