@@ -51,6 +51,6 @@ listService:
     gaestezimmerfenster: binary_sensor.0x00158d00020455bf_contact
   door_tilted:
     terassentuer arbeitszimmer gekippt: binary_sensor.0x00158d000205b82e_contact
-    terassentuer schlafzimmer gekippt: binary_sensor.0x00158d000232c3d1_contact
+    terassentuer schlafzimmer gekippt: binary_sensor.0x00158d000232c3d1_contact_2
     terrassentuer gekippt: binary_sensor.0x00158d0001bb4dc0_contact
 

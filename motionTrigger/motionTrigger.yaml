@@ -30,7 +30,7 @@ bedroomMotionTrigger:
   module: motionTrigger
   class: MotionTrigger
   app_switch: input_boolean.bedroom_motion_trigger
-  sensor: binary_sensor.0x00158d000204c95d_occupancy
+  sensor: binary_sensor.0x00158d000204c95d_occupancy_2
   entity_on: light.bedroom_yeelight
   sensor_type: zigbee2mqtt
   after_sundown: True

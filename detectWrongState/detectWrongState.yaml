@@ -6,7 +6,7 @@ detectWrongStateWhenLeaving:
   binary_sensor.0x00158d000205b808_contact,binary_sensor.0x00158d00020499ad_contact,\
   binary_sensor.0x00158d00020498b6_contact,binary_sensor.0x00158d000204ba26_contact,\
   binary_sensor.0x00158d0002048951_contact,binary_sensor.0x00158d00020455bf_contact,\
-  binary_sensor.0x00158d000205b82e_contact,binary_sensor.0x00158d000232c3d1_contact,\
+  binary_sensor.0x00158d000205b82e_contact,binary_sensor.0x00158d000232c3d1_contact_2,\
   binary_sensor.0x00158d0001bb4dc0_contact,media_player.denon_avr_x1300w,switch.large_lamp,\
   switch.small_lamp,switch.snowboard,light.bedroom_yeelight,light.bar_table,light.lobby_yeelight,\
   light.reading_lamp_yeelight,light.treppe_oben,light.stairs_lower_yeelight,switch.ventilator,light.livingroom_yeelight,\
@@ -37,7 +37,7 @@ detectWindowsOpenWhenGoingToBed:
   binary_sensor.0x00158d000205b808_contact,binary_sensor.0x00158d00020499ad_contact,\
   binary_sensor.0x00158d00020498b6_contact,binary_sensor.0x00158d000204ba26_contact,\
   binary_sensor.0x00158d0002048951_contact,binary_sensor.0x00158d00020455bf_contact,\
-  binary_sensor.0x00158d000205b82e_contact,binary_sensor.0x00158d000232c3d1_contact,\
+  binary_sensor.0x00158d000205b82e_contact,binary_sensor.0x00158d000232c3d1_contact_2,\
   binary_sensor.0x00158d0001bb4dc0_contact"
   after_sundown: True
   trigger_entity: input_boolean.sleepmode

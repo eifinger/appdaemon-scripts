@@ -6,7 +6,7 @@ notifyOfActionWhenAway:
   binary_sensor.0x00158d000205b808_contact,binary_sensor.0x00158d00020499ad_contact,\
   binary_sensor.0x00158d00020498b6_contact,binary_sensor.0x00158d000204ba26_contact,\
   binary_sensor.0x00158d0002048951_contact,binary_sensor.0x00158d00020455bf_contact,\
-  binary_sensor.0x00158d000205b82e_contact,binary_sensor.0x00158d000232c3d1_contact,\
+  binary_sensor.0x00158d000205b82e_contact,binary_sensor.0x00158d000232c3d1_contact_2,\
   binary_sensor.0x00158d0001bb4dc0_contact,binary_sensor.0x00158d000236d982_occupancy,\
   binary_sensor.0x00158d000236d83c_occupancy,binary_sensor.0x00158d000236b801_occupancy,\
   binary_sensor.0x00158d0001fa464b_occupancy,binary_sensor.0x00158d00012aab97_occupancy"
