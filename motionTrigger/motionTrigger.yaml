@@ -21,6 +21,7 @@ bathMotionTrigger:
   entity_off: light.lower_bathroom_yeelight
   sensor_type: zigbee2mqtt
   after_sundown: True
+  turn_off_constraint_entities_on: binary_sensor.0x00158d0001fa464b_occupancy
   delay: 300
   global_dependencies:
     - globals
@@ -34,7 +35,7 @@ bedroomMotionTrigger:
   entity_on: light.bedroom_yeelight
   sensor_type: zigbee2mqtt
   after_sundown: True
-  constraint_entities_off: input_boolean.sleepmode
+  turn_on_constraint_entities_off: input_boolean.sleepmode
   global_dependencies:
     - globals
     - secrets

@@ -17,10 +17,15 @@ import datetime
 # after_sundown (optionally): true 
 # delay (optionally): amount of time after turning on to turn off again. If not specified defaults to 70 seconds. example: 10
 #                     if an input_number is defined it will automatically take the delay from there. example: input_number.motionTrigger_delay
-# constraint_entities_off (optionally): list of entities which have to be off. example: light.bedroom_yeelight,light.bar_table
-# constraint_entities_on (optionally): list of entities which have to be on. example: light.bedroom_yeelight,light.bar_table
+# turn_on_constraint_entities_off (optionally): list of entities which have to be off for entity to be turned on. example: light.bedroom_yeelight,light.bar_table
+# turn_on_constraint_entities_on (optionally): list of entities which have to be on for entity to be turned on. example: light.bedroom_yeelight,light.bar_table
+# turn_off_constraint_entities_off (optionally): list of entities which have to be off for entity to be turned off. example: light.bedroom_yeelight,light.bar_table
+# turn_off_constraint_entities_on (optionally): list of entities which have to be on for entity to be turned off. example: light.bedroom_yeelight,light.bar_table
 #
 # Release Notes
+#
+# Version 1.9:
+#   introduced turn_on_constraints and turn_off_constraints
 #
 # Version 1.8:
 #   support for input_number as delay and delay starts on last motion not when state changes to off
@@ -35,7 +40,7 @@ import datetime
 #   Added app_switch
 #
 # Version 1.4:
-#   Added options "after, constraint_entities_off and constraint_entities_on"
+#   Added options "after, turn_on_constraint_entities_off and turn_on_constraint_entities_on"
 #
 # Version 1.3:
 #   Only turn off entity if it was turned on by this app
@@ -96,13 +101,21 @@ class MotionTrigger(hass.Hass):
         except KeyError:
             self.delay = None
         try:
-            self.constraint_entities_off = globals.get_arg_list(self.args, "constraint_entities_off")
+            self.turn_on_constraint_entities_off = globals.get_arg_list(self.args, "turn_on_constraint_entities_off")
         except KeyError:
-            self.constraint_entities_off = []
+            self.turn_on_constraint_entities_off = []
         try:
-            self.constraint_entities_on = globals.get_arg_list(self.args, "constraint_entities_on")
+            self.turn_on_constraint_entities_on = globals.get_arg_list(self.args, "turn_on_constraint_entities_on")
         except KeyError:
-            self.constraint_entities_on = []
+            self.turn_on_constraint_entities_on = []
+        try:
+            self.turn_off_constraint_entities_off = globals.get_arg_list(self.args, "turn_off_constraint_entities_off")
+        except KeyError:
+            self.turn_off_constraint_entities_off = []
+        try:
+            self.turn_off_constraint_entities_on = globals.get_arg_list(self.args, "turn_off_constraint_entities_on")
+        except KeyError:
+            self.turn_off_constraint_entities_on = []
 
         # Subscribe to sensors
         if self.sensor_type == SENSOR_TYPE_XIAOMI:
@@ -132,6 +145,7 @@ class MotionTrigger(hass.Hass):
         if self.after_sundown is not None:
             if self.after_sundown and not self.sun_down():
                 turn_on = False
+                self.log("Is not after sundown")
         if self.after is not None:
             after_time = datetime.datetime.combine(
                 datetime.date.today(),
@@ -139,12 +153,19 @@ class MotionTrigger(hass.Hass):
             )
             if datetime.datetime.now() > after_time:
                 turn_on = False
-        for entity in self.constraint_entities_off:
-            if self.get_state(entity) != "off":
+                self.log("Now is before {}".format(self.after))
+        for entity in self.turn_on_constraint_entities_off:
+            entity_state = self.get_state(entity)
+            if entity_state != "off":
                 turn_on = False
-        for entity in self.constraint_entities_on:
-            if self.get_state(entity) != "on":
+                self.log("{} is still {}".format(entity, entity_state))
+                break
+        for entity in self.turn_on_constraint_entities_on:
+            entity_state = self.get_state(entity)
+            if entity_state != "on":
                 turn_on = False
+                self.log("{} is still {}".format(entity, entity_state))
+                break
         if turn_on and self.get_state(self.entity_on) == "off":
             self.log("Motion detected: turning {} on".format(self.entity_on))
             self.turn_on(self.entity_on)
@@ -155,16 +176,32 @@ class MotionTrigger(hass.Hass):
             delay = 70
         if self.turned_on_by_me and turn_on:
             if self.timer_handle is not None:
+                self.log("Resetting timer")
                 self.timer_handle_list.remove(self.timer_handle)
                 self.cancel_timer(self.timer_handle)
+            self.log("Will turn off in {}s".format(delay))
             self.timer_handle = self.run_in(self.turn_off_callback, delay)
             self.timer_handle_list.append(self.timer_handle)
   
     def turn_off_callback(self, kwargs):
+        turn_off = True
         if self.entity_off is not None:
-            self.log("Turning {} off".format(self.entity_off))
-            self.turn_off(self.entity_off)
-            self.turned_on_by_me = False
+            for entity in self.turn_off_constraint_entities_off:
+                entity_state = self.get_state(entity)
+                if entity_state != "off":
+                    turn_off = False
+                    self.log("{} is still {}".format(entity, entity_state))
+                    break
+            for entity in self.turn_off_constraint_entities_on:
+                entity_state = self.get_state(entity)
+                if entity_state != "on":
+                    turn_off = False
+                    self.log("{} is still {}".format(entity, entity_state))
+                    break
+            if turn_off:
+                self.log("Turning {} off".format(self.entity_off))
+                self.turn_off(self.entity_off)
+                self.turned_on_by_me = False
         else:
             self.log("No entity_off defined", level="DEBUG")
         
