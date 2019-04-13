@@ -50,7 +50,7 @@ class AlexaSpeakerConnector(hass.Hass):
                         "media_player/select_source", entity_id=self.receiver, source=self.receiver_source)
                     self.timer_handle_list.append(self.run_in(self.run_in_callback, WAITING_TIME))
 
-    def run_in_callback(self):
+    def run_in_callback(self, kwargs):
         """
         Callback method to introduce a waiting time for the receiver to come 'online'
         :return:
