@@ -9,7 +9,11 @@ import globals
 #   app_switch: on/off switch for this app. example: input_boolean.turn_fan_on_when_hot
 #   sleepmode: input_boolean holding the sleepmode. example: input_boolean.sleepmode
 #   users: configuration for users
+#
 # Release Notes
+#
+# Version 1.1:
+#   Only send notification if sleepmode is actually changed
 #
 # Version 1.0:
 #   Initial Version
@@ -38,14 +42,16 @@ class SleepModeHandler(hass.Hass):
             if new != "" and new != old:
                 if new == "on":
                     if self.are_all_that_are_home_sleeping():
-                        self.log("All at home are sleeping")
-                        self.turn_on(self.sleepmode)
-                        self.notifier.notify(self.notify_name, self.message_sleeping)
+                        if self.get_state(self.sleepmode) == "off":
+                            self.log("All at home are sleeping")
+                            self.turn_on(self.sleepmode)
+                            self.notifier.notify(self.notify_name, self.message_sleeping)
                 elif new == "off":
                     if self.are_all_that_are_home_awake():
-                        self.log("All at home are awake")
-                        self.turn_off(self.sleepmode)
-                        self.notifier.notify(self.notify_name, self.message_awake)
+                        if self.get_state(self.sleepmode) == "on":
+                            self.log("All at home are awake")
+                            self.turn_off(self.sleepmode)
+                            self.notifier.notify(self.notify_name, self.message_awake)
 
     def are_all_that_are_home_sleeping(self):
         for user in self.users:
