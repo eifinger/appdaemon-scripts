@@ -58,7 +58,7 @@ SENSOR_TYPE_XIAOMI = "xiaomi"
 SENSOR_TYPE_ZIGBEE2MQTT = "zigbee2mqtt"
 
 
-class g(hass.Hass):
+class MotionTrigger(hass.Hass):
 
     def initialize(self):
     
