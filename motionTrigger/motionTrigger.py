@@ -136,7 +136,7 @@ class MotionTrigger(hass.Hass):
 
     def state_changed(self, entity, attribute, old, new, kwargs):
         if self.get_state(self.app_switch) == "on":
-            if new == "on" and new != old:
+            if new == "on":
                 self.turn_on_callback(None)
 
     def turn_on_callback(self, kwargs):
