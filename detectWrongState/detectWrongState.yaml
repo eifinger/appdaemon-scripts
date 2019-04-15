@@ -13,14 +13,14 @@ detectWrongStateWhenLeaving:
   switch.tv, switch.weihnachtslichter,switch.bedroom_receiver"
   trigger_entity: input_boolean.is_home
   trigger_state: "off"
-  message_DE: "Du hast {} angelassen. Ich habe es für dich ausgemacht."
-  message_EN: "You left on {}. I turned it off for you"
-  message_off_DE: "Du hast {} vergessen anzumachen. Ich habe es für dich angemacht."
-  message_off_EN: "You forgot to turn on {}. I turned it on for you"
-  message_reed_DE: "Du hast {} offen gelassen Dummie."
-  message_reed_EN: "You left open {} Dummy."
-  message_reed_off_DE: "Du hast {} zu gelassen Dummie."
-  message_reed_off_EN: "You left {} closed Dummy."
+  message: "Du hast {} angelassen. Ich habe es für dich ausgemacht."
+  #message: "You left on {}. I turned it off for you"
+  message_off: "Du hast {} vergessen anzumachen. Ich habe es für dich angemacht."
+  #message_off: "You forgot to turn on {}. I turned it on for you"
+  message_reed: "Du hast {} offen gelassen Dummie."
+  #message_reed: "You left open {} Dummy."
+  message_reed_off: "Du hast {} zu gelassen Dummie."
+  #message_reed_off: "You left {} closed Dummy."
   notify_name: group_notifications
   use_alexa: False
   dependencies: 
@@ -42,14 +42,14 @@ detectWindowsOpenWhenGoingToBed:
   after_sundown: True
   trigger_entity: input_boolean.sleepmode
   trigger_state: "on"
-  message_DE: "Du hast {} angelassen. Ich habe es für dich ausgemacht."
-  message_EN: "You left on {}. I turned it off for you"
-  message_off_DE: "Du hast {} vergessen anzumachen. Ich habe es für dich angemacht."
-  message_off_EN: "You forgot to turn on {}. I turned it on for you"
-  message_reed_DE: "Du hast {} offen gelassen Dummie."
-  message_reed_EN: "You left open {} Dummy."
-  message_reed_off_DE: "Du hast {} zu gelassen Dummie."
-  message_reed_off_EN: "You left {} closed Dummy."
+  message: "Du hast {} angelassen. Ich habe es für dich ausgemacht."
+  #message: "You left on {}. I turned it off for you"
+  message_off: "Du hast {} vergessen anzumachen. Ich habe es für dich angemacht."
+  #message_off: "You forgot to turn on {}. I turned it on for you"
+  message_reed: "Du hast {} offen gelassen Dummie."
+  #message_reed: "You left open {} Dummy."
+  message_reed_off: "Du hast {} zu gelassen Dummie."
+  #message_reed_off: "You left {} closed Dummy."
   notify_name: group_notifications
   use_alexa: True
   dependencies: 
