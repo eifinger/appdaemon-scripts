@@ -8,9 +8,13 @@ import globals
 #   input_boolean: input_boolean holding the sleepmode. example: input_boolean.sleepmode
 #   location_sensor: location sensor of user. example: sensor.location_user_one
 #   room: Room name in which both users must be. example: Wohnzimmer
-#   duration: seconds to wait before turning sleepmode on/off. example: 120
+#   asleep_duration: seconds to wait before turning sleepmode on. example: 120
+#   awake_duration: seconds to wait before turning sleepmode off. example: 120
 #
 # Release Notes
+#
+# Version 1.1:
+#   Added asleep_duration and awake_duration instead of duration
 #
 # Version 1.0:
 #   Initial Version
@@ -24,13 +28,14 @@ class UserSleepModeHandler(hass.Hass):
         self.app_switch = globals.get_arg(self.args, "app_switch")
         self.location_sensor = globals.get_arg(self.args, "location_sensor")
         self.room = globals.get_arg(self.args, "room")
-        self.duration = globals.get_arg(self.args, "duration")
+        self.asleep_duration = globals.get_arg(self.args, "asleep_duration")
+        self.awake_duration = globals.get_arg(self.args, "awake_duration")
         self.input_boolean = globals.get_arg(self.args, "input_boolean")
 
         self.listen_state_handle_list.append(
-            self.listen_state(self.asleep, self.location_sensor, new=self.room, duration=self.duration))
+            self.listen_state(self.asleep, self.location_sensor, new=self.room, duration=self.asleep_duration))
         self.listen_state_handle_list.append(
-            self.listen_state(self.awake, self.location_sensor, old=self.room, duration=self.duration))
+            self.listen_state(self.awake, self.location_sensor, old=self.room, duration=self.awake_duration))
     
     def asleep(self, entity, attribute, old, new, kwargs):
         if self.get_state(self.app_switch) == "on":
@@ -39,7 +44,7 @@ class UserSleepModeHandler(hass.Hass):
                     "{} is in {} for more than {}s. Turning {} on".format(
                         self.friendly_name(self.location_sensor),
                         self.room,
-                        self.duration,
+                        self.asleep_duration,
                         self.input_boolean
                     )
                 )
@@ -52,7 +57,7 @@ class UserSleepModeHandler(hass.Hass):
                     "{} is outside {} for more than {}s. Turning {} off".format(
                         self.friendly_name(self.location_sensor),
                         self.room,
-                        self.duration,
+                        self.awake_duration,
                         self.input_boolean
                     )
                 )

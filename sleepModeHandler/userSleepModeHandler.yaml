@@ -5,7 +5,8 @@ userSleepModeHandlerUserOne:
   input_boolean: input_boolean.user_one_sleep
   location_sensor: sensor.mqtt_room_user_one
   room: bedroom
-  duration: 600
+  awake_duration: 600
+  asleep_duration: 1800
   global_dependencies:
     - globals
 
@@ -16,7 +17,8 @@ userSleepModeHandlerUserTwo:
   input_boolean: input_boolean.user_two_sleep
   location_sensor: sensor.mqtt_room_user_two
   room: bedroom
-  duration: 600
+  awake_duration: 600
+  asleep_duration: 1800
   global_dependencies:
     - globals
     - secrets
