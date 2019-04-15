@@ -3,8 +3,8 @@ userSleepModeHandlerUserOne:
   class: UserSleepModeHandler
   app_switch: input_boolean.user_sleep_mode_handler_user_one
   input_boolean: input_boolean.user_one_sleep
-  location_sensor: sensor.mqtt_room_user_one
-  room: bedroom
+  location_sensor: sensor.location_user_one
+  room: Schlafzimmer
   awake_duration: 600
   asleep_duration: 1800
   global_dependencies:
@@ -15,8 +15,8 @@ userSleepModeHandlerUserTwo:
   class: UserSleepModeHandler
   app_switch: input_boolean.user_sleep_mode_handler_user_two
   input_boolean: input_boolean.user_two_sleep
-  location_sensor: sensor.mqtt_room_user_two
-  room: bedroom
+  location_sensor: sensor.location_user_two
+  room: Schlafzimmer
   awake_duration: 600
   asleep_duration: 1800
   global_dependencies:

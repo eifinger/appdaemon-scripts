@@ -13,6 +13,9 @@ import globals
 #
 # Release Notes
 #
+# Version 1.2:
+#   Only trigger on an actual change
+#
 # Version 1.1:
 #   Added asleep_duration and awake_duration instead of duration
 #
@@ -40,28 +43,30 @@ class UserSleepModeHandler(hass.Hass):
     def asleep(self, entity, attribute, old, new, kwargs):
         if self.get_state(self.app_switch) == "on":
             if new != "" and new != old:
-                self.log(
-                    "{} is in {} for more than {}s. Turning {} on".format(
-                        self.friendly_name(self.location_sensor),
-                        self.room,
-                        self.asleep_duration,
-                        self.input_boolean
+                if self.get_state(self.input_boolean) == "off":
+                    self.log(
+                        "{} is in {} for more than {}s. Turning {} on".format(
+                            self.friendly_name(self.location_sensor),
+                            self.room,
+                            self.asleep_duration,
+                            self.input_boolean
+                        )
                     )
-                )
-                self.turn_on(self.input_boolean)
+                    self.turn_on(self.input_boolean)
 
     def awake(self, entity, attribute, old, new, kwargs):
         if self.get_state(self.app_switch) == "on":
             if new != "" and new != old:
-                self.log(
-                    "{} is outside {} for more than {}s. Turning {} off".format(
-                        self.friendly_name(self.location_sensor),
-                        self.room,
-                        self.awake_duration,
-                        self.input_boolean
+                if self.get_state(self.input_boolean) == "on":
+                    self.log(
+                        "{} is outside {} for more than {}s. Turning {} off".format(
+                            self.friendly_name(self.location_sensor),
+                            self.room,
+                            self.awake_duration,
+                            self.input_boolean
+                        )
                     )
-                )
-                self.turn_off(self.input_boolean)
+                    self.turn_off(self.input_boolean)
 
     def terminate(self):
         for listen_state_handle in self.listen_state_handle_list:
