@@ -21,7 +21,7 @@ bathMotionTrigger:
   entity_off: light.lower_bathroom_yeelight
   sensor_type: zigbee2mqtt
   after_sundown: True
-  turn_off_constraint_entities_on: binary_sensor.0x00158d0001fa464b_occupancy
+  #turn_off_constraint_entities_on: binary_sensor.0x00158d0001fa464b_occupancy
   delay: 300
   global_dependencies:
     - globals
