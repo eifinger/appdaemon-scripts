@@ -14,10 +14,14 @@ import datetime
 # notify_name: Who to notify. example: group_notifications
 # user_id: The user_id of the telegram user to ask whether he knows an unknown face. example: 812391
 # reminder_acknowledged_entity: Input Boolean to store the information whether the user acknowledged the notification.
-#                        This prevents new notifications upon HA/Appdaemon restart. example: input_boolean.persistence_plantwateringnotifier_reminder_acknowledged
-# message_<LANG>: localized message to use in notification
+#                        This prevents new notifications upon HA/Appdaemon restart.
+#                        example: input_boolean.persistence_plantwateringnotifier_reminder_acknowledged
+# message: localized message to use in notification
 #
 # Release Notes
+#
+# Version 1.5.1:
+#   Use consistent message variable
 #
 # Version 1.5:
 #   use Notify App
@@ -37,6 +41,7 @@ import datetime
 # Version 1.0:
 #   Initial Version
 
+
 class PlantWateringNotifier(hass.Hass):
 
     def initialize(self):
@@ -45,21 +50,19 @@ class PlantWateringNotifier(hass.Hass):
         self.listen_event_handle_list = []
         self.listen_state_handle_list = []
 
-        self.app_switch = globals.get_arg(self.args,"app_switch")
-        self.rain_precip_sensor = globals.get_arg(self.args,"rain_precip_sensor")
-        self.rain_precip_intensity_sensor = globals.get_arg(self.args,"rain_precip_intensity_sensor")
-        self.precip_type_sensor = globals.get_arg(self.args,"precip_type_sensor")
-        self.notify_name = globals.get_arg(self.args,"notify_name")
-        self.user_id = globals.get_arg(self.args,"user_id")
-        self.reminder_acknowledged_entity = globals.get_arg(self.args,"reminder_acknowledged_entity")
-        self.message = globals.get_arg(self.args,"message_DE")
-        self.message_not_needed = globals.get_arg(self.args,"message_not_needed_DE")
-        self.message_evening = globals.get_arg(self.args,"message_evening_DE")
+        self.app_switch = globals.get_arg(self.args, "app_switch")
+        self.rain_precip_sensor = globals.get_arg(self.args, "rain_precip_sensor")
+        self.rain_precip_intensity_sensor = globals.get_arg(self.args, "rain_precip_intensity_sensor")
+        self.precip_type_sensor = globals.get_arg(self.args, "precip_type_sensor")
+        self.notify_name = globals.get_arg(self.args, "notify_name")
+        self.user_id = globals.get_arg(self.args, "user_id")
+        self.reminder_acknowledged_entity = globals.get_arg(self.args, "reminder_acknowledged_entity")
+        self.message = globals.get_arg(self.args, "message")
+        self.message_not_needed = globals.get_arg(self.args, "message_not_needed")
+        self.message_evening = globals.get_arg(self.args, "message_evening")
 
-        
-
-        self.intensity_minimum = 2 # mm/h
-        self.propability_minimum = 90 # %
+        self.intensity_minimum = 2  # mm/h
+        self.propability_minimum = 90  # %
 
         self.keyboard_callback = "/plants_watered"
 
@@ -69,9 +72,9 @@ class PlantWateringNotifier(hass.Hass):
 
         self.listen_event_handle_list.append(self.listen_event(self.receive_telegram_callback, 'telegram_callback'))
 
-        #Remind daily at 08:00
+        # Remind daily at 08:00
         self.timer_handle_list.append(self.run_daily(self.run_morning_callback, datetime.time(8, 0, 0)))
-        #Remind daily at 18:00
+        # Remind daily at 18:00
         self.timer_handle_list.append(self.run_daily(self.run_evening_callback, datetime.time(18, 0, 0)))
 
     def run_morning_callback(self, kwargs):
@@ -91,7 +94,7 @@ class PlantWateringNotifier(hass.Hass):
                 self.turn_off(self.reminder_acknowledged_entity)
                 self.log("Setting reminder_acknowledged to: {}".format("off"))
                 self.log("Reminding user")
-                keyboard = [[("Hab ich gemacht",self.keyboard_callback)]]
+                keyboard = [[("Hab ich gemacht", self.keyboard_callback)]]
                 self.call_service('telegram_bot/send_message',
                           target=self.user_id,
                           message=self.message.format(precip_propability),
@@ -106,9 +109,9 @@ class PlantWateringNotifier(hass.Hass):
     def run_evening_callback(self, kwargs):
         """Remind user to water the plants he if didn't acknowledge it"""
         if self.get_state(self.app_switch) == "on":
-            if( self.get_state(self.reminder_acknowledged_entity) == "off" ):
+            if self.get_state(self.reminder_acknowledged_entity) == "off":
                 self.log("Reminding user")
-                self.call_service("notify/" + self.notify_name,message=self.message_evening)
+                self.call_service("notify/" + self.notify_name, message=self.message_evening)
 
     def receive_telegram_callback(self, event_name, data, kwargs):
         """Event listener for Telegram callback queries."""
@@ -118,7 +121,7 @@ class PlantWateringNotifier(hass.Hass):
         chat_id = data['chat_id']
         message_id = data["message"]["message_id"]
         text = data["message"]["text"]
-        self.log("callback data: {}".format(data), level = "DEBUG")  
+        self.log("callback data: {}".format(data), level="DEBUG")
 
         if data_callback == self.keyboard_callback:  # Keyboard editor:
             # Answer callback query
@@ -134,7 +137,6 @@ class PlantWateringNotifier(hass.Hass):
                               message=text + " Hast du um {}:{} erledigt.".format(datetime.datetime.now().hour,datetime.datetime.now().minute),
                               inline_keyboard=[])
 
-        
     def terminate(self):
         for timer_handle in self.timer_handle_list:
             self.cancel_timer(timer_handle)

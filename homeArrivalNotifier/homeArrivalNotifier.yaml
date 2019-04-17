@@ -7,8 +7,8 @@ homeArrivalNotifierUserOne:
   notify_name: group_notifications
   user_name: secret_name_user_one
   zone_name: Home
-  message_DE: "Willkommen zu Hause {}."
-  message_EN: "Welcome Home {}."
+  message: "Willkommen zu Hause {}."
+  #message: "Welcome Home {}."
   dependencies: 
     - Notifier
   global_dependencies:
@@ -24,8 +24,8 @@ homeArrivalNotifierUserTwo:
   notify_name: group_notifications
   user_name: secret_name_user_two
   zone_name: Home
-  message_DE: "Willkommen zu Hause {}."
-  message_EN: "Welcome Home {}."
+  message: "Willkommen zu Hause {}."
+  #message: "Welcome Home {}."
   dependencies: 
     - Notifier
   global_dependencies:

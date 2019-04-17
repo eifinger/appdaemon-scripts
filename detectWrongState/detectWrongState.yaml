@@ -17,9 +17,9 @@ detectWrongStateWhenLeaving:
   #message: "You left on {}. I turned it off for you"
   message_off: "Du hast {} vergessen anzumachen. Ich habe es für dich angemacht."
   #message_off: "You forgot to turn on {}. I turned it on for you"
-  message_reed: "Du hast {} offen gelassen Dummie."
+  message_reed: "Du hast {} offen gelassen."
   #message_reed: "You left open {} Dummy."
-  message_reed_off: "Du hast {} zu gelassen Dummie."
+  message_reed_off: "Du hast {} zu gelassen."
   #message_reed_off: "You left {} closed Dummy."
   notify_name: group_notifications
   use_alexa: False
@@ -46,9 +46,9 @@ detectWindowsOpenWhenGoingToBed:
   #message: "You left on {}. I turned it off for you"
   message_off: "Du hast {} vergessen anzumachen. Ich habe es für dich angemacht."
   #message_off: "You forgot to turn on {}. I turned it on for you"
-  message_reed: "Du hast {} offen gelassen Dummie."
+  message_reed: "Du hast {} offen gelassen."
   #message_reed: "You left open {} Dummy."
-  message_reed_off: "Du hast {} zu gelassen Dummie."
+  message_reed_off: "Du hast {} zu gelassen."
   #message_reed_off: "You left {} closed Dummy."
   notify_name: group_notifications
   use_alexa: True

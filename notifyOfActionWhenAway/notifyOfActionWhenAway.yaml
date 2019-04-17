@@ -13,8 +13,8 @@ notifyOfActionWhenAway:
   isHome: input_boolean.is_home
   notify_name: group_notifications
   isHome_delay: 20
-  message_DE: "Alarm: {} ist gewechselt auf {}"
-  message_EN: "Alarm: {} changed to {}"
+  message: "Alarm: {} ist gewechselt auf {}"
+  #message: "Alarm: {} changed to {}"
   dependencies: 
     - Notifier
   global_dependencies:

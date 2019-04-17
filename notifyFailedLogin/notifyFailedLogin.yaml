@@ -2,8 +2,8 @@ notifyFailedLogin:
   module: notifyFailedLogin
   class: NotifyFailedLogin
   notify_name: group_notifications
-  message_DE: "Alarm: {}"
-  message_EN: "Alarm: {}"
+  message: "Alarm: {}"
+  #message: "Alarm: {}"
   dependencies: 
     - Notifier
   global_dependencies:

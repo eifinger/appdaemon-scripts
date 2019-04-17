@@ -18,9 +18,12 @@ import math
 #  wakeup_light: light to fade in. example: light.bedroom_yeelight
 #  isweekday: entity which holds the information whether today is a week day. example: binary_sensor.workday_today
 #  notify_name: Who to notify. example: group_notifications
-#  message_<LANG>: localized message to use in notification. e.g. "You left open {} Dummy."
+#  message: localized message to use in notification. e.g. "You left open {} Dummy."
 #
 # Release Notes
+#
+# Version 1.3.1:
+#   Use consistent message variable
 #
 # Version 1.3:
 #   Use new formatted alarm_time
@@ -52,7 +55,7 @@ class AlarmClock(hass.Hass):
         self.notify_name = globals.get_arg(self.args, "notify_name")
         self.wakeup_light = globals.get_arg(self.args, "wakeup_light")
         self.fade_in_time_multiplicator = globals.get_arg(self.args, "fade_in_time_multiplicator")
-        self.message = globals.get_arg(self.args, "message_DE")
+        self.message = globals.get_arg(self.args, "message")
         self.button = globals.get_arg(self.args, "button")
 
         self.notifier = self.get_app('Notifier')
@@ -96,8 +99,8 @@ class AlarmClock(hass.Hass):
         offset = self.cached_fade_in_time.split(".", 1)[0]
 
         if self.cached_alarm_time is not None and self.cached_alarm_time != "":
-            rundatetime = datetime.datetime.strptime(self.cached_alarm_time, "%Y-%m-%d %H:%M:%S")
-            event_time = rundatetime - datetime.timedelta(minutes=int(offset))
+            run_datetime = datetime.datetime.strptime(self.cached_alarm_time, "%Y-%m-%d %H:%M:%S")
+            event_time = run_datetime - datetime.timedelta(minutes=int(offset))
             try:
                 self.alarm_timer = self.run_at(self.trigger_alarm, event_time)
                 self.timer_handle_list.append(self.alarm_timer)
@@ -112,7 +115,7 @@ class AlarmClock(hass.Hass):
                     or (
                     self.get_state(self.alarmweekday) == "on"
                     and self.get_state(self.isweekday) == "on"
-            )
+                    )
             ):
                 if float(self.cached_fade_in_time) > 0:
                     self.log("Turning on {}".format(self.friendly_name(self.wakeup_light)))

@@ -44,7 +44,7 @@ def welcome_home():
 
 def forgot_window_open():
     if language == "de":
-        return "Du hast {} offen gelassen Dummie."
+        return "Du hast {} offen gelassen."
     if language == "en":
         return "You left open {} Dummy."
     return "You left open {} Dummy."

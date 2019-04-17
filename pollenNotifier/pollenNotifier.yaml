@@ -7,10 +7,10 @@ roggenNotifier:
   notify_name: group_notifications
   notify_time: 08:00
   notify_threshold: 1.0
-  message_DE: "{} ist {} {} Belastung."
-  message_EN: "The {} intensity {} is {}."
-  message_no_data_DE: "Ich habe {} leider keine Daten für {}."
-  message_no_data_EN: "{} I have no pollen data for {}."
+  message: "{} ist {} {} Belastung."
+  #message: "The {} intensity {} is {}."
+  message_no_data: "Ich habe {} leider keine Daten für {}."
+  #message_no_data: "{} I have no pollen data for {}."
   dependencies: 
     - Notifier
   global_dependencies:
@@ -26,10 +26,10 @@ graeserNotifier:
   notify_name: group_notifications
   notify_time: 08:00
   notify_threshold: 1.0
-  message_DE: "{} ist {} {} Belastung."
-  message_EN: "The {} intensity {} is {}."
-  message_no_data_DE: "Ich habe {} leider keine Daten für {}."
-  message_no_data_EN: "{} I have no pollen data for {}."
+  message: "{} ist {} {} Belastung."
+  #message: "The {} intensity {} is {}."
+  message_no_data: "Ich habe {} leider keine Daten für {}."
+  #message_no_data: "{} I have no pollen data for {}."
   dependencies: 
     - Notifier
   global_dependencies:
@@ -45,10 +45,10 @@ birkeNotifier:
   notify_name: group_notifications
   notify_time: 08:00
   notify_threshold: 1.0
-  message_DE: "{} ist {} {} Belastung."
-  message_EN: "The {} intensity {} is {}."
-  message_no_data_DE: "Ich habe {} leider keine Daten für {}."
-  message_no_data_EN: "{} I have no pollen data for {}."
+  message: "{} ist {} {} Belastung."
+  #message: "The {} intensity {} is {}."
+  message_no_data: "Ich habe {} leider keine Daten für {}."
+  #message_no_data: "{} I have no pollen data for {}."
   dependencies: 
     - Notifier
   global_dependencies:

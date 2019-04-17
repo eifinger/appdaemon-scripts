@@ -8,12 +8,12 @@ plantWateringNotifier:
   notify_name: group_notifications
   user_id: secret_telegram_user_id
   reminder_acknowledged_entity: input_boolean.persistence_plantwateringnotifier_reminder_acknowledged
-  message_DE: "Die Regenwahrscheinlichkeit beträgt heute nur {}. Vergiss nicht die Pflanzen zu gießen!"
-  message_EN: "The Rain Propability is only {}. Don't forget to water the plants!"
-  message_not_needed_DE: "Es wird heute mit einer Wahrscheinlichkeit von {} Prozent ungefähr {} Millimeter pro Stunde regnen. Du brauchst nicht selbst gießen."
-  message_not_needed_EN: "It will rain today {} millimeter per hour with a propability of {}. You don't have to water your plants"
-  message_evening_DE: "Ich bin mir nicht sicher ob du vergessen hast die Pflanzen zu gießen, deswegen erinnere ich dich lieber noch einmal daran."
-  message_evening_EN: "I'm not sure whether you waterd your plants, so I thought I better remind you again"
+  message: "Die Regenwahrscheinlichkeit beträgt heute nur {}. Vergiss nicht die Pflanzen zu gießen!"
+  #message: "The Rain Propability is only {}. Don't forget to water the plants!"
+  message_not_needed: "Es wird heute mit einer Wahrscheinlichkeit von {} Prozent ungefähr {} Millimeter pro Stunde regnen. Du brauchst nicht selbst gießen."
+  #message_not_needed: "It will rain today {} millimeter per hour with a propability of {}. You don't have to water your plants"
+  message_evening: "Ich bin mir nicht sicher ob du vergessen hast die Pflanzen zu gießen, deswegen erinnere ich dich lieber noch einmal daran."
+  #message_evening: "I'm not sure whether you waterd your plants, so I thought I better remind you again"
   dependencies: 
     - Notifier
   global_dependencies:

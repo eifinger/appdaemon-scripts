@@ -127,8 +127,8 @@ alarmClock:
   wakeup_light: light.bedroom_yeelight
   isweekday: binary_sensor.workday_today
   notify_name: group_notifications
-  message_DE: "Guten Morgen!"
-  message_EN: "Good Morning!"
+  message: "Guten Morgen!"
+  #message: "Good Morning!"
   global_dependencies:
     - globals
 ```
@@ -185,14 +185,14 @@ detectWrongStateWhenLeaving:
   binary_sensor.door_window_sensor_158d0002059ddf,media_player.denon_avr_x1300w,switch.large_lamp,\
   switch.small_lamp,switch.snowboard,light.bedroom_yeelight,light.bar_table,light.lobby_yeelight,\
   light.reading_lamp_yeelight,light.treppe_oben,light.stairs_lower_yeelight,switch.ventilator"
-  message_DE: "Du hast {} angelassen. Ich habe es für dich ausgemacht."
-  message_EN: "You left on {}. I turned it off for you"
-  message_off_DE: "Du hast {} vergessen anzumachen. Ich habe es für dich angemacht."
-  message_off_EN: "You forgot to turn on {}. I turned it on for you"
-  message_reed_DE: "Du hast {} offen gelassen Dummie."
-  message_reed_EN: "You left open {} Dummy."
-  message_reed_off_DE: "Du hast {} zu gelassen Dummie."
-  message_reed_off_EN: "You left {} closed Dummy."
+  message: "Du hast {} angelassen. Ich habe es für dich ausgemacht."
+  #message: "You left on {}. I turned it off for you"
+  message_off: "Du hast {} vergessen anzumachen. Ich habe es für dich angemacht."
+  #message_off: "You forgot to turn on {}. I turned it on for you"
+  message_reed: "Du hast {} offen gelassen."
+  #message_reed: "You left open {} Dummy."
+  message_reed_off: "Du hast {} zu gelassen."
+  #message_reed_off: "You left {} closed Dummy."
   isHome: input_boolean.is_home
   global_dependencies:
     - globals
@@ -224,8 +224,8 @@ googleTravelTime_home_from_work:
   sensor: sensor.travel_time_home_from_work
   notify_input_boolean: input_boolean.travel_time_home_from_work
   notify_name: group_notifications
-  message_DE: "Du kannst losfahren nach {}"
-  message_EN: "You can start your journey to {}"
+  message: "Du kannst losfahren nach {}"
+  #message: "You can start your journey to {}"
   global_dependencies:
     - globals
 ```
@@ -255,8 +255,8 @@ homeArrivalNotifierUserOne:
   notify_name: group_notifications
   user_name: secret_name_user_one
   zone_name: Home
-  message_DE: "Willkommen zu Hause {}."
-  message_EN: "Welcome Home {}."
+  message: "Willkommen zu Hause {}."
+  #message: "Welcome Home {}."
   global_dependencies:
     - globals
 ```
@@ -289,8 +289,8 @@ isHomeDeterminer:
   app_switch: input_boolean.is_home_determiner
   ishome: input_boolean.is_home
   input_booleans: input_boolean.user_one_home,input_boolean.user_two_home
-  message_DE: "Es ist keiner mehr zu Hause. Setze isHome auf off"
-  message_EN: "Everyone left home. Setting isHome to off"
+  message: "Es ist keiner mehr zu Hause. Setze isHome auf off"
+  #message: "Everyone left home. Setting isHome to off"
   global_dependencies:
     - globals
 ```
@@ -368,8 +368,8 @@ newWifiDeviceNotify:
   module: newWifiDeviceNotify
   class: DeviceNotify
   notify_name: group_notifications
-  message_DE: "Unbekanntes Gerät entdeckt. Hostname: {}. MAC: {}."
-  message_EN: "Unknown device connected. Hostname: {}. MAC: {}"
+  message: "Unbekanntes Gerät entdeckt. Hostname: {}. MAC: {}."
+  #message: "Unknown device connected. Hostname: {}. MAC: {}"
   global_dependencies:
     - globals
 ```
@@ -392,8 +392,8 @@ nextAppointmentLeaveNotifier:
   input_number: input_number.leave_time_offset
   destination_name_sensor: sensor.cal_next_appointment_location
   travel_time_sensor: sensor.travel_time_next_appointment_location
-  message_DE: "Es ist Zeit loszufahren nach {}. Du brauchst {} Minuten. Hier ist ein Google Maps Link: {}"
-  message_EN: "It's time to leave to {}. It will take {} minutes. Here is a Google Maps Link: {}"
+  message: "Es ist Zeit loszufahren nach {}. Du brauchst {} Minuten. Hier ist ein Google Maps Link: {}"
+  #message: "It's time to leave to {}. It will take {} minutes. Here is a Google Maps Link: {}"
   global_dependencies:
     - globals
 ```
@@ -408,8 +408,8 @@ notifyFailedLogin:
   module: notifyFailedLogin
   class: NotifyFailedLogin
   notify_name: group_notifications
-  message_DE: "Alarm: {}"
-  message_EN: "Alarm: {}"
+  message: "Alarm: {}"
+  #message: "Alarm: {}"
   global_dependencies:
     - globals
 ```
@@ -434,8 +434,8 @@ notifyOfActionWhenAway:
   isHome: input_boolean.is_home
   user_name: group_notifications
   isHome_delay: 20
-  message_DE: "Alarm: {} ist gewechselt auf {}"
-  message_EN: "Alarm: {} changed to {}"
+  message: "Alarm: {} ist gewechselt auf {}"
+  #message: "Alarm: {} changed to {}"
   global_dependencies:
     - messages
     - globals
@@ -456,12 +456,12 @@ plantWateringNotifier:
   notify_name: group_notifications
   user_id: secret_telegram_user_id
   reminder_acknowledged_entity: input_boolean.persistence_plantwateringnotifier_reminder_acknowledged
-  message_DE: "Die Regenwahrscheinlichkeit beträgt heute nur {}. Vergiss nicht die Pflanzen zu gießen!"
-  message_EN: "The Rain Propability is only {}. Don't forget to water the plants!"
-  message_not_needed_DE: "Es wird heute mit einer Wahrscheinlichkeit von {} Prozent ungefähr {} Millimeter pro Stunde regnen. Du brauchst nicht selbst gießen."
-  message_not_needed_EN: "It will rain today {} millimeter per hour with a propability of {}. You don't have to water your plants"
-  message_evening_DE: "Ich bin mir nicht sicher ob du vergessen hast die Pflanzen zu gießen, deswegen erinnere ich dich lieber noch einmal daran."
-  message_evening_EN: "I'm not sure whether you waterd your plants, so I thought I better remind you again"
+  message: "Die Regenwahrscheinlichkeit beträgt heute nur {}. Vergiss nicht die Pflanzen zu gießen!"
+  #message: "The Rain Propability is only {}. Don't forget to water the plants!"
+  message_not_needed: "Es wird heute mit einer Wahrscheinlichkeit von {} Prozent ungefähr {} Millimeter pro Stunde regnen. Du brauchst nicht selbst gießen."
+  #message_not_needed: "It will rain today {} millimeter per hour with a propability of {}. You don't have to water your plants"
+  message_evening: "Ich bin mir nicht sicher ob du vergessen hast die Pflanzen zu gießen, deswegen erinnere ich dich lieber noch einmal daran."
+  #message_evening: "I'm not sure whether you waterd your plants, so I thought I better remind you again"
   global_dependencies:
     - globals
     - messages
@@ -482,10 +482,10 @@ roggenNotifier:
   notify_name: group_notifications
   notify_time: 08:00
   notify_threshold: 1.0
-  message_DE: "{} ist {} {} Belastung."
-  message_EN: "The {} intensity {} is {}."
-  message_no_data_DE: "Ich habe {} leider keine Daten für {}."
-  message_no_data_EN: "{} I have no pollen data for {}."
+  message: "{} ist {} {} Belastung."
+  #message: "The {} intensity {} is {}."
+  message_no_data: "Ich habe {} leider keine Daten für {}."
+  #message_no_data: "{} I have no pollen data for {}."
   global_dependencies:
     - globals
 ```
@@ -505,10 +505,10 @@ powerUsageNotification_Dishwasher:
   delay: 1260 #21 minutes
   threshold: 2
   alternative_name: Die Spülmaschine
-  message_DE: "{} ist gestartet."
-  message_EN: "{} just started."
-  message_off_DE: "{} ist fertig."
-  message_off_EN: "{} just finished."
+  message: "{} ist gestartet."
+  #message: "{} just started."
+  message_off: "{} ist fertig."
+  #message_off: "{} just finished."
   global_dependencies:
     - globals
 ```
