@@ -61,7 +61,8 @@ Every App has an input_boolean inside HA which turns it on/off. This is useful i
 *   [runOnStateChange](#runonstatechange)
 *   [sensorWatcher](#sensorwatcher)
 *   [setThermostat](#setthermostat)
-*   [setMediaPlayerSource](#setMediaPlayerSource)
+*   [setThermostatOnStateChange](#setthermostatonstatechange)
+*   [setMediaPlayerSource](#setmediaplayersource)
 *   [sleepModeHandler](#sleepmodehandler)
 *   [standardSetter](#standardsetter)
 *   [turnFanOnWhenHot](#turnfanonwhenhot)
@@ -343,17 +344,20 @@ leavingWorkNotifierUserOne:
 Turn something on/off when a motion sensor turns on. Automatically turn it off again after a delay.
 
 ```yaml
-obenTreppeMotionTrigger:
+bathMotionTrigger:
   module: motionTrigger
   class: MotionTrigger
-  app_switch: input_boolean.oben_treppe_motion_trigger
-  sensor: binary_sensor.motion_sensor_158d00012aab97
-  entity_on: light.treppe_oben
-  entity_off: light.treppe_oben
+  app_switch: input_boolean.bath_motion_trigger
+  sensor: binary_sensor.0x00158d000236b801_occupancy
+  entity_on: light.lower_bathroom_yeelight
+  entity_off: light.lower_bathroom_yeelight
   sensor_type: zigbee2mqtt
   after_sundown: True
+  turn_off_constraint_entities_on: binary_sensor.0x00158d0001fa464b_occupancy
+  delay: 300
   global_dependencies:
     - globals
+    - secrets
 ```
 
 ### newWifiDeviceNotify
@@ -647,6 +651,32 @@ warm_bath_before_wakeup:
     - Notifier
   global_dependencies:
     - globals
+```
+
+### setThermostatOnStateChange
+
+App which sets a thermostat to a target temperature on state change.
+This is a separate App from [runOnStateChange](#runonstatechange)
+because here we need a target number or entity to which to set the thermostat to.
+
+```yaml
+setBadObenThermostatWhenComingHome:
+  module: setThermostatOnStateChange
+  class: SetThermostatOnStateChange
+  app_switch: input_boolean.set_upper_bath_thermostat_when_coming_home
+  trigger_entity: input_boolean.is_home
+  trigger_state: "on"
+  climate_entity: climate.bad_oben_thermostat
+  target_entity: input_number.set_upper_bath_thermostat_when_coming_home
+  message: "Ich habe {} auf {} °C gestellt"
+  #message: "I have set {} to {}"
+  notify_name: group_notifications
+  use_alexa: False
+  dependencies:
+    - Notifier
+  global_dependencies:
+    - globals
+    - secrets
 ```
 
 ### sleepModeHandler
