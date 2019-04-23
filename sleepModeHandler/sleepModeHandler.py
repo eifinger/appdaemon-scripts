@@ -12,6 +12,9 @@ import globals
 #
 # Release Notes
 #
+# Version 1.2:
+#   Add use_alexa
+#
 # Version 1.1:
 #   Only send notification if sleepmode is actually changed
 #
@@ -31,6 +34,11 @@ class SleepModeHandler(hass.Hass):
         self.message_sleeping = globals.get_arg(self.args, "message_sleeping")
         self.message_awake = globals.get_arg(self.args, "message_awake")
 
+        try:
+            self.use_alexa = globals.get_arg(self.args, "use_alexa")
+        except KeyError:
+            self.use_alexa = False
+
         self.notifier = self.get_app('Notifier')
 
         for user in self.users:
@@ -45,13 +53,13 @@ class SleepModeHandler(hass.Hass):
                         if self.get_state(self.sleepmode) == "off":
                             self.log("All at home are sleeping")
                             self.turn_on(self.sleepmode)
-                            self.notifier.notify(self.notify_name, self.message_sleeping)
+                            self.notifier.notify(self.notify_name, self.message_sleeping, useAlexa=self.use_alexa)
                 elif new == "off":
                     if self.are_all_that_are_home_awake():
                         if self.get_state(self.sleepmode) == "on":
                             self.log("All at home are awake")
                             self.turn_off(self.sleepmode)
-                            self.notifier.notify(self.notify_name, self.message_awake)
+                            self.notifier.notify(self.notify_name, self.message_awake, useAlexa=self.use_alexa)
 
     def are_all_that_are_home_sleeping(self):
         for user in self.users:
