@@ -7,7 +7,7 @@ import globals
 #   app_switch: on/off switch for this app. example: input_boolean.turn_fan_on_when_hot
 #   input_boolean: input_boolean holding the sleepmode. example: input_boolean.sleepmode
 #   location_sensor: location sensor of user. example: sensor.location_user_one
-#   room: Room name in which both users must be. example: Wohnzimmer
+#   room: Room name in which user must be. example: Wohnzimmer
 #   asleep_duration: seconds to wait before turning sleepmode on. example: 120
 #   awake_duration: seconds to wait before turning sleepmode off. example: 120
 #
