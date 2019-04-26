@@ -58,7 +58,7 @@ class UserSleepModeHandler(hass.Hass):
                              f"Resetting timer. Will trigger asleep in {self.asleep_duration}s")
                     if self.timer_handle is not None:
                         self.cancel_timer(self.timer_handle)
-                    self.timer_handle = self.run_in(self.awake, self.asleep_duration)
+                    self.timer_handle = self.run_in(self.asleep, self.asleep_duration)
 
     def awake(self, kwargs):
         """User left room for more than self.awake_duration. Turn off sleep mode"""
