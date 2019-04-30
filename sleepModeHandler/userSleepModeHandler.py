@@ -1,5 +1,6 @@
 import appdaemon.plugins.hass.hassapi as hass
 import globals
+from queue import Queue
 #
 # App which sets the sleep mode on/off
 #
@@ -40,6 +41,8 @@ class UserSleepModeHandler(hass.Hass):
 
         self.timer_handle = None
 
+        self.queue = Queue()
+
         self.listen_state_handle_list.append(
             self.listen_state(self.state_change, self.location_sensor))
     
@@ -78,6 +81,17 @@ class UserSleepModeHandler(hass.Hass):
                 f"Turning {self.input_boolean} on")
             self.turn_on(self.input_boolean)
 
+    def insert_room_state_change(self, entity, attribute, old, new, kwargs):
+        """Insert a new room state change into the queue"""
+        self.queue.put(new)
+
+    def calculate_room_presence(self, kwargs):
+        """Calculate the percentage the person was in the target room since the last invocation"""
+        state_changes = []
+        while not self.queue.empty():
+            state_changes.append(self.queue.get())
+        for state_change in state_changes:
+
 
     def terminate(self):
         if self.timer_handle is not None:
@@ -85,4 +99,3 @@ class UserSleepModeHandler(hass.Hass):
 
         for listen_state_handle in self.listen_state_handle_list:
             self.cancel_listen_state(listen_state_handle)
-

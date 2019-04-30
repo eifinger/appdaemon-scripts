@@ -22,7 +22,7 @@ import globals
 # Version 1.0:
 #   Initial Version
 
-WAITING_TIME = 5
+WAITING_TIME = 10
 
 
 class AlexaSpeakerConnector(hass.Hass):
