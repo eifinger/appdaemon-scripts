@@ -91,6 +91,7 @@ class UserSleepModeHandler(hass.Hass):
         while not self.queue.empty():
             state_changes.append(self.queue.get())
         for state_change in state_changes:
+            pass
 
 
     def terminate(self):
