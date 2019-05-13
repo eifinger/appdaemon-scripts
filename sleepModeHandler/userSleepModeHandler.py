@@ -65,21 +65,29 @@ class UserSleepModeHandler(hass.Hass):
 
     def awake(self, kwargs):
         """User left room for more than self.awake_duration. Turn off sleep mode"""
-        if self.get_state(self.input_boolean) == "on":
-            self.log(
-                f"{self.friendly_name(self.location_sensor)} is outside {self.room} "
-                f"for more than {self.asleep_duration}s. "
-                f"Turning {self.input_boolean} off")
-            self.turn_off(self.input_boolean)
+        current_location = self.get_state(self.location_sensor)
+        if current_location != self.room:
+            if self.get_state(self.input_boolean) == "on":
+                self.log(
+                    f"{self.friendly_name(self.location_sensor)} is outside {self.room} "
+                    f"for more than {self.asleep_duration}s. "
+                    f"Turning {self.input_boolean} off")
+                self.turn_off(self.input_boolean)
+        else:
+            self.log(f"Timer ran out but user is in {current_location}")
 
     def asleep(self, kwargs):
         """User stayed in room for more than self.asleep_duration. Turn on sleep mode"""
-        if self.get_state(self.input_boolean) == "off":
-            self.log(
-                f"{self.friendly_name(self.location_sensor)} is in {self.room} "
-                f"for more than {self.asleep_duration}s. "
-                f"Turning {self.input_boolean} on")
-            self.turn_on(self.input_boolean)
+        current_location = self.get_state(self.location_sensor)
+        if current_location == self.room:
+            if self.get_state(self.input_boolean) == "off":
+                self.log(
+                    f"{self.friendly_name(self.location_sensor)} is in {self.room} "
+                    f"for more than {self.asleep_duration}s. "
+                    f"Turning {self.input_boolean} on")
+                self.turn_on(self.input_boolean)
+        else:
+            self.log(f"Timer ran out but user is in {current_location}")
 
     def insert_room_state_change(self, entity, attribute, old, new, kwargs):
         """Insert a new room state change into the queue"""
