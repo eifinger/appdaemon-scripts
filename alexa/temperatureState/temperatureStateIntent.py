@@ -1,8 +1,8 @@
 import appdaemon.plugins.hass.hassapi as hass
 import random
 
-class temperatureStateIntent(hass.Hass):
 
+class temperatureStateIntent(hass.Hass):
     def initialize(self):
         return
 
@@ -12,27 +12,35 @@ class temperatureStateIntent(hass.Hass):
         ############################################
         try:
             if self.args["language"] == "DE":
-                temp = self.floatToStr(self.get_state(self.args["sensors"][slots["location"]])) + self.args["temperatureUnit"]
+                temp = (
+                    self.floatToStr(
+                        self.get_state(self.args["sensors"][slots["location"]])
+                    )
+                    + self.args["temperatureUnit"]
+                )
             else:
-                temp = str(self.get_state(self.args["sensors"][slots["location"]])) + self.args["temperatureUnit"]
-            text = self.random_arg(self.args["textLine"]) + temp 
+                temp = (
+                    str(self.get_state(self.args["sensors"][slots["location"]]))
+                    + self.args["temperatureUnit"]
+                )
+            text = self.random_arg(self.args["textLine"]) + temp
         except:
             text = self.random_arg(self.args["Error"])
         return text
 
-    def floatToStr(self,myfloat):
+    def floatToStr(self, myfloat):
         ############################################
         # replace . with , for better speech
         ############################################
         floatstr = str(myfloat)
-        floatstr = floatstr.replace(".",",")
+        floatstr = floatstr.replace(".", ",")
         return floatstr
 
-    def random_arg(self,argName):
+    def random_arg(self, argName):
         ############################################
         # pick a random text from a list
         ############################################
-        if isinstance(argName,list):
+        if isinstance(argName, list):
             text = random.choice(argName)
         else:
             text = argName

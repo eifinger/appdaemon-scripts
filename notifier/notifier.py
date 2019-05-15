@@ -1,8 +1,9 @@
 import appdaemon.plugins.hass.hassapi as hass
 import datetime
 import globals
+
 #
-# Centralizes messaging. Among other things, it will determine whether a user is at home and if yes in which room. 
+# Centralizes messaging. Among other things, it will determine whether a user is at home and if yes in which room.
 # Then Alexa in that room will be used additionally to Telegram
 #
 # Args:
@@ -12,7 +13,7 @@ import globals
 #  user_location_sensors: sensors showing the location of users
 #  alexa_to_location_mapping: mapping of which alexa device is used for which room
 #
-# 
+#
 #
 # Release Notes
 #
@@ -37,7 +38,6 @@ __WAIT_TIME__ = 5  # seconds
 
 
 class Notifier(hass.Hass):
-
     def initialize(self):
         self.timer_handle_list = []
 
@@ -54,22 +54,38 @@ class Notifier(hass.Hass):
         if useAlexa and self.get_state(self.app_switch_alexa) == "on":
             self.log("Notifying via Alexa")
             # check last message
-            if self.last_alexa_notification_time is not None and (datetime.datetime.now() - self.last_alexa_notification_time < datetime.timedelta(seconds=__WAIT_TIME__)):
-                self.timer_handle_list.append(self.run_in(self.notify_callback, __WAIT_TIME__, message=message))
+            if self.last_alexa_notification_time is not None and (
+                datetime.datetime.now() - self.last_alexa_notification_time
+                < datetime.timedelta(seconds=__WAIT_TIME__)
+            ):
+                self.timer_handle_list.append(
+                    self.run_in(self.notify_callback, __WAIT_TIME__, message=message)
+                )
             else:
                 self.last_alexa_notification_time = datetime.datetime.now()
-                self.call_service(__NOTIFY__ + self.alexa_tts, data={"type": "tts"}, target=self.alexa_media_player, message=message)
+                self.call_service(
+                    __NOTIFY__ + self.alexa_tts,
+                    data={"type": "tts"},
+                    target=self.alexa_media_player,
+                    message=message,
+                )
 
     def notify_callback(self, kwargs):
         self.last_alexa_notification_time = datetime.datetime.now()
-        self.call_service(__NOTIFY__ + self.alexa_tts, data={"type": "tts"}, target=self.alexa_media_player,
-                          message=kwargs["message"])
+        self.call_service(
+            __NOTIFY__ + self.alexa_tts,
+            data={"type": "tts"},
+            target=self.alexa_media_player,
+            message=kwargs["message"],
+        )
 
     def getAlexaDeviceForUserLocation(self, notify_name):
         if notify_name == __GROUP_NOTIFICATIONS__:
             return self.args["alexa_to_location_mapping"]["Wohnzimmer"]
         elif notify_name.lower() in self.args["user_location_sensors"]:
-            location = self.get_state(self.args["user_location_sensors"][notify_name.lower()])
+            location = self.get_state(
+                self.args["user_location_sensors"][notify_name.lower()]
+            )
             if location in self.args["alexa_to_location_mapping"]:
                 return self.args["alexa_to_location_mapping"][location]
             else:
@@ -77,7 +93,6 @@ class Notifier(hass.Hass):
         else:
             self.log("Unknown notify_name: {}".format(notify_name))
             return None
-
 
     def terminate(self):
         for timer_handle in self.timer_handle_list:

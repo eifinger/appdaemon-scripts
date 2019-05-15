@@ -1,6 +1,7 @@
 import appdaemon.plugins.hass.hassapi as hass
 import datetime
 import globals
+
 #
 # App which resets a counter on the last day of month
 #
@@ -20,7 +21,6 @@ import globals
 
 
 class ResetCounterOnLastDayOfMonth(hass.Hass):
-
     def initialize(self):
         self.timer_handle_list = []
 
@@ -35,19 +35,27 @@ class ResetCounterOnLastDayOfMonth(hass.Hass):
     def run_at_callback(self, kwargs):
         if self.get_state(self.app_switch) == "on":
             self.call_service("counter/reset", entity_id=self.counter)
-            self.log("Reset {} to {}".format(self.friendly_name(self.counter), self.get_state(self.counter)))
+            self.log(
+                "Reset {} to {}".format(
+                    self.friendly_name(self.counter), self.get_state(self.counter)
+                )
+            )
             runtime = self.get_next_run_time()
             self.log("Next reset will be: {}".format(runtime))
             self.timer_handle_list.append(self.run_at(self.run_at_callback, runtime))
 
     @staticmethod
     def last_day_of_month(any_day):
-        next_month = any_day.replace(day=28) + datetime.timedelta(days=4)  # this will never fail
+        next_month = any_day.replace(day=28) + datetime.timedelta(
+            days=4
+        )  # this will never fail
         return next_month - datetime.timedelta(days=next_month.day)
 
     def get_next_run_time(self):
         today = datetime.date.today()
-        last_day_of_month = self.last_day_of_month(today) + datetime.timedelta(days=1)  # Reset in in different timezone
+        last_day_of_month = self.last_day_of_month(today) + datetime.timedelta(
+            days=1
+        )  # Reset in in different timezone
         hours = self.time.split(":", 1)[0]
         minutes = self.time.split(":", 1)[1]
         runtime = datetime.time(int(hours), int(minutes))

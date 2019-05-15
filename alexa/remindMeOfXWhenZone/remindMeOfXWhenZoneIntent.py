@@ -5,24 +5,24 @@ import globals
 __ZONE_ACTION_ENTER__ = "kommen"
 __ZONE_ACTION_LEAVE__ = "verlassen"
 
-class RemindMeOfXWhenZoneIntent(hass.Hass):
 
+class RemindMeOfXWhenZoneIntent(hass.Hass):
     def initialize(self):
         self.timer_handle_list = []
         self.listen_state_handle_list = []
 
-        self.device_tracker = globals.get_arg(self.args,"device_tracker")
-        self.notify_name = globals.get_arg(self.args,"notify_name")
-        self.remindMessageSkeleton = globals.get_arg(self.args,"remindMessageSkeleton")
+        self.device_tracker = globals.get_arg(self.args, "device_tracker")
+        self.notify_name = globals.get_arg(self.args, "notify_name")
+        self.remindMessageSkeleton = globals.get_arg(self.args, "remindMessageSkeleton")
 
-        self.notifier = self.get_app('Notifier')
+        self.notifier = self.get_app("Notifier")
         return
 
     def getIntentResponse(self, slots, devicename):
         ############################################
         # an Intent to give back the state from a light.
         # but it also can be any other kind of entity
-        ############################################           
+        ############################################
         try:
             # get zone_name for friendly name used when talking to alexa
             zone_name = None
@@ -31,9 +31,19 @@ class RemindMeOfXWhenZoneIntent(hass.Hass):
                     zone_name = value
             # listen to a state change of the zone
             if zone_name == None:
-                raise Exception("Could not find zonemapping for: {}".format(slots["zone"].lower()))
+                raise Exception(
+                    "Could not find zonemapping for: {}".format(slots["zone"].lower())
+                )
             else:
-                self.listen_state_handle_list.append(self.listen_state(self.remind_callback, self.device_tracker, zone=slots["zone"], zoneAction=slots["zoneAction"], reminder=slots["reminder"]))
+                self.listen_state_handle_list.append(
+                    self.listen_state(
+                        self.remind_callback,
+                        self.device_tracker,
+                        zone=slots["zone"],
+                        zoneAction=slots["zoneAction"],
+                        reminder=slots["reminder"],
+                    )
+                )
                 # set correct zoneAction response
                 if slots["zoneAction"] == __ZONE_ACTION_ENTER__:
                     text = self.args["textLine"] + self.args["textEnter"]
@@ -49,11 +59,19 @@ class RemindMeOfXWhenZoneIntent(hass.Hass):
         if kwargs["zoneAction"] == __ZONE_ACTION_ENTER__:
             if new != old and new == kwargs["zone"]:
                 self.log("Notifying")
-                self.notifier.notify(self.notify_name, self.remindMessageSkeleton + kwargs["reminder"], useAlexa=False)
+                self.notifier.notify(
+                    self.notify_name,
+                    self.remindMessageSkeleton + kwargs["reminder"],
+                    useAlexa=False,
+                )
         elif kwargs["zoneAction"] == __ZONE_ACTION_LEAVE__:
             if new != old and old == kwargs["zone"]:
                 self.log("Notifying")
-                self.notifier.notify(self.notify_name, self.remindMessageSkeleton + kwargs["reminder"], useAlexa=False)
+                self.notifier.notify(
+                    self.notify_name,
+                    self.remindMessageSkeleton + kwargs["reminder"],
+                    useAlexa=False,
+                )
 
     def terminate(self):
         for timer_handle in self.timer_handle_list:

@@ -1,6 +1,7 @@
 import appdaemon.plugins.hass.hassapi as hass
 import datetime
 import globals
+
 #
 # App which turns on the light based on the room the user is currently in
 #
@@ -24,26 +25,30 @@ import globals
 # Version 1.0:
 #   Initial Version
 
-class RoomBasedLightControl(hass.Hass):
 
+class RoomBasedLightControl(hass.Hass):
     def initialize(self):
 
         self.listen_state_handle_list = []
         self.timer_handle_list = []
 
-        self.room_sensor = globals.get_arg(self.args,"room_sensor")
-        self.entity = globals.get_arg(self.args,"entity")
+        self.room_sensor = globals.get_arg(self.args, "room_sensor")
+        self.entity = globals.get_arg(self.args, "entity")
         self.mappings = self.args["mappings"]
 
         self.mappings_dict = {}
 
         for mapping in self.mappings:
-            self.mappings_dict[self.mappings[mapping]["room"]] = self.mappings[mapping]["entity"]
+            self.mappings_dict[self.mappings[mapping]["room"]] = self.mappings[mapping][
+                "entity"
+            ]
 
-        self.listen_state_handle_list.append(self.listen_state(self.state_change, self.entity))
+        self.listen_state_handle_list.append(
+            self.listen_state(self.state_change, self.entity)
+        )
 
     def state_change(self, entity, attributes, old, new, kwargs):
-        self.log("{} turned {}".format(self.friendly_name(self.entity),new))
+        self.log("{} turned {}".format(self.friendly_name(self.entity), new))
         room = self.get_state(self.room_sensor)
         self.log("User is in room {}".format(room))
         mapped_entity = self.mappings_dict.get(room)

@@ -1,6 +1,7 @@
 import appdaemon.plugins.hass.hassapi as hass
 import globals
 from queue import Queue
+
 #
 # App which sets the sleep mode on/off
 #
@@ -28,7 +29,6 @@ from queue import Queue
 
 
 class UserSleepModeHandler(hass.Hass):
-
     def initialize(self):
         self.listen_state_handle_list = []
 
@@ -44,21 +44,26 @@ class UserSleepModeHandler(hass.Hass):
         self.queue = Queue()
 
         self.listen_state_handle_list.append(
-            self.listen_state(self.state_change, self.location_sensor))
-    
+            self.listen_state(self.state_change, self.location_sensor)
+        )
+
     def state_change(self, entity, attribute, old, new, kwargs):
         """Handle state changes of the location sensor"""
         if new != old:
             if self.get_state(self.app_switch) == "on":
                 # User left room
                 if old == self.room:
-                    self.log(f"User left {self.room}. Resetting timer. Will trigger awake in {self.awake_duration}s")
+                    self.log(
+                        f"User left {self.room}. Resetting timer. Will trigger awake in {self.awake_duration}s"
+                    )
                     if self.timer_handle is not None:
                         self.cancel_timer(self.timer_handle)
                     self.timer_handle = self.run_in(self.awake, self.awake_duration)
                 elif new == self.room:
-                    self.log(f"User entered {self.room}. "
-                             f"Resetting timer. Will trigger asleep in {self.asleep_duration}s")
+                    self.log(
+                        f"User entered {self.room}. "
+                        f"Resetting timer. Will trigger asleep in {self.asleep_duration}s"
+                    )
                     if self.timer_handle is not None:
                         self.cancel_timer(self.timer_handle)
                     self.timer_handle = self.run_in(self.asleep, self.asleep_duration)
@@ -71,7 +76,8 @@ class UserSleepModeHandler(hass.Hass):
                 self.log(
                     f"{self.friendly_name(self.location_sensor)} is outside {self.room} "
                     f"for more than {self.asleep_duration}s. "
-                    f"Turning {self.input_boolean} off")
+                    f"Turning {self.input_boolean} off"
+                )
                 self.turn_off(self.input_boolean)
         else:
             self.log(f"Timer ran out but user is in {current_location}")
@@ -84,7 +90,8 @@ class UserSleepModeHandler(hass.Hass):
                 self.log(
                     f"{self.friendly_name(self.location_sensor)} is in {self.room} "
                     f"for more than {self.asleep_duration}s. "
-                    f"Turning {self.input_boolean} on")
+                    f"Turning {self.input_boolean} on"
+                )
                 self.turn_on(self.input_boolean)
         else:
             self.log(f"Timer ran out but user is in {current_location}")
@@ -100,7 +107,6 @@ class UserSleepModeHandler(hass.Hass):
             state_changes.append(self.queue.get())
         for state_change in state_changes:
             pass
-
 
     def terminate(self):
         if self.timer_handle is not None:

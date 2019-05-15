@@ -28,64 +28,80 @@ import datetime
 # Version 1.0:
 #   Initial Version
 
+
 class TurnFanOnWhenHot(hass.Hass):
+    def initialize(self):
+        self.listen_state_handle_list = []
+        self.timer_handle_list = []
 
-  def initialize(self):
-    self.listen_state_handle_list = []
-    self.timer_handle_list = []
+        self.app_switch = globals.get_arg(self.args, "app_switch")
+        self.temp_sensor = globals.get_arg(self.args, "temp_sensor")
+        self.threshold_entity = globals.get_arg(self.args, "threshold_entity")
+        self.location_sensors = globals.get_arg_list(self.args, "location_sensors")
+        self.room = globals.get_arg(self.args, "room")
+        self.actor = globals.get_arg(self.args, "actor")
+        self.delay = globals.get_arg(self.args, "delay")
 
-    self.app_switch = globals.get_arg(self.args,"app_switch")
-    self.temp_sensor = globals.get_arg(self.args,"temp_sensor")
-    self.threshold_entity = globals.get_arg(self.args,"threshold_entity")
-    self.location_sensors = globals.get_arg_list(self.args,"location_sensors")
-    self.room = globals.get_arg(self.args,"room")
-    self.actor = globals.get_arg(self.args,"actor")
-    self.delay = globals.get_arg(self.args,"delay")
+        self.turned_on_by_me = False  # Giggedi
 
-    self.turned_on_by_me = False #Giggedi
+        self.turn_off_timer_handle = None
 
-    self.turn_off_timer_handle = None
-
-    self.listen_state_handle_list.append(self.listen_state(self.state_change, self.temp_sensor))
-    for sensor in self.location_sensors:
-      self.listen_state_handle_list.append(self.listen_state(self.state_change, sensor))
-    
-  def state_change(self, entity, attribute, old, new, kwargs):
-    if self.get_state(self.app_switch) == "on":
-      turn_on = False
-      if (self.get_state(self.temp_sensor) != None and self.get_state(self.temp_sensor) != "unkown" 
-      and self.get_state(self.threshold_entity) != None
-      and float(self.get_state(self.temp_sensor)) > float(self.get_state(self.threshold_entity))):
+        self.listen_state_handle_list.append(
+            self.listen_state(self.state_change, self.temp_sensor)
+        )
         for sensor in self.location_sensors:
-          if self.get_state(sensor) == self.room:
-            if self.get_state(self.actor) != "on":
-              self.log("{} is {}. This is above theshold of {}".format(self.friendly_name(self.temp_sensor), self.get_state(self.temp_sensor), self.get_state(self.threshold_entity)))
-              self.log("{} is in {}".format(sensor, self.room))
-              self.log("Turning on {}".format(self.friendly_name(self.actor)))
-              self.turn_on(self.actor)
-              self.turned_on_by_me = True
-            turn_on = True
-            if self.turn_off_timer_handle != None:
-              self.timer_handle_list.remove(self.turn_off_timer_handle)
-              self.cancel_timer(self.turn_off_timer_handle)
-              self.turn_off_timer_handle = None
-      if not turn_on and self.turned_on_by_me:
-        if self.get_state(self.actor) != "off":
-          self.turn_off_timer_handle = self.run_in(self.turn_off_callback,self.delay)
-          self.timer_handle_list.append(self.turn_off_timer_handle)
-            
+            self.listen_state_handle_list.append(
+                self.listen_state(self.state_change, sensor)
+            )
 
-  def turn_off_callback(self, kwargs):
-    """Turn off the actor again if the timer was not cancelled in the meantime"""
-    self.log("Turning off {}".format(self.friendly_name(self.actor)))
-    self.turn_off(self.actor)
-    self.turned_on_by_me = False
-    self.turn_off_timer_handle = None
+    def state_change(self, entity, attribute, old, new, kwargs):
+        if self.get_state(self.app_switch) == "on":
+            turn_on = False
+            if (
+                self.get_state(self.temp_sensor) != None
+                and self.get_state(self.temp_sensor) != "unkown"
+                and self.get_state(self.threshold_entity) != None
+                and float(self.get_state(self.temp_sensor))
+                > float(self.get_state(self.threshold_entity))
+            ):
+                for sensor in self.location_sensors:
+                    if self.get_state(sensor) == self.room:
+                        if self.get_state(self.actor) != "on":
+                            self.log(
+                                "{} is {}. This is above theshold of {}".format(
+                                    self.friendly_name(self.temp_sensor),
+                                    self.get_state(self.temp_sensor),
+                                    self.get_state(self.threshold_entity),
+                                )
+                            )
+                            self.log("{} is in {}".format(sensor, self.room))
+                            self.log(
+                                "Turning on {}".format(self.friendly_name(self.actor))
+                            )
+                            self.turn_on(self.actor)
+                            self.turned_on_by_me = True
+                        turn_on = True
+                        if self.turn_off_timer_handle != None:
+                            self.timer_handle_list.remove(self.turn_off_timer_handle)
+                            self.cancel_timer(self.turn_off_timer_handle)
+                            self.turn_off_timer_handle = None
+            if not turn_on and self.turned_on_by_me:
+                if self.get_state(self.actor) != "off":
+                    self.turn_off_timer_handle = self.run_in(
+                        self.turn_off_callback, self.delay
+                    )
+                    self.timer_handle_list.append(self.turn_off_timer_handle)
 
+    def turn_off_callback(self, kwargs):
+        """Turn off the actor again if the timer was not cancelled in the meantime"""
+        self.log("Turning off {}".format(self.friendly_name(self.actor)))
+        self.turn_off(self.actor)
+        self.turned_on_by_me = False
+        self.turn_off_timer_handle = None
 
-  def terminate(self):
-    for listen_state_handle in self.listen_state_handle_list:
-      self.cancel_listen_state(listen_state_handle)
+    def terminate(self):
+        for listen_state_handle in self.listen_state_handle_list:
+            self.cancel_listen_state(listen_state_handle)
 
-    for timer_handle in self.timer_handle_list:
+        for timer_handle in self.timer_handle_list:
             self.cancel_timer(timer_handle)

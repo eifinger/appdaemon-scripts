@@ -1,5 +1,6 @@
 import appdaemon.plugins.hass.hassapi as hass
 import globals
+
 #
 # App which runs something based on a state change
 #
@@ -29,7 +30,6 @@ import globals
 
 
 class RunOnStateChange(hass.Hass):
-
     def initialize(self):
         self.listen_state_handle_list = []
 
@@ -65,28 +65,46 @@ class RunOnStateChange(hass.Hass):
         self.trigger_entity = globals.get_arg(self.args, "trigger_entity")
         self.trigger_state = globals.get_arg(self.args, "trigger_state")
 
-        self.notifier = self.get_app('Notifier')
+        self.notifier = self.get_app("Notifier")
 
-        self.listen_state_handle_list.append(self.listen_state(self.state_change, self.trigger_entity))
+        self.listen_state_handle_list.append(
+            self.listen_state(self.state_change, self.trigger_entity)
+        )
 
     def state_change(self, entity, attribute, old, new, kwargs):
         if self.get_state(self.app_switch) == "on":
             if new != "" and new == self.trigger_state and old != new:
-                if self.after_sundown == None or ((self.after_sundown == True and self.sun_down()) or self.after_sundown == False):
-                    #turn_off
+                if self.after_sundown == None or (
+                    (self.after_sundown == True and self.sun_down())
+                    or self.after_sundown == False
+                ):
+                    # turn_off
                     for entity in self.entities_on:
                         self.turn_on(entity)
                         self.log("Turning on {}".format(entity))
                         if self.notify_name is not None and self.message_on is not None:
                             self.log(self.message_on.format(self.friendly_name(entity)))
-                            self.notifier.notify(self.notify_name, self.message_on.format(self.friendly_name(entity)), useAlexa=self.use_alexa)
-                    #turn_on
+                            self.notifier.notify(
+                                self.notify_name,
+                                self.message_on.format(self.friendly_name(entity)),
+                                useAlexa=self.use_alexa,
+                            )
+                    # turn_on
                     for entity in self.entities_off:
                         self.turn_off(entity)
                         self.log("Turning off {}".format(entity))
-                        if self.notify_name is not None and self.message_off is not None:
-                            self.log(self.message_off.format(self.friendly_name(entity)))
-                            self.notifier.notify(self.notify_name, self.message_off.format(self.friendly_name(entity)), useAlexa=self.use_alexa)
+                        if (
+                            self.notify_name is not None
+                            and self.message_off is not None
+                        ):
+                            self.log(
+                                self.message_off.format(self.friendly_name(entity))
+                            )
+                            self.notifier.notify(
+                                self.notify_name,
+                                self.message_off.format(self.friendly_name(entity)),
+                                useAlexa=self.use_alexa,
+                            )
 
     def terminate(self):
         for listen_state_handle in self.listen_state_handle_list:

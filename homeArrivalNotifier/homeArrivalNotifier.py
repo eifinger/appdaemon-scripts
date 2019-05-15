@@ -1,5 +1,6 @@
 import appdaemon.plugins.hass.hassapi as hass
 import globals
+
 #
 # App to send a notification if someone arrives at home
 #
@@ -30,8 +31,8 @@ import globals
 # Version 1.0:
 #   Initial Version
 
-class HomeArrivalNotifier(hass.Hass):
 
+class HomeArrivalNotifier(hass.Hass):
     def initialize(self):
         self.listen_state_handle_list = []
 
@@ -42,19 +43,24 @@ class HomeArrivalNotifier(hass.Hass):
         self.user_name = globals.get_arg(self.args, "user_name")
         self.message = globals.get_arg(self.args, "message")
 
-        self.notifier = self.get_app('Notifier')
-        
-        self.listen_state_handle_list.append(self.listen_state(self.state_change, self.input_boolean))
-    
+        self.notifier = self.get_app("Notifier")
+
+        self.listen_state_handle_list.append(
+            self.listen_state(self.state_change, self.input_boolean)
+        )
+
     def state_change(self, entity, attribute, old, new, kwargs):
         if self.get_state(self.app_switch) == "on":
             if new != "" and new != old:
                 self.log("{} changed from {} to {}".format(entity, old, new))
                 if new == "on":
-                    self.log("{} arrived at {}".format(self.notify_name, self.zone_name))
-                    self.notifier.notify(self.notify_name, self.message.format(self.user_name))          
+                    self.log(
+                        "{} arrived at {}".format(self.notify_name, self.zone_name)
+                    )
+                    self.notifier.notify(
+                        self.notify_name, self.message.format(self.user_name)
+                    )
 
     def terminate(self):
         for listen_state_handle in self.listen_state_handle_list:
             self.cancel_listen_state(listen_state_handle)
-

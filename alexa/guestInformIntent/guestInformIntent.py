@@ -1,8 +1,8 @@
 import appdaemon.plugins.hass.hassapi as hass
 from fuzzywuzzy import process
 
-class guestInformIntent(hass.Hass):
 
+class guestInformIntent(hass.Hass):
     def initialize(self):
         return
 
@@ -10,15 +10,19 @@ class guestInformIntent(hass.Hass):
         ############################################
         # an Intent to give back the state from a light.
         # but it also can be any other kind of entity
-        ############################################           
+        ############################################
         try:
             text = "Das weiß ich leider im Moment nicht"
             self.log("Slots: {}".format(slots))
             if slots["fuzzyword"] is not None and slots["fuzzyword"] is not "":
                 tuple_list = process.extract(slots["fuzzyword"], self.get_choices())
                 self.log("tuple_list: {}".format(tuple_list))
-                entities = [word for(word, confidence) in tuple_list if confidence > 60]
-                text = "Du kannst folgende Dinge kontrollieren. {}".format(", ".join(entities))
+                entities = [
+                    word for (word, confidence) in tuple_list if confidence > 60
+                ]
+                text = "Du kannst folgende Dinge kontrollieren. {}".format(
+                    ", ".join(entities)
+                )
         except:
             text = self.random_arg(self.args["Error"])
         return text
@@ -51,14 +55,10 @@ class guestInformIntent(hass.Hass):
                 list.append(self.friendly_name("media_player." + media_player))
         return list
 
-
-
-
-
     def floatToStr(self, myfloat):
         ############################################
         # replace . with , for better speech
         ############################################
         floatstr = str(myfloat)
-        floatstr = floatstr.replace(".",",")
+        floatstr = floatstr.replace(".", ",")
         return floatstr

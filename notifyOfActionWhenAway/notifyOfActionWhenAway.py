@@ -1,5 +1,6 @@
 import appdaemon.plugins.hass.hassapi as hass
 import globals
+
 #
 # App to send notification when a sensor changes state
 #
@@ -29,7 +30,6 @@ import globals
 
 
 class NotifyOfActionWhenAway(hass.Hass):
-
     def initialize(self):
 
         self.listen_state_handle_list = []
@@ -41,28 +41,51 @@ class NotifyOfActionWhenAway(hass.Hass):
         self.isHome = globals.get_arg(self.args, "isHome")
         self.message = globals.get_arg(self.args, "message")
 
-        self.notifier = self.get_app('Notifier')
+        self.notifier = self.get_app("Notifier")
 
         for sensor in globals.get_arg_list(self.args, "sensor"):
-            self.listen_state_handle_list.append(self.listen_state(self.state_change, sensor))
+            self.listen_state_handle_list.append(
+                self.listen_state(self.state_change, sensor)
+            )
 
     def state_change(self, entity, attribute, old, new, kwargs):
         if self.get_state(self.app_switch) == "on":
             if new != "" and new != old:
                 if self.get_state(self.isHome) == "off":
-                    if entity.startswith("binary_sensor.motion_sensor") and new == "off":
+                    if (
+                        entity.startswith("binary_sensor.motion_sensor")
+                        and new == "off"
+                    ):
                         pass
                     else:
-                        self.log("Waiting {} seconds for someone to come home".format(self.isHome_delay))
+                        self.log(
+                            "Waiting {} seconds for someone to come home".format(
+                                self.isHome_delay
+                            )
+                        )
                         self.timer_handle_list.append(
-                            self.run_in(self.notify_if_no_one_home, self.isHome_delay, sensor=entity, new=new))
+                            self.run_in(
+                                self.notify_if_no_one_home,
+                                self.isHome_delay,
+                                sensor=entity,
+                                new=new,
+                            )
+                        )
 
     def notify_if_no_one_home(self, kwargs):
         if self.get_state(self.isHome) == "off":
-            self.log("{} changed to {}".format(self.friendly_name(kwargs["sensor"]), kwargs["new"]))
+            self.log(
+                "{} changed to {}".format(
+                    self.friendly_name(kwargs["sensor"]), kwargs["new"]
+                )
+            )
             self.notifier.notify(
                 self.notify_name,
-                self.message.format(self.friendly_name(kwargs["sensor"]), kwargs["new"]), useAlexa=False)
+                self.message.format(
+                    self.friendly_name(kwargs["sensor"]), kwargs["new"]
+                ),
+                useAlexa=False,
+            )
 
     def terminate(self):
         for listen_state_handle in self.listen_state_handle_list:

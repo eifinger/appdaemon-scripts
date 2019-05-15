@@ -3,14 +3,14 @@ import random
 
 
 def get_arg(args, key):
-        key = args[key]
-        if type(key) is str and key.startswith("secret_"):
-            if key in secrets.secret_dict:
-                return secrets.secret_dict[key]
-            else:
-                raise KeyError("Could not find {} in secret_dict".format(key))
+    key = args[key]
+    if type(key) is str and key.startswith("secret_"):
+        if key in secrets.secret_dict:
+            return secrets.secret_dict[key]
         else:
-            return key
+            raise KeyError("Could not find {} in secret_dict".format(key))
+    else:
+        return key
 
 
 def get_arg_list(args, key):

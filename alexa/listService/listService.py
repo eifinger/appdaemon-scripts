@@ -1,4 +1,5 @@
 import appdaemon.plugins.hass.hassapi as hass
+
 #
 # Provide the list of HA entities for Alexa Apps
 #
@@ -10,18 +11,18 @@ import appdaemon.plugins.hass.hassapi as hass
 # door: dict of reed sensors showing if the door is completely open
 # door_tilted: dict of reed sensors showing if a door is partially/leaning open
 # window: dict of reed sensors showing if a window is open
-# 
+#
 #
 # Release Notes
 #
 # Version 1.0:
 #   Initial Version
 
-class ListService(hass.Hass):
 
+class ListService(hass.Hass):
     def initialize(self):
         return
-    
+
     def getSwitchable(self):
         return self.args["switchable"]
 

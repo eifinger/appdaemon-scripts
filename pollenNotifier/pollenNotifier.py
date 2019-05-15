@@ -1,6 +1,7 @@
 import appdaemon.plugins.hass.hassapi as hass
 import globals
 import datetime
+
 #
 # App which notifies you when there is a pollen forecast for today
 # Used with sensors getting data from https://opendata.dwd.de/climate_environment/health/alerts/s31fg.json
@@ -35,9 +36,8 @@ import datetime
 
 
 class PollenNotifier(hass.Hass):
-
     def initialize(self):
-    
+
         self.timer_handle_list = []
         self.listen_event_handle_list = []
         self.listen_state_handle_list = []
@@ -71,31 +71,48 @@ class PollenNotifier(hass.Hass):
         self.level_mapping_dict["2-3"] = 2.5
         self.level_mapping_dict["3"] = 3
 
-        self.notifier = self.get_app('Notifier')
+        self.notifier = self.get_app("Notifier")
 
         hours = self.notify_time.split(":", 1)[0]
         minutes = self.notify_time.split(":", 1)[1]
-        self.timer_handle_list.append(self.run_daily(self.run_daily_callback, datetime.time(int(hours), int(minutes), 0)))
+        self.timer_handle_list.append(
+            self.run_daily(
+                self.run_daily_callback, datetime.time(int(hours), int(minutes), 0)
+            )
+        )
 
     def run_daily_callback(self, kwargs):
         """Check if there is an pollen forcast and notify the user about it"""
         if self.get_state(self.app_switch) == "on":
             pollen_sensor_state = self.get_state(self.pollen_sensor)
-            self.log("{} Belastung Heute: {}".format(self.pollen_name, pollen_sensor_state))
+            self.log(
+                "{} Belastung Heute: {}".format(self.pollen_name, pollen_sensor_state)
+            )
 
             if pollen_sensor_state == "-1":
                 message = self.message_no_data.format("Heute", self.pollen_name)
             elif pollen_sensor_state == "0":
-                message = self.message.format("Heute", self.mappingsdict[pollen_sensor_state], self.pollen_name) + " Genieß den Tag!"
+                message = (
+                    self.message.format(
+                        "Heute",
+                        self.mappingsdict[pollen_sensor_state],
+                        self.pollen_name,
+                    )
+                    + " Genieß den Tag!"
+                )
             else:
-                message = self.message.format("Heute", self.mappingsdict[pollen_sensor_state], self.pollen_name)
+                message = self.message.format(
+                    "Heute", self.mappingsdict[pollen_sensor_state], self.pollen_name
+                )
 
-            if self.level_mapping_dict[pollen_sensor_state] >= float(self.notify_threshold):
+            if self.level_mapping_dict[pollen_sensor_state] >= float(
+                self.notify_threshold
+            ):
                 self.log("Notifying user")
                 self.notifier.notify(self.notify_name, message)
             else:
                 self.log("Threshold not met. Not notifying user")
-        
+
     def terminate(self):
         for timer_handle in self.timer_handle_list:
             self.cancel_timer(timer_handle)

@@ -1,5 +1,6 @@
 import appdaemon.plugins.hass.hassapi as hass
 import globals
+
 #
 # App to Turn on Receiver Bluetooth when Alexa is playing something so it plays on the big speakers
 #
@@ -26,7 +27,6 @@ WAITING_TIME = 10
 
 
 class AlexaSpeakerConnector(hass.Hass):
-
     def initialize(self):
         self.listen_state_handle_list = []
         self.timer_handle_list = []
@@ -37,7 +37,9 @@ class AlexaSpeakerConnector(hass.Hass):
         self.receiver = globals.get_arg(self.args, "receiver")
         self.receiver_source = globals.get_arg(self.args, "receiver_source")
 
-        self.listen_state_handle_list.append(self.listen_state(self.state_change, self.alexa_entity))
+        self.listen_state_handle_list.append(
+            self.listen_state(self.state_change, self.alexa_entity)
+        )
 
     def state_change(self, entity, attribute, old, new, kwargs):
         if self.get_state(self.app_switch) == "on":
@@ -45,19 +47,35 @@ class AlexaSpeakerConnector(hass.Hass):
                 self.log("{} changed to {}".format(self.alexa_entity, new))
                 # Only trigger when the receiver is off. Otherwise its probably playing something
                 if self.get_state(self.receiver) == "off":
-                    self.log("Setting source of {} to: {}". format(self.receiver, self.receiver_source))
+                    self.log(
+                        "Setting source of {} to: {}".format(
+                            self.receiver, self.receiver_source
+                        )
+                    )
                     self.call_service(
-                        "media_player/select_source", entity_id=self.receiver, source=self.receiver_source)
-                    self.timer_handle_list.append(self.run_in(self.run_in_callback, WAITING_TIME))
+                        "media_player/select_source",
+                        entity_id=self.receiver,
+                        source=self.receiver_source,
+                    )
+                    self.timer_handle_list.append(
+                        self.run_in(self.run_in_callback, WAITING_TIME)
+                    )
 
     def run_in_callback(self, kwargs):
         """
         Callback method to introduce a waiting time for the receiver to come 'online'
         :return:
         """
-        self.log("Setting source of {} to: {}".format(self.alexa_entity, self.alexa_entity_source))
+        self.log(
+            "Setting source of {} to: {}".format(
+                self.alexa_entity, self.alexa_entity_source
+            )
+        )
         self.call_service(
-            "media_player/select_source", entity_id=self.alexa_entity, source=self.alexa_entity_source)
+            "media_player/select_source",
+            entity_id=self.alexa_entity,
+            source=self.alexa_entity_source,
+        )
 
     def terminate(self):
         for listen_state_handle in self.listen_state_handle_list:
@@ -65,4 +83,3 @@ class AlexaSpeakerConnector(hass.Hass):
 
         for timer_handle in self.timer_handle_list:
             self.cancel_timer(timer_handle)
-

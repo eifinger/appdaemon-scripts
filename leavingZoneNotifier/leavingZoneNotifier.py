@@ -1,13 +1,14 @@
 import appdaemon.plugins.hass.hassapi as hass
 import datetime
 import globals
+
 #
 # App to notify if user_one is leaving a zone.
 # User had to be in that zone 3 minutes before
 # in order for the notification to be triggered
 #
 # Args:
-#   app_switch: on/off switch for this app. 
+#   app_switch: on/off switch for this app.
 #               example: input_boolean.turn_fan_on_when_hot
 #   device: Device to track
 #   user_name: Name of the user used in the notification message
@@ -15,12 +16,12 @@ import globals
 #          This should be too small to avoid false positives from your tracker.
 #          I am using GPS Logger on Android and sometimes my device switches
 #          from work to home and 2 minutes later back. example: 120
-#   lingering_time: time a user has to be in a zone to trigger this app. 
+#   lingering_time: time a user has to be in a zone to trigger this app.
 #                   example: 3600
 #   zone: zone name from which the user is leaving
 #   notify_name: Who to notify. example: group_notifications
 #   message: localized message to use in notification
-#   travel_time_sensor (optional): Sensor showing the travel time home. 
+#   travel_time_sensor (optional): Sensor showing the travel time home.
 #                                  example: sensor.travel_time_home_user_one
 #   travel_time_sensor_message (optional): Additional notify message.
 #
@@ -62,7 +63,6 @@ import globals
 
 
 class LeavingZoneNotifier(hass.Hass):
-
     def initialize(self):
 
         self.listen_state_handle_list = []
@@ -79,9 +79,7 @@ class LeavingZoneNotifier(hass.Hass):
         self.delay = globals.get_arg(self.args, "delay")
         self.message = globals.get_arg(self.args, "message")
         try:
-            self.travel_time_sensor = globals.get_arg(
-                self.args, "travel_time_sensor"
-            )
+            self.travel_time_sensor = globals.get_arg(self.args, "travel_time_sensor")
         except KeyError:
             self.travel_time_sensor = None
         try:
@@ -94,107 +92,81 @@ class LeavingZoneNotifier(hass.Hass):
         self.user_entered_zone = None
         self.false_positive = False
 
-        self.notifier = self.get_app('Notifier')        
+        self.notifier = self.get_app("Notifier")
 
         self.listen_state_handle_list.append(
-            self.listen_state(
-                self.zone_state_change, self.device, attribute="all"
-            )
+            self.listen_state(self.zone_state_change, self.device, attribute="all")
         )
 
     def zone_state_change(self, entity, attributes, old, new, kwargs):
         if self.get_state(self.app_switch) == "on":
             last_changed = self.convert_utc(new["last_changed"])
             self.log(
-                "Zone of {} changed from {} to {}."
-                .format(
-                    self.friendly_name(entity),
-                    old["state"],
-                    new["state"]
+                "Zone of {} changed from {} to {}.".format(
+                    self.friendly_name(entity), old["state"], new["state"]
                 ),
-                level="DEBUG"
+                level="DEBUG",
             )
             # self.log("Attributes: {}".format(new))
             if (
-                    new["state"] == self.zone
-                    and old["state"] != self.zone
-                    and self.false_positive is False
+                new["state"] == self.zone
+                and old["state"] != self.zone
+                and self.false_positive is False
             ):
-                self.log(
-                    "Setting user_entered_zone to {}".format(last_changed)
-                )
+                self.log("Setting user_entered_zone to {}".format(last_changed))
                 self.user_entered_zone = last_changed
             if old["state"] == self.zone and new["state"] != self.zone:
-                if(
-                        self.user_entered_zone is None
-                        or(
-                        last_changed - self.user_entered_zone >=
-                        datetime.timedelta(seconds=self.lingering_time)
-                        )
+                if self.user_entered_zone is None or (
+                    last_changed - self.user_entered_zone
+                    >= datetime.timedelta(seconds=self.lingering_time)
                 ):
                     self.log(
-                        "Zone of {} changed from {} to {}. Wait {} seconds until notification."
-                        .format(
+                        "Zone of {} changed from {} to {}. Wait {} seconds until notification.".format(
                             self.friendly_name(entity),
                             old["state"],
                             new["state"],
-                            self.delay
+                            self.delay,
                         )
                     )
                     self.timer_handle_list.append(
                         self.run_in(self.notify_user, self.delay, old_zone=old)
                     )
                     self.false_positive = True
-                    self.log(
-                        "Setting false_positive to {}"
-                        .format(self.false_positive)
-                    )
+                    self.log("Setting false_positive to {}".format(self.false_positive))
 
     def notify_user(self, kwargs):
         # Check if user did not come back to the zone in the meantime
         if self.get_state(self.device) != kwargs["old_zone"]:
             if self.travel_time_sensor is not None:
                 self.log(
-                    "Updating travel_time_sensor: {}"
-                    .format(self.travel_time_sensor)
+                    "Updating travel_time_sensor: {}".format(self.travel_time_sensor)
                 )
 
                 self.call_service(
-                    "homeassistant/update_entity",
-                    entity_id=self.travel_time_sensor
+                    "homeassistant/update_entity", entity_id=self.travel_time_sensor
                 )
 
-                self.timer_handle_list.append(
-                    self.run_in(self.notify_user_callback, 2)
-                )
+                self.timer_handle_list.append(self.run_in(self.notify_user_callback, 2))
             else:
                 self.log("self.travel_time_sensor is not None")
                 self.log("Notify user")
                 self.notifier.notify(
                     self.notify_name,
                     self.message.format(
-                        self.user_name,
-                        self.zone,
-                        divmod(self.delay, 60)[0]
-                    )
+                        self.user_name, self.zone, divmod(self.delay, 60)[0]
+                    ),
                 )
                 self.false_positive = False
-                self.log(
-                    "Setting false_positive to {}".format(self.false_positive)
-                )
+                self.log("Setting false_positive to {}".format(self.false_positive))
 
     def notify_user_callback(self, kwargs):
         self.log("Notify user")
         self.notifier.notify(
             self.notify_name,
-            self.message.format(
-                self.user_name,
-                self.zone,
-                divmod(self.delay, 60)[0]
-            ) +
-            self.travel_time_sensor_message.format(
+            self.message.format(self.user_name, self.zone, divmod(self.delay, 60)[0])
+            + self.travel_time_sensor_message.format(
                 self.get_state(self.travel_time_sensor)
-            )
+            ),
         )
         self.false_positive = False
         self.log("Setting false_positive to {}".format(self.false_positive))

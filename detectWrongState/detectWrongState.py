@@ -1,5 +1,6 @@
 import appdaemon.plugins.hass.hassapi as hass
 import globals
+
 #
 # App which notifies of wrong states based on a state change
 #
@@ -61,7 +62,6 @@ import globals
 
 
 class DetectWrongState(hass.Hass):
-
     def initialize(self):
         self.listen_state_handle_list = []
 
@@ -105,19 +105,18 @@ class DetectWrongState(hass.Hass):
         except KeyError:
             self.use_alexa = False
 
-        self.notifier = self.get_app('Notifier')
+        self.notifier = self.get_app("Notifier")
 
-        self.listen_state_handle_list.append(self.listen_state(self.state_change, self.trigger_entity))
+        self.listen_state_handle_list.append(
+            self.listen_state(self.state_change, self.trigger_entity)
+        )
 
     def state_change(self, entity, attribute, old, new, kwargs):
         if self.get_state(self.app_switch) == "on":
             if new != "" and new == self.trigger_state:
-                if(
-                        self.after_sundown is None
-                        or (
-                            (self.after_sundown and self.sun_down())
-                            or self.after_sundown is not False
-                        )
+                if self.after_sundown is None or (
+                    (self.after_sundown and self.sun_down())
+                    or self.after_sundown is not False
                 ):
                     # entities_off
                     for entity in self.entities_off:
@@ -125,7 +124,7 @@ class DetectWrongState(hass.Hass):
                         if full_state is not None:
                             attributes = full_state["attributes"]
                             self.log("full_state: {}".format(full_state), level="DEBUG")
-                            if(
+                            if (
                                 full_state["state"] != "off"
                                 and full_state["state"] != "unavailable"
                                 and "device_class" in attributes
@@ -136,26 +135,36 @@ class DetectWrongState(hass.Hass):
                                 )
                             ):
                                 if self.message_reed is not None:
-                                    self.log(self.message_reed.format(self.friendly_name(entity)))
+                                    self.log(
+                                        self.message_reed.format(
+                                            self.friendly_name(entity)
+                                        )
+                                    )
                                     if self.notify_name is not None:
                                         self.notifier.notify(
                                             self.notify_name,
                                             self.message_reed.format(
-                                                self.friendly_name(entity)),
-                                            useAlexa=self.use_alexa)
-                            elif(
+                                                self.friendly_name(entity)
+                                            ),
+                                            useAlexa=self.use_alexa,
+                                        )
+                            elif (
                                 full_state["state"] != "off"
                                 and full_state["state"] != "unavailable"
                             ):
                                 self.turn_off(entity)
                                 if self.message is not None:
-                                    self.log(self.message.format(self.friendly_name(entity)))
+                                    self.log(
+                                        self.message.format(self.friendly_name(entity))
+                                    )
                                     if self.notify_name is not None:
                                         self.notifier.notify(
                                             self.notify_name,
                                             self.message.format(
-                                                self.friendly_name(entity)),
-                                            useAlexa=self.use_alexa)
+                                                self.friendly_name(entity)
+                                            ),
+                                            useAlexa=self.use_alexa,
+                                        )
                     # entities_on
                     for entity in self.entities_on:
                         full_state = self.get_state(entity, attribute="all")
@@ -171,24 +180,34 @@ class DetectWrongState(hass.Hass):
                             )
                         ):
                             if self.message_reed_off is not None:
-                                self.log(self.message_reed_off.format(self.friendly_name(entity)))
+                                self.log(
+                                    self.message_reed_off.format(
+                                        self.friendly_name(entity)
+                                    )
+                                )
                                 if self.notify_name is not None:
                                     self.notifier.notify(
                                         self.notify_name,
                                         message=self.message_reed_off.format(
-                                            self.friendly_name(entity)),
-                                        useAlexa=self.use_alexa)
+                                            self.friendly_name(entity)
+                                        ),
+                                        useAlexa=self.use_alexa,
+                                    )
                         elif full_state["state"] == "off":
                             self.turn_on(entity)
 
                             if self.message_off is not None:
-                                self.log(self.message_off.format(self.friendly_name(entity)))
+                                self.log(
+                                    self.message_off.format(self.friendly_name(entity))
+                                )
                                 if self.notify_name is not None:
                                     self.notifier.notify(
                                         self.notify_name,
                                         message=self.message_off.format(
-                                            self.friendly_name(entity)),
-                                        useAlexa=self.use_alexa)
+                                            self.friendly_name(entity)
+                                        ),
+                                        useAlexa=self.use_alexa,
+                                    )
 
     def terminate(self):
         for listen_state_handle in self.listen_state_handle_list:

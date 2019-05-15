@@ -1,5 +1,6 @@
 import appdaemon.plugins.hass.hassapi as hass
 import globals
+
 #
 # App which notifies you when a power usage sensor indicated a device is on/off
 #
@@ -37,10 +38,10 @@ import globals
 # Version 1.0:
 #   Initial Version
 
-class PowerUsageNotification(hass.Hass):
 
+class PowerUsageNotification(hass.Hass):
     def initialize(self):
-    
+
         self.timer_handle_list = []
         self.listen_event_handle_list = []
         self.listen_state_handle_list = []
@@ -58,7 +59,9 @@ class PowerUsageNotification(hass.Hass):
         except KeyError:
             self.notify_start = True
         try:
-            self.notify_start_use_alexa = globals.get_arg(self.args, "notify_start_use_alexa")
+            self.notify_start_use_alexa = globals.get_arg(
+                self.args, "notify_start_use_alexa"
+            )
         except KeyError:
             self.notify_start_use_alexa = True
         try:
@@ -66,7 +69,9 @@ class PowerUsageNotification(hass.Hass):
         except KeyError:
             self.notify_end = True
         try:
-            self.notify_end_use_alexa = globals.get_arg(self.args, "notify_end_use_alexa")
+            self.notify_end_use_alexa = globals.get_arg(
+                self.args, "notify_end_use_alexa"
+            )
         except KeyError:
             self.notify_end_use_alexa = True
         self.delay = globals.get_arg(self.args, "delay")
@@ -77,16 +82,22 @@ class PowerUsageNotification(hass.Hass):
         self.triggered = False
         self.isWaitingHandle = None
 
-        self.notifier = self.get_app('Notifier')
+        self.notifier = self.get_app("Notifier")
 
         # Subscribe to sensors
-        self.listen_state_handle_list.append(self.listen_state(self.state_change, self.sensor))
+        self.listen_state_handle_list.append(
+            self.listen_state(self.state_change, self.sensor)
+        )
 
-    
     def state_change(self, entity, attribute, old, new, kwargs):
         if self.get_state(self.app_switch) == "on":
             # Initial: power usage goes up
-            if ( new != None and new != "" and not self.triggered and float(new) > self.threshold ):
+            if (
+                new != None
+                and new != ""
+                and not self.triggered
+                and float(new) > self.threshold
+            ):
                 self.triggered = True
                 self.log("Power Usage is: {}".format(float(new)))
                 self.log("Setting triggered to: {}".format(self.triggered))
@@ -96,23 +107,34 @@ class PowerUsageNotification(hass.Hass):
                     self.notifier.notify(
                         self.notify_name,
                         self.message.format(self.alternative_name),
-                        useAlexa=self.notify_start_use_alexa
+                        useAlexa=self.notify_start_use_alexa,
                     )
                 else:
                     self.log("Not notifying user")
             # Power usage goes down below threshold
-            elif ( new != None and new != "" and self.triggered and self.isWaitingHandle == None and float(new) <= self.threshold):
+            elif (
+                new != None
+                and new != ""
+                and self.triggered
+                and self.isWaitingHandle == None
+                and float(new) <= self.threshold
+            ):
                 self.log("Waiting: {} seconds to notify.".format(self.delay))
-                self.isWaitingHandle = self.run_in(self.notify_device_off,self.delay)
+                self.isWaitingHandle = self.run_in(self.notify_device_off, self.delay)
                 self.log("Setting isWaitingHandle to: {}".format(self.isWaitingHandle))
                 self.timer_handle_list.append(self.isWaitingHandle)
             # Power usage goes up before delay
-            elif( new != None and new != "" and self.triggered and self.isWaitingHandle != None and float(new) > self.threshold):
+            elif (
+                new != None
+                and new != ""
+                and self.triggered
+                and self.isWaitingHandle != None
+                and float(new) > self.threshold
+            ):
                 self.log("Cancelling timer")
                 self.cancel_timer(self.isWaitingHandle)
                 self.isWaitingHandle = None
                 self.log("Setting isWaitingHandle to: {}".format(self.isWaitingHandle))
-
 
     def notify_device_off(self, kwargs):
         """Notify User that device is off. This may get cancelled if it turns on again in the meantime"""
@@ -126,11 +148,10 @@ class PowerUsageNotification(hass.Hass):
             self.notifier.notify(
                 self.notify_name,
                 self.message_off.format(self.alternative_name),
-                useAlexa=self.notify_end_use_alexa
+                useAlexa=self.notify_end_use_alexa,
             )
         else:
             self.log("Not notifying user")
-        
 
     def terminate(self):
         for timer_handle in self.timer_handle_list:

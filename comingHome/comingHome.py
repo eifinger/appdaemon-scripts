@@ -1,6 +1,7 @@
 import appdaemon.plugins.hass.hassapi as hass
 import globals
 import datetime
+
 #
 # App to Turn on Lobby Lamp when Door openes and no one is Home
 #
@@ -33,7 +34,6 @@ import datetime
 
 
 class ComingHome(hass.Hass):
-
     def initialize(self):
         self.listen_state_handle_list = []
 
@@ -48,7 +48,9 @@ class ComingHome(hass.Hass):
 
         self.delay = 2
 
-        self.listen_state_handle_list.append(self.listen_state(self.state_change, self.sensor))
+        self.listen_state_handle_list.append(
+            self.listen_state(self.state_change, self.sensor)
+        )
 
     def state_change(self, entity, attribute, old, new, kwargs):
         if self.get_state(self.app_switch) == "on":
@@ -56,16 +58,22 @@ class ComingHome(hass.Hass):
                 isHome_attributes = self.get_state(self.isHome, attribute="all")
                 isHome_state = isHome_attributes["state"]
                 last_changed = self.convert_utc(isHome_attributes["last_changed"])
-                if (
-                        isHome_state == "off"
-                        or (datetime.datetime.now(datetime.timezone.utc) - last_changed <= datetime.timedelta(seconds=self.delay))
+                if isHome_state == "off" or (
+                    datetime.datetime.now(datetime.timezone.utc) - last_changed
+                    <= datetime.timedelta(seconds=self.delay)
                 ):
                     if self.after_sundown is not None and self.after_sundown:
                         if self.sun_down():
-                            self.log("{} changed to {}".format(self.friendly_name(entity), new))
+                            self.log(
+                                "{} changed to {}".format(
+                                    self.friendly_name(entity), new
+                                )
+                            )
                             self.turn_on(self.actor)
                     else:
-                        self.log("{} changed to {}".format(self.friendly_name(entity), new))
+                        self.log(
+                            "{} changed to {}".format(self.friendly_name(entity), new)
+                        )
                         self.turn_on(self.actor)
 
     def terminate(self):

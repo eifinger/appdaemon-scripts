@@ -1,5 +1,6 @@
 import appdaemon.plugins.hass.hassapi as hass
 import globals
+
 #
 # App which sets a thermostat to a target temperature on state change
 #
@@ -27,7 +28,6 @@ import globals
 
 
 class SetThermostatOnStateChange(hass.Hass):
-
     def initialize(self):
         self.timer_handle_list = []
         self.listen_state_handle_list = []
@@ -50,37 +50,37 @@ class SetThermostatOnStateChange(hass.Hass):
         except KeyError:
             self.use_alexa = False
 
-        self.notifier = self.get_app('Notifier')
+        self.notifier = self.get_app("Notifier")
 
-        self.listen_state_handle_list.append(self.listen_state(self.state_change, self.trigger_entity))
+        self.listen_state_handle_list.append(
+            self.listen_state(self.state_change, self.trigger_entity)
+        )
 
     def state_change(self, entity, attribute, old, new, kwargs):
         if self.get_state(self.app_switch) == "on":
-            if(
-                    new != ""
-                    and new == self.trigger_state
-                    and old != new
-            ):
+            if new != "" and new == self.trigger_state and old != new:
                 if self.message is not None:
                     self.log(
                         self.message.format(
-                            self.friendly_name(
-                                self.climate_entity),
-                            self.get_state(self.target_entity)))
-                self.call_service("climate/turn_on",
-                                  entity_id=self.climate_entity)
+                            self.friendly_name(self.climate_entity),
+                            self.get_state(self.target_entity),
+                        )
+                    )
+                self.call_service("climate/turn_on", entity_id=self.climate_entity)
                 self.call_service(
                     "climate/set_temperature",
                     entity_id=self.climate_entity,
-                    temperature=self.get_state(self.target_entity))
+                    temperature=self.get_state(self.target_entity),
+                )
                 if self.notify_name is not None:
                     self.notifier.notify(
                         self.notify_name,
                         self.message.format(
-                            self.friendly_name(
-                                self.climate_entity),
-                            self.get_state(self.target_entity)),
-                        useAlexa=self.use_alexa)
+                            self.friendly_name(self.climate_entity),
+                            self.get_state(self.target_entity),
+                        ),
+                        useAlexa=self.use_alexa,
+                    )
 
     def terminate(self):
         for timer_handle in self.timer_handle_list:
@@ -88,4 +88,3 @@ class SetThermostatOnStateChange(hass.Hass):
 
         for listen_state_handle in self.listen_state_handle_list:
             self.cancel_listen_state(listen_state_handle)
-

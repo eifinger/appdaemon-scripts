@@ -1,5 +1,6 @@
 import appdaemon.plugins.hass.hassapi as hass
 import globals
+
 #
 # App to send notification when a login attempt fails
 #
@@ -25,26 +26,30 @@ import globals
 
 
 class NotifyFailedLogin(hass.Hass):
-
     def initialize(self):
 
         self.timer_handle_list = []
         self.listen_event_handle_list = []
         self.listen_state_handle_list = []
 
-
         self.notify_name = globals.get_arg(self.args, "notify_name")
         self.message = globals.get_arg(self.args, "message")
 
-        self.notifier = self.get_app('Notifier')
+        self.notifier = self.get_app("Notifier")
 
-        self.listen_state_handle_list.append(self.listen_state(self.state_change, "persistent_notification.httplogin"))
+        self.listen_state_handle_list.append(
+            self.listen_state(self.state_change, "persistent_notification.httplogin")
+        )
 
     def state_change(self, entity, attribute, old, new, kwargs):
         if new != "" and new == "notifying":
-            message = self.get_state("persistent_notification.httplogin",attribute="message")
+            message = self.get_state(
+                "persistent_notification.httplogin", attribute="message"
+            )
             self.log(message)
-            self.notifier.notify(self.notify_name, self.message.format(message), useAlexa=False)
+            self.notifier.notify(
+                self.notify_name, self.message.format(message), useAlexa=False
+            )
 
     def terminate(self):
         for timer_handle in self.timer_handle_list:

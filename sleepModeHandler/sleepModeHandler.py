@@ -23,7 +23,6 @@ import globals
 
 
 class SleepModeHandler(hass.Hass):
-
     def initialize(self):
         self.listen_state_handle_list = []
 
@@ -39,11 +38,12 @@ class SleepModeHandler(hass.Hass):
         except KeyError:
             self.use_alexa = False
 
-        self.notifier = self.get_app('Notifier')
+        self.notifier = self.get_app("Notifier")
 
         for user in self.users:
             self.listen_state_handle_list.append(
-                self.listen_state(self.state_change, user["sleep_mode"]))
+                self.listen_state(self.state_change, user["sleep_mode"])
+            )
 
     def state_change(self, entity, attribute, old, new, kwargs):
         if self.get_state(self.app_switch) == "on":
@@ -53,13 +53,21 @@ class SleepModeHandler(hass.Hass):
                         if self.get_state(self.sleepmode) == "off":
                             self.log("All at home are sleeping")
                             self.turn_on(self.sleepmode)
-                            self.notifier.notify(self.notify_name, self.message_sleeping, useAlexa=self.use_alexa)
+                            self.notifier.notify(
+                                self.notify_name,
+                                self.message_sleeping,
+                                useAlexa=self.use_alexa,
+                            )
                 elif new == "off":
                     if self.are_all_that_are_home_awake():
                         if self.get_state(self.sleepmode) == "on":
                             self.log("All at home are awake")
                             self.turn_off(self.sleepmode)
-                            self.notifier.notify(self.notify_name, self.message_awake, useAlexa=self.use_alexa)
+                            self.notifier.notify(
+                                self.notify_name,
+                                self.message_awake,
+                                useAlexa=self.use_alexa,
+                            )
 
     def are_all_that_are_home_sleeping(self):
         for user in self.users:
@@ -78,4 +86,3 @@ class SleepModeHandler(hass.Hass):
     def terminate(self):
         for listen_state_handle in self.listen_state_handle_list:
             self.cancel_listen_state(listen_state_handle)
-

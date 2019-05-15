@@ -39,15 +39,16 @@ import globals
 
 
 class NextAppointmentLeaveNotifier(hass.Hass):
-
     def initialize(self):
 
         self.listen_state_handle_list = []
-        
+
         self.sensor = globals.get_arg(self.args, "sensor")
         self.notify_input_boolean = globals.get_arg(self.args, "notify_input_boolean")
         self.notify_name = globals.get_arg(self.args, "notify_name")
-        self.destination_name_sensor = globals.get_arg(self.args, "destination_name_sensor")
+        self.destination_name_sensor = globals.get_arg(
+            self.args, "destination_name_sensor"
+        )
         self.travel_time_sensor = globals.get_arg(self.args, "travel_time_sensor")
         self.message = globals.get_arg(self.args, "message")
         self.message_google_link = globals.get_arg(self.args, "message_google_link")
@@ -56,22 +57,26 @@ class NextAppointmentLeaveNotifier(hass.Hass):
 
         self.google_source_url = "http://maps.google.com/maps?q="
 
-        self.notifier = self.get_app('Notifier')
+        self.notifier = self.get_app("Notifier")
 
         # Used to check of user got already notified for this event
         self.location_of_last_notified_event = ""
         destination_name = self.get_state(self.destination_name_sensor)
         self.log(f"destination_name_sensor: {destination_name}")
         if destination_name != "unknown" and destination_name != "None":
-            notification_time = datetime.datetime.strptime(self.get_state(self.sensor), "%Y-%m-%d %H:%M")
+            notification_time = datetime.datetime.strptime(
+                self.get_state(self.sensor), "%Y-%m-%d %H:%M"
+            )
             if self.get_state(self.travel_time_sensor) != "unknown":
                 try:
-                    self.timer_handle = self.run_at(self.notify_user,notification_time)
+                    self.timer_handle = self.run_at(self.notify_user, notification_time)
                     self.log(f"Will notify at {notification_time}")
                 except ValueError:
                     self.log("Notification time is in the past")
 
-        self.listen_state_handle_list.append(self.listen_state(self.state_change, self.sensor))
+        self.listen_state_handle_list.append(
+            self.listen_state(self.state_change, self.sensor)
+        )
 
     def state_change(self, entity, attributes, old, new, kwargs):
         try:
@@ -84,14 +89,18 @@ class NextAppointmentLeaveNotifier(hass.Hass):
         destination_name = self.get_state(self.destination_name_sensor)
         self.log(f"destination_name_sensor: {destination_name}")
         if destination_name != "unknown" and destination_name != "None":
-            notification_time = datetime.datetime.strptime(self.get_state(self.sensor), "%Y-%m-%d %H:%M")
+            notification_time = datetime.datetime.strptime(
+                self.get_state(self.sensor), "%Y-%m-%d %H:%M"
+            )
             if self.get_state(self.travel_time_sensor) != "unknown":
                 try:
                     self.timer_handle = self.run_at(self.notify_user, notification_time)
                     self.log(f"Will notify at {notification_time}")
                 except ValueError:
                     self.log("Notification time is in the past")
-                    self.timer_handle = self.run_at(self.notify_user, datetime.datetime.now())
+                    self.timer_handle = self.run_at(
+                        self.notify_user, datetime.datetime.now()
+                    )
 
     def notify_user(self, *kwargs):
         if self.get_state(self.notify_input_boolean) == "on":
@@ -100,16 +109,20 @@ class NextAppointmentLeaveNotifier(hass.Hass):
                 if self.location_of_last_notified_event == location_name:
                     self.log(f"User already got notified for {location_name}")
                 else:
-                    google_maps_url = self.google_source_url + location_name.replace(" ", "+")
+                    google_maps_url = self.google_source_url + location_name.replace(
+                        " ", "+"
+                    )
                     self.log("Notify user")
                     self.notifier.notify(
                         self.notify_name,
-                        self.message.format(location_name, self.get_state(self.travel_time_sensor))
+                        self.message.format(
+                            location_name, self.get_state(self.travel_time_sensor)
+                        ),
                     )
                     self.notifier.notify(
                         self.notify_name,
                         self.message_google_link.format(google_maps_url),
-                        useAlexa=False
+                        useAlexa=False,
                     )
                     self.location_of_last_notified_event = location_name
             else:

@@ -1,5 +1,6 @@
 import appdaemon.plugins.hass.hassapi as hass
 import globals
+
 #
 # App which increments a counter on a given service call
 #
@@ -9,7 +10,7 @@ import globals
 # domain: domain of the service call. example: homeassistant
 # service: service name of the service call. example: update_entity
 # entity_id: list of entity_id in the service call. example: sensor.travel_time_home_user_one
-# counter: increase a counter each time the service gets called. example: counter.google_maps_api_calls 
+# counter: increase a counter each time the service gets called. example: counter.google_maps_api_calls
 #
 # Release Notes
 #
@@ -21,7 +22,6 @@ import globals
 
 
 class IncreaseCounterOnServiceCall(hass.Hass):
-
     def initialize(self):
         self.timer_handle_list = []
         self.listen_event_handle_list = []
@@ -32,18 +32,24 @@ class IncreaseCounterOnServiceCall(hass.Hass):
         self.entity_ids = globals.get_arg_list(self.args, "entity_id")
         self.counter = globals.get_arg(self.args, "counter")
 
-        self.listen_event_handle_list.append(self.listen_event(self.call_service_callback, "call_service"))
-    
+        self.listen_event_handle_list.append(
+            self.listen_event(self.call_service_callback, "call_service")
+        )
+
     def call_service_callback(self, event_name, data, kwargs):
-        self.log(event_name + ': ' + str(data), level="DEBUG")
+        self.log(event_name + ": " + str(data), level="DEBUG")
         if (
-                self.get_state(self.app_switch) == "on"
-                and data["domain"] == self.domain
-                and data["service"] == self.service
-                and data["service_data"]["entity_id"][0] in self.entity_ids
+            self.get_state(self.app_switch) == "on"
+            and data["domain"] == self.domain
+            and data["service"] == self.service
+            and data["service_data"]["entity_id"][0] in self.entity_ids
         ):
             self.call_service("counter/increment", entity_id=self.counter)
-            self.log("Incremented {} to {}".format(self.friendly_name(self.counter), self.get_state(self.counter)))
+            self.log(
+                "Incremented {} to {}".format(
+                    self.friendly_name(self.counter), self.get_state(self.counter)
+                )
+            )
 
     def terminate(self):
         for timer_handle in self.timer_handle_list:
@@ -51,4 +57,3 @@ class IncreaseCounterOnServiceCall(hass.Hass):
 
         for listen_event_handle in self.listen_event_handle_list:
             self.cancel_listen_event(listen_event_handle)
-

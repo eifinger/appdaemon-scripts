@@ -1,4 +1,4 @@
-import appdaemon.plugins.hass.hassapi as hass # pylint: disable=import-error
+import appdaemon.plugins.hass.hassapi as hass  # pylint: disable=import-error
 import globals
 import datetime
 
@@ -14,7 +14,7 @@ import datetime
 # entity_off (optionally): entity to turn off when detecting motion, can be a light, script or anything else that can be turned off. Can also be a scene which will be turned on
 # sensor_type: Possible values: xiaomi,zigbee2mqtt. Default: xiaomi
 # after (optionally): Only trigger after a certain time. example: 22:00
-# after_sundown (optionally): true 
+# after_sundown (optionally): true
 # delay (optionally): amount of time after turning on to turn off again. If not specified defaults to 70 seconds. example: 10
 #                     if an input_number is defined it will automatically take the delay from there. example: input_number.motionTrigger_delay
 # turn_on_constraint_entities_off (optionally): list of entities which have to be off for entity to be turned on. example: light.bedroom_yeelight,light.bar_table
@@ -59,9 +59,8 @@ SENSOR_TYPE_ZIGBEE2MQTT = "zigbee2mqtt"
 
 
 class MotionTrigger(hass.Hass):
-
     def initialize(self):
-    
+
         self.timer_handle = None
         self.listen_event_handle_list = []
         self.listen_state_handle_list = []
@@ -94,34 +93,48 @@ class MotionTrigger(hass.Hass):
                 if self.delay.startswith("input_number"):
                     self.delay_entity = self.delay
                     self.delay = int(self.get_state(self.delay_entity).split(".")[0])
-                    self.listen_state_handle_list.append(self.listen_state(self.delay_changed, self.delay_entity))
+                    self.listen_state_handle_list.append(
+                        self.listen_state(self.delay_changed, self.delay_entity)
+                    )
             except AttributeError:  # does not have attribute 'startswith' -> is not of type string
                 pass
             self.log("Delay changed to : {}".format(self.delay))
         except KeyError:
             self.delay = None
         try:
-            self.turn_on_constraint_entities_off = globals.get_arg_list(self.args, "turn_on_constraint_entities_off")
+            self.turn_on_constraint_entities_off = globals.get_arg_list(
+                self.args, "turn_on_constraint_entities_off"
+            )
         except KeyError:
             self.turn_on_constraint_entities_off = []
         try:
-            self.turn_on_constraint_entities_on = globals.get_arg_list(self.args, "turn_on_constraint_entities_on")
+            self.turn_on_constraint_entities_on = globals.get_arg_list(
+                self.args, "turn_on_constraint_entities_on"
+            )
         except KeyError:
             self.turn_on_constraint_entities_on = []
         try:
-            self.turn_off_constraint_entities_off = globals.get_arg_list(self.args, "turn_off_constraint_entities_off")
+            self.turn_off_constraint_entities_off = globals.get_arg_list(
+                self.args, "turn_off_constraint_entities_off"
+            )
         except KeyError:
             self.turn_off_constraint_entities_off = []
         try:
-            self.turn_off_constraint_entities_on = globals.get_arg_list(self.args, "turn_off_constraint_entities_on")
+            self.turn_off_constraint_entities_on = globals.get_arg_list(
+                self.args, "turn_off_constraint_entities_on"
+            )
         except KeyError:
             self.turn_off_constraint_entities_on = []
 
         # Subscribe to sensors
         if self.sensor_type == SENSOR_TYPE_XIAOMI:
-            self.listen_event_handle_list.append(self.listen_event(self.motion_event_detected, "xiaomi_aqara.motion"))
+            self.listen_event_handle_list.append(
+                self.listen_event(self.motion_event_detected, "xiaomi_aqara.motion")
+            )
         elif self.sensor_type == SENSOR_TYPE_ZIGBEE2MQTT:
-            self.listen_state_handle_list.append(self.listen_state(self.state_changed, self.sensor))
+            self.listen_state_handle_list.append(
+                self.listen_state(self.state_changed, self.sensor)
+            )
         else:
             self.log("Unknown sensor_type: {}".format(self.sensor_type), level="ERROR")
 
@@ -140,7 +153,10 @@ class MotionTrigger(hass.Hass):
                 self.turn_on_callback(None)
 
     def turn_on_callback(self, kwargs):
-        self.log("Motion detected on sensor: {}".format(self.friendly_name(self.sensor)), level="DEBUG")
+        self.log(
+            "Motion detected on sensor: {}".format(self.friendly_name(self.sensor)),
+            level="DEBUG",
+        )
         turn_on = True
         if self.after_sundown is not None:
             if self.after_sundown and not self.sun_down():
@@ -149,7 +165,9 @@ class MotionTrigger(hass.Hass):
         if self.after is not None:
             after_time = datetime.datetime.combine(
                 datetime.date.today(),
-                datetime.time(int(self.after.split(":")[0]), int(self.after.split(":")[1]))
+                datetime.time(
+                    int(self.after.split(":")[0]), int(self.after.split(":")[1])
+                ),
             )
             if datetime.datetime.now() > after_time:
                 turn_on = False
@@ -182,7 +200,7 @@ class MotionTrigger(hass.Hass):
             self.log("Will turn off in {}s".format(delay))
             self.timer_handle = self.run_in(self.turn_off_callback, delay)
             self.timer_handle_list.append(self.timer_handle)
-  
+
     def turn_off_callback(self, kwargs):
         turn_off = True
         if self.entity_off is not None:
@@ -204,7 +222,7 @@ class MotionTrigger(hass.Hass):
                 self.turned_on_by_me = False
         else:
             self.log("No entity_off defined", level="DEBUG")
-        
+
     def terminate(self):
         for timer_handle in self.timer_handle_list:
             self.cancel_timer(timer_handle)

@@ -39,7 +39,6 @@ import math
 
 
 class AlarmClock(hass.Hass):
-
     def initialize(self):
 
         self.timer_handle_list = []
@@ -54,11 +53,13 @@ class AlarmClock(hass.Hass):
         self.isweekday = globals.get_arg(self.args, "isweekday")
         self.notify_name = globals.get_arg(self.args, "notify_name")
         self.wakeup_light = globals.get_arg(self.args, "wakeup_light")
-        self.fade_in_time_multiplicator = globals.get_arg(self.args, "fade_in_time_multiplicator")
+        self.fade_in_time_multiplicator = globals.get_arg(
+            self.args, "fade_in_time_multiplicator"
+        )
         self.message = globals.get_arg(self.args, "message")
         self.button = globals.get_arg(self.args, "button")
 
-        self.notifier = self.get_app('Notifier')
+        self.notifier = self.get_app("Notifier")
 
         self.brightness = 100
         self.rgb_color = [255, 120, 0]
@@ -68,10 +69,16 @@ class AlarmClock(hass.Hass):
         self.cached_fade_in_time = self.get_state(self.naturalwakeup)
         self.add_timer()
 
-        self.listen_state_handle_list.append(self.listen_state(self.alarm_change, self.alarm_time))
-        self.listen_state_handle_list.append(self.listen_state(self.naturalwakeup_change, self.naturalwakeup))
+        self.listen_state_handle_list.append(
+            self.listen_state(self.alarm_change, self.alarm_time)
+        )
+        self.listen_state_handle_list.append(
+            self.listen_state(self.naturalwakeup_change, self.naturalwakeup)
+        )
 
-        self.listen_event_handle_list.append(self.listen_event(self.button_clicked, "xiaomi_aqara.click"))
+        self.listen_event_handle_list.append(
+            self.listen_event(self.button_clicked, "xiaomi_aqara.click")
+        )
 
     def alarm_change(self, entity, attributes, old, new, kwargs):
         if new is not None and new != old and new != self.cached_alarm_time:
@@ -99,7 +106,9 @@ class AlarmClock(hass.Hass):
         offset = self.cached_fade_in_time.split(".", 1)[0]
 
         if self.cached_alarm_time is not None and self.cached_alarm_time != "":
-            run_datetime = datetime.datetime.strptime(self.cached_alarm_time, "%Y-%m-%d %H:%M:%S")
+            run_datetime = datetime.datetime.strptime(
+                self.cached_alarm_time, "%Y-%m-%d %H:%M:%S"
+            )
             event_time = run_datetime - datetime.timedelta(minutes=int(offset))
             try:
                 self.alarm_timer = self.run_at(self.trigger_alarm, event_time)
@@ -110,39 +119,56 @@ class AlarmClock(hass.Hass):
 
     def trigger_alarm(self, kwargs):
         if self.get_state(self.wakemeup) == "on":
-            if (
-                    self.get_state(self.alarmweekday) == "off"
-                    or (
-                    self.get_state(self.alarmweekday) == "on"
-                    and self.get_state(self.isweekday) == "on"
-                    )
+            if self.get_state(self.alarmweekday) == "off" or (
+                self.get_state(self.alarmweekday) == "on"
+                and self.get_state(self.isweekday) == "on"
             ):
                 if float(self.cached_fade_in_time) > 0:
-                    self.log("Turning on {}".format(self.friendly_name(self.wakeup_light)))
+                    self.log(
+                        "Turning on {}".format(self.friendly_name(self.wakeup_light))
+                    )
                     self.call_service(
-                        "light/turn_on",
-                        entity_id=self.wakeup_light,
-                        brightness_pct=1)
-                    transition = int(float(self.cached_fade_in_time) * int(self.fade_in_time_multiplicator))
-                    self.log("Transitioning light in over {} seconds".format(transition))
+                        "light/turn_on", entity_id=self.wakeup_light, brightness_pct=1
+                    )
+                    transition = int(
+                        float(self.cached_fade_in_time)
+                        * int(self.fade_in_time_multiplicator)
+                    )
+                    self.log(
+                        "Transitioning light in over {} seconds".format(transition)
+                    )
                     self.timer_handle_list.append(
-                        self.run_in(self.run_fade_in, 1, transition=transition, brightness_pct=1))
-                self.timer_handle_list.append(self.run_in(self.run_alarm, float(self.cached_fade_in_time)))
+                        self.run_in(
+                            self.run_fade_in, 1, transition=transition, brightness_pct=1
+                        )
+                    )
+                self.timer_handle_list.append(
+                    self.run_in(self.run_alarm, float(self.cached_fade_in_time))
+                )
 
     def button_clicked(self, event_name, data, kwargs):
         """Extra callback method to trigger the wakeup light on demand by pressing a Xiaomi Button"""
         if data["entity_id"] == self.button:
             if data["click_type"] == "single":
                 if float(self.cached_fade_in_time) > 0:
-                    self.log("Turning on {}".format(self.friendly_name(self.wakeup_light)))
+                    self.log(
+                        "Turning on {}".format(self.friendly_name(self.wakeup_light))
+                    )
                     self.call_service(
-                        "light/turn_on",
-                        entity_id=self.wakeup_light,
-                        brightness_pct=1)
-                    transition = int(float(self.cached_fade_in_time) * int(self.fade_in_time_multiplicator))
-                    self.log("Transitioning light in over {} seconds".format(transition))
+                        "light/turn_on", entity_id=self.wakeup_light, brightness_pct=1
+                    )
+                    transition = int(
+                        float(self.cached_fade_in_time)
+                        * int(self.fade_in_time_multiplicator)
+                    )
+                    self.log(
+                        "Transitioning light in over {} seconds".format(transition)
+                    )
                     self.timer_handle_list.append(
-                        self.run_in(self.run_fade_in, 1, transition=transition, brightness_pct=1))
+                        self.run_in(
+                            self.run_fade_in, 1, transition=transition, brightness_pct=1
+                        )
+                    )
 
     def run_fade_in(self, kwargs):
         """
@@ -159,7 +185,12 @@ class AlarmClock(hass.Hass):
         if pct_increase < 0.01:
             wait_factor = math.ceil(0.01 / pct_increase)
             pct_increase = 0.01
-            self.log("pct_increase smaller than 1% next run_in in {} seconds".format(wait_factor), level="DEBUG")
+            self.log(
+                "pct_increase smaller than 1% next run_in in {} seconds".format(
+                    wait_factor
+                ),
+                level="DEBUG",
+            )
         brightness_pct_old = brightness_pct
         self.log("brightness_pct_old: {}".format(brightness_pct_old), level="DEBUG")
         brightness_pct_new = int((brightness_pct_old + pct_increase * 100))
@@ -169,9 +200,16 @@ class AlarmClock(hass.Hass):
                 "light/turn_on",
                 entity_id=self.wakeup_light,
                 rgb_color=self.rgb_color,
-                brightness_pct=brightness_pct_new)
+                brightness_pct=brightness_pct_new,
+            )
             self.timer_handle_list.append(
-                self.run_in(self.run_fade_in, wait_factor, transition=transition, brightness_pct=brightness_pct_new))
+                self.run_in(
+                    self.run_fade_in,
+                    wait_factor,
+                    transition=transition,
+                    brightness_pct=brightness_pct_new,
+                )
+            )
 
     def run_alarm(self, kwargs):
         self.notifier.notify(self.notify_name, self.message)
@@ -186,4 +224,3 @@ class AlarmClock(hass.Hass):
 
         for listen_state_handle in self.listen_state_handle_list:
             self.cancel_listen_state(listen_state_handle)
-

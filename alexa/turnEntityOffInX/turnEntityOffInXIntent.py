@@ -3,8 +3,8 @@ import random
 import isodate
 import datetime
 
-class TurnEntityOffInXIntent(hass.Hass):
 
+class TurnEntityOffInXIntent(hass.Hass):
     def initialize(self):
         self.timer_handle_list = []
         self.listService = self.get_app("listService")
@@ -14,13 +14,19 @@ class TurnEntityOffInXIntent(hass.Hass):
         ############################################
         # an Intent to give back the state from a light.
         # but it also can be any other kind of entity
-        ############################################           
+        ############################################
         try:
 
             entityname = self.listService.getSwitchable()[slots["device"]]
-            #to upper because of https://github.com/gweis/isodate/issues/52
+            # to upper because of https://github.com/gweis/isodate/issues/52
             duration = isodate.parse_duration(slots["duration"].upper())
-            self.timer_handle_list.append(self.run_in(self.turn_off_callback, duration.total_seconds(), entityname=entityname))
+            self.timer_handle_list.append(
+                self.run_in(
+                    self.turn_off_callback,
+                    duration.total_seconds(),
+                    entityname=entityname,
+                )
+            )
             minutes, seconds = divmod(duration.total_seconds(), 60)
             minutes = int(minutes)
             seconds = int(seconds)
@@ -55,11 +61,11 @@ class TurnEntityOffInXIntent(hass.Hass):
         self.log("Turning off {}".format(entityname))
         self.turn_off(entityname)
 
-    def random_arg(self,argName):
+    def random_arg(self, argName):
         ############################################
         # pick a random text from a list
         ############################################
-        if isinstance(argName,list):
+        if isinstance(argName, list):
             text = random.choice(argName)
         else:
             text = argName
