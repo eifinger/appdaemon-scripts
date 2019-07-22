@@ -70,7 +70,7 @@ class alexa_api(hass.Hass):
                 self.alexalog(
                     "dialog has been completed, Dialog stopped by user", 100, "*"
                 )
-            else intentResponse == "next":
+            elif intentResponse == "next":
                 ############################################
                 # user just responded yes, so just a question
                 ############################################
