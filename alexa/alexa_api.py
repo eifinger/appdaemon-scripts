@@ -70,7 +70,7 @@ class alexa_api(hass.Hass):
                 self.alexalog(
                     "dialog has been completed, Dialog stopped by user", 100, "*"
                 )
-            else:
+            else intentResponse == "next":
                 ############################################
                 # user just responded yes, so just a question
                 ############################################
@@ -82,6 +82,16 @@ class alexa_api(hass.Hass):
                 self.alexalog(
                     "dialog has been completed, User just responded yes", 100, "*"
                 )
+            else:
+                ############################################
+                # Send the response from the Intent + question for next action
+                ############################################
+                speech = intentResponse
+                endSession = True
+                dialogDelegate = False
+                card = None
+                self.tempCardContent = self.tempCardContent + self.intentname + "\n"
+                self.alexalog("dialog has been completed, Response " + speech, 100, "*")
         if speech != None:
             speech = self.cleanup_text(speech)
         if card:
