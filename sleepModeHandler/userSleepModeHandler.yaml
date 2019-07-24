@@ -4,6 +4,7 @@ userSleepModeHandlerUserOne:
   app_switch: input_boolean.user_sleep_mode_handler_user_one
   input_boolean: input_boolean.user_one_sleep
   location_sensor: sensor.location_user_one
+  is_home_input_boolean: input_boolean.is_user_home_determiner_user_one
   room: Schlafzimmer
   awake_duration: 600
   asleep_duration: 1800
@@ -16,6 +17,7 @@ userSleepModeHandlerUserTwo:
   app_switch: input_boolean.user_sleep_mode_handler_user_two
   input_boolean: input_boolean.user_two_sleep
   location_sensor: sensor.location_user_two
+  is_home_input_boolean: input_boolean.is_user_home_determiner_user_two
   room: Schlafzimmer
   awake_duration: 600
   asleep_duration: 1800
