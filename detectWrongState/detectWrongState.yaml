@@ -10,7 +10,7 @@ detectWrongStateWhenLeaving:
   binary_sensor.0x00158d0001bb4dc0_contact,media_player.denon_avr_x1300w,switch.large_lamp,\
   switch.small_lamp,switch.snowboard,light.bedroom_yeelight,light.bar_table,light.lobby_yeelight,\
   light.reading_lamp_yeelight,light.treppe_oben,light.stairs_lower_yeelight,switch.ventilator,light.livingroom_yeelight,\
-  switch.tv, switch.weihnachtslichter,switch.bedroom_receiver,light.lower_bathroom_yeelight,switch.markise"
+  switch.tv, switch.weihnachtslichter,switch.bedroom_receiver,light.lower_bathroom_yeelight"
   trigger_entity: input_boolean.is_home
   trigger_state: "off"
   message: "Du hast {} angelassen. Ich habe es für dich ausgemacht."
