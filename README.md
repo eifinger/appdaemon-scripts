@@ -58,7 +58,6 @@ Every App has an input_boolean inside HA which turns it on/off. This is useful i
 *   [plantWateringNotifier](#plantwateringnotifier)
 *   [powerUsageNotification](#powerusagenotification)
 *   [roomBasedLightControl](#roombasedlightcontrol)
-*   [runOnStateChange](#runonstatechange)
 *   [sensorWatcher](#sensorwatcher)
 *   [setThermostat](#setthermostat)
 *   [setThermostatOnStateChange](#setthermostatonstatechange)
@@ -560,29 +559,6 @@ roomBasedLightControl:
     - globals
 ```
 
-### runOnStateChange
-
-App which runs something based on a state change
-```yaml
-turnOffUpperBathThermostatWhenWindowOpen:
-  module: runOnStateChange
-  class: RunOnStateChange
-  app_switch: input_boolean.turn_off_upper_bath_thermostat_when_window_open
-  entities_off: climate.bad_oben_thermostat
-  trigger_entity: binary_sensor.door_window_sensor_158d000204ba26
-  trigger_state: "on"
-  message_on: "Ich habe {} angeschaltet"
-  #message_on: "I turned on {}"
-  message_off: "Ich habe {} ausgeschaltet"
-  #message_off: "I turned off {}"
-  notify_name: group_notifications
-  use_alexa: False
-  dependencies:
-    - Notifier
-  global_dependencies:
-    - globals
-```
-
 ### sensorWatcher
 
 Notify me if sensors are offline. This can be the case when batteries are empty.
@@ -616,6 +592,7 @@ sensorWatcher:
 
 App which sets media player source on based on a entity state.
 I currently use this to turn on multi room audio when getting up.
+
 ```yaml
 setMultiRoomAudioWhenSleepModeTurnsOff:
   module: setMediaPlayerSource
@@ -632,6 +609,7 @@ setMultiRoomAudioWhenSleepModeTurnsOff:
 ### setThermostat
 
 App which sets a thermostat to a target temperature for a specific duration
+
 ```yaml
 warm_bath_before_wakeup:
   module: setThermostat
@@ -656,8 +634,6 @@ warm_bath_before_wakeup:
 ### setThermostatOnStateChange
 
 App which sets a thermostat to a target temperature on state change.
-This is a separate App from [runOnStateChange](#runonstatechange)
-because here we need a target number or entity to which to set the thermostat to.
 
 ```yaml
 setBadObenThermostatWhenComingHome:
