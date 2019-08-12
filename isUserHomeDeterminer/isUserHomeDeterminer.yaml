@@ -5,7 +5,7 @@ isUserHomeDeterminerUserOne:
   app_switch: input_boolean.is_user_home_determiner_user_one
   input_boolean: input_boolean.user_one_home
   device_tracker: secret_device_user_one
-  door_sensor: binary_sensor.door
+  door_sensor: binary_sensor.contact_door
   global_dependencies:
     - globals
 
@@ -16,7 +16,7 @@ isUserHomeDeterminerUserTwo:
   app_switch: input_boolean.is_user_home_determiner_user_two
   input_boolean: input_boolean.user_two_home
   device_tracker: secret_device_user_two
-  door_sensor: binary_sensor.door
+  door_sensor: binary_sensor.contact_door
   global_dependencies:
     - globals
     - secrets

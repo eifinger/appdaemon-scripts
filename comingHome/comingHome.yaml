@@ -3,7 +3,7 @@ comingHomeYeelight:
   module: comingHome
   class: ComingHome
   app_switch: input_boolean.coming_home_yeelight
-  sensor: binary_sensor.door
+  sensor: binary_sensor.contact_door
   isHome: input_boolean.is_home
   actor: switch.large_lamp
   after_sundown: True
@@ -13,6 +13,6 @@ comingHomeAlexa:
   module: comingHome
   class: ComingHome
   app_switch: input_boolean.coming_home_alexa
-  sensor: binary_sensor.door
+  sensor: binary_sensor.contact_door
   isHome: input_boolean.is_home
   actor: script.receiver_set_source_bluetooth
