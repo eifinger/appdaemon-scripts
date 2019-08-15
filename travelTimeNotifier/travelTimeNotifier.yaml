@@ -1,0 +1,42 @@
+googleTravelTime_home_from_work:
+ module: travelTimeNotifier
+ class: TravelTimeNotifier
+ sensor: sensor.travel_time_home_from_work_here
+ notify_input_boolean: input_boolean.travel_time_home_from_work
+ notify_name: group_notifications
+ message: "Du kannst losfahren nach {}"
+ #message: "You can start your journey to {}"
+ notify_use_Alexa: False
+ dependencies: 
+   - Notifier
+ global_dependencies:
+   - globals
+   - secrets
+
+googleTravelTime_work_from_home:
+ module: travelTimeNotifier
+ class: TravelTimeNotifier
+ sensor: sensor.travel_time_work_from_home_here
+ notify_input_boolean: input_boolean.travel_time_work_from_home
+ notify_name: group_notifications
+ message: "Du kannst losfahren nach {}"
+ #message: "You can start your journey to {}"
+ dependencies: 
+   - Notifier
+ global_dependencies:
+   - globals
+   - secrets
+
+googleTravelTime_elmo_from_home:
+ module: travelTimeNotifier
+ class: TravelTimeNotifier
+ sensor: sensor.travel_time_elmo_from_home_here
+ notify_input_boolean: input_boolean.travel_time_elmo_from_home
+ notify_name: group_notifications
+ message: "Du kannst losfahren nach {}"
+ #message: "You can start your journey to {}"
+ dependencies: 
+   - Notifier
+ global_dependencies:
+   - globals
+   - secrets

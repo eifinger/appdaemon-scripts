@@ -7,7 +7,7 @@ import globals
 #
 #
 # Args:
-# sensor: google travel sensor to watch. example: sensor.travel_time_home_from_work
+# sensor: google_travel_time or here_travel_time sensor to watch. example: sensor.travel_time_home_from_work
 # notify_input_boolean: input_boolean determining whether to notify. example: input_boolean.travel_time_home_from_work
 # notify_name: Who to notify. example: group_notifications
 # acceptable_range (optional): Multiplier of the normal travel time that is still acceptable. example: 1.2
@@ -15,6 +15,9 @@ import globals
 # notify_use_Alexa: use Alexa as TTS. Defaults to True. example: False
 #
 # Release Notes
+#
+# Version 1.5:
+#   Rename to TravelTimeNotifier as this can be used with here_travel_time also
 #
 # Version 1.4:
 #   use Notify App
@@ -32,7 +35,7 @@ import globals
 #   Initial Version
 
 
-class GoogleTravelTime(hass.Hass):
+class TravelTimeNotifier(hass.Hass):
     def initialize(self):
 
         self.listen_state_handle_list = []
@@ -41,7 +44,7 @@ class GoogleTravelTime(hass.Hass):
         self.sensor = globals.get_arg(self.args, "sensor")
         self.notify_input_boolean = globals.get_arg(self.args, "notify_input_boolean")
         self.notify_name = globals.get_arg(self.args, "notify_name")
-        self.message = globals.get_arg(self.args, "message_DE")
+        self.message = globals.get_arg(self.args, "message")
         try:
             self.acceptable_range = globals.get_arg(self.args, "acceptable_range")
         except KeyError:
