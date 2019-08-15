@@ -2,7 +2,7 @@ obenTreppeMotionTrigger:
   module: motionTrigger
   class: MotionTrigger
   app_switch: input_boolean.oben_treppe_motion_trigger
-  sensor: binary_sensor.0x00158d00012aab97_occupancy
+  sensor: binary_sensor.presence_stairs
   entity_on: light.upper_stairs_yeelight
   entity_off: light.upper_stairs_yeelight
   sensor_type: zigbee2mqtt
@@ -16,7 +16,7 @@ bathMotionTrigger:
   module: motionTrigger
   class: MotionTrigger
   app_switch: input_boolean.bath_motion_trigger
-  sensor: binary_sensor.0x00158d000236b801_occupancy
+  sensor: binary_sensor.presence_bathroom
   entity_on: light.lower_bathroom_yeelight
   entity_off: light.lower_bathroom_yeelight
   sensor_type: zigbee2mqtt
@@ -31,7 +31,7 @@ bedroomMotionTrigger:
   module: motionTrigger
   class: MotionTrigger
   app_switch: input_boolean.bedroom_motion_trigger
-  sensor: binary_sensor.0x00158d000204c95d_occupancy_2
+  sensor: binary_sensor.presence_bedroom
   entity_on: light.bedroom_yeelight
   sensor_type: zigbee2mqtt
   after_sundown: True
