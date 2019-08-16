@@ -40,6 +40,7 @@ Every App has an input_boolean inside HA which turns it on/off. This is useful i
 *   [alarmClock](#alarmclock)
 *   [buttonClicked](#buttonclicked)
 *   [comingHome](#cominghome)
+*   [deconzXiaomiButton](#deconzxiaomibutton)
 *   [detectWrongState](#detectwrongstate)
 *   [eventMonitor](#eventmonitor)
 *   [faceRecognitionBot](#facerecognitionbot)
@@ -170,6 +171,24 @@ comingHomeYeelight:
   isHome: input_boolean.is_home
   actor: switch.large_lamp
   after_sundown: True
+```
+
+### deconzXiaomiButton
+
+App which toggles entities for single/double/hold presses of Xiaomi buttons connected via deconz.
+
+This app is installed via [HACS](https://github.com/custom-components/hacs). 
+
+The repository itself with the full documentation can be found on github: [appdaemon-deconz-xiaomi-button](https://github.com/eifinger/appdaemon-deconz-xiaomi-button)
+
+```yaml
+DeconzXiaomiButtonBedroom:
+  module: deconz_xiaomi_button
+  class: DeconzXiaomiButton
+  id: round_button_schlafzimmer
+  actor_single: light.bedroom_yeelight
+  actor_double: group.all
+  actor_hold: light.bedroom_yeelight
 ```
 
 ### detectWrongState
