@@ -2,14 +2,13 @@ notifyOfActionWhenAway:
   module: notifyOfActionWhenAway
   class: NotifyOfActionWhenAway
   app_switch: input_boolean.notify_of_action_when_away
-  sensor: "binary_sensor.0x00158d000126a57b_contact,binary_sensor.0x00158d000232c4e7_contact,\
-  binary_sensor.0x00158d000205b808_contact,binary_sensor.0x00158d00020499ad_contact,\
-  binary_sensor.0x00158d00020498b6_contact,binary_sensor.0x00158d000204ba26_contact,\
-  binary_sensor.0x00158d0002048951_contact,binary_sensor.0x00158d00020455bf_contact,\
-  binary_sensor.0x00158d000205b82e_contact,binary_sensor.0x00158d000232c3d1_contact_2,\
-  binary_sensor.0x00158d0001bb4dc0_contact,binary_sensor.0x00158d000236d982_occupancy,\
-  binary_sensor.0x00158d000236d83c_occupancy,binary_sensor.0x00158d000236b801_occupancy,\
-  binary_sensor.0x00158d0001fa464b_occupancy,binary_sensor.0x00158d00012aab97_occupancy"
+  sensor: "binary_sensor.contact_bathroom_window,binary_sensor.contact_bedroom_door,\
+  binary_sensor.contact_bedroom_door_tilted,binary_sensor.contact_door,binary_sensor.contact_guest_window,\
+  binary_sensor.contact_kitchen_window,binary_sensor.contact_studyroom_door,\
+  binary_sensor.contact_studyroom_door_tilted,binary_sensor.contact_terrace_door,\
+  binary_sensor.contact_terrace_door_tilted,binary_sensor.contact_upper_bathroom_window,\
+  binary_sensor.presence_stairs,binary_sensor.presence_bathroom,binary_sensor.presence_lobby,\
+  binary_sensor.presence_bedroom,binary_sensor.presence_kitchen,binary_sensor.presence_terrace"
   isHome: input_boolean.is_home
   notify_name: group_notifications
   isHome_delay: 20
