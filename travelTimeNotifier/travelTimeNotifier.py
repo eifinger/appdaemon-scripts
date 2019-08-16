@@ -66,16 +66,22 @@ class TravelTimeNotifier(hass.Hass):
         self.log("new: {}".format(new), level="DEBUG")
 
         duration_in_traffic = new["attributes"]["duration_in_traffic"]
-        duration_in_traffic_minutes = int(
-            duration_in_traffic[: duration_in_traffic.find(" ")]
-        )
+        if isinstance(duration_in_traffic, float):
+            duration_in_traffic_minutes = int(duration_in_traffic)
+        else:
+            duration_in_traffic_minutes = int(
+                duration_in_traffic[: duration_in_traffic.find(" ")]
+            )
         self.log(
             "duration_in_traffic_minutes: {}".format(duration_in_traffic_minutes),
             level="DEBUG",
         )
 
         duration = new["attributes"]["duration"]
-        duration_minutes = int(duration[: duration.find(" ")])
+        if isinstance(duration, float):
+            duration_minutes = int(duration)
+        else:
+            duration_minutes = int(duration[: duration.find(" ")])
         self.log("duration_minutes: {}".format(duration_minutes), level="DEBUG")
 
         if (
