@@ -68,20 +68,20 @@ class TravelTimeNotifier(hass.Hass):
         self.log("old: {}".format(old), level="DEBUG")
         self.log("new: {}".format(new), level="DEBUG")
 
-        duration_in_traffic_minutes = parse_duration_in_traffic_minutes(new)
+        duration_in_traffic_minutes = self.parse_duration_in_traffic_minutes(new)
         self.log(
             "duration_in_traffic_minutes: {}".format(duration_in_traffic_minutes),
             level="DEBUG",
         )
 
-        duration_minutes = parse_duration_minutes(new)
+        duration_minutes = self.parse_duration_minutes(new)
         self.log("duration_minutes: {}".format(duration_minutes), level="DEBUG")
 
         if (
             duration_in_traffic_minutes <= duration_minutes * self.acceptable_range
             and self.get_state(self.notify_input_boolean) == "on"
         ):
-            destination_address = parse_destination_address(new)
+            destination_address = self.parse_destination_address(new)
             message = self.message.format(destination_address)
             self.log("Notify user")
             self.notifier.notify(
