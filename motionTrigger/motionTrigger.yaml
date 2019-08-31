@@ -18,7 +18,6 @@ bathMotionTrigger:
   app_switch: input_boolean.bath_motion_trigger
   sensor: binary_sensor.presence_bathroom
   entity_on: light.lower_bathroom_yeelight
-  entity_off: light.lower_bathroom_yeelight
   sensor_type: zigbee2mqtt
   after_sundown: True
   #turn_off_constraint_entities_on: binary_sensor.0x00158d0001fa464b_occupancy
