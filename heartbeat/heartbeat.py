@@ -32,12 +32,12 @@ class Heartbeat(hass.Hass):
             self.log("Heartbeat", level="DEBUG")
         except requests.exceptions.HTTPError as exception:
             self.log(
-                "Error trying to set entity. Will try again in 1s. Error: {}".format(
+                "Error trying to set entity. Will try again in 5s. Error: {}".format(
                     exception
                 ),
                 level="WARNING",
             )
-            self.timer_handle_list.append(self.run_in(self.heartbeat, 1))
+            self.timer_handle_list.append(self.run_in(self.heartbeat, 5))
 
     def terminate(self):
         for timer_handle in self.timer_handle_list:
