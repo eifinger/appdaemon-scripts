@@ -6,6 +6,8 @@ secret_dict = {
     "secret_sindlingen": "Frankfurt am Main",
     "secret_device_user_one": "device_tracker.me",
     "secret_device_user_two": "device_tracker.notme",
+    "secret_person_user_one:": "person.me",
+    "secret_person_user_two:": "person.notme",
     "secret_name_user_one": "me",
     "secret_name_user_two": "notme",
     "secret_elmo_location": "00.000000, 00.000000",

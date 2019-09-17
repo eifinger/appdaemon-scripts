@@ -16,7 +16,7 @@ import requests
 #
 # app_switch: on/off switch for this app. example: input_boolean.turn_fan_on_when_hot
 # input_boolean: input_boolean which shows if someone is home e.g. input_boolean.isHome
-# device_tracker: device tracker of the user to track e.g. device_tracker.simon
+# device_tracker: device tracker or person of the user to track e.g. device_tracker.simon
 # door_sensor: Door sensor which indicated the front door opened e.g. binary_sensor.door_window_sensor_158d000126a57b
 #
 # Release Notes
