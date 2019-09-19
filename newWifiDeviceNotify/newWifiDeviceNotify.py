@@ -20,6 +20,9 @@ import globals
 #
 # Release Notes
 #
+# Version 1.5.1:
+#   Wait till entity is fully created
+#
 # Version 1.5:
 #   Add support for Unifi > 0.98 and other integrations that are not using known_devices / device_tracker_new_device.
 #   Fritzbox support is now optional
@@ -99,7 +102,7 @@ class DeviceNotify(hass.Hass):
             )
         )
         self.listen_event_handle_list.append(
-            self.listen_event(self.receive_telegram_callback, "telegram_callback")
+            self.listen_event(self.receiveTelegramCallback, "telegram_callback")
         )
 
     def entityRegistryUpdatedCallback(self, event_name, data, kwargs):
@@ -107,9 +110,20 @@ class DeviceNotify(hass.Hass):
         self.log("event_name: {}".format(event_name))
         self.log("data: {}".format(data))
         if data["action"] == "create":
-            new_entity_attributes = self.get_state(data["entity_id"], attribute="all")[
-                "attributes"
-            ]
+            # Wait recursively until the entity was fully created
+            self.run_in(
+                self.handleNewRegistryEntity, 1, new_entity_id=data["entity_id"]
+            )
+
+    def handleNewRegistryEntity(self, kwargs):
+        """Wait till Entity is available and notify if it was created by a router"""
+        full_state = self.get_state(kwargs["new_entity_id"], attribute="all")
+        if full_state is None:
+            self.run_in(
+                self.handleNewRegistryEntity, 1, new_entity_id=kwargs["new_entity_id"]
+            )
+        else:
+            new_entity_attributes = full_state["attributes"]
             if new_entity_attributes.get("source_type") == "router":
                 self.notifyNewDeviceAdded(
                     new_entity_attributes["hostname"], new_entity_attributes["mac"]
@@ -152,7 +166,7 @@ class DeviceNotify(hass.Hass):
             inline_keyboard=keyboard,
         )
 
-    def receive_telegram_callback(self, event_name, data, kwargs):
+    def receiveTelegramCallback(self, event_name, data, kwargs):
         """Event listener for Telegram callback queries."""
         self.log("callback data: {}".format(data))
         data_callback = data["data"]
