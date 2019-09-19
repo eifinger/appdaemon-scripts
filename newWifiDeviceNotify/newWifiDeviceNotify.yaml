@@ -3,18 +3,18 @@ newWifiDeviceNotify:
   class: DeviceNotify
   notify_name: group_notifications
   user_id: secret_telegram_user_id
-  fritzbox_url: secret_fritzbox_url
-  fritzbox_user: ''
-  fritzbox_password: secret_fritzbox_password
-  fritzbox_profile_name: 'Unbeschränkt'
   message: "Unbekanntes Gerät entdeckt. Hostname: {}. MAC: {}."
   #message: "Unknown device connected. Hostname: {}. MAC: {}"
-  message_allow_access: "Soll ich das Gerät ins Internet lassen?"
-  #message_allow_access: "Should I let the device access the Internet?"
-  message_access_allowed: "Großzügig wie ich bin, habe ich das Gerät ins Internet gelassen"
-  #message_access_allowed: "I have let the device access the internet. How kind of me!"
-  message_access_blocked: "Ich habe das Gerät vor den Schrecken des Internets bewahrt"
-  #message_access_blocked: "I have saved the device from the dangers of the Internet"
+  #fritzbox_url: secret_fritzbox_url
+  #fritzbox_user: ''
+  #fritzbox_password: secret_fritzbox_password
+  #fritzbox_profile_name: 'Unbeschränkt'
+  #fritzbox_message_allow_access: "Soll ich das Gerät ins Internet lassen?"
+  #fritzbox_message_allow_access: "Should I let the device access the Internet?"
+  #fritzbox_message_access_allowed: "Großzügig wie ich bin, habe ich das Gerät ins Internet gelassen"
+  #fritzbox_message_access_allowed: "I have let the device access the internet. How kind of me!"
+  #fritzbox_message_access_blocked: "Ich habe das Gerät vor den Schrecken des Internets bewahrt"
+  #fritzbox_message_access_blocked: "I have saved the device from the dangers of the Internet"
   dependencies: 
     - Notifier
   global_dependencies:

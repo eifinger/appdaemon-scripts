@@ -9,14 +9,20 @@ import globals
 #
 # notify_name: Who to notify. example: group_notifications
 # user_id: Who to notify. example: -217831
-# fritzbox_url: The url of your fritzbox. example: http://fritz.box
-# fritzbox_user: The user to login to your fritzbox. example: ''
-# fritzbox_password: The password to login to your fritzbox. example: 'mysecurepassword'
-# fritzbox_profile_name: Name of the profile with Internet Access. example: 'Unbeschränkt'
-# message_<LANG>: localized message to use in notification. e.g. "You left open {} Dummy."
-# message_allow_access:
+# message: Message to use in notification. e.g. "Unknown device connected. Hostname: {}. MAC: {}"
+# fritzbox_url (optional): The url of your fritzbox. example: http://fritz.box
+# fritzbox_user (optional): The user to login to your fritzbox. example: ''
+# fritzbox_password (optional): The password to login to your fritzbox. example: 'mysecurepassword'
+# fritzbox_profile_name (optional): Name of the profile with Internet Access. example: 'Unbeschränkt'
+# fritzbox_message_allow_access (optional): Message to use in telegram message. example: "Should I let the device access the Internet?"
+# fritzbox_message_access_allowed (optional): Message to use in telegram message. example: "I have let the device access the internet. How kind of me!"
+# fritzbox_message_access_blocked (optional): Message to use in telegram message. example: "I have saved the device from the dangers of the Internet"
 #
 # Release Notes
+#
+# Version 1.5:
+#   Add support for Unifi > 0.98 and other integrations that are not using known_devices / device_tracker_new_device.
+#   Fritzbox support is now optional
 #
 # Version 1.4:
 #   Don't use Alexa for Notifications
@@ -45,35 +51,84 @@ class DeviceNotify(hass.Hass):
         self.notify_name = globals.get_arg(self.args, "notify_name")
         self.user_id = globals.get_arg(self.args, "user_id")
         self.message = globals.get_arg(self.args, "message")
-        self.fritzbox_url = globals.get_arg(self.args, "fritzbox_url")
-        self.fritzbox_user = globals.get_arg(self.args, "fritzbox_user")
-        self.fritzbox_password = globals.get_arg(self.args, "fritzbox_password")
-        self.fritzbox_profile_name = globals.get_arg(self.args, "fritzbox_profile_name")
-        self.message_allow_access = globals.get_arg(self.args, "message_allow_access")
-        self.message_access_allowed = globals.get_arg(
-            self.args, "message_access_allowed"
-        )
-        self.message_access_blocked = globals.get_arg(
-            self.args, "message_access_blocked"
-        )
+        try:
+            self.fritzbox_url = globals.get_arg(self.args, "fritzbox_url")
+        except KeyError:
+            self.fritzbox_url = None
+        try:
+            self.fritzbox_user = globals.get_arg(self.args, "fritzbox_user")
+        except KeyError:
+            self.fritzbox_user = None
+        try:
+            self.fritzbox_password = globals.get_arg(self.args, "fritzbox_password")
+        except KeyError:
+            self.fritzbox_password = None
+        try:
+            self.fritzbox_profile_name = globals.get_arg(
+                self.args, "fritzbox_profile_name"
+            )
+        except KeyError:
+            self.fritzbox_profile_name = None
+        try:
+            self.fritzbox_message_allow_access = globals.get_arg(
+                self.args, "fritzbox_message_allow_access"
+            )
+        except KeyError:
+            self.fritzbox_message_allow_access = None
+        try:
+            self.fritzbox_message_access_allowed = globals.get_arg(
+                self.args, "fritzbox_message_access_allowed"
+            )
+        except KeyError:
+            self.fritzbox_message_access_allowed = None
+        try:
+            self.fritzbox_message_access_blocked = globals.get_arg(
+                self.args, "fritzbox_message_access_blocked"
+            )
+        except KeyError:
+            self.fritzbox_message_access_blocked = None
 
         self.notifier = self.get_app("Notifier")
 
         self.listen_event_handle_list.append(
-            self.listen_event(self.newDevice, "device_tracker_new_device")
+            self.listen_event(self.newDeviceCallback, "device_tracker_new_device")
         )
-        # subscribe to telegram events
+        self.listen_event_handle_list.append(
+            self.listen_event(
+                self.entityRegistryUpdatedCallback, "entity_registry_updated"
+            )
+        )
         self.listen_event_handle_list.append(
             self.listen_event(self.receive_telegram_callback, "telegram_callback")
         )
 
-    def newDevice(self, event_name, data, kwargs):
+    def entityRegistryUpdatedCallback(self, event_name, data, kwargs):
+        """Callback method for entity_registry_updated event"""
+        self.log("event_name: {}".format(event_name))
+        self.log("data: {}".format(data))
+        if data["action"] == "create":
+            new_entity_attributes = self.get_state(data["entity_id"], attribute="all")[
+                "attributes"
+            ]
+            if new_entity_attributes.get("source_type") == "router":
+                self.notifyNewDeviceAdded(
+                    new_entity_attributes["hostname"], new_entity_attributes["mac"]
+                )
+                if self.fritzbox_url is not None:
+                    self.askForProfileChange(new_entity_attributes["hostname"])
+
+    def newDeviceCallback(self, event_name, data, kwargs):
         """Callback method for device_tracker_new_device event"""
         self.log("event_name: {}".format(event_name))
         self.log("data: {}".format(data))
-        message = self.message.format(data["host_name"], data["mac"])
+        self.notifyNewDeviceAdded(data["host_name"], data["mac"])
+        if self.fritzbox_url is not None:
+            self.askForProfileChange(data["host_name"])
+
+    def notifyNewDeviceAdded(self, host_name, mac):
+        """Send a notification message when a new device was added"""
+        message = self.message.format(host_name, mac)
         self.notifier.notify(self.notify_name, message, useAlexa=False)
-        self.askForProfileChange(data["host_name"])
 
     def askForProfileChange(self, host_name):
         """Asks the user if he wants to allow the new device to have internet access"""
