@@ -20,6 +20,9 @@ import globals
 #
 # Release Notes
 #
+# Version 1.5.2:
+#   Handle hostname is None
+#
 # Version 1.5.1:
 #   Wait till entity is fully created
 #
@@ -125,11 +128,11 @@ class DeviceNotify(hass.Hass):
         else:
             new_entity_attributes = full_state["attributes"]
             if new_entity_attributes.get("source_type") == "router":
-                self.notifyNewDeviceAdded(
-                    new_entity_attributes["hostname"], new_entity_attributes["mac"]
-                )
-                if self.fritzbox_url is not None:
-                    self.askForProfileChange(new_entity_attributes["hostname"])
+                hostname = new_entity_attributes.get("hostname")
+                mac = new_entity_attributes.get("mac")
+                self.notifyNewDeviceAdded(hostname, mac)
+                if self.fritzbox_url is not None and hostname is not None:
+                    self.askForProfileChange(hostname)
 
     def newDeviceCallback(self, event_name, data, kwargs):
         """Callback method for device_tracker_new_device event"""
