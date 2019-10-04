@@ -1,6 +1,7 @@
 import appdaemon.plugins.hass.hassapi as hass
 import datetime
 import globals
+from typing import Optional
 
 #
 # App which notifies the user if the travel time is within a normal amount
