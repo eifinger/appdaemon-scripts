@@ -140,7 +140,7 @@ class FaceRecognitionBot(hass.Hass):
             self.listen_event(self.receive_telegram_text, "telegram_text")
         )
         # Teach periodic run
-        self.timer_handle_list.append(self.run_in(self.check_health_callback, 5))
+        #self.timer_handle_list.append(self.run_in(self.check_health_callback, 5))
 
         # custom variables
 
