@@ -13,6 +13,9 @@ import datetime
 #
 # Release Notes
 #
+# Version 2.0:
+#   Removed unneeded workaround for yeelight
+#
 # Version 1.0:
 #   Initial Version
 
@@ -40,62 +43,22 @@ class DeconzXiaomiButton(hass.Hass):
                 # Is on
                 if self.get_state(self.actor_single) == "on":
                     self.log("Turning {} off".format(self.actor_single))
-                    # Workaround for Yeelight see https://community.home-assistant.io/t/transition-for-turn-off-service-doesnt-work-for-yeelight-lightstrip/25333/4
-                    if self.actor_single.startswith("light"):
-                        self.call_service(
-                            "light/turn_on",
-                            entity_id=self.actor_single,
-                            transition=1,
-                            brightness_pct=1,
-                        )
-                        self.timer_handle_list.append(
-                            self.run_in(self.turn_off_workaround, 2)
-                        )
-                    else:
-                        self.turn_off(self.actor_single)
+                    self.turn_off(self.actor_single)
                 # Is off
                 if self.get_state(self.actor_single) == "off":
                     self.log("Turning {} on".format(self.actor_single))
-                    if self.actor_single.startswith("light"):
-                        self.call_service(
-                            "light/turn_on",
-                            entity_id=self.actor_single,
-                            transition=1,
-                            brightness_pct=100,
-                        )
-                    else:
-                        self.turn_on(self.actor_single)
+                    self.turn_on(self.actor_single)
 
             if data["event"] == 1004 and self.actor_double is not None:
                 self.log("Double Button Click: {}".format(data["id"]))
                 self.log("Toggling {}".format(self.actor_double))
                 # Is on
                 if self.get_state(self.actor_double) == "on":
-                    # Workaround for Yeelight see https://community.home-assistant.io/t/transition-for-turn-off-service-doesnt-work-for-yeelight-lightstrip/25333/4
-                    if self.actor_single.startswith("light"):
-                        self.call_service(
-                            "light/turn_on",
-                            entity_id=self.actor_single,
-                            transition=1,
-                            brightness_pct=1,
-                        )
-                        self.timer_handle_list.append(
-                            self.run_in(self.turn_off_workaround, 2)
-                        )
-                    else:
-                        self.turn_off(self.actor_single)
+                    self.turn_off(self.actor_single)
                 # Is off
                 if self.get_state(self.actor_double) == "off":
                     self.log("Turning {} on".format(self.actor_single))
-                    if self.actor_single.startswith("light"):
-                        self.call_service(
-                            "light/turn_on",
-                            entity_id=self.actor_single,
-                            transition=1,
-                            brightness_pct=100,
-                        )
-                    else:
-                        self.turn_on(self.actor_single)
+                    self.turn_on(self.actor_single)
 
             if data["event"] == 1001 and self.actor_hold is not None:
                 self.log("Long Button Click: {}".format(data["id"]))
@@ -132,9 +95,6 @@ class DeconzXiaomiButton(hass.Hass):
             entity_id=kwargs["entity_id"],
             brightness_pct=brightness_pct_new * 100,
         )
-
-    def turn_off_workaround(self, *kwargs):
-        self.call_service("light/turn_off", entity_id=self.actor_single)
 
     def terminate(self):
         for listen_event_handle in self.listen_event_handle_list:
