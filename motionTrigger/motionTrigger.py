@@ -12,7 +12,7 @@ import datetime
 # sensor: binary sensor to use as trigger
 # entity_on : entity to turn on when detecting motion, can be a light, script, scene or anything else that can be turned on
 # entity_off (optionally): entity to turn off when detecting motion, can be a light, script or anything else that can be turned off. Can also be a scene which will be turned on
-# sensor_type: Possible values: xiaomi,zigbee2mqtt. Default: xiaomi
+# sensor_type: Possible values: xiaomi, zigbee2mqtt, deconz. Default: xiaomi
 # after (optionally): Only trigger after a certain time. example: 22:00
 # after_sundown (optionally): true
 # delay (optionally): amount of time after turning on to turn off again. If not specified defaults to 70 seconds. example: 10
@@ -23,6 +23,9 @@ import datetime
 # turn_off_constraint_entities_on (optionally): list of entities which have to be on for entity to be turned off. example: light.bedroom_yeelight,light.bar_table
 #
 # Release Notes
+#
+# Version 1.10:
+#   wait with turn_off till sensor is really off
 #
 # Version 1.9:
 #   introduced turn_on_constraints and turn_off_constraints
@@ -56,6 +59,7 @@ import datetime
 
 SENSOR_TYPE_XIAOMI = "xiaomi"
 SENSOR_TYPE_ZIGBEE2MQTT = "zigbee2mqtt"
+SENSOR_TYPE_DECONZ = "deconz"
 
 
 class MotionTrigger(hass.Hass):
@@ -100,7 +104,7 @@ class MotionTrigger(hass.Hass):
                 pass
             self.log("Delay changed to : {}".format(self.delay))
         except KeyError:
-            self.delay = None
+            self.delay = 90
         try:
             self.turn_on_constraint_entities_off = globals.get_arg_list(
                 self.args, "turn_on_constraint_entities_off"
@@ -131,16 +135,16 @@ class MotionTrigger(hass.Hass):
             self.listen_event_handle_list.append(
                 self.listen_event(self.motion_event_detected, "xiaomi_aqara.motion")
             )
-        elif self.sensor_type == SENSOR_TYPE_ZIGBEE2MQTT:
+        elif self.sensor_type in [SENSOR_TYPE_ZIGBEE2MQTT, SENSOR_TYPE_DECONZ]:
             self.listen_state_handle_list.append(
                 self.listen_state(self.state_changed, self.sensor)
             )
         else:
-            self.log("Unknown sensor_type: {}".format(self.sensor_type), level="ERROR")
+            self.log(f"Unknown sensor_type: {self.sensor_type}", level="ERROR")
 
     def delay_changed(self, entity, attribute, old, new, kwargs):
         self.delay = int(self.get_state(self.delay_entity).split(".")[0])
-        self.log("Delay changed to : {}".format(self.delay))
+        self.log(f"Delay changed to : {self.delay}")
 
     def motion_event_detected(self, event_name, data, kwargs):
         if self.get_state(self.app_switch) == "on":
@@ -154,7 +158,7 @@ class MotionTrigger(hass.Hass):
 
     def turn_on_callback(self, kwargs):
         self.log(
-            "Motion detected on sensor: {}".format(self.friendly_name(self.sensor)),
+            f"Motion detected on sensor: {self.friendly_name(self.sensor)}",
             level="DEBUG",
         )
         turn_on = True
@@ -171,57 +175,60 @@ class MotionTrigger(hass.Hass):
             )
             if datetime.datetime.now() > after_time:
                 turn_on = False
-                self.log("Now is before {}".format(self.after))
+                self.log(f"Now is before {self.after}")
         for entity in self.turn_on_constraint_entities_off:
             entity_state = self.get_state(entity)
             if entity_state != "off":
                 turn_on = False
-                self.log("{} is still {}".format(entity, entity_state))
+                self.log(f"{entity} is still {entity_state}")
                 break
         for entity in self.turn_on_constraint_entities_on:
             entity_state = self.get_state(entity)
             if entity_state != "on":
                 turn_on = False
-                self.log("{} is still {}".format(entity, entity_state))
+                self.log(f"{entity} is still {entity_state}")
                 break
         if turn_on and self.get_state(self.entity_on) == "off":
-            self.log("Motion detected: turning {} on".format(self.entity_on))
+            self.log(f"Motion detected: turning {self.entity_on} on")
             self.turn_on(self.entity_on)
             self.turned_on_by_me = True
-        if self.delay is not None:
-            delay = self.delay
-        else:
-            delay = 70
         if self.turned_on_by_me and turn_on:
-            if self.timer_handle is not None:
-                self.log("Resetting timer")
-                self.timer_handle_list.remove(self.timer_handle)
-                self.cancel_timer(self.timer_handle)
-            self.log("Will turn off in {}s".format(delay))
-            self.timer_handle = self.run_in(self.turn_off_callback, delay)
-            self.timer_handle_list.append(self.timer_handle)
+            self.reset_timer()
 
     def turn_off_callback(self, kwargs):
-        turn_off = True
-        if self.entity_off is not None:
-            for entity in self.turn_off_constraint_entities_off:
-                entity_state = self.get_state(entity)
-                if entity_state != "off":
-                    turn_off = False
-                    self.log("{} is still {}".format(entity, entity_state))
-                    break
-            for entity in self.turn_off_constraint_entities_on:
-                entity_state = self.get_state(entity)
-                if entity_state != "on":
-                    turn_off = False
-                    self.log("{} is still {}".format(entity, entity_state))
-                    break
-            if turn_off:
-                self.log("Turning {} off".format(self.entity_off))
-                self.turn_off(self.entity_off)
-                self.turned_on_by_me = False
+        if self.get_state(self.sensor) == "on":
+            self.log(f"{self.sensor} is still on")
+            self.reset_timer()
         else:
-            self.log("No entity_off defined", level="DEBUG")
+            turn_off = True
+            if self.entity_off is not None:
+                for entity in self.turn_off_constraint_entities_off:
+                    entity_state = self.get_state(entity)
+                    if entity_state != "off":
+                        turn_off = False
+                        self.log(f"{entity} is still {entity_state}")
+                        break
+                for entity in self.turn_off_constraint_entities_on:
+                    entity_state = self.get_state(entity)
+                    if entity_state != "on":
+                        turn_off = False
+                        self.log(f"{entity} is still {entity_state}")
+                        break
+                if turn_off:
+                    self.log(f"Turning {self.entity_off} off")
+                    self.turn_off(self.entity_off)
+                    self.turned_on_by_me = False
+            else:
+                self.log("No entity_off defined", level="DEBUG")
+
+    def reset_timer(self):
+        if self.timer_handle is not None:
+            self.log("Resetting timer")
+            self.timer_handle_list.remove(self.timer_handle)
+            self.cancel_timer(self.timer_handle)
+        self.log(f"Will turn off in {self.delay}s")
+        self.timer_handle = self.run_in(self.turn_off_callback, self.delay)
+        self.timer_handle_list.append(self.timer_handle)
 
     def terminate(self):
         for timer_handle in self.timer_handle_list:
