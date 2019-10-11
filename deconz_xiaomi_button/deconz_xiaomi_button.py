@@ -13,6 +13,9 @@ import datetime
 #
 # Release Notes
 #
+# Version 2.0.1
+#   use elif when toggling
+#
 # Version 2.0:
 #   Removed unneeded workaround for yeelight
 #
@@ -45,7 +48,7 @@ class DeconzXiaomiButton(hass.Hass):
                     self.log("Turning {} off".format(self.actor_single))
                     self.turn_off(self.actor_single)
                 # Is off
-                if self.get_state(self.actor_single) == "off":
+                elif self.get_state(self.actor_single) == "off":
                     self.log("Turning {} on".format(self.actor_single))
                     self.turn_on(self.actor_single)
 
@@ -56,7 +59,7 @@ class DeconzXiaomiButton(hass.Hass):
                 if self.get_state(self.actor_double) == "on":
                     self.turn_off(self.actor_single)
                 # Is off
-                if self.get_state(self.actor_double) == "off":
+                elif self.get_state(self.actor_double) == "off":
                     self.log("Turning {} on".format(self.actor_single))
                     self.turn_on(self.actor_single)
 
