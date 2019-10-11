@@ -24,6 +24,9 @@ import datetime
 #
 # Release Notes
 #
+# Version 1.10.1:
+#   always log No entity_off defined
+#
 # Version 1.10:
 #   wait with turn_off till sensor is really off
 #
@@ -219,7 +222,7 @@ class MotionTrigger(hass.Hass):
                     self.turn_off(self.entity_off)
                     self.turned_on_by_me = False
             else:
-                self.log("No entity_off defined", level="DEBUG")
+                self.log("No entity_off defined.")
 
     def reset_timer(self):
         if self.timer_handle is not None:
