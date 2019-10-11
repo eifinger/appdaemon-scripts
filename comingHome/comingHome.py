@@ -16,6 +16,9 @@ import datetime
 # after_sundown (optionally): whether to only trigger after sundown. example: True
 # Release Notes
 #
+# Version 1.4.1:
+#   fix duplicate line for self.actor
+#
 # Version 1.4:
 #   Add service and service_data and make actor optional
 #
@@ -45,7 +48,6 @@ class ComingHome(hass.Hass):
         self.app_switch = globals.get_arg(self.args, "app_switch")
         self.sensor = globals.get_arg(self.args, "sensor")
         self.isHome = globals.get_arg(self.args, "isHome")
-        self.actor = globals.get_arg(self.args, "actor")
         try:
             self.actor = globals.get_arg(self.args, "actor")
         except KeyError:
