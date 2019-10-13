@@ -13,6 +13,9 @@ import datetime
 #
 # Release Notes
 #
+# Version 2.0.2
+#   use else when toggling
+#
 # Version 2.0.1
 #   use elif when toggling
 #
@@ -43,12 +46,13 @@ class DeconzXiaomiButton(hass.Hass):
         if data["id"] == self.id:
             if data["event"] == 1002 and self.actor_single is not None:
                 self.log("ButtonClicked: {}".format(data["id"]))
+                self.log("Toggling {}".format(self.actor_double))
                 # Is on
                 if self.get_state(self.actor_single) == "on":
                     self.log("Turning {} off".format(self.actor_single))
                     self.turn_off(self.actor_single)
                 # Is off
-                elif self.get_state(self.actor_single) == "off":
+                else:
                     self.log("Turning {} on".format(self.actor_single))
                     self.turn_on(self.actor_single)
 
@@ -57,11 +61,11 @@ class DeconzXiaomiButton(hass.Hass):
                 self.log("Toggling {}".format(self.actor_double))
                 # Is on
                 if self.get_state(self.actor_double) == "on":
-                    self.turn_off(self.actor_single)
+                    self.turn_off(self.actor_double)
                 # Is off
-                elif self.get_state(self.actor_double) == "off":
-                    self.log("Turning {} on".format(self.actor_single))
-                    self.turn_on(self.actor_single)
+                else:
+                    self.log("Turning {} on".format(self.actor_double))
+                    self.turn_on(self.actor_double)
 
             if data["event"] == 1001 and self.actor_hold is not None:
                 self.log("Long Button Click: {}".format(data["id"]))
