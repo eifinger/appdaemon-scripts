@@ -16,6 +16,9 @@ import datetime
 # after_sundown (optionally): whether to only trigger after sundown. example: True
 # Release Notes
 #
+# Version 1.4.2:
+#   unwrap service_data
+#
 # Version 1.4.1:
 #   fix duplicate line for self.actor
 #
@@ -102,7 +105,7 @@ class ComingHome(hass.Hass):
         if self.service is not None:
             if self.service_data is not None:
                 self.log("{} changed to {}".format(self.friendly_name(entity), new))
-                self.call_service(service, service_data)
+                self.call_service(service, **service_data)
 
     def terminate(self):
         for listen_state_handle in self.listen_state_handle_list:
