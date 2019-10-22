@@ -21,6 +21,9 @@ import globals
 #
 # Release Notes
 #
+# Version 2.1:
+#   More off_states to support alexa_media
+#
 # Version 2.0:
 #   Renamed to detectWrongState, notification optional
 #
@@ -118,96 +121,56 @@ class DetectWrongState(hass.Hass):
                     (self.after_sundown and self.sun_down())
                     or self.after_sundown is not False
                 ):
-                    # entities_off
-                    for entity in self.entities_off:
-                        full_state = self.get_state(entity, attribute="all")
-                        if full_state is not None:
-                            attributes = full_state["attributes"]
-                            self.log("full_state: {}".format(full_state), level="DEBUG")
-                            if (
-                                full_state["state"] != "off"
-                                and full_state["state"] != "unavailable"
-                                and "device_class" in attributes
-                                and (
-                                    attributes["device_class"] == "window"
-                                    or attributes["device_class"] == "door"
-                                    or attributes["device_class"] == "garage_door"
-                                )
-                            ):
-                                if self.message_reed is not None:
-                                    self.log(
-                                        self.message_reed.format(
-                                            self.friendly_name(entity)
-                                        )
-                                    )
-                                    if self.notify_name is not None:
-                                        self.notifier.notify(
-                                            self.notify_name,
-                                            self.message_reed.format(
-                                                self.friendly_name(entity)
-                                            ),
-                                            useAlexa=self.use_alexa,
-                                        )
-                            elif (
-                                full_state["state"] != "off"
-                                and full_state["state"] != "unavailable"
-                            ):
-                                self.turn_off(entity)
-                                if self.message is not None:
-                                    self.log(
-                                        self.message.format(self.friendly_name(entity))
-                                    )
-                                    if self.notify_name is not None:
-                                        self.notifier.notify(
-                                            self.notify_name,
-                                            self.message.format(
-                                                self.friendly_name(entity)
-                                            ),
-                                            useAlexa=self.use_alexa,
-                                        )
-                    # entities_on
-                    for entity in self.entities_on:
-                        full_state = self.get_state(entity, attribute="all")
-                        attributes = full_state["attributes"]
-                        self.log("full_state: {}".format(full_state))
-                        if (
-                            full_state["state"] == "off"
-                            and "device_class" in attributes
-                            and (
-                                attributes["device_class"] == "window"
-                                or attributes["device_class"] == "door"
-                                or attributes["device_class"] == "garage_door"
-                            )
-                        ):
-                            if self.message_reed_off is not None:
-                                self.log(
-                                    self.message_reed_off.format(
-                                        self.friendly_name(entity)
-                                    )
-                                )
-                                if self.notify_name is not None:
-                                    self.notifier.notify(
-                                        self.notify_name,
-                                        message=self.message_reed_off.format(
-                                            self.friendly_name(entity)
-                                        ),
-                                        useAlexa=self.use_alexa,
-                                    )
-                        elif full_state["state"] == "off":
-                            self.turn_on(entity)
+                    self.check_entities_should_be_off()
+                    self.check_entities_should_be_on()
 
-                            if self.message_off is not None:
-                                self.log(
-                                    self.message_off.format(self.friendly_name(entity))
-                                )
-                                if self.notify_name is not None:
-                                    self.notifier.notify(
-                                        self.notify_name,
-                                        message=self.message_off.format(
-                                            self.friendly_name(entity)
-                                        ),
-                                        useAlexa=self.use_alexa,
-                                    )
+    def check_entities_should_be_off(self):
+        off_states = ["off", "unavailable", "paused", "standby"]
+        for entity in self.entities_off:
+            state = self.get_state(entity)
+            if state not in off_states:
+                if self.is_entity_reed_contact(entity):
+                    message = self.message_reed
+                else:
+                    self.turn_off(entity)
+                    message = self.message
+                self.send_notification(message, entity)
+    
+    def check_entities_should_be_on(self):
+        for entity in self.entities_on:
+            state = self.get_state(entity)
+            if state == "off":
+                if self.is_entity_reed_contact(entity):
+                    message = self.message_reed_on
+                else:
+                    self.turn_on(entity)
+                    message = self.message_on
+                self.send_notification(message, entity)
+
+    def is_entity_reed_contact(self, entity):
+        reed_types = ["window", "door", "garage_door"]
+        full_state = self.get_state(entity, attribute="all")
+        if full_state is not None:
+            attributes = full_state["attributes"]
+            self.log("full_state: {}".format(full_state), level="DEBUG")
+            if attributes.get("device_class") in reed_types:
+                return True
+        return False
+
+    def send_notification(self, message, entity):
+        if message is not None:
+            formatted_message = self.message.format(
+                    self.friendly_name(entity)
+                )
+            self.log(
+                formatted_message
+            )
+            if self.notify_name is not None:
+                self.notifier.notify(
+                    self.notify_name,
+                    formatted_message,
+                    useAlexa=self.use_alexa,
+                )
 
     def terminate(self):
         for listen_state_handle in self.listen_state_handle_list:
