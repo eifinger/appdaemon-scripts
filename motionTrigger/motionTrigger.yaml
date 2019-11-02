@@ -1,31 +1,3 @@
-obenTreppeMotionTrigger:
-  module: motionTrigger
-  class: MotionTrigger
-  app_switch: input_boolean.oben_treppe_motion_trigger
-  sensor: binary_sensor.presence_stairs
-  entity_on: light.upper_stairs_yeelight
-  entity_off: light.upper_stairs_yeelight
-  sensor_type: deconz
-  after_sundown: True
-  delay: input_number.oben_treppe_motion_trigger_delay
-  global_dependencies:
-    - globals
-    - secrets
-
-bathMotionTrigger:
-  module: motionTrigger
-  class: MotionTrigger
-  app_switch: input_boolean.bath_motion_trigger
-  sensor: binary_sensor.presence_bathroom
-  entity_on: light.lower_bathroom_yeelight
-  sensor_type: deconz
-  after_sundown: True
-  #turn_off_constraint_entities_on: binary_sensor.0x00158d0001fa464b_occupancy
-  delay: 300
-  global_dependencies:
-    - globals
-    - secrets
-
 bedroomMotionTrigger:
   module: motionTrigger
   class: MotionTrigger
