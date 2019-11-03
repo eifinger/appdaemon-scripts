@@ -8,15 +8,6 @@ comingHomeYeelight:
   actor: switch.large_lamp
   after_sundown: True
 
-#Turn Receiver on and set to Sat/Cbl when the first person is coming home and the sun is down
-comingHomeAlexa:
-  module: comingHome
-  class: ComingHome
-  app_switch: input_boolean.coming_home_alexa
-  sensor: binary_sensor.contact_door
-  isHome: input_boolean.is_home
-  actor: script.receiver_set_source_bluetooth
-
 comingHomeSetVolume:
   module: comingHome
   class: ComingHome
