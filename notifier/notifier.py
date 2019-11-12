@@ -17,6 +17,9 @@ import globals
 #
 # Release Notes
 #
+# Version 1.4:
+#   Use type announce
+#
 # Version 1.3:
 #   Use Version 1.2.1 of alexa_media_player
 #
@@ -62,19 +65,13 @@ class Notifier(hass.Hass):
                     self.run_in(self.notify_callback, __WAIT_TIME__, message=message)
                 )
             else:
-                self.last_alexa_notification_time = datetime.datetime.now()
-                self.call_service(
-                    __NOTIFY__ + self.alexa_tts,
-                    data={"type": "tts"},
-                    target=self.alexa_media_player,
-                    message=message,
-                )
+                self.run_in(self.notify_callback, 0, message=message)
 
     def notify_callback(self, kwargs):
         self.last_alexa_notification_time = datetime.datetime.now()
         self.call_service(
             __NOTIFY__ + self.alexa_tts,
-            data={"type": "tts"},
+            data={"type": "announce", "method": "speak"},
             target=self.alexa_media_player,
             message=kwargs["message"],
         )
