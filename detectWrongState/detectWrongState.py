@@ -128,6 +128,7 @@ class DetectWrongState(hass.Hass):
         off_states = ["off", "unavailable", "paused", "standby"]
         for entity in self.entities_off:
             state = self.get_state(entity)
+            self.log(f"entity: {entity}")
             if state not in off_states:
                 if self.is_entity_reed_contact(entity):
                     message = self.message_reed
