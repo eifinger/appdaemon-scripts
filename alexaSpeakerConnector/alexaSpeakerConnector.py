@@ -14,6 +14,9 @@ import globals
 #
 # Release Notes
 #
+# Version 1.2.0:
+#   Introduce INITIAL_VOLUME
+#
 # Version 1.1.1:
 #   Fix WAITING_TIME
 #
@@ -24,6 +27,7 @@ import globals
 #   Initial Version
 
 WAITING_TIME = 10
+INITIAL_VOLUME = 0.3
 
 
 class AlexaSpeakerConnector(hass.Hass):
@@ -56,6 +60,11 @@ class AlexaSpeakerConnector(hass.Hass):
                         "media_player/select_source",
                         entity_id=self.receiver,
                         source=self.receiver_source,
+                    )
+                    self.call_service(
+                        "media_player/volume_set",
+                        entity_id=self.receiver,
+                        volume_level=INITIAL_VOLUME,
                     )
                     self.timer_handle_list.append(
                         self.run_in(self.run_in_callback, WAITING_TIME)
