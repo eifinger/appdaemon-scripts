@@ -27,7 +27,7 @@ import globals
 #   Initial Version
 
 WAITING_TIME = 10
-INITIAL_VOLUME = 0.3
+INITIAL_VOLUME = 30
 
 
 class AlexaSpeakerConnector(hass.Hass):
@@ -60,6 +60,9 @@ class AlexaSpeakerConnector(hass.Hass):
                         "media_player/select_source",
                         entity_id=self.receiver,
                         source=self.receiver_source,
+                    )
+                    self.log(
+                        f"Setting volume of {self.receiver} to: {INITIAL_VOLUME}"
                     )
                     self.call_service(
                         "media_player/volume_set",
