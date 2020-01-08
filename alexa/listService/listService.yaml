@@ -53,4 +53,5 @@ listService:
     terassentuer arbeitszimmer gekippt: binary_sensor.contact_studyroom_door_tilted
     terassentuer schlafzimmer gekippt: binary_sensor.contact_bedroom_door_tilted
     terrassentuer gekippt: binary_sensor.contact_terrace_door_tilted
+    badfenster oben gekippt: binary_sensor.contact_upper_bathroom_window_tilted
 

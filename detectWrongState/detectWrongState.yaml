@@ -12,7 +12,7 @@ detectWrongStateWhenLeaving:
   light.treppe_oben,light.stairs_lower_yeelight,switch.ventilator,light.livingroom_yeelight,\
   switch.tv,switch.weihnachtslichter,switch.bedroom_receiver,light.lower_bathroom_yeelight,\
   media_player.kevin_s_echo_dot_unten,media_player.kevins_echo,media_player.kevins_echo_dot,\
-  media_player.kevins_echo_dot_oben"
+  media_player.kevins_echo_dot_oben,binary_sensor.contact_upper_bathroom_window_tilted"
   trigger_entity: input_boolean.is_home
   trigger_state: "off"
   message: "Du hast {} angelassen. Ich habe es für dich ausgemacht."
@@ -39,7 +39,8 @@ detectWindowsOpenWhenGoingToBed:
   binary_sensor.contact_bedroom_door_tilted,binary_sensor.contact_door,binary_sensor.contact_guest_window,\
   binary_sensor.contact_kitchen_window,binary_sensor.contact_studyroom_door,\
   binary_sensor.contact_studyroom_door_tilted,binary_sensor.contact_terrace_door,\
-  binary_sensor.contact_terrace_door_tilted,binary_sensor.contact_upper_bathroom_window"
+  binary_sensor.contact_terrace_door_tilted,binary_sensor.contact_upper_bathroom_window,\
+  binary_sensor.contact_upper_bathroom_window_tilted"
   after_sundown: True
   trigger_entity: input_boolean.sleepmode
   trigger_state: "on"
