@@ -9,7 +9,7 @@ detectWrongStateWhenLeaving:
   binary_sensor.contact_terrace_door_tilted,binary_sensor.contact_upper_bathroom_window,\
   media_player.denon_avr_x1300w,switch.large_lamp,switch.small_lamp,switch.snowboard,\
   light.bedroom_yeelight,light.bar_table,light.lobby_yeelight,light.reading_lamp_yeelight,\
-  light.treppe_oben,light.stairs_lower_yeelight,switch.ventilator,light.livingroom_yeelight,\
+  light.upper_stairs_yeelight,light.stairs_lower_yeelight,switch.ventilator,light.livingroom_yeelight,\
   switch.tv,switch.weihnachtslichter,switch.bedroom_receiver,light.lower_bathroom_yeelight,\
   media_player.kevin_s_echo_dot_unten,media_player.kevins_echo,media_player.kevins_echo_dot,\
   media_player.kevins_echo_dot_oben,binary_sensor.contact_upper_bathroom_window_tilted"
@@ -66,7 +66,7 @@ detectDevicesOnWhenGoingToBed:
   app_switch: input_boolean.detect_devices_on_when_going_to_bed
   entities_off: "media_player.denon_avr_x1300w,switch.large_lamp,\
   switch.small_lamp,switch.snowboard,light.bedroom_yeelight,light.bar_table,light.lobby_yeelight,\
-  light.reading_lamp_yeelight,light.treppe_oben,light.stairs_lower_yeelight,switch.ventilator,light.livingroom_yeelight,\
+  light.reading_lamp_yeelight,light.upper_stairs_yeelight,light.stairs_lower_yeelight,switch.ventilator,light.livingroom_yeelight,\
   switch.tv,switch.weihnachtslichter,switch.bedroom_receiver,switch.tv,light.bar_table,light.lower_bathroom_yeelight,\
   switch.markise"
   trigger_entity: input_boolean.sleepmode
