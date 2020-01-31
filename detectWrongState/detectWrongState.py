@@ -142,7 +142,7 @@ class DetectWrongState(hass.Hass):
             state = self.get_state(entity)
             if state == "off":
                 if self.is_entity_reed_contact(entity):
-                    message = self.message_reed_on
+                    message = self.message_reed_off
                 else:
                     self.turn_on(entity)
                     message = self.message_on
