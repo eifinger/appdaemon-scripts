@@ -1,2 +1,2 @@
-wheels
+wheel==0.34.2
 voluptuous==0.11.5
