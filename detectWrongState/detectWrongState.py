@@ -129,7 +129,7 @@ class DetectWrongState(hass.Hass):
         for entity in self.entities_off:
             state = self.get_state(entity)
             self.log(f"entity: {entity}")
-            if state not in off_states:
+            if state is not None and state not in off_states:
                 if self.is_entity_reed_contact(entity):
                     message = self.message_reed
                 else:
