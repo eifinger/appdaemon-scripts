@@ -2,7 +2,7 @@ detectWrongStateWhenLeaving:
   module: detectWrongState
   class: DetectWrongState
   app_switch: input_boolean.detect_wrong_state_when_leaving
-  entities_off: "binary_sensor.contact_bathroom_window,binary_sensor.contact_bedroom_door,\
+  entities_off: "binary_sensor.contact_bedroom_door,\
   binary_sensor.contact_bedroom_door_tilted,binary_sensor.contact_door,binary_sensor.contact_guest_window,\
   binary_sensor.contact_kitchen_window,binary_sensor.contact_studyroom_door,\
   binary_sensor.contact_studyroom_door_tilted,binary_sensor.contact_terrace_door,\
