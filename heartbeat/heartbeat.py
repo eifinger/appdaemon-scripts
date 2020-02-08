@@ -10,6 +10,9 @@ import requests
 #
 # Release Notes
 #
+# Version 1.1:
+#   Set start to None run_minutely will run after 1 minute
+#
 # Version 1.0:
 #   Initial Version
 
@@ -23,7 +26,7 @@ class Heartbeat(hass.Hass):
         self.heartbeat(None)
 
         self.timer_handle_list.append(
-            self.run_minutely(self.heartbeat, start=self.time())
+            self.run_minutely(self.heartbeat, start=None)
         )
 
     def heartbeat(self, kwargs):

@@ -1,12 +1,12 @@
-appWatcher:
-  module: appWatcher
-  class: AppWatcher
-  notify_name: kevin
-  include_log_message_in_notification: True
-  notify_message: "Es ist ein Fehler aufgetreten in App: {}"
-  #notify_message: "An Error occurred in App: {}"
-  dependencies:
-    - Notifier
-  global_dependencies:
-    - globals
-    - secrets
+# appWatcher:
+#   module: appWatcher
+#   class: AppWatcher
+#   notify_name: kevin
+#   include_log_message_in_notification: True
+#   notify_message: "Es ist ein Fehler aufgetreten in App: {}"
+#   #notify_message: "An Error occurred in App: {}"
+#   dependencies:
+#     - Notifier
+#   global_dependencies:
+#     - globals
+#     - secrets
