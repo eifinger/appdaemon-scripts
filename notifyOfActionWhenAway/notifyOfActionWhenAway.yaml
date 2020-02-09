@@ -2,13 +2,14 @@ notifyOfActionWhenAway:
   module: notifyOfActionWhenAway
   class: NotifyOfActionWhenAway
   app_switch: input_boolean.notify_of_action_when_away
-  sensor: "binary_sensor.contact_bathroom_window,binary_sensor.contact_bedroom_door,\
+  sensor: "binary_sensor.contact_bathroom_window_tilted,binary_sensor.contact_bedroom_door,\
   binary_sensor.contact_bedroom_door_tilted,binary_sensor.contact_door,binary_sensor.contact_guest_window,\
   binary_sensor.contact_kitchen_window,binary_sensor.contact_studyroom_door,\
   binary_sensor.contact_studyroom_door_tilted,binary_sensor.contact_terrace_door,\
   binary_sensor.contact_terrace_door_tilted,binary_sensor.contact_upper_bathroom_window,\
   binary_sensor.presence_stairs,binary_sensor.presence_bathroom,binary_sensor.presence_lobby,\
-  binary_sensor.presence_bedroom,binary_sensor.presence_kitchen,binary_sensor.presence_terrace"
+  binary_sensor.presence_bedroom,binary_sensor.presence_kitchen,binary_sensor.presence_terrace,\
+  binary_sensor.contact_badfenster,binary_sensor.contact_upper_bathroom_window_tilted"
   isHome: input_boolean.is_home
   notify_name: group_notifications
   isHome_delay: 20
