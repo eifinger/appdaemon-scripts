@@ -3,7 +3,7 @@ Notifier:
   class: Notifier
   app_switch_alexa: input_boolean.notifier_alexa
   alexa_tts: alexa_media
-  alexa_media_player: media_player.kevins_echo_dot_oben
+  alexa_media_player: media_player.kevins_echo_dot_oben,media_player.kevin_s_echo_dot_unten,media_player.kevins_echo,media_player.kevins_echo_dot
   user_location_sensors:
     kevin: sensor.location_user_one
     sina: sensor.location_user_two

@@ -17,6 +17,9 @@ import globals
 #
 # Release Notes
 #
+# Version 1.5:
+#   Allow multiple alexa_media_player
+#
 # Version 1.4:
 #   Use type announce
 #
@@ -45,7 +48,7 @@ class Notifier(hass.Hass):
         self.timer_handle_list = []
 
         self.alexa_tts = globals.get_arg(self.args, "alexa_tts")
-        self.alexa_media_player = globals.get_arg(self.args, "alexa_media_player")
+        self.alexa_media_player = globals.get_arg_list(self.args, "alexa_media_player")
         self.app_switch_alexa = globals.get_arg(self.args, "app_switch_alexa")
 
         self.last_alexa_notification_time = None
