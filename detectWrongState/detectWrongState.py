@@ -155,6 +155,7 @@ class DetectWrongState(hass.Hass):
             attributes = full_state["attributes"]
             self.log("full_state: {}".format(full_state), level="DEBUG")
             if attributes.get("device_class") in reed_types:
+                self.log(f"device_class: {attributes.get("device_class")}")
                 return True
         return False
 
