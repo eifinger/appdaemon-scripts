@@ -26,6 +26,7 @@ detectWrongStateWhenLeaving:
   #message_reed_off: "You left {} closed Dummy."
   notify_name: group_notifications
   use_alexa: False
+  log_level: DEBUG
   dependencies: 
     - Notifier
   global_dependencies:
@@ -55,6 +56,7 @@ detectWindowsOpenWhenGoingToBed:
   #message_reed_off: "You left {} closed Dummy."
   notify_name: group_notifications
   use_alexa: True
+  log_level: DEBUG
   dependencies: 
     - Notifier
   global_dependencies:
@@ -72,6 +74,7 @@ detectDevicesOnWhenGoingToBed:
   switch.markise"
   trigger_entity: input_boolean.sleepmode
   trigger_state: "on"
+  log_level: DEBUG
   dependencies:
     - Notifier
   global_dependencies:
