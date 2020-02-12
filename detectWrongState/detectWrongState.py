@@ -155,13 +155,12 @@ class DetectWrongState(hass.Hass):
             attributes = full_state["attributes"]
             self.log("full_state: {}".format(full_state), level="DEBUG")
             if attributes.get("device_class") in reed_types:
-                self.log(f"device_class: {attributes.get('device_class')}")
                 return True
         return False
 
     def send_notification(self, message, entity):
         if message is not None:
-            formatted_message = self.message.format(
+            formatted_message = message.format(
                     self.friendly_name(entity)
                 )
             self.log(
