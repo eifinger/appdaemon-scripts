@@ -45,7 +45,10 @@ class TurnOffBarAfterRestart(hass.Hass):
         """This is needed because the turn_on command can result in a HTTP 503 when homeassistant is restarting"""
         try:
             self.call_service(
-                "light/turn_on", entity_id=self.light, rgb_color=[0, 255, 0]
+                "light/turn_on",
+                entity_id=self.light,
+                rgb_color=[0, 255, 0],
+                white_value=0
             )
             self.log("Turning {} green".format(self.friendly_name(self.light)))
             self.timer_handle_list.append(self.run_in(self.turn_off_callback, 5))
