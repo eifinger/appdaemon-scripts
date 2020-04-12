@@ -8,7 +8,7 @@ notifyOfActionWhenAway:
   binary_sensor.contact_studyroom_door_tilted,binary_sensor.contact_terrace_door,\
   binary_sensor.contact_terrace_door_tilted,binary_sensor.contact_upper_bathroom_window,\
   binary_sensor.presence_stairs,binary_sensor.presence_bathroom,binary_sensor.presence_lobby,\
-  binary_sensor.presence_bedroom,binary_sensor.presence_kitchen,binary_sensor.presence_terrace,\
+  binary_sensor.presence_bedroom,binary_sensor.presence_kitchen,binary_sensor.presence_upper_stairs,\
   binary_sensor.contact_badfenster,binary_sensor.contact_upper_bathroom_window_tilted"
   isHome: input_boolean.is_home
   notify_name: group_notifications
