@@ -71,7 +71,7 @@ detectDevicesOnWhenGoingToBed:
   switch.small_lamp,switch.snowboard,light.bedroom_yeelight,light.bar_table,light.lobby_yeelight,\
   light.reading_lamp_yeelight,light.upper_stairs_yeelight,light.stairs_lower_yeelight,switch.ventilator,light.livingroom_yeelight,\
   switch.tv,switch.weihnachtslichter,switch.bedroom_receiver,switch.tv,light.bar_table,light.lower_bathroom_yeelight,\
-  switch.markise"
+  switch.markise, switch.coffee_machine_plug_relay"
   trigger_entity: input_boolean.sleepmode
   trigger_state: "on"
   log_level: DEBUG
