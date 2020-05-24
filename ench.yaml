@@ -1,0 +1,13 @@
+---
+ench:
+  module: ench
+  class: EnCh
+  notify: "notify.kevin"
+  show_friendly_name: False
+  battery:
+    interval_min: 180
+    min_level: 20
+  unavailable:
+    interval_min: 60
+  stale:
+    max_stale_min: 15
