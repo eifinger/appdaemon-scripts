@@ -9,5 +9,3 @@ ench:
     min_level: 20
   unavailable:
     interval_min: 60
-  stale:
-    max_stale_min: 15
