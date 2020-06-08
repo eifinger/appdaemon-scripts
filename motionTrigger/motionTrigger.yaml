@@ -11,6 +11,18 @@ bedroomMotionTrigger:
     - globals
     - secrets
 
+studyroomMotionTrigger:
+  module: motionTrigger
+  class: MotionTrigger
+  app_switch: input_boolean.studyroom_motion_trigger
+  sensor: binary_sensor.presence_studyroom
+  entity_on: light.philips_miio_light_bulb
+  sensor_type: deconz
+  after_sundown: True
+  global_dependencies:
+    - globals
+    - secrets
+
 
 
 
