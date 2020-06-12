@@ -5,8 +5,8 @@ ench:
   notify: "notify.kevin"
   show_friendly_name: False
   exclude:
-    - devicetracker.venue8
-    - devicetracker.kevin
+    - device_tracker.venue8
+    - device_tracker.kevin
   battery:
     interval_min: 180
     min_level: 20
