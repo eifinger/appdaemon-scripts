@@ -17,6 +17,9 @@ from typing import Optional
 #
 # Release Notes
 #
+# Version 1.7:
+#   Catch NoneType when Homeassistant is still starting
+#
 # Version 1.6:
 #   Introduce methods to deal with minor differences between google and here
 #
@@ -78,11 +81,14 @@ class TravelTimeNotifier(hass.Hass):
         duration_minutes = self.parse_duration_minutes(new)
         self.log("duration_minutes: {}".format(duration_minutes), level="DEBUG")
 
-        if duration_in_traffic_minutes <= duration_minutes * self.acceptable_range:
-            if self.get_state(self.notify_input_boolean) == "on":
-                destination_address = self.parse_destination_address(new)
-                self.notify_user(destination_address)
-                self.turn_off(self.notify_input_boolean)
+        if duration_minutes is None or duration_in_traffic_minutes is None:
+            self.log("Sensor is None. Homeassistant might not be fully started.")
+        else:
+            if duration_in_traffic_minutes <= duration_minutes * self.acceptable_range:
+                if self.get_state(self.notify_input_boolean) == "on":
+                    destination_address = self.parse_destination_address(new)
+                    self.notify_user(destination_address)
+                    self.turn_off(self.notify_input_boolean)
 
     def notify_user(self, address: str) -> None:
         """Notify the user it is time to leave for the given address."""
