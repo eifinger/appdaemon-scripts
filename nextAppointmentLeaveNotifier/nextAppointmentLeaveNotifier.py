@@ -12,9 +12,12 @@ import globals
 # notify_name: Who to notify. example: group_notifications
 # destination_name_sensor: Sensor which holds the Destination name to use in notification. example: sensor.cal_next_appointment_location
 # travel_time_sensor: sensor which holds the travel time. example: sensor.travel_time_next_appointment_location
-# message_<LANG>: localized message to use in notification
+# message: message to use in notification
 #
 # Release Notes
+#
+# Version 1.5:
+#   Catch None when Home Assistant is still starting
 #
 # Version 1.4.2:
 #   Fix notification for location_name "None"
@@ -61,18 +64,7 @@ class NextAppointmentLeaveNotifier(hass.Hass):
 
         # Used to check of user got already notified for this event
         self.location_of_last_notified_event = ""
-        destination_name = self.get_state(self.destination_name_sensor)
-        self.log(f"destination_name_sensor: {destination_name}")
-        if destination_name != "unknown" and destination_name != "None":
-            notification_time = datetime.datetime.strptime(
-                self.get_state(self.sensor), "%Y-%m-%d %H:%M"
-            )
-            if self.get_state(self.travel_time_sensor) != "unknown":
-                try:
-                    self.timer_handle = self.run_at(self.notify_user, notification_time)
-                    self.log(f"Will notify at {notification_time}")
-                except ValueError:
-                    self.log("Notification time is in the past")
+        self.set_timer_handle()        
 
         self.listen_state_handle_list.append(
             self.listen_state(self.state_change, self.sensor)
@@ -85,22 +77,25 @@ class NextAppointmentLeaveNotifier(hass.Hass):
         except AttributeError:
             # Timer was not set
             pass
-        # Parse time string from sensor. For parsing information look at http://strftime.org/
+        self.set_timer_handle()
+
+    def set_timer_handle(self):
         destination_name = self.get_state(self.destination_name_sensor)
         self.log(f"destination_name_sensor: {destination_name}")
-        if destination_name != "unknown" and destination_name != "None":
-            notification_time = datetime.datetime.strptime(
-                self.get_state(self.sensor), "%Y-%m-%d %H:%M"
-            )
-            if self.get_state(self.travel_time_sensor) != "unknown":
-                try:
-                    self.timer_handle = self.run_at(self.notify_user, notification_time)
-                    self.log(f"Will notify at {notification_time}")
-                except ValueError:
-                    self.log("Notification time is in the past")
-                    self.timer_handle = self.run_at(
-                        self.notify_user, datetime.datetime.now()
-                    )
+        if self.get_state(self.sensor) != None:
+            if destination_name != "unknown" and destination_name != "None":
+                notification_time = datetime.datetime.strptime(
+                    self.get_state(self.sensor), "%Y-%m-%d %H:%M"
+                )
+                if self.get_state(self.travel_time_sensor) != "unknown":
+                    try:
+                        self.timer_handle = self.run_at(self.notify_user, notification_time)
+                        self.log(f"Will notify at {notification_time}")
+                    except ValueError:
+                        self.log("Notification time is in the past")
+                        self.timer_handle = self.run_at(
+                            self.notify_user, datetime.datetime.now()
+                        )
 
     def notify_user(self, *kwargs):
         if self.get_state(self.notify_input_boolean) == "on":

@@ -22,6 +22,9 @@ import math
 #
 # Release Notes
 #
+# Version 1.4:
+#   Catch unknown
+#
 # Version 1.3.1:
 #   Use consistent message variable
 #
