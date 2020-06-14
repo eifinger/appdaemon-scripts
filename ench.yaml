@@ -5,7 +5,7 @@ ench:
   notify: "notify.kevin"
   show_friendly_name: False
   exclude:
-    - device_tracker.venue8*
+    - device_tracker.venue_8*
     - device_tracker.kevin
     - device_tracker.sonoff_large_ventilator_7998
     - device_tracker.sonoff_ventilator_8133
