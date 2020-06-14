@@ -105,7 +105,10 @@ class AlarmClock(hass.Hass):
         self.log("cached_fade_in_time: {}".format(self.cached_fade_in_time))
         offset = self.cached_fade_in_time.split(".", 1)[0]
 
-        if self.cached_alarm_time is not None and self.cached_alarm_time != "":
+        if (self.cached_alarm_time is not None 
+            and self.cached_alarm_time != "" 
+            and self.cached_alarm_time != "unknown"
+        ):
             run_datetime = datetime.datetime.strptime(
                 self.cached_alarm_time, "%Y-%m-%d %H:%M:%S"
             )
