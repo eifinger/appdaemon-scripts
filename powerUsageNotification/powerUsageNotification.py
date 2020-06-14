@@ -23,6 +23,9 @@ import globals
 #
 # Release Notes
 #
+# Version 1.5:
+#   Catch unknown
+#
 # Version 1.4:
 #   Added notify_start, notify_start_use_alexa, notify_end, notify_end_use_alexa, input_boolean
 #
@@ -95,6 +98,7 @@ class PowerUsageNotification(hass.Hass):
             if (
                 new != None
                 and new != ""
+                and new != "unknown"
                 and not self.triggered
                 and float(new) > self.threshold
             ):
