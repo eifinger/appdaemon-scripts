@@ -7,6 +7,25 @@ ench:
   exclude:
     - device_tracker.venue8
     - device_tracker.kevin
+    - device_tracker.sonoff_large_ventilator_7998
+    - device_tracker.sonoff_ventilator_8133
+    - device_tracker.android*
+    - device_tracker.astrids_mbp
+    - device_tracker.franzi_s_iphone
+    - device_tracker.galaxy*
+    - device_tracker.iphone*
+    - device_tracer.oneplus*
+    - device_tracker.unifi*
+    - input_text.avanza*
+    - light.group_0
+    - media_player.kevin_s*
+    - sensor.192_168_1_39*
+    - sensor.192_168_1_48*
+    - sensor.large_ventilator*
+    - sensor.this_device*
+    - sensor.travel_time_next*
+    - switch.*_repeat_switch*
+    - switch.*_shuffle_switch*
   battery:
     interval_min: 180
     min_level: 20
