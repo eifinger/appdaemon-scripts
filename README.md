@@ -497,29 +497,9 @@ powerUsageNotification_Dishwasher:
   #message: "{} just started."
   message_off: "{} ist fertig."
   #message_off: "{} just finished."
-  global_dependencies:
-    - globals
 ```
 
 ![dishWasherNotify](images/dishWasherNotify.PNG)
-
-### setMediaPlayerSource
-
-App which sets media player source on based on a entity state.
-I currently use this to turn on multi room audio when getting up.
-
-```yaml
-setMultiRoomAudioWhenSleepModeTurnsOff:
-  module: setMediaPlayerSource
-  class: SetMediaPlayerSource
-  app_switch: input_boolean.set_multiroom_audio_when_sleepmode_turns_off
-  trigger_entity: input_boolean.sleepmode
-  trigger_state: "off"
-  media_player: media_player.spotify
-  source: Wohnung
-  global_dependencies:
-    - globals
-```
 
 ### setThermostat
 
@@ -540,10 +520,8 @@ warm_bath_before_wakeup:
   #message: "I have set {} to {}"
   notify_name: group_notifications
   use_alexa: False
-  dependencies: 
+  dependencies:
     - Notifier
-  global_dependencies:
-    - globals
 ```
 
 ### setThermostatOnStateChange
