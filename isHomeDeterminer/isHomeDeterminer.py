@@ -31,7 +31,7 @@ class IsHomeDeterminer(hass.Hass):
         self.app_switch = self.args["app_switch"]
         self.ishome = self.args["ishome"]
         self.input_booleans = self.args["input_booleans"].split(",")
-        self.message = self.args["message"].split(",")
+        self.message = self.args["message"]
 
         if self.get_state(self.app_switch) == "on":
             for input_boolean in self.input_booleans:

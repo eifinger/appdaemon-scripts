@@ -35,12 +35,12 @@ class HomeArrivalNotifier(hass.Hass):
     def initialize(self):
         self.listen_state_handle_list = []
 
-        self.app_switch = self.args[self.args, "app_switch"]
-        self.zone_name = self.args[self.args, "zone_name"]
-        self.input_boolean = self.args[self.args, "input_boolean"]
-        self.notify_name = self.args[self.args, "notify_name"]
-        self.user_name = self.args[self.args, "user_name"]
-        self.message = self.args[self.args, "message"]
+        self.app_switch = self.args["app_switch"]
+        self.zone_name = self.args["zone_name"]
+        self.input_boolean = self.args["input_boolean"]
+        self.notify_name = self.args["notify_name"]
+        self.user_name = self.args["user_name"]
+        self.message = self.args["message"]
 
         self.notifier = self.get_app("Notifier")
 
