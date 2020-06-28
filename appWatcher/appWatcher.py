@@ -37,8 +37,8 @@ class AppWatcher(hass.Hass):
         if level == "WARNING" or level == "ERROR" or level == "CRITICAL":
             self.log("Correct level: {}".format(level))
             self.log("name: {}".format(app_name))
-            if app_name == "Appdaemon":
-                self.log("Is Appdaemon message")
+            if app_name == "AppDaemon":
+                self.log("Is AppDaemon message")
                 # check if this is a warning for an app
                 try:
                     app_message_start_index = message.index(":", 11) + 2
