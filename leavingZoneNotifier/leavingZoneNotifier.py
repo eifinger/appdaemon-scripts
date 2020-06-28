@@ -27,6 +27,9 @@ import globals
 #
 # Release Notes
 #
+# Version 1.10:
+#   Catch old state might be None during startup
+#
 # Version 1.9:
 #   PEP8 style and log message when updating travel_time_sensor
 #
@@ -99,23 +102,24 @@ class LeavingZoneNotifier(hass.Hass):
         )
 
     def zone_state_change(self, entity, attributes, old, new, kwargs):
+        """Check if user entered or left a zone."""
         if self.get_state(self.app_switch) == "on":
             last_changed = self.convert_utc(new["last_changed"])
+            if old is not None:
+                old_state = old["state"]
             self.log(
                 "Zone of {} changed from {} to {}.".format(
-                    self.friendly_name(entity), old["state"], new["state"]
+                    self.friendly_name(entity), old_state, new["state"]
                 ),
-                level="DEBUG",
             )
-            # self.log("Attributes: {}".format(new))
             if (
                 new["state"] == self.zone
-                and old["state"] != self.zone
+                and old_state != self.zone
                 and self.false_positive is False
             ):
                 self.log("Setting user_entered_zone to {}".format(last_changed))
                 self.user_entered_zone = last_changed
-            if old["state"] == self.zone and new["state"] != self.zone:
+            if old_state == self.zone and new["state"] != self.zone:
                 if self.user_entered_zone is None or (
                     last_changed - self.user_entered_zone
                     >= datetime.timedelta(seconds=self.lingering_time)
@@ -123,7 +127,7 @@ class LeavingZoneNotifier(hass.Hass):
                     self.log(
                         "Zone of {} changed from {} to {}. Wait {} seconds until notification.".format(
                             self.friendly_name(entity),
-                            old["state"],
+                            old_state,
                             new["state"],
                             self.delay,
                         )
