@@ -8,6 +8,9 @@ import globals
 #
 # Release Notes
 #
+# Version 2.0:
+#   Updates for Appdaemon Version 4.0.3
+#
 # Version 1.0:
 #   Initial Version
 
@@ -27,9 +30,10 @@ class AppWatcher(hass.Hass):
         # App dependencies
         self.notifier = self.get_app("Notifier")
 
-        self.listen_log(self.log_message_callback)
+        self.handle = self.listen_log(self.log_message_callback)
 
     def log_message_callback(self, name, ts, level, message):
+        self.log("name: {}, ts: {}, level: {}, messsage: {}".format(name, ts, level, message))
         if level == "WARNING" or level == "ERROR" or level == "CRITICAL":
             self.log("Correct level: {}".format(level))
             self.log("name: {}".format(name))
@@ -62,4 +66,4 @@ class AppWatcher(hass.Hass):
                             )
 
     def terminate(self):
-        self.cancel_listen_log()
+        self.cancel_listen_log(self.handle)
