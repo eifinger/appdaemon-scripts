@@ -45,7 +45,6 @@ Every App has an input_boolean inside HA which turns it on/off. This is useful i
 *   [eventMonitor](#eventmonitor)
 *   [faceRecognitionBot](#facerecognitionbot)
 *   [google_travel_time](#google_travel_time)
-*   [headingToZoneNotifier](#headingtozonenotifier)
 *   [heartbeat](#heartbeat)
 *   [homeArrivalNotifier](#homearrivalnotifier)
 *   [isHomeDeterminer](#ishomedeterminer)
@@ -250,10 +249,6 @@ googleTravelTime_home_from_work:
 ```
 
 ![googleTravelTimes](images/googleTravelTimes.PNG)
-
-### headingToZoneNotifier
-
-Currently not used
 
 ### heartbeat
 
@@ -476,7 +471,7 @@ plantWateringNotifier:
   rain_precip_intensity_sensor: sensor.dark_sky_precip_intensity
   precip_type_sensor: sensor.dark_sky_precip
   notify_name: group_notifications
-  user_id: secret_telegram_user_id
+  user_id: secret! telegram_user_id
   reminder_acknowledged_entity: input_boolean.persistence_plantwateringnotifier_reminder_acknowledged
   message: "Die Regenwahrscheinlichkeit beträgt heute nur {}. Vergiss nicht die Pflanzen zu gießen!"
   #message: "The Rain Propability is only {}. Don't forget to water the plants!"
