@@ -24,14 +24,16 @@ ench:
     - sensor.ventilator*
     - switch.ventilator
     - switch.large_ventilator
-    - sensor.this_device*
     - sensor.travel_time_next*
-    - switch.*_repeat_switch*
-    - switch.*_shuffle_switch*
     - sensor.glances*_temp
+    # Alexa Media Player
     - sensor.*next_alarm
     - sensor.*next_reminder
     - sensor.*next_timer
+    - sensor.this_device*
+    - switch.*_repeat_switch*
+    - switch.*_shuffle_switch*
+    - switch.*do_not_disturb_switch
   battery:
     interval_min: 180
     min_level: 20
