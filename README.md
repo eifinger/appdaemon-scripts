@@ -503,31 +503,6 @@ powerUsageNotification_Dishwasher:
 
 ![dishWasherNotify](images/dishWasherNotify.PNG)
 
-### roomBasedLightControl
-
-BETA
-Turn the light on based on which room my smartphone is currently being determined by [find3](https://github.com/schollz/find3)
-
-```yaml
-roomBasedLightControl:
-  module: roomBasedLightControl
-  class: RoomBasedLightControl
-  room_sensor: sensor.mqtt_room_user_one
-  entity: input_boolean.room_based_light
-  mappings:
-    livingroom:
-      room: livingroom
-      entity: switch.large_lamp
-    kitchen:
-      room: kitchen
-      entity: switch.large_lamp
-    bedroom:
-      room: bedroom
-      entity: light.bedroom_yeelight
-  global_dependencies:
-    - globals
-```
-
 ### sensorWatcher
 
 Notify me if sensors are offline. This can be the case when batteries are empty.
