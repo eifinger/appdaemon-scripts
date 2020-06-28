@@ -1,6 +1,5 @@
 import appdaemon.plugins.hass.hassapi as hass
 import datetime
-import globals
 
 #
 # App which notifies the user to start to the next appointment
@@ -46,15 +45,13 @@ class NextAppointmentLeaveNotifier(hass.Hass):
 
         self.listen_state_handle_list = []
 
-        self.sensor = globals.get_arg(self.args, "sensor")
-        self.notify_input_boolean = globals.get_arg(self.args, "notify_input_boolean")
-        self.notify_name = globals.get_arg(self.args, "notify_name")
-        self.destination_name_sensor = globals.get_arg(
-            self.args, "destination_name_sensor"
-        )
-        self.travel_time_sensor = globals.get_arg(self.args, "travel_time_sensor")
-        self.message = globals.get_arg(self.args, "message")
-        self.message_google_link = globals.get_arg(self.args, "message_google_link")
+        self.sensor = self.args["sensor"]
+        self.notify_input_boolean = self.args["notify_input_boolean"]
+        self.notify_name = self.args["notify_name"]
+        self.destination_name_sensor = self.args["destination_name_sensor"]
+        self.travel_time_sensor = self.args["travel_time_sensor"]
+        self.message = self.args["message"]
+        self.message_google_link = self.args["message_google_link"]
 
         self.timer_handle = None
 
@@ -64,7 +61,7 @@ class NextAppointmentLeaveNotifier(hass.Hass):
 
         # Used to check of user got already notified for this event
         self.location_of_last_notified_event = ""
-        self.set_timer_handle()        
+        self.set_timer_handle()
 
         self.listen_state_handle_list.append(
             self.listen_state(self.state_change, self.sensor)
@@ -89,7 +86,9 @@ class NextAppointmentLeaveNotifier(hass.Hass):
                 )
                 if self.get_state(self.travel_time_sensor) != "unknown":
                     try:
-                        self.timer_handle = self.run_at(self.notify_user, notification_time)
+                        self.timer_handle = self.run_at(
+                            self.notify_user, notification_time
+                        )
                         self.log(f"Will notify at {notification_time}")
                     except ValueError:
                         self.log("Notification time is in the past")

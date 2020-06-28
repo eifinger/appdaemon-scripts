@@ -1,5 +1,4 @@
 import appdaemon.plugins.hass.hassapi as hass
-import globals
 import datetime
 
 #
@@ -50,20 +49,16 @@ class PlantWateringNotifier(hass.Hass):
         self.listen_event_handle_list = []
         self.listen_state_handle_list = []
 
-        self.app_switch = globals.get_arg(self.args, "app_switch")
-        self.rain_precip_sensor = globals.get_arg(self.args, "rain_precip_sensor")
-        self.rain_precip_intensity_sensor = globals.get_arg(
-            self.args, "rain_precip_intensity_sensor"
-        )
-        self.precip_type_sensor = globals.get_arg(self.args, "precip_type_sensor")
-        self.notify_name = globals.get_arg(self.args, "notify_name")
-        self.user_id = globals.get_arg(self.args, "user_id")
-        self.reminder_acknowledged_entity = globals.get_arg(
-            self.args, "reminder_acknowledged_entity"
-        )
-        self.message = globals.get_arg(self.args, "message")
-        self.message_not_needed = globals.get_arg(self.args, "message_not_needed")
-        self.message_evening = globals.get_arg(self.args, "message_evening")
+        self.app_switch = self.args["app_switch"]
+        self.rain_precip_sensor = self.args["rain_precip_sensor"]
+        self.rain_precip_intensity_sensor = self.args["rain_precip_intensity_sensor"]
+        self.precip_type_sensor = self.args["precip_type_sensor"]
+        self.notify_name = self.args["notify_name"]
+        self.user_id = self.args["user_id"]
+        self.reminder_acknowledged_entity = self.args["reminder_acknowledged_entity"]
+        self.message = self.args["message"]
+        self.message_not_needed = self.args["message_not_needed"]
+        self.message_evening = self.args["message_evening"]
 
         self.intensity_minimum = 2  # mm/h
         self.propability_minimum = 90  # %

@@ -1,5 +1,4 @@
 import appdaemon.plugins.hass.hassapi as hass
-import globals
 import datetime
 
 #
@@ -48,25 +47,13 @@ class ComingHome(hass.Hass):
     def initialize(self):
         self.listen_state_handle_list = []
 
-        self.app_switch = globals.get_arg(self.args, "app_switch")
-        self.sensor = globals.get_arg(self.args, "sensor")
-        self.isHome = globals.get_arg(self.args, "isHome")
-        try:
-            self.actor = globals.get_arg(self.args, "actor")
-        except KeyError:
-            self.actor = None
-        try:
-            self.service = globals.get_arg(self.args, "service")
-        except KeyError:
-            self.service = None
-        try:
-            self.service_data = globals.get_arg(self.args, "service_data")
-        except KeyError:
-            self.service_data = None
-        try:
-            self.after_sundown = globals.get_arg(self.args, "after_sundown")
-        except KeyError:
-            self.after_sundown = None
+        self.app_switch = self.args["app_switch"]
+        self.sensor = self.args["sensor"]
+        self.isHome = self.args["isHome"]
+        self.actor = self.args.get("actor")
+        self.service = self.args.get("service")
+        self.service_data = self.args.get("service_data")
+        self.after_sundown = self.args.get("after_sundown")
 
         self.delay = 2
 

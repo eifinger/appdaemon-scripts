@@ -17,7 +17,3 @@ notifyOfActionWhenAway:
   #message: "Alarm: {} changed to {}"
   dependencies: 
     - Notifier
-  global_dependencies:
-    - messages
-    - globals
-    - secrets

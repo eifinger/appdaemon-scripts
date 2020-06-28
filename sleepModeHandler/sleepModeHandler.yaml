@@ -16,6 +16,3 @@ sleepModeHandler:
       isHome: input_boolean.user_two_home
   dependencies:
     - Notifier
-  global_dependencies:
-    - globals
-    - secrets

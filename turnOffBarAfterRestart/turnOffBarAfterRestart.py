@@ -1,6 +1,5 @@
 import appdaemon.plugins.hass.hassapi as hass
-import globals
-import requests
+from requests.exceptions import HTTPError
 
 #
 # Will turn the bar table green and then off when homeassistant restarts to indicate the restart went well
@@ -23,7 +22,7 @@ class TurnOffBarAfterRestart(hass.Hass):
         self.listen_event_handle_list = []
         self.listen_state_handle_list = []
 
-        self.light = globals.get_arg(self.args, "light")
+        self.light = self.args["light"]
 
         self.timer_handle_list.append(self.run_in(self.turn_green_callback, 1))
 
@@ -32,7 +31,7 @@ class TurnOffBarAfterRestart(hass.Hass):
         try:
             self.log("Turning {} off".format(self.friendly_name(self.light)))
             self.turn_off(self.light)
-        except requests.exceptions.HTTPError as exception:
+        except HTTPError as exception:
             self.log(
                 "Error trying to turn off entity. Will try again in 1s. Error: {}".format(
                     exception
@@ -48,11 +47,11 @@ class TurnOffBarAfterRestart(hass.Hass):
                 "light/turn_on",
                 entity_id=self.light,
                 rgb_color=[0, 255, 0],
-                white_value=0
+                white_value=0,
             )
             self.log("Turning {} green".format(self.friendly_name(self.light)))
             self.timer_handle_list.append(self.run_in(self.turn_off_callback, 5))
-        except requests.exceptions.HTTPError as exception:
+        except HTTPError as exception:
             self.log(
                 "Error trying to turn on entity. Will try again in 1s. Error: {}".format(
                     exception

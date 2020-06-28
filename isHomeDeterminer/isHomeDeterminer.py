@@ -1,5 +1,4 @@
 import appdaemon.plugins.hass.hassapi as hass
-import messages
 import globals
 
 #
@@ -29,10 +28,10 @@ class IsHomeDeterminer(hass.Hass):
     def initialize(self):
         self.listen_state_handle_list = []
 
-        self.app_switch = globals.get_arg(self.args, "app_switch")
-        self.ishome = globals.get_arg(self.args, "ishome")
-        self.input_booleans = globals.get_arg_list(self.args, "input_booleans")
-        self.message = globals.get_arg_list(self.args, "message")
+        self.app_switch = self.args["app_switch"]
+        self.ishome = self.args["ishome"]
+        self.input_booleans = self.args["input_booleans"].split(",")
+        self.message = self.args["message"].split(",")
 
         if self.get_state(self.app_switch) == "on":
             for input_boolean in self.input_booleans:

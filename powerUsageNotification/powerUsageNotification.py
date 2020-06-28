@@ -1,5 +1,4 @@
 import appdaemon.plugins.hass.hassapi as hass
-import globals
 
 #
 # App which notifies you when a power usage sensor indicated a device is on/off
@@ -49,38 +48,31 @@ class PowerUsageNotification(hass.Hass):
         self.listen_event_handle_list = []
         self.listen_state_handle_list = []
 
-        self.app_switch = globals.get_arg(self.args, "app_switch")
+        self.app_switch = self.args["app_switch"]
+        self.input_boolean = self.args.get("input_boolean")
+        self.sensor = self.args["sensor"]
+        self.alternative_name = self.args["alternative_name"]
+        self.notify_name = self.args["notify_name"]
         try:
-            self.input_boolean = globals.get_arg(self.args, "input_boolean")
-        except KeyError:
-            self.input_boolean = None
-        self.sensor = globals.get_arg(self.args, "sensor")
-        self.alternative_name = globals.get_arg(self.args, "alternative_name")
-        self.notify_name = globals.get_arg(self.args, "notify_name")
-        try:
-            self.notify_start = globals.get_arg(self.args, "notify_start")
+            self.notify_start = self.args["notify_start"]
         except KeyError:
             self.notify_start = True
         try:
-            self.notify_start_use_alexa = globals.get_arg(
-                self.args, "notify_start_use_alexa"
-            )
+            self.notify_start_use_alexa = self.args["notify_start_use_alexa"]
         except KeyError:
             self.notify_start_use_alexa = True
         try:
-            self.notify_end = globals.get_arg(self.args, "notify_end")
+            self.notify_end = self.args["notify_end"]
         except KeyError:
             self.notify_end = True
         try:
-            self.notify_end_use_alexa = globals.get_arg(
-                self.args, "notify_end_use_alexa"
-            )
+            self.notify_end_use_alexa = self.args["notify_end_use_alexa"]
         except KeyError:
             self.notify_end_use_alexa = True
-        self.delay = globals.get_arg(self.args, "delay")
-        self.threshold = globals.get_arg(self.args, "threshold")
-        self.message = globals.get_arg(self.args, "message")
-        self.message_off = globals.get_arg(self.args, "message_off")
+        self.delay = self.args["delay"]
+        self.threshold = self.args["threshold"]
+        self.message = self.args["message"]
+        self.message_off = self.args["message_off"]
 
         self.triggered = False
         self.isWaitingHandle = None

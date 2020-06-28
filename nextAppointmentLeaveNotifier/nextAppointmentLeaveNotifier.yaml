@@ -13,9 +13,6 @@ nextAppointmentLeaveNotifier:
   #message_google_link: " Here is a Google Maps Link: {}"
   dependencies:
     - Notifier
-  global_dependencies:
-    - globals
-    - secrets
 
 nextAppointmentLeaveNotifierUserTwo:
   module: nextAppointmentLeaveNotifier
@@ -32,6 +29,3 @@ nextAppointmentLeaveNotifierUserTwo:
   #message_google_link: " Here is a Google Maps Link: {}"
   dependencies:
     - Notifier
-  global_dependencies:
-    - globals
-    - secrets

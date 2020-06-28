@@ -2,6 +2,3 @@ heartbeat:
   module: heartbeat
   class: Heartbeat
   sensor: sensor.appdaemon_heartbeat
-  global_dependencies:
-    - globals
-    - secrets

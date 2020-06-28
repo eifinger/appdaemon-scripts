@@ -1,4 +1,4 @@
-googleTravelTime_home_from_work:
+travelTime_home_from_work:
  module: travelTimeNotifier
  class: TravelTimeNotifier
  sensor: sensor.travel_time_home_from_work_here
@@ -9,11 +9,8 @@ googleTravelTime_home_from_work:
  notify_use_Alexa: False
  dependencies: 
    - Notifier
- global_dependencies:
-   - globals
-   - secrets
 
-googleTravelTime_work_from_home:
+travelTime_work_from_home:
  module: travelTimeNotifier
  class: TravelTimeNotifier
  sensor: sensor.travel_time_work_from_home_here
@@ -23,11 +20,8 @@ googleTravelTime_work_from_home:
  #message: "You can start your journey to {}"
  dependencies: 
    - Notifier
- global_dependencies:
-   - globals
-   - secrets
 
-googleTravelTime_elmo_from_home:
+travelTime_elmo_from_home:
  module: travelTimeNotifier
  class: TravelTimeNotifier
  sensor: sensor.travel_time_elmo_from_home_here
@@ -37,11 +31,8 @@ googleTravelTime_elmo_from_home:
  #message: "You can start your journey to {}"
  dependencies: 
    - Notifier
- global_dependencies:
-   - globals
-   - secrets
 
-googleTravelTime_home_from_elmo:
+travelTime_home_from_elmo:
  module: travelTimeNotifier
  class: TravelTimeNotifier
  sensor: sensor.travel_time_home_from_elmo_here
@@ -51,11 +42,8 @@ googleTravelTime_home_from_elmo:
  #message: "You can start your journey to {}"
  dependencies: 
    - Notifier
- global_dependencies:
-   - globals
-   - secrets
 
-googleTravelTime_work_user_two_from_home:
+travelTime_work_user_two_from_home:
  module: travelTimeNotifier
  class: TravelTimeNotifier
  sensor: sensor.travel_time_work_user_two_from_home_here
@@ -65,11 +53,8 @@ googleTravelTime_work_user_two_from_home:
  #message: "You can start your journey to {}"
  dependencies: 
    - Notifier
- global_dependencies:
-   - globals
-   - secrets
 
-googleTravelTime_home_from_work_user_two_here:
+travelTime_home_from_work_user_two_here:
  module: travelTimeNotifier
  class: TravelTimeNotifier
  sensor: sensor.travel_time_home_from_work_user_two_here
@@ -79,6 +64,3 @@ googleTravelTime_home_from_work_user_two_here:
  #message: "You can start your journey to {}"
  dependencies: 
    - Notifier
- global_dependencies:
-   - globals
-   - secrets

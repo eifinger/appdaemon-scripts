@@ -3,7 +3,7 @@ reminderPlantwateringNew:
   class: Reminder
   app_switch: input_boolean.plant_watering_reminder_new
   notify_name: group_notifications
-  user_id: secret_telegram_user_id
+  user_id: !secret telegram_user_id
   reminder_acknowledged_entity: input_boolean.persistence_reminder_plantwatering_new_reminder_acknowledged
   message: "Vergiss nicht die neuen Pflanzen zu gießen!"
   #message: "Don't forget to water the plants!"
@@ -11,6 +11,3 @@ reminderPlantwateringNew:
   #message_evening: "I'm not sure whether you watered your plants, so I thought I better remind you again"
   dependencies:
     - Notifier
-  global_dependencies:
-    - globals
-    - secrets

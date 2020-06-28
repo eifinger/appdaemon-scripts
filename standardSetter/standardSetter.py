@@ -1,6 +1,4 @@
 import appdaemon.plugins.hass.hassapi as hass
-import globals
-import requests
 
 #
 # App which resets entities back to a standard value
@@ -27,18 +25,12 @@ class StandardSetter(hass.Hass):
         self.listen_event_handle_list = []
         self.listen_state_handle_list = []
 
-        self.entity = globals.get_arg(self.args, "entity")
-        self.standard_entity = globals.get_arg(self.args, "standard_entity")
-        try:
-            self.trigger_event = globals.get_arg(self.args, "trigger_event")
-        except KeyError as identifier:
-            self.trigger_event = None
-        try:
-            self.trigger_state = globals.get_arg(self.args, "trigger_state")
-        except KeyError as identifier:
-            self.trigger_state = None
+        self.entity = self.args["entity"]
+        self.standard_entity = self.args["standard_entity"]
+        self.trigger_event = self.args.get("trigger_event")
+        self.trigger_state = self.args.get("trigger_state")
 
-        self.trigger_entity = globals.get_arg(self.args, "trigger_entity")
+        self.trigger_entity = self.args["trigger_entity"]
 
         if self.trigger_event != None:
             self.listen_event_handle_list.append(

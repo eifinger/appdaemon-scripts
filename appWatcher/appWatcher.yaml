@@ -6,6 +6,3 @@ appWatcher:
   #notify_message: "Appdaemon reported an error: {}"
   dependencies:
     - Notifier
-  global_dependencies:
-    - globals
-    - secrets

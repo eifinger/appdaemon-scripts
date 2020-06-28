@@ -1,5 +1,4 @@
 import appdaemon.plugins.hass.hassapi as hass
-import globals
 import datetime
 import uuid
 
@@ -32,14 +31,12 @@ class Reminder(hass.Hass):
         self.listen_event_handle_list = []
         self.listen_state_handle_list = []
 
-        self.app_switch = globals.get_arg(self.args, "app_switch")
-        self.notify_name = globals.get_arg(self.args, "notify_name")
-        self.user_id = globals.get_arg(self.args, "user_id")
-        self.reminder_acknowledged_entity = globals.get_arg(
-            self.args, "reminder_acknowledged_entity"
-        )
-        self.message = globals.get_arg(self.args, "message")
-        self.message_evening = globals.get_arg(self.args, "message_evening")
+        self.app_switch = self.args["app_switch"]
+        self.notify_name = self.args["notify_name"]
+        self.user_id = self.args["user_id"]
+        self.reminder_acknowledged_entity = self.args["reminder_acknowledged_entity"]
+        self.message = self.args["message"]
+        self.message_evening = self.args["message_evening"]
 
         self.keyboard_callback = (
             KEYBOARD_CALLBACK_BASE + uuid.uuid4().hex

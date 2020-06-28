@@ -1,5 +1,4 @@
 import appdaemon.plugins.hass.hassapi as hass
-import globals
 import datetime
 
 #
@@ -42,14 +41,14 @@ class PollenNotifier(hass.Hass):
         self.listen_event_handle_list = []
         self.listen_state_handle_list = []
 
-        self.app_switch = globals.get_arg(self.args, "app_switch")
-        self.pollen_sensor = globals.get_arg(self.args, "pollen_sensor")
-        self.pollen_name = globals.get_arg(self.args, "pollen_name")
-        self.notify_name = globals.get_arg(self.args, "notify_name")
-        self.notify_time = globals.get_arg(self.args, "notify_time")
-        self.notify_threshold = globals.get_arg(self.args, "notify_threshold")
-        self.message = globals.get_arg(self.args, "message")
-        self.message_no_data = globals.get_arg(self.args, "message_no_data")
+        self.app_switch = self.args["app_switch"]
+        self.pollen_sensor = self.args["pollen_sensor"]
+        self.pollen_name = self.args["pollen_name"]
+        self.notify_name = self.args["notify_name"]
+        self.notify_time = self.args["notify_time"]
+        self.notify_threshold = self.args["notify_threshold"]
+        self.message = self.args["message"]
+        self.message_no_data = self.args["message_no_data"]
 
         self.mappingsdict = {}
         self.mappingsdict["-1"] = "keine Daten"

@@ -1,6 +1,5 @@
 import appdaemon.plugins.hass.hassapi as hass
 from fritz_switch_profiles import FritzProfileSwitch
-import globals
 
 #
 # App which sends a notification if a new device is found
@@ -54,45 +53,22 @@ class DeviceNotify(hass.Hass):
     def initialize(self):
         self.listen_event_handle_list = []
 
-        self.notify_name = globals.get_arg(self.args, "notify_name")
-        self.user_id = globals.get_arg(self.args, "user_id")
-        self.message = globals.get_arg(self.args, "message")
-        try:
-            self.fritzbox_url = globals.get_arg(self.args, "fritzbox_url")
-        except KeyError:
-            self.fritzbox_url = None
-        try:
-            self.fritzbox_user = globals.get_arg(self.args, "fritzbox_user")
-        except KeyError:
-            self.fritzbox_user = None
-        try:
-            self.fritzbox_password = globals.get_arg(self.args, "fritzbox_password")
-        except KeyError:
-            self.fritzbox_password = None
-        try:
-            self.fritzbox_profile_name = globals.get_arg(
-                self.args, "fritzbox_profile_name"
-            )
-        except KeyError:
-            self.fritzbox_profile_name = None
-        try:
-            self.fritzbox_message_allow_access = globals.get_arg(
-                self.args, "fritzbox_message_allow_access"
-            )
-        except KeyError:
-            self.fritzbox_message_allow_access = None
-        try:
-            self.fritzbox_message_access_allowed = globals.get_arg(
-                self.args, "fritzbox_message_access_allowed"
-            )
-        except KeyError:
-            self.fritzbox_message_access_allowed = None
-        try:
-            self.fritzbox_message_access_blocked = globals.get_arg(
-                self.args, "fritzbox_message_access_blocked"
-            )
-        except KeyError:
-            self.fritzbox_message_access_blocked = None
+        self.notify_name = self.args["notify_name"]
+        self.user_id = self.args["user_id"]
+        self.message = self.args["message"]
+        self.fritzbox_url = self.args.get("fritzbox_url")
+        self.fritzbox_user = self.args.get("fritzbox_user")
+        self.fritzbox_password = self.args.get("fritzbox_password")
+        self.fritzbox_profile_name = self.args.get("fritzbox_profile_name")
+        self.fritzbox_message_allow_access = self.args.get(
+            "fritzbox_message_allow_access"
+        )
+        self.fritzbox_message_access_allowed = self.args.get(
+            "fritzbox_message_access_allowed"
+        )
+        self.fritzbox_message_access_blocked = self.args.get(
+            "fritzbox_message_access_blocked"
+        )
 
         self.notifier = self.get_app("Notifier")
 

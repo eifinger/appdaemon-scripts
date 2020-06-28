@@ -2,7 +2,6 @@ import json
 from json import JSONDecodeError
 
 import appdaemon.plugins.hass.hassapi as hass  # pylint: disable=import-error
-import globals
 import shutil
 import os
 import time
@@ -64,55 +63,43 @@ class FaceRecognitionBot(hass.Hass):
         self.listen_state_handle_list = []
 
         # args
-        self.app_switch = globals.get_arg(self.args, "app_switch")
-        self.sensor = globals.get_arg(self.args, "sensor")
-        self.button = globals.get_arg(self.args, "button")
-        self.camera = globals.get_arg(self.args, "camera")
-        self.local_file_camera = globals.get_arg(self.args, "local_file_camera")
-        self.filename = globals.get_arg(self.args, "filename")
-        self.notify_name = globals.get_arg(self.args, "notify_name")
-        self.wol_switch = globals.get_arg(self.args, "wol_switch")
-        self.user_id = globals.get_arg(self.args, "user_id")
-        self.number_of_images = globals.get_arg(self.args, "number_of_images")
-        self.waitBeforeSnapshot = globals.get_arg(self.args, "waitBeforeSnapshot")
-        self.message_face_identified = globals.get_arg(
-            self.args, "message_face_identified"
-        )
-        self.message_unkown_face = globals.get_arg(self.args, "message_unkown_face")
-        self.message_unkown_face_with_known = globals.get_arg(
-            self.args, "message_unkown_face_with_known"
-        )
-        self.message_provide_name = globals.get_arg(self.args, "message_provide_name")
-        self.message_name_provided = globals.get_arg(self.args, "message_name_provided")
-        self.message_name_provided_callback = globals.get_arg(
-            self.args, "message_name_provided_callback"
-        )
-        self.facebox_healthcheck_filename = globals.get_arg(
-            self.args, "facebox_healthcheck_filename"
-        )
-        self.healthcheck_face_name = globals.get_arg(self.args, "healthcheck_face_name")
-        self.ip = globals.get_arg(self.args, "ip")
-        self.port = globals.get_arg(self.args, "port")
+        self.app_switch = self.args["app_switch"]
+        self.sensor = self.args["sensor"]
+        self.button = self.args["button"]
+        self.camera = self.args["camera"]
+        self.local_file_camera = self.args["local_file_camera"]
+        self.filename = self.args["filename"]
+        self.notify_name = self.args["notify_name"]
+        self.wol_switch = self.args["wol_switch"]
+        self.user_id = self.args["user_id"]
+        self.number_of_images = self.args["number_of_images"]
+        self.waitBeforeSnapshot = self.args["waitBeforeSnapshot"]
+        self.message_face_identified = self.args["message_face_identified"]
+        self.message_unkown_face = self.args["message_unkown_face"]
+        self.message_unkown_face_with_known = self.args[
+            "message_unkown_face_with_known"
+        ]
+        self.message_provide_name = self.args["message_provide_name"]
+        self.message_name_provided = self.args["message_name_provided"]
+        self.message_name_provided_callback = self.args[
+            "message_name_provided_callback"
+        ]
+        self.facebox_healthcheck_filename = self.args["facebox_healthcheck_filename"]
+        self.healthcheck_face_name = self.args["healthcheck_face_name"]
+        self.ip = self.args["ip"]
+        self.port = self.args["port"]
 
         # optional args
-        self.facebox_source_directory = globals.get_arg(
-            self.args, "facebox_source_directory"
-        )
+        self.facebox_source_directory = self.args["facebox_source_directory"]
         if not self.facebox_source_directory.endswith("/"):
             self.facebox_source_directory = self.facebox_source_directory + "/"
-        self.facebox_unknown_directory = globals.get_arg(
-            self.args, "facebox_unknown_directory"
-        )
+        self.facebox_unknown_directory = self.args["facebox_unknown_directory"]
         if not self.facebox_unknown_directory.endswith("/"):
             self.facebox_unknown_directory = self.facebox_unknown_directory + "/"
-        self.facebox_noface_directory = globals.get_arg(
-            self.args, "facebox_noface_directory"
-        )
+        self.facebox_noface_directory = self.args["facebox_noface_directory"]
         if not self.facebox_noface_directory.endswith("/"):
             self.facebox_noface_directory = self.facebox_noface_directory + "/"
-        self.facebox_known_faces_directory = globals.get_arg(
-            self.args, "facebox_known_faces_directory"
-        )
+        self.facebox_known_faces_directory = self.args["facebox_known_faces_directory"]
         if not self.facebox_known_faces_directory.endswith("/"):
             self.facebox_known_faces_directory = (
                 self.facebox_known_faces_directory + "/"
@@ -140,7 +127,7 @@ class FaceRecognitionBot(hass.Hass):
             self.listen_event(self.receive_telegram_text, "telegram_text")
         )
         # Teach periodic run
-        #self.timer_handle_list.append(self.run_in(self.check_health_callback, 5))
+        # self.timer_handle_list.append(self.run_in(self.check_health_callback, 5))
 
         # custom variables
 

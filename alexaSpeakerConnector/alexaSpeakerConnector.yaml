@@ -7,6 +7,3 @@ alexaSpeakerConnector:
   alexa_entity_source: Denon AVR-X1300W
   receiver: media_player.denon_avr_x1300w
   receiver_source: Bluetooth
-  global_dependencies:
-    - globals
-    - secrets

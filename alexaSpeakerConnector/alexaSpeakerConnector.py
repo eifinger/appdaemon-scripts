@@ -1,5 +1,4 @@
 import appdaemon.plugins.hass.hassapi as hass
-import globals
 
 #
 # App to Turn on Receiver Bluetooth when Alexa is playing something so it plays on the big speakers
@@ -35,11 +34,11 @@ class AlexaSpeakerConnector(hass.Hass):
         self.listen_state_handle_list = []
         self.timer_handle_list = []
 
-        self.app_switch = globals.get_arg(self.args, "app_switch")
-        self.alexa_entity = globals.get_arg(self.args, "alexa_entity")
-        self.alexa_entity_source = globals.get_arg(self.args, "alexa_entity_source")
-        self.receiver = globals.get_arg(self.args, "receiver")
-        self.receiver_source = globals.get_arg(self.args, "receiver_source")
+        self.app_switch = self.args["app_switch"]
+        self.alexa_entity = self.args["alexa_entity"]
+        self.alexa_entity_source = self.args["alexa_entity_source"]
+        self.receiver = self.args["receiver"]
+        self.receiver_source = self.args["receiver_source"]
 
         self.listen_state_handle_list.append(
             self.listen_state(self.state_change, self.alexa_entity)
@@ -61,9 +60,7 @@ class AlexaSpeakerConnector(hass.Hass):
                         entity_id=self.receiver,
                         source=self.receiver_source,
                     )
-                    self.log(
-                        f"Setting volume of {self.receiver} to: {INITIAL_VOLUME}"
-                    )
+                    self.log(f"Setting volume of {self.receiver} to: {INITIAL_VOLUME}")
                     self.call_service(
                         "media_player/volume_set",
                         entity_id=self.receiver,

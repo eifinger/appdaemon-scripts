@@ -7,9 +7,6 @@ bedroomMotionTrigger:
   sensor_type: deconz
   after_sundown: True
   turn_on_constraint_entities_off: input_boolean.sleepmode
-  global_dependencies:
-    - globals
-    - secrets
 
 studyroomMotionTrigger:
   module: motionTrigger
@@ -19,9 +16,6 @@ studyroomMotionTrigger:
   entity_on: light.philips_miio_light_bulb
   sensor_type: deconz
   after_sundown: True
-  global_dependencies:
-    - globals
-    - secrets
 
 
 

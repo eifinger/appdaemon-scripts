@@ -1,7 +1,6 @@
 import appdaemon.plugins.hass.hassapi as hass
-import globals
 import datetime
-import requests
+from requests.exceptions import HTTPError
 
 #
 # App to toggle an input boolean when a person enters or leaves home.
@@ -56,10 +55,10 @@ class IsUserHomeDeterminer(hass.Hass):
 
         self.delay = 600
 
-        self.app_switch = globals.get_arg(self.args, "app_switch")
-        self.input_boolean = globals.get_arg(self.args, "input_boolean")
-        self.device_tracker = globals.get_arg(self.args, "device_tracker")
-        self.door_sensor = globals.get_arg(self.args, "door_sensor")
+        self.app_switch = self.args["app_switch"]
+        self.input_boolean = self.args["input_boolean"]
+        self.device_tracker = self.args["device_tracker"]
+        self.door_sensor = self.args["door_sensor"]
 
         device_tracker_state = self.get_state(self.device_tracker, attribute="all")
         if self.get_state(self.app_switch) == "on":
@@ -87,18 +86,13 @@ class IsUserHomeDeterminer(hass.Hass):
     def state_change(self, entity, attribute, old, new, kwargs):
         if self.get_state(self.app_switch) == "on":
             if new != "" and new != old:
-                self.log(
-                    "{} changed from {} to {}".format(entity, old, new), level="DEBUG"
-                )
+                self.log("{} changed from {} to {}".format(entity, old, new))
                 if new == "on" and old == "off":
                     self.cancel_listen_state_callback(None)
                     device_tracker_state = self.get_state(
                         self.device_tracker, attribute="all"
                     )
-                    self.log(
-                        "device_tracker_state: {}".format(device_tracker_state),
-                        level="DEBUG",
-                    )
+                    self.log("device_tracker_state: {}".format(device_tracker_state),)
                     last_changed = device_tracker_state["last_changed"]
                     self.log("last_changed: {}".format(last_changed))
                     # User got home: Device tracker changed to home before door sensor triggered
@@ -173,7 +167,7 @@ class IsUserHomeDeterminer(hass.Hass):
         """This is needed because the turn_on command can result in a HTTP 503 when homeassistant is restarting"""
         try:
             self.turn_on(kwargs["turn_on_entity"])
-        except requests.exceptions.HTTPError as exception:
+        except HTTPError as exception:
             self.log(
                 "Error trying to turn on entity. Will try again in 1s. Error: {}".format(
                     exception
@@ -190,7 +184,7 @@ class IsUserHomeDeterminer(hass.Hass):
         """This is needed because the turn_off command can result in a HTTP 503 when homeassistant is restarting"""
         try:
             self.turn_off(kwargs["turn_off_entity"])
-        except requests.exceptions.HTTPError as exception:
+        except HTTPError as exception:
             self.log(
                 "Error trying to turn off entity. Will try again in 1s. Error: {}".format(
                     exception

@@ -47,11 +47,12 @@ listService:
   window:
     kuechenfenster:  binary_sensor.contact_kitchen_window
     badfenster oben: binary_sensor.contact_upper_bathroom_window
-    badfenster unten: binary_sensor.contact_bathroom_window
+    badfenster unten: binary_sensor.contact_badfenster
     gaestezimmerfenster: binary_sensor.contact_guest_window
   door_tilted:
     terassentuer arbeitszimmer gekippt: binary_sensor.contact_studyroom_door_tilted
     terassentuer schlafzimmer gekippt: binary_sensor.contact_bedroom_door_tilted
     terrassentuer gekippt: binary_sensor.contact_terrace_door_tilted
+    badfenster unten gekippt: binary_sensor.contact_bathroom_window_tilted
     badfenster oben gekippt: binary_sensor.contact_upper_bathroom_window_tilted
 

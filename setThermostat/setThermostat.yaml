@@ -15,9 +15,6 @@ warm_bath_before_wakeup:
   use_alexa: False
   dependencies: 
     - Notifier
-  global_dependencies:
-    - globals
-    - secrets
 
 warm_upper_bath_before_wakeup:
   module: setThermostat
@@ -36,7 +33,4 @@ warm_upper_bath_before_wakeup:
   use_alexa: False
   dependencies:
     - Notifier
-  global_dependencies:
-    - globals
-    - secrets
 

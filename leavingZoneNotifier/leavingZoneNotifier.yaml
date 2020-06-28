@@ -15,9 +15,6 @@ leavingWorkNotifierUserOne:
   #travel_time_sensor_message: "The travel time is {}."
   dependencies: 
     - Notifier
-  global_dependencies:
-    - globals
-    - secrets
 
 leavingWorkNotifierUserTwo:
   module: leavingZoneNotifier
@@ -36,9 +33,6 @@ leavingWorkNotifierUserTwo:
   #travel_time_sensor_message: "The travel time is {}."
   dependencies:
     - Notifier
-  global_dependencies:
-    - globals
-    - secrets
 
 leavingElmoNotifierUserTwo:
   module: leavingZoneNotifier
@@ -57,6 +51,3 @@ leavingElmoNotifierUserTwo:
   #travel_time_sensor_message: "The travel time is {}."
   dependencies: 
     - Notifier
-  global_dependencies:
-    - globals
-    - secrets

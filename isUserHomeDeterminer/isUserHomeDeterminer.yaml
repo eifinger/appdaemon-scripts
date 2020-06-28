@@ -6,8 +6,6 @@ isUserHomeDeterminerUserOne:
   input_boolean: input_boolean.user_one_home
   device_tracker: person.kevin
   door_sensor: binary_sensor.contact_door
-  global_dependencies:
-    - globals
 
 #Determine if user two gets/leaves home
 isUserHomeDeterminerUserTwo:
@@ -17,6 +15,3 @@ isUserHomeDeterminerUserTwo:
   input_boolean: input_boolean.user_two_home
   device_tracker: person.sina
   door_sensor: binary_sensor.contact_door
-  global_dependencies:
-    - globals
-    - secrets

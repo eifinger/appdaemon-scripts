@@ -1,6 +1,5 @@
 import appdaemon.plugins.hass.hassapi as hass
 import datetime
-import globals
 
 #
 # App to notify if user_one is leaving a zone.
@@ -71,26 +70,18 @@ class LeavingZoneNotifier(hass.Hass):
         self.listen_state_handle_list = []
         self.timer_handle_list = []
 
-        self.app_switch = globals.get_arg(self.args, "app_switch")
-        self.user_name = globals.get_arg(self.args, "user_name")
-        self.zone = globals.get_arg(self.args, "zone")
-        self.notify_name = globals.get_arg(self.args, "notify_name")
-        self.device = globals.get_arg(self.args, "device")
+        self.app_switch = self.args["app_switch"]
+        self.user_name = self.args["user_name"]
+        self.zone = self.args["zone"]
+        self.notify_name = self.args["notify_name"]
+        self.device = self.args["device"]
         # 'lingering_time' the time a user has to stay in a zone
         # for this app to trigger
-        self.lingering_time = globals.get_arg(self.args, "lingering_time")
-        self.delay = globals.get_arg(self.args, "delay")
-        self.message = globals.get_arg(self.args, "message")
-        try:
-            self.travel_time_sensor = globals.get_arg(self.args, "travel_time_sensor")
-        except KeyError:
-            self.travel_time_sensor = None
-        try:
-            self.travel_time_sensor_message = globals.get_arg(
-                self.args, "travel_time_sensor_message"
-            )
-        except KeyError:
-            self.travel_time_sensor_message = None
+        self.lingering_time = self.args["lingering_time"]
+        self.delay = self.args["delay"]
+        self.message = self.args["message"]
+        self.travel_time_sensor = self.args.get("travel_time_sensor")
+        self.travel_time_sensor_message = self.args.get("travel_time_sensor_message")
 
         self.user_entered_zone = None
         self.false_positive = False

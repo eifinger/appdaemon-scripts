@@ -1,5 +1,4 @@
 import appdaemon.plugins.hass.hassapi as hass
-import globals
 import datetime
 import math
 
@@ -48,19 +47,17 @@ class AlarmClock(hass.Hass):
         self.listen_event_handle_list = []
         self.listen_state_handle_list = []
 
-        self.alarm_time = globals.get_arg(self.args, "alarm_time")
-        self.wakemeup = globals.get_arg(self.args, "wakemeup")
-        self.naturalwakeup = globals.get_arg(self.args, "naturalwakeup")
-        self.alarmweekday = globals.get_arg(self.args, "alarmweekday")
-        self.radiowakeup = globals.get_arg(self.args, "radiowakeup")
-        self.isweekday = globals.get_arg(self.args, "isweekday")
-        self.notify_name = globals.get_arg(self.args, "notify_name")
-        self.wakeup_light = globals.get_arg(self.args, "wakeup_light")
-        self.fade_in_time_multiplicator = globals.get_arg(
-            self.args, "fade_in_time_multiplicator"
-        )
-        self.message = globals.get_arg(self.args, "message")
-        self.button = globals.get_arg(self.args, "button")
+        self.alarm_time = self.args["alarm_time"]
+        self.wakemeup = self.args["wakemeup"]
+        self.naturalwakeup = self.args["naturalwakeup"]
+        self.alarmweekday = self.args["alarmweekday"]
+        self.radiowakeup = self.args["radiowakeup"]
+        self.isweekday = self.args["isweekday"]
+        self.notify_name = self.args["notify_name"]
+        self.wakeup_light = self.args["wakeup_light"]
+        self.fade_in_time_multiplicator = self.args["fade_in_time_multiplicator"]
+        self.message = self.args["message"]
+        self.button = self.args["button"]
 
         self.notifier = self.get_app("Notifier")
 
@@ -108,8 +105,9 @@ class AlarmClock(hass.Hass):
         self.log("cached_fade_in_time: {}".format(self.cached_fade_in_time))
         offset = self.cached_fade_in_time.split(".", 1)[0]
 
-        if (self.cached_alarm_time is not None 
-            and self.cached_alarm_time != "" 
+        if (
+            self.cached_alarm_time is not None
+            and self.cached_alarm_time != ""
             and self.cached_alarm_time != "unknown"
         ):
             run_datetime = datetime.datetime.strptime(

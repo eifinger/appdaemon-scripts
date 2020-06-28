@@ -1,6 +1,5 @@
 import appdaemon.plugins.hass.hassapi as hass
 import datetime
-import globals
 
 #
 # Centralizes messaging. Among other things, it will determine whether a user is at home and if yes in which room.
@@ -47,9 +46,9 @@ class Notifier(hass.Hass):
     def initialize(self):
         self.timer_handle_list = []
 
-        self.alexa_tts = globals.get_arg(self.args, "alexa_tts")
-        self.alexa_media_player = globals.get_arg_list(self.args, "alexa_media_player")
-        self.app_switch_alexa = globals.get_arg(self.args, "app_switch_alexa")
+        self.alexa_tts = self.args["alexa_tts"]
+        self.alexa_media_player = self.args["alexa_media_player"].split(",")
+        self.app_switch_alexa = self.args["app_switch_alexa"]
 
         self.last_alexa_notification_time = None
 

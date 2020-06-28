@@ -13,9 +13,6 @@ roggenNotifier:
   #message_no_data: "{} I have no pollen data for {}."
   dependencies: 
     - Notifier
-  global_dependencies:
-    - globals
-    - secrets
 
 graeserNotifier:
   module: pollenNotifier
@@ -32,9 +29,6 @@ graeserNotifier:
   #message_no_data: "{} I have no pollen data for {}."
   dependencies: 
     - Notifier
-  global_dependencies:
-    - globals
-    - secrets
 
 birkeNotifier:
   module: pollenNotifier
@@ -51,6 +45,3 @@ birkeNotifier:
   #message_no_data: "{} I have no pollen data for {}."
   dependencies: 
     - Notifier
-  global_dependencies:
-    - globals
-    - secrets

@@ -1,6 +1,5 @@
 import appdaemon.plugins.hass.hassapi as hass
 import datetime
-import globals
 from typing import Optional
 
 #
@@ -48,16 +47,16 @@ class TravelTimeNotifier(hass.Hass):
         self.listen_state_handle_list = []
         self.timer_handle_list = []
 
-        self.sensor = globals.get_arg(self.args, "sensor")
-        self.notify_input_boolean = globals.get_arg(self.args, "notify_input_boolean")
-        self.notify_name = globals.get_arg(self.args, "notify_name")
-        self.message = globals.get_arg(self.args, "message")
+        self.sensor = self.args["sensor"]
+        self.notify_input_boolean = self.args["notify_input_boolean"]
+        self.notify_name = self.args["notify_name"]
+        self.message = self.args["message"]
         try:
-            self.acceptable_range = globals.get_arg(self.args, "acceptable_range")
+            self.acceptable_range = self.args["acceptable_range"]
         except KeyError:
             self.acceptable_range = 1.2
         try:
-            self.notify_use_Alexa = globals.get_arg(self.args, "notify_use_Alexa")
+            self.notify_use_Alexa = self.args["notify_use_Alexa"]
         except KeyError:
             self.notify_use_Alexa = True
 
@@ -68,18 +67,15 @@ class TravelTimeNotifier(hass.Hass):
         )
 
     def state_change(self, entity, attributes, old, new, kwargs) -> None:
-        self.log("entity: {}".format(entity), level="DEBUG")
-        self.log("old: {}".format(old), level="DEBUG")
-        self.log("new: {}".format(new), level="DEBUG")
+        self.log("entity: {}".format(entity))
+        self.log("old: {}".format(old))
+        self.log("new: {}".format(new))
 
         duration_in_traffic_minutes = self.parse_duration_in_traffic_minutes(new)
-        self.log(
-            "duration_in_traffic_minutes: {}".format(duration_in_traffic_minutes),
-            level="DEBUG",
-        )
+        self.log("duration_in_traffic_minutes: {}".format(duration_in_traffic_minutes),)
 
         duration_minutes = self.parse_duration_minutes(new)
-        self.log("duration_minutes: {}".format(duration_minutes), level="DEBUG")
+        self.log("duration_minutes: {}".format(duration_minutes))
 
         if duration_minutes is None or duration_in_traffic_minutes is None:
             self.log("Sensor is None. Homeassistant might not be fully started.")

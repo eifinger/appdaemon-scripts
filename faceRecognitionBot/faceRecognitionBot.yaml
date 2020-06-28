@@ -6,21 +6,21 @@ faceRecognitionBot:
   button: binary_sensor.switch_158d000215aa28
   camera: camera.android_ip_webcam_door
   local_file_camera: camera.saved_image
-  filename: secret_facebox_notifier_filename
+  filename: !secret facebox_notifier_filename
   image_processing: image_processing.facebox
   notify_name: group_notifications
   wol_switch: switch.facebox_wol
-  user_id: secret_telegram_user_id
-  facebox_source_directory: secret_facebox_folderpath
-  facebox_unknown_directory: secret_facebox_unknown_directory
-  facebox_noface_directory: secret_facebox_noface_directory
-  facebox_known_faces_directory: secret_facebox_known_faces_directory
-  facebox_healthcheck_filename: secret_facebox_healthcheck_filename
+  user_id: !secret telegram_user_id
+  facebox_source_directory: !secret facebox_folderpath
+  facebox_unknown_directory: !secret facebox_unknown_directory
+  facebox_noface_directory: !secret facebox_noface_directory
+  facebox_known_faces_directory: !secret facebox_known_faces_directory
+  facebox_healthcheck_filename: !secret facebox_healthcheck_filename
   healthcheck_face_name: Kevin 
   number_of_images: 10
-  waitBeforeSnapshot: 2.5
-  ip: secret_facebox_ip
-  port: secret_facebox_port
+  waitBeforeSnapshot: 1
+  ip: !secret facebox_ip
+  port: !secret facebox_port
   message_face_identified: "Ich habe {} erkannt"
   #message_face_identified: "I have recognized {}."
   message_unkown_face: "Ich habe dieses Gesicht nicht erkannt. Kennst du es?"
@@ -35,6 +35,3 @@ faceRecognitionBot:
   #message_name_provided_callback: "{} said that this is {}"
   dependencies:
     - Notifier
-  global_dependencies:
-    - globals
-    - secrets

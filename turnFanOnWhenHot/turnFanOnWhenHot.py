@@ -1,5 +1,4 @@
 import appdaemon.plugins.hass.hassapi as hass
-import globals
 import datetime
 
 #
@@ -34,13 +33,13 @@ class TurnFanOnWhenHot(hass.Hass):
         self.listen_state_handle_list = []
         self.timer_handle_list = []
 
-        self.app_switch = globals.get_arg(self.args, "app_switch")
-        self.temp_sensor = globals.get_arg(self.args, "temp_sensor")
-        self.threshold_entity = globals.get_arg(self.args, "threshold_entity")
-        self.location_sensors = globals.get_arg_list(self.args, "location_sensors")
-        self.room = globals.get_arg(self.args, "room")
-        self.actor = globals.get_arg(self.args, "actor")
-        self.delay = globals.get_arg(self.args, "delay")
+        self.app_switch = self.args["app_switch"]
+        self.temp_sensor = self.args["temp_sensor"]
+        self.threshold_entity = self.args["threshold_entity"]
+        self.location_sensors = self.args["location_sensors"].split(",")
+        self.room = self.args["room"]
+        self.actor = self.args["actor"]
+        self.delay = self.args["delay"]
 
         self.turned_on_by_me = False  # Giggedi
 

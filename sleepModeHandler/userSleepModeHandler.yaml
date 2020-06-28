@@ -8,8 +8,6 @@ userSleepModeHandlerUserOne:
   room: Schlafzimmer
   awake_duration: 600
   asleep_duration: 1800
-  global_dependencies:
-    - globals
 
 userSleepModeHandlerUserTwo:
   module: userSleepModeHandler
@@ -21,6 +19,3 @@ userSleepModeHandlerUserTwo:
   room: Schlafzimmer
   awake_duration: 600
   asleep_duration: 1800
-  global_dependencies:
-    - globals
-    - secrets

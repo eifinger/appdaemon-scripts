@@ -2,7 +2,7 @@ newWifiDeviceNotify:
   module: newWifiDeviceNotify
   class: DeviceNotify
   notify_name: group_notifications
-  user_id: secret_telegram_user_id
+  user_id: !secret telegram_user_id
   message: "Unbekanntes Gerät entdeckt. Hostname: {}. MAC: {}."
   #message: "Unknown device connected. Hostname: {}. MAC: {}"
   #fritzbox_url: fritzbox_url
@@ -17,6 +17,3 @@ newWifiDeviceNotify:
   #fritzbox_message_access_blocked: "I have saved the device from the dangers of the Internet"
   dependencies: 
     - Notifier
-  global_dependencies:
-    - globals
-    - secrets

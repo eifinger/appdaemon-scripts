@@ -1,6 +1,5 @@
 import appdaemon.plugins.hass.hassapi as hass
 import datetime
-import globals
 
 __ZONE_ACTION_ENTER__ = "kommen"
 __ZONE_ACTION_LEAVE__ = "verlassen"
@@ -11,9 +10,9 @@ class RemindMeOfXWhenZoneIntent(hass.Hass):
         self.timer_handle_list = []
         self.listen_state_handle_list = []
 
-        self.device_tracker = globals.get_arg(self.args, "device_tracker")
-        self.notify_name = globals.get_arg(self.args, "notify_name")
-        self.remindMessageSkeleton = globals.get_arg(self.args, "remindMessageSkeleton")
+        self.device_tracker = self.args["device_tracker"]
+        self.notify_name = self.args["notify_name"]
+        self.remindMessageSkeleton = self.args["remindMessageSkeleton"]
 
         self.notifier = self.get_app("Notifier")
         return

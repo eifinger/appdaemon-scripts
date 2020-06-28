@@ -2,6 +2,4 @@
 ## Global
 #################################################################
 global_modules:
-  - secrets
-  - messages
   - globals

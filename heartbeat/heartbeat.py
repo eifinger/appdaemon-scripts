@@ -1,6 +1,5 @@
 import appdaemon.plugins.hass.hassapi as hass
-import globals
-import requests
+from requests.exceptions import HTTPError
 
 #
 # App which sets a homeassistant entity as a heartbeat to check for threadstarvation etc
@@ -21,19 +20,17 @@ class Heartbeat(hass.Hass):
     def initialize(self):
         self.timer_handle_list = []
 
-        self.sensor = globals.get_arg(self.args, "sensor")
+        self.sensor = self.args["sensor"]
 
         self.heartbeat(None)
 
-        self.timer_handle_list.append(
-            self.run_minutely(self.heartbeat, start=None)
-        )
+        self.timer_handle_list.append(self.run_minutely(self.heartbeat, start=None))
 
     def heartbeat(self, kwargs):
         try:
             self.set_state(self.sensor, state=str(self.time()))
             self.log("Heartbeat", level="DEBUG")
-        except requests.exceptions.HTTPError as exception:
+        except HTTPError as exception:
             self.log(
                 "Error trying to set entity. Will try again in 5s. Error: {}".format(
                     exception

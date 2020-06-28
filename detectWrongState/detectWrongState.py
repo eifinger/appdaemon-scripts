@@ -1,5 +1,4 @@
 import appdaemon.plugins.hass.hassapi as hass
-import globals
 
 #
 # App which notifies of wrong states based on a state change
@@ -68,45 +67,24 @@ class DetectWrongState(hass.Hass):
     def initialize(self):
         self.listen_state_handle_list = []
 
-        self.app_switch = globals.get_arg(self.args, "app_switch")
+        self.app_switch = self.args["app_switch"]
         try:
-            self.entities_on = globals.get_arg_list(self.args, "entities_on")
+            self.entities_on = self.args["entities_on"].split(",")
         except KeyError:
             self.entities_on = []
         try:
-            self.entities_off = globals.get_arg_list(self.args, "entities_off")
+            self.entities_off = self.args["entities_off"].split(",")
         except KeyError:
             self.entities_off = []
-        try:
-            self.after_sundown = globals.get_arg(self.args, "after_sundown")
-        except KeyError:
-            self.after_sundown = None
-        self.trigger_entity = globals.get_arg(self.args, "trigger_entity")
-        self.trigger_state = globals.get_arg(self.args, "trigger_state")
-        try:
-            self.message = globals.get_arg(self.args, "message")
-        except KeyError:
-            self.message = None
-        try:
-            self.message_off = globals.get_arg(self.args, "message_off")
-        except KeyError:
-            self.message_off = None
-        try:
-            self.message_reed = globals.get_arg(self.args, "message_reed")
-        except KeyError:
-            self.message_reed = None
-        try:
-            self.message_reed_off = globals.get_arg(self.args, "message_reed_off")
-        except KeyError:
-            self.message_reed_off = None
-        try:
-            self.notify_name = globals.get_arg(self.args, "notify_name")
-        except KeyError:
-            self.notify_name = None
-        try:
-            self.use_alexa = globals.get_arg(self.args, "use_alexa")
-        except KeyError:
-            self.use_alexa = False
+        self.after_sundown = self.args.get("after_sundown")
+        self.trigger_entity = self.args["trigger_entity"]
+        self.trigger_state = self.args["trigger_state"]
+        self.message = self.args.get("message")
+        self.message_off = self.args.get("message_off")
+        self.message_reed = self.args.get("message_reed")
+        self.message_reed_off = self.args.get("message_reed_off")
+        self.notify_name = self.args.get("notify_name")
+        self.use_alexa = self.args.get("use_alexa")
 
         self.notifier = self.get_app("Notifier")
 
@@ -136,7 +114,7 @@ class DetectWrongState(hass.Hass):
                     self.turn_off(entity)
                     message = self.message
                 self.send_notification(message, entity)
-    
+
     def check_entities_should_be_on(self):
         for entity in self.entities_on:
             state = self.get_state(entity)
@@ -160,17 +138,11 @@ class DetectWrongState(hass.Hass):
 
     def send_notification(self, message, entity):
         if message is not None:
-            formatted_message = message.format(
-                    self.friendly_name(entity)
-                )
-            self.log(
-                formatted_message
-            )
+            formatted_message = message.format(self.friendly_name(entity))
+            self.log(formatted_message)
             if self.notify_name is not None:
                 self.notifier.notify(
-                    self.notify_name,
-                    formatted_message,
-                    useAlexa=self.use_alexa,
+                    self.notify_name, formatted_message, useAlexa=self.use_alexa,
                 )
 
     def terminate(self):

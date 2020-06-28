@@ -1,5 +1,4 @@
 import appdaemon.plugins.hass.hassapi as hass
-import globals
 
 #
 # App which listens on the log for App crashes and notifies via telegram
@@ -17,10 +16,10 @@ import globals
 
 class AppWatcher(hass.Hass):
     def initialize(self):
-        self.notify_name = globals.get_arg(self.args, "notify_name")
-        self.notify_message = globals.get_arg(self.args, "notify_message")
+        self.notify_name = self.args["notify_name"]
+        self.notify_message = self.args["notify_message"]
         try:
-            self.exclude_apps = globals.get_arg_list(self.args, "exclude_apps")
+            self.exclude_apps = self.args["exclude_apps"].split(",")
         except KeyError:
             self.exclude_apps = None
 
@@ -30,7 +29,11 @@ class AppWatcher(hass.Hass):
         self.handle = self.listen_log(self.log_message_callback)
 
     def log_message_callback(self, app_name, ts, level, log_type, message, kwargs):
-        self.log("name: {}, ts: {}, level: {}, messsage: {}".format(app_name, ts, level, message))
+        self.log(
+            "name: {}, ts: {}, level: {}, messsage: {}".format(
+                app_name, ts, level, message
+            )
+        )
         if level == "WARNING" or level == "ERROR" or level == "CRITICAL":
             if app_name == "AppDaemon":
                 if "Unexpected error" in message:

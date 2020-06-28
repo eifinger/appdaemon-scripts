@@ -8,9 +8,6 @@ turnLargeFanOnWhenHot:
   room: Wohnzimmer
   actor: switch.large_ventilator
   delay: 120
-  global_dependencies:
-    - globals
-    - secrets
 
 turnSmallFanOnWhenHot:
   module: turnFanOnWhenHot
@@ -22,6 +19,3 @@ turnSmallFanOnWhenHot:
   room: Wohnzimmer
   actor: switch.small_ventilator
   delay: 120
-  global_dependencies:
-    - globals
-    - secrets

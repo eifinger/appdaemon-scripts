@@ -1,5 +1,4 @@
 import appdaemon.plugins.hass.hassapi as hass
-import globals
 import datetime
 
 #
@@ -48,17 +47,17 @@ class SetThermostat(hass.Hass):
         self.timer_handle_list = []
         self.listen_state_handle_list = []
 
-        self.app_switch = globals.get_arg(self.args, "app_switch")
-        self.time_entity = globals.get_arg(self.args, "time_entity")
-        self.upfront_time = globals.get_arg(self.args, "upfront_time")
-        self.duration = globals.get_arg(self.args, "duration")
-        self.climat_entity = globals.get_arg(self.args, "climat_entity")
-        self.target_entity = globals.get_arg(self.args, "target_entity")
-        self.message = globals.get_arg(self.args, "message")
-        self.notify_name = globals.get_arg(self.args, "notify_name")
-        self.use_alexa = globals.get_arg(self.args, "use_alexa")
-        self.isHome = globals.get_arg(self.args, "isHome")
-        self.sleepMode = globals.get_arg(self.args, "sleepMode")
+        self.app_switch = self.args["app_switch"]
+        self.time_entity = self.args["time_entity"]
+        self.upfront_time = self.args["upfront_time"]
+        self.duration = self.args["duration"]
+        self.climat_entity = self.args["climat_entity"]
+        self.target_entity = self.args["target_entity"]
+        self.message = self.args["message"]
+        self.notify_name = self.args["notify_name"]
+        self.use_alexa = self.args["use_alexa"]
+        self.isHome = self.args["isHome"]
+        self.sleepMode = self.args["sleepMode"]
 
         self.notifier = self.get_app("Notifier")
 

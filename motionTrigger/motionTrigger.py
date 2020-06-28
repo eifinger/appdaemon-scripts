@@ -1,5 +1,4 @@
 import appdaemon.plugins.hass.hassapi as hass  # pylint: disable=import-error
-import globals
 import datetime
 
 #
@@ -75,27 +74,18 @@ class MotionTrigger(hass.Hass):
 
         self.turned_on_by_me = False  # Giggedi
 
-        self.app_switch = globals.get_arg(self.args, "app_switch")
-        self.sensor = globals.get_arg(self.args, "sensor")
-        self.entity_on = globals.get_arg(self.args, "entity_on")
+        self.app_switch = self.args["app_switch"]
+        self.sensor = self.args["sensor"]
+        self.entity_on = self.args["entity_on"]
+        self.entity_off = self.args["entity_off"]
         try:
-            self.entity_off = globals.get_arg(self.args, "entity_off")
-        except KeyError:
-            self.entity_off = None
-        try:
-            self.sensor_type = globals.get_arg(self.args, "sensor_type")
+            self.sensor_type = self.args["sensor_type"]
         except KeyError:
             self.sensor_type = SENSOR_TYPE_ZIGBEE2MQTT
+        self.after = self.args.get("after")
+        self.after_sundown = self.args.get("after_sundown")
         try:
-            self.after = globals.get_arg(self.args, "after")
-        except KeyError:
-            self.after = None
-        try:
-            self.after_sundown = globals.get_arg(self.args, "after_sundown")
-        except KeyError:
-            self.after_sundown = None
-        try:
-            self.delay = globals.get_arg(self.args, "delay")
+            self.delay = self.args["delay"]
             try:
                 if self.delay.startswith("input_number"):
                     self.delay_entity = self.delay
@@ -109,27 +99,27 @@ class MotionTrigger(hass.Hass):
         except KeyError:
             self.delay = 90
         try:
-            self.turn_on_constraint_entities_off = globals.get_arg_list(
-                self.args, "turn_on_constraint_entities_off"
-            )
+            self.turn_on_constraint_entities_off = self.args[
+                "turn_on_constraint_entities_off"
+            ].split(",")
         except KeyError:
             self.turn_on_constraint_entities_off = []
         try:
-            self.turn_on_constraint_entities_on = globals.get_arg_list(
-                self.args, "turn_on_constraint_entities_on"
-            )
+            self.turn_on_constraint_entities_on = self.args[
+                "turn_on_constraint_entities_on"
+            ].split(",")
         except KeyError:
             self.turn_on_constraint_entities_on = []
         try:
-            self.turn_off_constraint_entities_off = globals.get_arg_list(
-                self.args, "turn_off_constraint_entities_off"
-            )
+            self.turn_off_constraint_entities_off = self.args[
+                "turn_off_constraint_entities_off"
+            ].split(",")
         except KeyError:
             self.turn_off_constraint_entities_off = []
         try:
-            self.turn_off_constraint_entities_on = globals.get_arg_list(
-                self.args, "turn_off_constraint_entities_on"
-            )
+            self.turn_off_constraint_entities_on = self.args[
+                "turn_off_constraint_entities_on"
+            ].split(",")
         except KeyError:
             self.turn_off_constraint_entities_on = []
 
@@ -160,10 +150,7 @@ class MotionTrigger(hass.Hass):
                 self.turn_on_callback(None)
 
     def turn_on_callback(self, kwargs):
-        self.log(
-            f"Motion detected on sensor: {self.friendly_name(self.sensor)}",
-            level="DEBUG",
-        )
+        self.log(f"Motion detected on sensor: {self.friendly_name(self.sensor)}",)
         turn_on = True
         if self.after_sundown is not None:
             if self.after_sundown and not self.sun_down():

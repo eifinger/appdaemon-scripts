@@ -3,8 +3,5 @@ nextBusIntent:
   class: nextBusIntent
   textLine: "Linie {} fährt in {} Minuten"
   #textLine: "Line {} departs in {} minutes"
-  Error: <p>Ich habe nicht richtig verstanden was du meinst</p>
+  error: <p>Ich habe nicht richtig verstanden was du meinst</p>
   sensor: sensor.nach_bruckenkopf
-  global_dependencies:
-    - globals
-    - secrets

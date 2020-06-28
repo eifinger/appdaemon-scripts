@@ -1,5 +1,4 @@
 import appdaemon.plugins.hass.hassapi as hass
-import globals
 
 
 #
@@ -26,15 +25,15 @@ class SleepModeHandler(hass.Hass):
     def initialize(self):
         self.listen_state_handle_list = []
 
-        self.app_switch = globals.get_arg(self.args, "app_switch")
-        self.sleepmode = globals.get_arg(self.args, "sleepmode")
-        self.users = globals.get_arg(self.args, "users")
-        self.notify_name = globals.get_arg(self.args, "notify_name")
-        self.message_sleeping = globals.get_arg(self.args, "message_sleeping")
-        self.message_awake = globals.get_arg(self.args, "message_awake")
+        self.app_switch = self.args["app_switch"]
+        self.sleepmode = self.args["sleepmode"]
+        self.users = self.args["users"]
+        self.notify_name = self.args["notify_name"]
+        self.message_sleeping = self.args["message_sleeping"]
+        self.message_awake = self.args["message_awake"]
 
         try:
-            self.use_alexa = globals.get_arg(self.args, "use_alexa")
+            self.use_alexa = self.args["use_alexa"]
         except KeyError:
             self.use_alexa = False
 

@@ -1,5 +1,4 @@
 import appdaemon.plugins.hass.hassapi as hass
-import globals
 from queue import Queue
 
 #
@@ -45,14 +44,13 @@ class UserSleepModeHandler(hass.Hass):
     def initialize(self):
         self.listen_state_handle_list = []
 
-        self.app_switch = globals.get_arg(self.args, "app_switch")
-        self.location_sensor = globals.get_arg(self.args, "location_sensor")
-        self.room = globals.get_arg(self.args, "room")
-        self.asleep_duration = globals.get_arg(self.args, "asleep_duration")
-        self.awake_duration = globals.get_arg(self.args, "awake_duration")
-        self.input_boolean = globals.get_arg(self.args, "input_boolean")
-        self.is_home_input_boolean = globals.get_arg(
-            self.args, "is_home_input_boolean")
+        self.app_switch = self.args["app_switch"]
+        self.location_sensor = self.args["location_sensor"]
+        self.room = self.args["room"]
+        self.asleep_duration = self.args["asleep_duration"]
+        self.awake_duration = self.args["awake_duration"]
+        self.input_boolean = self.args["input_boolean"]
+        self.is_home_input_boolean = self.args["is_home_input_boolean"]
 
         self.timer_handle = None
 

@@ -1,5 +1,4 @@
 import appdaemon.plugins.hass.hassapi as hass
-import globals
 
 #
 # App to send notification when a sensor changes state
@@ -35,15 +34,15 @@ class NotifyOfActionWhenAway(hass.Hass):
         self.listen_state_handle_list = []
         self.timer_handle_list = []
 
-        self.app_switch = globals.get_arg(self.args, "app_switch")
-        self.notify_name = globals.get_arg(self.args, "notify_name")
-        self.isHome_delay = globals.get_arg(self.args, "isHome_delay")
-        self.isHome = globals.get_arg(self.args, "isHome")
-        self.message = globals.get_arg(self.args, "message")
+        self.app_switch = self.args["app_switch"]
+        self.notify_name = self.args["notify_name"]
+        self.isHome_delay = self.args["isHome_delay"]
+        self.isHome = self.args["isHome"]
+        self.message = self.args["message"]
 
         self.notifier = self.get_app("Notifier")
 
-        for sensor in globals.get_arg_list(self.args, "sensor"):
+        for sensor in self.args["sensor"].split(","):
             self.listen_state_handle_list.append(
                 self.listen_state(self.state_change, sensor)
             )

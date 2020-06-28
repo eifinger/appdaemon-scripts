@@ -29,9 +29,6 @@ detectWrongStateWhenLeaving:
   log_level: DEBUG
   dependencies: 
     - Notifier
-  global_dependencies:
-    - globals
-    - secrets
 
 detectWindowsOpenWhenGoingToBed:
   module: detectWrongState
@@ -59,9 +56,6 @@ detectWindowsOpenWhenGoingToBed:
   log_level: DEBUG
   dependencies: 
     - Notifier
-  global_dependencies:
-    - globals
-    - secrets
 
 detectDevicesOnWhenGoingToBed:
   module: detectWrongState
@@ -77,6 +71,3 @@ detectDevicesOnWhenGoingToBed:
   log_level: DEBUG
   dependencies:
     - Notifier
-  global_dependencies:
-    - globals
-    - secrets

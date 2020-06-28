@@ -1,5 +1,4 @@
 import appdaemon.plugins.hass.hassapi as hass
-import globals
 import datetime
 
 #
@@ -28,18 +27,9 @@ class ButtonClicked(hass.Hass):
         self.listen_event_handle_list = []
         self.timer_handle_list = []
 
-        try:
-            self.actor_single = globals.get_arg(self.args, "actor_single")
-        except KeyError:
-            self.actor_single = None
-        try:
-            self.actor_double = globals.get_arg(self.args, "actor_double")
-        except KeyError:
-            self.actor_double = None
-        try:
-            self.actor_hold = globals.get_arg(self.args, "actor_hold")
-        except KeyError:
-            self.actor_hold = None
+        self.actor_single = self.args.get("actor_single")
+        self.actor_double = self.args.get("actor_double")
+        self.actor_hold = self.args.get("actor_hold")
 
         self.dimmer_timer_handle = None
 

@@ -8,9 +8,6 @@ xiaomiroundButtonBedroomClicked:
   actor_hold: light.bedroom_yeelight
   dependencies: 
     - Notifier
-  global_dependencies:
-    - globals
-    - secrets
 
 xiaomisquareButtonLobbyClicked:
   module: buttonClicked
@@ -20,9 +17,6 @@ xiaomisquareButtonLobbyClicked:
   actor_double: switch.lobby
   dependencies: 
     - Notifier
-  global_dependencies:
-    - globals
-    - secrets
 
 xiaomiroundButtonBathroomClicked:
   module: buttonClicked
@@ -33,7 +27,4 @@ xiaomiroundButtonBathroomClicked:
   actor_hold: light.lower_bathroom_yeelight
   dependencies: 
     - Notifier
-  global_dependencies:
-    - globals
-    - secrets
     

@@ -1,5 +1,4 @@
 import appdaemon.plugins.hass.hassapi as hass
-import globals
 
 #
 # App which sets a thermostat to a target temperature on state change
@@ -32,21 +31,15 @@ class SetThermostatOnStateChange(hass.Hass):
         self.timer_handle_list = []
         self.listen_state_handle_list = []
 
-        self.app_switch = globals.get_arg(self.args, "app_switch")
-        self.trigger_entity = globals.get_arg(self.args, "trigger_entity")
-        self.trigger_state = globals.get_arg(self.args, "trigger_state")
-        self.climate_entity = globals.get_arg(self.args, "climate_entity")
-        self.target_entity = globals.get_arg(self.args, "target_entity")
+        self.app_switch = self.args["app_switch"]
+        self.trigger_entity = self.args["trigger_entity"]
+        self.trigger_state = self.args["trigger_state"]
+        self.climate_entity = self.args["climate_entity"]
+        self.target_entity = self.args["target_entity"]
+        self.message = self.args.get("message")
+        self.notify_name = self.args.get("notify_name")
         try:
-            self.message = globals.get_arg(self.args, "message")
-        except KeyError:
-            self.message = None
-        try:
-            self.notify_name = globals.get_arg(self.args, "notify_name")
-        except KeyError:
-            self.notify_name = None
-        try:
-            self.use_alexa = globals.get_arg(self.args, "use_alexa")
+            self.use_alexa = self.args["use_alexa"]
         except KeyError:
             self.use_alexa = False
 
