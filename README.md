@@ -503,22 +503,6 @@ powerUsageNotification_Dishwasher:
 
 ![dishWasherNotify](images/dishWasherNotify.PNG)
 
-### resetCounterOnLastDayOfMonth
-
-App which resets a counter on the last day of month
-
-```yaml
-resetGoogleMapsApiCounterOnLastDayOfMonth:
-  module: resetCounterOnLastDayOfMonth
-  class: ResetCounterOnLastDayOfMonth
-  app_switch: input_boolean.reset_googlemapsapicounter_on_last_day_of_month
-  time: "9:00"
-  counter: counter.google_maps_api_calls
-  global_dependencies:
-    - globals
-
-```
-
 ### roomBasedLightControl
 
 BETA
