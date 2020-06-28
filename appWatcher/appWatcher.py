@@ -32,7 +32,7 @@ class AppWatcher(hass.Hass):
 
         self.handle = self.listen_log(self.log_message_callback)
 
-    def log_message_callback(self, app_name, ts, level, log_type, message, **kwargs):
+    def log_message_callback(self, app_name, ts, level, log_type, message, kwargs):
         self.log("name: {}, ts: {}, level: {}, messsage: {}".format(app_name, ts, level, message))
         if level == "WARNING" or level == "ERROR" or level == "CRITICAL":
             self.log("Correct level: {}".format(level))
