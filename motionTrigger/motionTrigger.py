@@ -77,7 +77,7 @@ class MotionTrigger(hass.Hass):
         self.app_switch = self.args["app_switch"]
         self.sensor = self.args["sensor"]
         self.entity_on = self.args["entity_on"]
-        self.entity_off = self.args["entity_off"]
+        self.entity_off = self.args.get("entity_off")
         try:
             self.sensor_type = self.args["sensor_type"]
         except KeyError:
