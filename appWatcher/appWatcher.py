@@ -29,11 +29,6 @@ class AppWatcher(hass.Hass):
         self.handle = self.listen_log(self.log_message_callback)
 
     def log_message_callback(self, app_name, ts, level, log_type, message, kwargs):
-        self.log(
-            "name: {}, ts: {}, level: {}, messsage: {}".format(
-                app_name, ts, level, message
-            )
-        )
         if level == "WARNING" or level == "ERROR" or level == "CRITICAL":
             if app_name == "AppDaemon":
                 if "Unexpected error" in message:
