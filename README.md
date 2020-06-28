@@ -275,27 +275,11 @@ homeArrivalNotifierUserOne:
     - globals
 ```
 
-### increaseCounterOnServiceCall
-
-Increase a counter entity on a specified service call. I use it to keep track of all Google Maps Service Calls so I don't exceed my limit.
-
-```yaml
-increaseCounterOnGoogleMapsUpdate:
-  module: increaseCounterOnServiceCall
-  class: IncreaseCounterOnServiceCall
-  app_switch: input_boolean.increase_counter_on_google_maps_update
-  domain: homeassistant
-  service: update_entity
-  entity_id: sensor.travel_time_home_user_one
-  counter: counter.google_maps_api_calls
-  global_dependencies:
-    - globals
-```
-
 ### isHomeDeterminer
 
 Controls an input_boolean "isHome" which is used as a trigger for other Apps.
 The state depends on other input_booleans controlled by the [isUserHomeDeterminer](isUserHomeDeterminer/isUserHomeDeterminer.py)
+
 ```yaml
 isHomeDeterminer:
   module: isHomeDeterminer
@@ -414,28 +398,15 @@ nextAppointmentLeaveNotifier:
   global_dependencies:
     - globals
 ```
+
 ![nextAppointmentLeaveNotifier](images/next_appoint_leave_modifier.PNG)
 ![next_appoint_leave_modifier_notification](images/next_appoint_leave_modifier_notification.PNG)
-
-### notifyFailedLogin
-
-Send a notification on a failed login.
-```yaml
-notifyFailedLogin:
-  module: notifyFailedLogin
-  class: NotifyFailedLogin
-  notify_name: group_notifications
-  message: "Alarm: {}"
-  #message: "Alarm: {}"
-  global_dependencies:
-    - globals
-```
-![failedLogin](images/failedLogin.PNG)
 
 ### notifyOfActionWhenAway
 
 Notify me of any event for a list of entities when no one is at home.
 For example a door being openend or a motion sensor triggered
+
 ```yaml
 notifyOfActionWhenAway:
   module: notifyOfActionWhenAway
