@@ -21,6 +21,9 @@ import datetime
 #
 # Release Notes
 #
+# Version 1.5:
+#   Catch new is unknown
+#
 # Version 1.4:
 #   Use sleepmode
 #
@@ -75,6 +78,7 @@ class SetThermostat(hass.Hass):
             new is not None
             and new != old
             and new != ""
+            and new != "unknown"
             and new != self.cached_alarm_time
         ):
             if self.run_timer is not None:
