@@ -5,9 +5,9 @@ newWifiDeviceNotify:
   user_id: secret_telegram_user_id
   message: "Unbekanntes Gerät entdeckt. Hostname: {}. MAC: {}."
   #message: "Unknown device connected. Hostname: {}. MAC: {}"
-  #fritzbox_url: secret_fritzbox_url
+  #fritzbox_url: fritzbox_url
   #fritzbox_user: ''
-  #fritzbox_password: secret_fritzbox_password
+  #fritzbox_password: fritzbox_password
   #fritzbox_profile_name: 'Unbeschränkt'
   #fritzbox_message_allow_access: "Soll ich das Gerät ins Internet lassen?"
   #fritzbox_message_allow_access: "Should I let the device access the Internet?"

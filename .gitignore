@@ -111,3 +111,6 @@ secrets.py
 
 #PyCharm
 .idea
+
+#AppDaemon
+secrets.yaml

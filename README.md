@@ -272,7 +272,7 @@ homeArrivalNotifierUserOne:
   app_switch: input_boolean.home_arrival_notifier_user_one
   input_boolean: input_boolean.user_one_home
   notify_name: group_notifications
-  user_name: secret_name_user_one
+  user_name: Kevin
   zone_name: Home
   message: "Willkommen zu Hause {}."
   #message: "Welcome Home {}."
@@ -327,7 +327,7 @@ isUserHomeDeterminerUserOne:
   class: IsUserHomeDeterminer
   app_switch: input_boolean.is_user_home_determiner_user_one
   input_boolean: input_boolean.user_one_home
-  device_tracker: secret_device_user_one
+  device_tracker: person.kevin
   door_sensor: binary_sensor.door_window_sensor_158d000126a57b
   global_dependencies:
     - globals
@@ -342,8 +342,8 @@ leavingWorkNotifierUserOne:
   module: leavingZoneNotifier
   class: LeavingZoneNotifier
   app_switch: input_boolean.leaving_work_notifier_user_one
-  device: secret_device_user_one
-  user_name: secret_name_user_one
+  device: person.kevin
+  user_name: Kevin
   lingering_time: 3600
   delay: 120
   zone: Arbeit
@@ -708,7 +708,7 @@ userSleepModeHandlerUserOne:
   class: UserSleepModeHandler
   app_switch: input_boolean.user_sleep_mode_handler_user_one
   input_boolean: input_boolean.user_one_sleep
-  location_sensor: secret_device_user_one
+  location_sensor: person.kevin
   room: bedroom
   duration: 600
   global_dependencies:

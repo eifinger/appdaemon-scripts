@@ -86,7 +86,7 @@ Will send you a reminder over the notification service when you leave/enter a zo
 remindMeOfXWhenZoneIntent:
   module: remindMeOfXWhenZoneIntent
   class: RemindMeOfXWhenZoneIntent
-  device_tracker: secret_device_user_one
+  device_tracker: person.kevin
   notify_name: group_notifications
   Error: <p>Es ist etwas schief gegangen</p>
   textLine: "Okay ich erinnere dich an {{reminder}} wenn du {{zone}} "

@@ -5,7 +5,7 @@ homeArrivalNotifierUserOne:
   app_switch: input_boolean.home_arrival_notifier_user_one
   input_boolean: input_boolean.user_one_home
   notify_name: group_notifications
-  user_name: secret_name_user_one
+  user_name: Kevin
   zone_name: Home
   message: "Willkommen zu Hause {}."
   #message: "Welcome Home {}."
@@ -22,7 +22,7 @@ homeArrivalNotifierUserTwo:
   app_switch: input_boolean.home_arrival_notifier_user_two
   input_boolean: input_boolean.user_two_home
   notify_name: group_notifications
-  user_name: secret_name_user_two
+  user_name: Sina
   zone_name: Home
   message: "Willkommen zu Hause {}."
   #message: "Welcome Home {}."

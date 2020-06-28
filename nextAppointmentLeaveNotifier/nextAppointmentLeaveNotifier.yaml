@@ -3,7 +3,7 @@ nextAppointmentLeaveNotifier:
   class: NextAppointmentLeaveNotifier
   sensor: sensor.calc_leave_time
   notify_input_boolean: input_boolean.announce_time_to_leave
-  notify_name: secret_name_user_one
+  notify_name: Kevin
   input_number: input_number.leave_time_offset
   destination_name_sensor: sensor.cal_next_appointment_location
   travel_time_sensor: sensor.travel_time_next_appointment_location
@@ -22,7 +22,7 @@ nextAppointmentLeaveNotifierUserTwo:
   class: NextAppointmentLeaveNotifier
   sensor: sensor.calc_leave_time_user_two
   notify_input_boolean: input_boolean.announce_time_to_leave_user_two
-  notify_name: secret_name_user_two
+  notify_name: Sina
   input_number: input_number.leave_time_offset_user_two
   destination_name_sensor: sensor.cal_next_appointment_location_user_two
   travel_time_sensor: sensor.travel_time_next_appointment_location_user_two

@@ -2,8 +2,8 @@ leavingWorkNotifierUserOne:
   module: leavingZoneNotifier
   class: LeavingZoneNotifier
   app_switch: input_boolean.leaving_work_notifier_user_one
-  device: secret_device_user_one
-  user_name: secret_name_user_one
+  device: person.kevin
+  user_name: Kevin
   lingering_time: 3600
   delay: 120
   zone: Arbeit
@@ -23,11 +23,11 @@ leavingWorkNotifierUserTwo:
   module: leavingZoneNotifier
   class: LeavingZoneNotifier
   app_switch: input_boolean.leaving_work_notifier_user_two
-  device: secret_device_user_two
-  user_name: secret_name_user_two
+  device: device_tracker.sina
+  user_name: Sina
   lingering_time: 3600
   delay: 120
-  zone: secret_friendly_name_work_user_two
+  zone: !secret friendly_name_work_user_two
   notify_name: group_notifications
   message: "{} hat {} vor {} Minuten verlassen."
   #message: "{} left {} {} minutes ago"
@@ -44,8 +44,8 @@ leavingElmoNotifierUserTwo:
   module: leavingZoneNotifier
   class: LeavingZoneNotifier
   app_switch: input_boolean.leaving_elmo_notifier_user_two
-  device: secret_device_user_two
-  user_name: secret_name_user_two
+  device: device_tracker.sina
+  user_name: Sina
   lingering_time: 3600
   delay: 120
   zone: Elmo
