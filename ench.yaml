@@ -3,7 +3,6 @@ ench:
   module: ench
   class: EnCh
   notify: "notify.kevin"
-  show_friendly_name: False
   exclude:
     - device_tracker.venue_8*
     - device_tracker.kevin
