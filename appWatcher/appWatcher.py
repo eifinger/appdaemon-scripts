@@ -32,12 +32,12 @@ class AppWatcher(hass.Hass):
 
         self.handle = self.listen_log(self.log_message_callback)
 
-    def log_message_callback(self, name, ts, level, message):
-        self.log("name: {}, ts: {}, level: {}, messsage: {}".format(name, ts, level, message))
+    def log_message_callback(self, app_name, ts, level, log_type, message, **kwargs):
+        self.log("name: {}, ts: {}, level: {}, messsage: {}".format(app_name, ts, level, message))
         if level == "WARNING" or level == "ERROR" or level == "CRITICAL":
             self.log("Correct level: {}".format(level))
-            self.log("name: {}".format(name))
-            if name == "Appdaemon":
+            self.log("name: {}".format(app_name))
+            if app_name == "Appdaemon":
                 self.log("Is Appdaemon message")
                 # check if this is a warning for an app
                 try:
@@ -51,13 +51,13 @@ class AppWatcher(hass.Hass):
                 self.log("first_space_index is: {}".format(first_space_index))
                 if app_message_start_index is not None:
                     if app_message_start_index > first_space_index:
-                        app_name = message[11, message.index(":", 11)]
+                        stripped_app_name = message[11, message.index(":", 11)]
 
                         app_message = message[app_message_start_index:]
 
                         self.notifier.notify(
                             self.notify_name,
-                            self.notify_message.format(app_name),
+                            self.notify_message.format(stripped_app_name),
                             useAlexa=False,
                         )
                         if self.include_log_message_in_notification:
