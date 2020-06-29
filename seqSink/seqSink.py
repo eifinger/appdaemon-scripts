@@ -25,8 +25,9 @@ class SeqSink(hass.Hass):
         self.session = requests.Session()
         self.session.headers["Content-Type"] = "application/json"
 
-        if self.args("server_url"):
-            self.session.headers["X-Seq-ApiKey"] = self.args("server_url")
+        api_key = self.args.get("server_url")
+        if api_key:
+            self.session.headers["X-Seq-ApiKey"] = api_key
 
         self.handle = self.listen_log(self.log_message_callback)
 
