@@ -34,12 +34,12 @@ class SeqSink(hass.Hass):
     def log_message_callback(self, app_name, ts, level, log_type, message, kwargs):
         if app_name != "seqSink":
             event_data = {
-                "Timestamp": ts,
-                "Level": level,
-                "MessageTemplate": message,
+                "Timestamp": str(ts),
+                "Level": str(level),
+                "MessageTemplate": str(message),
                 "Properties": {
                     "Type": "Appdaemon",
-                    "AppName": app_name
+                    "AppName": str(app_name)
                 },
             }
             request_body = {"Events": [event_data]}
