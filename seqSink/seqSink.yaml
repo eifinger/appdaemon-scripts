@@ -1,0 +1,4 @@
+seqSink:
+  module: seqSink
+  class: SeqSink
+  server_url: "http://seq:5341/"

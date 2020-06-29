@@ -499,6 +499,17 @@ powerUsageNotification_Dishwasher:
 
 ![dishWasherNotify](images/dishWasherNotify.PNG)
 
+### seqSink
+
+App which forwards all logs to seq.
+
+```yaml
+seqSink:
+  module: seqSink
+  class: SeqSink
+  server_url: "http://seq:5341/"
+```
+
 ### setThermostat
 
 App which sets a thermostat to a target temperature for a specific duration
