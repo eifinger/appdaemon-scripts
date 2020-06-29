@@ -47,7 +47,7 @@ class SeqSink(hass.Hass):
             try:
                 request_body_json = json.dumps(request_body)
             except TypeError:
-                self.log(f"Could not serialize {message}")
+                self.log(f"Could not serialize {request_body}")
                 return
 
             try:
