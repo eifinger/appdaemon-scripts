@@ -26,6 +26,7 @@ ench:
     - switch.large_ventilator
     - sensor.travel_time_next*
     - sensor.glances*_temp
+    - sensor.publish_ip_on_boot
     # Alexa Media Player
     - sensor.*next_alarm
     - sensor.*next_reminder
