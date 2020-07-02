@@ -26,6 +26,9 @@ import datetime
 #
 # Release Notes
 #
+# Version 1.11:
+#   Catch new state might be None
+#
 # Version 1.10:
 #   Catch old state might be None during startup
 #
@@ -95,39 +98,40 @@ class LeavingZoneNotifier(hass.Hass):
     def zone_state_change(self, entity, attributes, old, new, kwargs):
         """Check if user entered or left a zone."""
         if self.get_state(self.app_switch) == "on":
-            last_changed = self.convert_utc(new["last_changed"])
-            if old is not None:
-                old_state = old["state"]
-            self.log(
-                "Zone of {} changed from {} to {}.".format(
-                    self.friendly_name(entity), old_state, new["state"]
-                ),
-            )
-            if (
-                new["state"] == self.zone
-                and old_state != self.zone
-                and self.false_positive is False
-            ):
-                self.log("Setting user_entered_zone to {}".format(last_changed))
-                self.user_entered_zone = last_changed
-            if old_state == self.zone and new["state"] != self.zone:
-                if self.user_entered_zone is None or (
-                    last_changed - self.user_entered_zone
-                    >= datetime.timedelta(seconds=self.lingering_time)
+            if new is not None:
+                last_changed = self.convert_utc(new["last_changed"])
+                if old is not None:
+                    old_state = old["state"]
+                self.log(
+                    "Zone of {} changed from {} to {}.".format(
+                        self.friendly_name(entity), old_state, new["state"]
+                    ),
+                )
+                if (
+                    new["state"] == self.zone
+                    and old_state != self.zone
+                    and self.false_positive is False
                 ):
-                    self.log(
-                        "Zone of {} changed from {} to {}. Wait {} seconds until notification.".format(
-                            self.friendly_name(entity),
-                            old_state,
-                            new["state"],
-                            self.delay,
+                    self.log("Setting user_entered_zone to {}".format(last_changed))
+                    self.user_entered_zone = last_changed
+                if old_state == self.zone and new["state"] != self.zone:
+                    if self.user_entered_zone is None or (
+                        last_changed - self.user_entered_zone
+                        >= datetime.timedelta(seconds=self.lingering_time)
+                    ):
+                        self.log(
+                            "Zone of {} changed from {} to {}. Wait {} seconds until notification.".format(
+                                self.friendly_name(entity),
+                                old_state,
+                                new["state"],
+                                self.delay,
+                            )
                         )
-                    )
-                    self.timer_handle_list.append(
-                        self.run_in(self.notify_user, self.delay, old_zone=old)
-                    )
-                    self.false_positive = True
-                    self.log("Setting false_positive to {}".format(self.false_positive))
+                        self.timer_handle_list.append(
+                            self.run_in(self.notify_user, self.delay, old_zone=old)
+                        )
+                        self.false_positive = True
+                        self.log("Setting false_positive to {}".format(self.false_positive))
 
     def notify_user(self, kwargs):
         # Check if user did not come back to the zone in the meantime
