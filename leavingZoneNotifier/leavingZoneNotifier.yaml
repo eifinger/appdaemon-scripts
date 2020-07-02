@@ -20,7 +20,7 @@ leavingWorkNotifierUserTwo:
   module: leavingZoneNotifier
   class: LeavingZoneNotifier
   app_switch: input_boolean.leaving_work_notifier_user_two
-  device: device_tracker.sina
+  device: person.sina
   user_name: Sina
   lingering_time: 3600
   delay: 120
@@ -38,7 +38,7 @@ leavingElmoNotifierUserTwo:
   module: leavingZoneNotifier
   class: LeavingZoneNotifier
   app_switch: input_boolean.leaving_elmo_notifier_user_two
-  device: device_tracker.sina
+  device: person.sina
   user_name: Sina
   lingering_time: 3600
   delay: 120
