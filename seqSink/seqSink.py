@@ -9,6 +9,9 @@ import requests
 #
 # Args:
 #
+# server_url: Server url of the seq instance to log to. example: "http://seq:5341/"
+# api_key (optional): Api key to use.
+#
 # Release Notes
 #
 # Version 1.0:
@@ -58,10 +61,8 @@ class SeqSink(hass.Hass):
                 )
                 response.raise_for_status()
             except requests.RequestException as requestFailed:
-                # Only notify for the first record in the batch, or we'll be generating too much noise.
                 self.log(f"Could not serialize {message}")
 
-                # Attempt to log error response
                 if not requestFailed.response:
                     self.log("Response from Seq was unavailable.")
                 elif not requestFailed.response.text:

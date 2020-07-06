@@ -10,16 +10,16 @@ import datetime
 # app_switch: on/off switch for this app. example: input_boolean.turn_fan_on_when_hot
 # sensor: binary sensor to use as trigger
 # entity_on : entity to turn on when detecting motion, can be a light, script, scene or anything else that can be turned on
-# entity_off (optionally): entity to turn off when detecting motion, can be a light, script or anything else that can be turned off. Can also be a scene which will be turned on
+# entity_off (optional): entity to turn off when detecting motion, can be a light, script or anything else that can be turned off. Can also be a scene which will be turned on
 # sensor_type: Possible values: xiaomi, zigbee2mqtt, deconz. Default: xiaomi
-# after (optionally): Only trigger after a certain time. example: 22:00
-# after_sundown (optionally): true
-# delay (optionally): amount of time after turning on to turn off again. If not specified defaults to 70 seconds. example: 10
+# after (optional): Only trigger after a certain time. example: 22:00
+# after_sundown (optional): true
+# delay (optional): amount of time after turning on to turn off again. If not specified defaults to 70 seconds. example: 10
 #                     if an input_number is defined it will automatically take the delay from there. example: input_number.motionTrigger_delay
-# turn_on_constraint_entities_off (optionally): list of entities which have to be off for entity to be turned on. example: light.bedroom_yeelight,light.bar_table
-# turn_on_constraint_entities_on (optionally): list of entities which have to be on for entity to be turned on. example: light.bedroom_yeelight,light.bar_table
-# turn_off_constraint_entities_off (optionally): list of entities which have to be off for entity to be turned off. example: light.bedroom_yeelight,light.bar_table
-# turn_off_constraint_entities_on (optionally): list of entities which have to be on for entity to be turned off. example: light.bedroom_yeelight,light.bar_table
+# turn_on_constraint_entities_off (optional): list of entities which have to be off for entity to be turned on. example: light.bedroom_yeelight,light.bar_table
+# turn_on_constraint_entities_on (optional): list of entities which have to be on for entity to be turned on. example: light.bedroom_yeelight,light.bar_table
+# turn_off_constraint_entities_off (optional): list of entities which have to be off for entity to be turned off. example: light.bedroom_yeelight,light.bar_table
+# turn_off_constraint_entities_on (optional): list of entities which have to be on for entity to be turned off. example: light.bedroom_yeelight,light.bar_table
 #
 # Release Notes
 #

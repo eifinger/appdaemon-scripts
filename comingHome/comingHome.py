@@ -9,10 +9,10 @@ import datetime
 # app_switch: on/off switch for this app. example: input_boolean.turn_fan_on_when_hot
 # sensor: door sensor
 # isHome: input_boolean which shows if someone is home eg input_boolean.isHome
-# actor (optionally): actor to turn on. example: script.receiver_set_source_bluetooth
-# service (optionally): service to call. example: media_player.volume_set
-# service_data (optionally): dictionary of attributes for the service call.
-# after_sundown (optionally): whether to only trigger after sundown. example: True
+# actor (optional): actor to turn on. example: script.receiver_set_source_bluetooth
+# service (optional): service to call. example: media_player.volume_set
+# service_data (optional): dictionary of attributes for the service call.
+# after_sundown (optional): whether to only trigger after sundown. example: True
 # Release Notes
 #
 # Version 1.4.2:
