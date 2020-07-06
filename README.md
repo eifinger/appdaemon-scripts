@@ -65,6 +65,7 @@ This is useful if I don't want any notifications right now or an App is misbehav
 * [notifyOfActionWhenAway](#notifyofactionwhenaway)
 * [plantWateringNotifier](#plantwateringnotifier)
 * [powerUsageNotification](#powerusagenotification)
+* [seqSink](#seqsink)
 * [setThermostat](#setthermostat)
 * [setThermostatOnStateChange](#setthermostatonstatechange)
 * [sleepModeHandler](#sleepmodehandler)
@@ -502,6 +503,7 @@ powerUsageNotification_Dishwasher:
 ### seqSink
 
 App which forwards all logs to seq.
+Blogged about this app in [this](https://blog.kevineifinger.de/archive/2020/07/06/Log-Management-For-My-AppDaemon-Apps.html) post.
 
 ```yaml
 seqSink:
