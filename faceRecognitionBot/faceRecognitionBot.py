@@ -430,6 +430,7 @@ class FaceRecognitionBot(hass.Hass):
         # copy file to saved image to display in HA
         shutil.copy(filename, self.filename)
         # send photo
+        self.log(f"Sending photo with filename: {filename}")
         self.call_service("TELEGRAM_BOT/SEND_PHOTO", file=filename)
         # copy all files where a face was detected to the unkown folder
         identifier = self._copyFilesToUnknown(result_dict_dict)
