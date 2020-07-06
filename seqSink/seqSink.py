@@ -67,7 +67,7 @@ class SeqSink(hass.Hass):
                 elif not requestFailed.response.text:
                     self.log("Response body from Seq was empty.")
                 else:
-                    self.log("Response body from Seq:{requestFailed.response.text}")
+                    self.log(f"Response body from Seq:{requestFailed.response.text}")
 
     def terminate(self):
         self.cancel_listen_log(self.handle)
