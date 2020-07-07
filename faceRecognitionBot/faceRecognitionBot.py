@@ -140,6 +140,7 @@ class FaceRecognitionBot(hass.Hass):
         self.run_in_initial_delay = 43200
         self.run_in_delay = self.run_in_initial_delay
         self.run_in_error_delay = 60
+        self.check_health_timeout = 10
 
         self.exclude_folders = (
             "healthcheck",
@@ -207,7 +208,7 @@ class FaceRecognitionBot(hass.Hass):
     def check_classifier_health(self):
         """Check if classifier is reachable under health_url and returns HTTP 200"""
         try:
-            response = requests.get(self.health_url)
+            response = requests.get(self.health_url, timeout=self.check_health_timeout)
             if response.status_code == 200:
                 self.log("Health-check passed")
                 self.run_in_delay = self.run_in_initial_delay
@@ -222,6 +223,10 @@ class FaceRecognitionBot(hass.Hass):
                 else:
                     self.run_in_delay = self.run_in_error_delay
                 return False
+        except requests.exceptions.Timeout as timeout_exception:
+            self.log("Health-Check timed out")
+            self.check_health_timeout = self.check_health_timeout * 1.5
+            return self.check_classifier_health()
         except requests.exceptions.RequestException as exception:
             self.log("Server is unreachable", level="WARNING")
             self.log(exception, level="WARNING")
@@ -577,7 +582,7 @@ class FaceRecognitionBot(hass.Hass):
         """Post an image to the classifier."""
         try:
             response = requests.post(
-                url, files={"file": open(image, "rb")}, timeout=TIMEOUT
+                url, files={"file": open(image, "rb")}, timeout=self.check_health_callback
             )
             return response
         except requests.exceptions.ConnectionError:
