@@ -429,11 +429,14 @@ class FaceRecognitionBot(hass.Hass):
         filename = self._getFileWithUnknownFaceFromResult(result_dict_dict)
         # copy file to saved image to display in HA
         shutil.copy(filename, self.filename)
+        filename_without_path = os.path.split(filename)[1]
         # send photo
-        self.log(f"Sending photo with filename: {filename}")
-        self.call_service("telegram_bot/send_photo", file=filename, target=self.notify_name)
+        unknown_filename = self.facebox_unknown_directory + filename_without_path
+        self.log(f"Sending photo with filename: {unknown_filename}")
+        self.call_service("telegram_bot/send_photo", file=unknown_filename, target=self.notify_name)
         # copy all files where a face was detected to the unkown folder
-        identifier = self._copyFilesToUnknown(result_dict_dict)
+        identifier = self._moveFilesToUnknown(result_dict_dict)
+        
         if identifier == "":
             self.log("Identifier is empty", level="ERROR")
         else:
@@ -522,7 +525,7 @@ class FaceRecognitionBot(hass.Hass):
                             # same face remove it from the list
                             unkown_faces.remove(filename)
 
-    def _copyFilesToUnknown(self, result_dict_dict):
+    def _moveFilesToUnknown(self, result_dict_dict):
         """Copy all files where the unknown face was detected to the unknown folder.
         Returns the timestamp under which all files can be identified"""
         identifier = ""
@@ -540,7 +543,7 @@ class FaceRecognitionBot(hass.Hass):
                 shutil.move(filename, new_filename)
         return identifier
 
-    def _copyFilesFromUnkownToDirectoryByIdentifier(self, directory, identifier):
+    def _moveFilesFromUnkownToDirectoryByIdentifier(self, directory, identifier):
         """Copy all files in the unknown folder which belong to an identifier (a timestamp) to a new directory"""
         if not os.path.exists(directory):
             os.makedirs(directory)
@@ -630,7 +633,7 @@ class FaceRecognitionBot(hass.Hass):
                 )
                 identifier = data_callback.split(IDENTIFIER_DELIMITER)[1]
                 directory = self.facebox_known_faces_directory + face
-                self._copyFilesFromUnkownToDirectoryByIdentifier(directory, identifier)
+                self._moveFilesFromUnkownToDirectoryByIdentifier(directory, identifier)
                 self.teach_name_by_directory(face, directory)
 
         if data_callback.startswith("/unkown"):
@@ -685,7 +688,7 @@ class FaceRecognitionBot(hass.Hass):
             )
             # Copy files to new directory
             directory = self.facebox_known_faces_directory + text
-            self._copyFilesFromUnkownToDirectoryByIdentifier(
+            self._moveFilesFromUnkownToDirectoryByIdentifier(
                 directory, self.last_identifier
             )
             self.teach_name_by_directory(text, directory)
