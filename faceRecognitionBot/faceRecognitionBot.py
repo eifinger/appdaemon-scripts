@@ -582,7 +582,7 @@ class FaceRecognitionBot(hass.Hass):
         """Post an image to the classifier."""
         try:
             response = requests.post(
-                url, files={"file": open(image, "rb")}, timeout=self.check_health_callback
+                url, files={"file": open(image, "rb")}, timeout=self.check_health_timeout
             )
             return response
         except requests.exceptions.ConnectionError:
