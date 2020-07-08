@@ -589,6 +589,8 @@ class FaceRecognitionBot(hass.Hass):
             self.log("ConnectionError")
         except requests.exceptions.ReadTimeout:
             self.log("ReadTimeout")
+            self.check_health_timeout = self.check_health_timeout * 1.5
+            self.log(f"Setting Health Check Timeout to {self.check_health_timeout}")
 
     ###############################################################
     # Telegram Bot
