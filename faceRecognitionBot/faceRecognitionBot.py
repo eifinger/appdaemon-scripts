@@ -434,13 +434,14 @@ class FaceRecognitionBot(hass.Hass):
         filename = self._getFileWithUnknownFaceFromResult(result_dict_dict)
         # copy file to saved image to display in HA
         shutil.copy(filename, self.filename)
+        # move all files where a face was detected to the unkown folder
+        identifier = self._moveFilesToUnknown(result_dict_dict)
+
         filename_without_path = os.path.split(filename)[1]
         # send photo
         unknown_filename = self.facebox_unknown_directory + filename_without_path
         self.log(f"Sending photo with filename: {unknown_filename}")
         self.call_service("telegram_bot/send_photo", file=unknown_filename, target=self.notify_name)
-        # copy all files where a face was detected to the unkown folder
-        identifier = self._moveFilesToUnknown(result_dict_dict)
         
         if identifier == "":
             self.log("Identifier is empty", level="ERROR")
