@@ -1,9 +1,9 @@
 #App to Turn on Receiver Bluetooth when Alexa is playing something so it plays on the big speakers
-alexaSpeakerConnector:
-  module: alexaSpeakerConnector
-  class: AlexaSpeakerConnector
-  app_switch: input_boolean.alexa_speaker_connector
-  alexa_entity: media_player.kevins_echo_dot_oben
-  alexa_entity_source: Denon AVR-X1300W
-  receiver: media_player.denon_avr_x1300w
-  receiver_source: Bluetooth
+# alexaSpeakerConnector:
+#   module: alexaSpeakerConnector
+#   class: AlexaSpeakerConnector
+#   app_switch: input_boolean.alexa_speaker_connector
+#   alexa_entity: media_player.kevins_echo_dot_oben
+#   alexa_entity_source: Denon AVR-X1300W
+#   receiver: media_player.denon_avr_x1300w
+#   receiver_source: Bluetooth
