@@ -1,19 +1,19 @@
 # Alarm Clock App
-alarmClock:
-  module: alarmClock
-  class: AlarmClock
-  alarm_time: sensor.alarm_time
-  wakemeup: input_boolean.wakemeup
-  naturalwakeup: input_number.alarm_natural_wakeup_fade_in
-  alarmweekday: input_boolean.alarmweekday
-  radiowakeup: input_boolean.radiowakeup
-  #TODO radioplayer: input_select.wakeup_radioplayer
-  wakeup_light: light.bedroom_yeelight
-  fade_in_time_multiplicator: 60
-  isweekday: binary_sensor.workday_today
-  notify_name: group_notifications
-  message: "Guten Morgen!"
-  #message: "Good Morning!"
-  button: binary_sensor.switch_158d000215aa28
-  dependencies:
-    - Notifier
+# alarmClock:
+#   module: alarmClock
+#   class: AlarmClock
+#   alarm_time: sensor.alarm_time
+#   wakemeup: input_boolean.wakemeup
+#   naturalwakeup: input_number.alarm_natural_wakeup_fade_in
+#   alarmweekday: input_boolean.alarmweekday
+#   radiowakeup: input_boolean.radiowakeup
+#   #TODO radioplayer: input_select.wakeup_radioplayer
+#   wakeup_light: light.bedroom_yeelight
+#   fade_in_time_multiplicator: 60
+#   isweekday: binary_sensor.workday_today
+#   notify_name: group_notifications
+#   message: "Guten Morgen!"
+#   #message: "Good Morning!"
+#   button: binary_sensor.switch_158d000215aa28
+#   dependencies:
+#     - Notifier
