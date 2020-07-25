@@ -441,7 +441,7 @@ class FaceRecognitionBot(hass.Hass):
         # send photo
         unknown_filename = self.facebox_unknown_directory + filename_without_path
         self.log(f"Sending photo with filename: {unknown_filename}")
-        self.call_service("telegram_bot/send_photo", file=unknown_filename, target=self.notify_name)
+        self.call_service("telegram_bot/send_photo", file=unknown_filename, target=self.user_id)
         
         if identifier == "":
             self.log("Identifier is empty", level="ERROR")
@@ -455,7 +455,7 @@ class FaceRecognitionBot(hass.Hass):
         # copy file to saved image to display in HA
         shutil.copy(filename, self.filename)
         # send photo
-        self.call_service("telegram_bot/send_photo", file=filename, target=self.notify_name)
+        self.call_service("telegram_bot/send_photo", file=filename, target=self.user_id)
         self.log(self.message_unkown_face_with_known)
         self.notifier.notify(self.notify_name, self.message_unkown_face_with_known)
 
