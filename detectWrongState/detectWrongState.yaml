@@ -1,34 +1,34 @@
-detectWrongStateWhenLeaving:
-  module: detectWrongState
-  class: DetectWrongState
-  app_switch: input_boolean.detect_wrong_state_when_leaving
-  entities_off: "binary_sensor.contact_bedroom_door,\
-  binary_sensor.contact_bedroom_door_tilted,binary_sensor.contact_door,binary_sensor.contact_guest_window,\
-  binary_sensor.contact_kitchen_window,binary_sensor.contact_studyroom_door,\
-  binary_sensor.contact_studyroom_door_tilted,binary_sensor.contact_terrace_door,\
-  binary_sensor.contact_terrace_door_tilted,binary_sensor.contact_upper_bathroom_window,\
-  media_player.denon_avr_x1300w,switch.large_lamp,switch.small_lamp,switch.snowboard,\
-  light.bedroom_yeelight,light.bar_table,light.lobby_yeelight,light.reading_lamp_yeelight,\
-  light.upper_stairs_yeelight,light.stairs_lower_yeelight,switch.ventilator,light.livingroom_yeelight,\
-  switch.tv,switch.weihnachtslichter,switch.bedroom_receiver,light.lower_bathroom_yeelight,\
-  media_player.kevin_s_echo_dot_unten,media_player.kevins_echo,media_player.kevins_echo_dot,\
-  media_player.kevins_echo_dot_oben,binary_sensor.contact_upper_bathroom_window_tilted,\
-  binary_sensor.contact_badfenster"
-  trigger_entity: input_boolean.is_home
-  trigger_state: "off"
-  message: "Du hast {} angelassen. Ich habe es für dich ausgemacht."
-  #message: "You left on {}. I turned it off for you"
-  message_off: "Du hast {} vergessen anzumachen. Ich habe es für dich angemacht."
-  #message_off: "You forgot to turn on {}. I turned it on for you"
-  message_reed: "Du hast {} offen gelassen."
-  #message_reed: "You left open {} Dummy."
-  message_reed_off: "Du hast {} zu gelassen."
-  #message_reed_off: "You left {} closed Dummy."
-  notify_name: group_notifications
-  use_alexa: False
-  log_level: DEBUG
-  dependencies: 
-    - Notifier
+# detectWrongStateWhenLeaving:
+#   module: detectWrongState
+#   class: DetectWrongState
+#   app_switch: input_boolean.detect_wrong_state_when_leaving
+#   entities_off: "binary_sensor.contact_bedroom_door,\
+#   binary_sensor.contact_bedroom_door_tilted,binary_sensor.contact_door,binary_sensor.contact_guest_window,\
+#   binary_sensor.contact_kitchen_window,binary_sensor.contact_studyroom_door,\
+#   binary_sensor.contact_studyroom_door_tilted,binary_sensor.contact_terrace_door,\
+#   binary_sensor.contact_terrace_door_tilted,binary_sensor.contact_upper_bathroom_window,\
+#   media_player.denon_avr_x1300w,switch.large_lamp,switch.small_lamp,switch.snowboard,\
+#   light.bedroom_yeelight,light.bar_table,light.lobby_yeelight,light.reading_lamp_yeelight,\
+#   light.upper_stairs_yeelight,light.stairs_lower_yeelight,switch.ventilator,light.livingroom_yeelight,\
+#   switch.tv,switch.weihnachtslichter,switch.bedroom_receiver,light.lower_bathroom_yeelight,\
+#   media_player.kevin_s_echo_dot_unten,media_player.kevins_echo,media_player.kevins_echo_dot,\
+#   media_player.kevins_echo_dot_oben,binary_sensor.contact_upper_bathroom_window_tilted,\
+#   binary_sensor.contact_badfenster"
+#   trigger_entity: input_boolean.is_home
+#   trigger_state: "off"
+#   message: "Du hast {} angelassen. Ich habe es für dich ausgemacht."
+#   #message: "You left on {}. I turned it off for you"
+#   message_off: "Du hast {} vergessen anzumachen. Ich habe es für dich angemacht."
+#   #message_off: "You forgot to turn on {}. I turned it on for you"
+#   message_reed: "Du hast {} offen gelassen."
+#   #message_reed: "You left open {} Dummy."
+#   message_reed_off: "Du hast {} zu gelassen."
+#   #message_reed_off: "You left {} closed Dummy."
+#   notify_name: group_notifications
+#   use_alexa: False
+#   log_level: DEBUG
+#   dependencies: 
+#     - Notifier
 
 # detectWindowsOpenWhenGoingToBed:
 #   module: detectWrongState
