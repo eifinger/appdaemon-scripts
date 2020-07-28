@@ -1,27 +1,27 @@
 #Notification if user one arrives at home
-homeArrivalNotifierUserOne:
-  module: homeArrivalNotifier
-  class: HomeArrivalNotifier
-  app_switch: input_boolean.home_arrival_notifier_user_one
-  input_boolean: input_boolean.user_one_home
-  notify_name: group_notifications
-  user_name: Kevin
-  zone_name: Home
-  message: "Willkommen zu Hause {}."
-  #message: "Welcome Home {}."
-  dependencies: 
-    - Notifier
+# homeArrivalNotifierUserOne:
+#   module: homeArrivalNotifier
+#   class: HomeArrivalNotifier
+#   app_switch: input_boolean.home_arrival_notifier_user_one
+#   input_boolean: input_boolean.user_one_home
+#   notify_name: group_notifications
+#   user_name: Kevin
+#   zone_name: Home
+#   message: "Willkommen zu Hause {}."
+#   #message: "Welcome Home {}."
+#   dependencies: 
+#     - Notifier
 
-#Notification if user two arrives at home
-homeArrivalNotifierUserTwo:
-  module: homeArrivalNotifier
-  class: HomeArrivalNotifier
-  app_switch: input_boolean.home_arrival_notifier_user_two
-  input_boolean: input_boolean.user_two_home
-  notify_name: group_notifications
-  user_name: Sina
-  zone_name: Home
-  message: "Willkommen zu Hause {}."
-  #message: "Welcome Home {}."
-  dependencies: 
-    - Notifier
+# #Notification if user two arrives at home
+# homeArrivalNotifierUserTwo:
+#   module: homeArrivalNotifier
+#   class: HomeArrivalNotifier
+#   app_switch: input_boolean.home_arrival_notifier_user_two
+#   input_boolean: input_boolean.user_two_home
+#   notify_name: group_notifications
+#   user_name: Sina
+#   zone_name: Home
+#   message: "Willkommen zu Hause {}."
+#   #message: "Welcome Home {}."
+#   dependencies: 
+#     - Notifier
