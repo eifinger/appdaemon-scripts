@@ -1,20 +1,20 @@
 #Switch on Lobby lamp when the first person is coming home and the sun is down
-comingHomeYeelight:
-  module: comingHome
-  class: ComingHome
-  app_switch: input_boolean.coming_home_yeelight
-  sensor: binary_sensor.contact_door
-  isHome: input_boolean.is_home
-  actor: switch.large_lamp
-  after_sundown: True
+# comingHomeYeelight:
+#   module: comingHome
+#   class: ComingHome
+#   app_switch: input_boolean.coming_home_yeelight
+#   sensor: binary_sensor.contact_door
+#   isHome: input_boolean.is_home
+#   actor: switch.large_lamp
+#   after_sundown: True
 
-comingHomeSetVolume:
-  module: comingHome
-  class: ComingHome
-  app_switch: input_boolean.coming_home_set_volume
-  sensor: binary_sensor.contact_door
-  isHome: input_boolean.is_home
-  service: media_player/volume_set
-  service_data:
-    entity_id: media_player.denon_avr_x1300w
-    volume_level: 0.3
+# comingHomeSetVolume:
+#   module: comingHome
+#   class: ComingHome
+#   app_switch: input_boolean.coming_home_set_volume
+#   sensor: binary_sensor.contact_door
+#   isHome: input_boolean.is_home
+#   service: media_player/volume_set
+#   service_data:
+#     entity_id: media_player.denon_avr_x1300w
+#     volume_level: 0.3
