@@ -1,21 +1,21 @@
-bedroomMotionTrigger:
-  module: motionTrigger
-  class: MotionTrigger
-  app_switch: input_boolean.bedroom_motion_trigger
-  sensor: binary_sensor.presence_bedroom
-  entity_on: light.bedroom_yeelight
-  sensor_type: deconz
-  after_sundown: True
-  turn_on_constraint_entities_off: input_boolean.sleepmode
+# bedroomMotionTrigger:
+#   module: motionTrigger
+#   class: MotionTrigger
+#   app_switch: input_boolean.bedroom_motion_trigger
+#   sensor: binary_sensor.presence_bedroom
+#   entity_on: light.bedroom_yeelight
+#   sensor_type: deconz
+#   after_sundown: True
+#   turn_on_constraint_entities_off: input_boolean.sleepmode
 
-studyroomMotionTrigger:
-  module: motionTrigger
-  class: MotionTrigger
-  app_switch: input_boolean.studyroom_motion_trigger
-  sensor: binary_sensor.presence_studyroom
-  entity_on: light.philips_miio_light_bulb
-  sensor_type: deconz
-  after_sundown: True
+# studyroomMotionTrigger:
+#   module: motionTrigger
+#   class: MotionTrigger
+#   app_switch: input_boolean.studyroom_motion_trigger
+#   sensor: binary_sensor.presence_studyroom
+#   entity_on: light.philips_miio_light_bulb
+#   sensor_type: deconz
+#   after_sundown: True
 
 
 
