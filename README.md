@@ -69,7 +69,6 @@ This is useful if I don't want any notifications right now or an App is misbehav
 * [setThermostat](#setthermostat)
 * [setThermostatOnStateChange](#setthermostatonstatechange)
 * [sleepModeHandler](#sleepmodehandler)
-* [standardSetter](#standardsetter)
 * [turnFanOnWhenHot](#turnfanonwhenhot)
 * [turnOffBarAfterRestart](#turnoffbarafterrestart)
 * [updateEntityService](#updateentityservice)
@@ -602,23 +601,6 @@ userSleepModeHandlerUserTwo:
   room: bedroom
   duration: 600
 ````
-
-### standardSetter
-
-Set back some HA entities back to their standard values.
-Configurable in the HA frontend. Currently used to set back the next the
-[nextAppointmentLeaveNotifier](#nextAppointmentLeaveNotifier) to my configured default value.
-
-```yaml
-standardSetterTravelModeNextAppointment:
-  module: standardSetter
-  class: StandardSetter
-  entity: input_select.next_appointment_travel_mode
-  standard_entity: input_select.next_appointment_travel_mode_standard
-  trigger_entity: sensor.cal_next_appointment_title
-```
-
-![standardSetter](images/standard_setter.PNG)
 
 ### turnFanOnWhenHot
 

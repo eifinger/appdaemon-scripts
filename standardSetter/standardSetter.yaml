@@ -1,6 +1,0 @@
-standardSetterTravelModeNextAppointment:
-  module: standardSetter
-  class: StandardSetter
-  entity: input_select.next_appointment_travel_mode
-  standard_entity: input_select.next_appointment_travel_mode_standard
-  trigger_entity: sensor.cal_next_appointment_title
