@@ -1,4 +1,4 @@
-turnOffBarAfterRestart:
-  module: turnOffBarAfterRestart
-  class: TurnOffBarAfterRestart
-  light: light.bar_table
+# turnOffBarAfterRestart:
+#   module: turnOffBarAfterRestart
+#   class: TurnOffBarAfterRestart
+#   light: light.bar_table
