@@ -1,21 +1,21 @@
-turnLargeFanOnWhenHot:
-  module: turnFanOnWhenHot
-  class: TurnFanOnWhenHot
-  app_switch: input_boolean.turn_large_fan_on_when_hot
-  temp_sensor: sensor.large_ventilator_temperature
-  threshold_entity: input_number.turn_large_fan_on_when_hot_threshold
-  location_sensors: sensor.location_user_one,sensor.location_user_two
-  room: Wohnzimmer
-  actor: switch.large_ventilator
-  delay: 120
+# turnLargeFanOnWhenHot:
+#   module: turnFanOnWhenHot
+#   class: TurnFanOnWhenHot
+#   app_switch: input_boolean.turn_large_fan_on_when_hot
+#   temp_sensor: sensor.large_ventilator_temperature
+#   threshold_entity: input_number.turn_large_fan_on_when_hot_threshold
+#   location_sensors: sensor.location_user_one,sensor.location_user_two
+#   room: Wohnzimmer
+#   actor: switch.large_ventilator
+#   delay: 120
 
-turnSmallFanOnWhenHot:
-  module: turnFanOnWhenHot
-  class: TurnFanOnWhenHot
-  app_switch: input_boolean.turn_small_fan_on_when_hot
-  temp_sensor: sensor.small_ventilator_temperature
-  threshold_entity: input_number.turn_small_fan_on_when_hot_threshold
-  location_sensors: sensor.location_user_one,sensor.location_user_two
-  room: Wohnzimmer
-  actor: switch.small_ventilator
-  delay: 120
+# turnSmallFanOnWhenHot:
+#   module: turnFanOnWhenHot
+#   class: TurnFanOnWhenHot
+#   app_switch: input_boolean.turn_small_fan_on_when_hot
+#   temp_sensor: sensor.small_ventilator_temperature
+#   threshold_entity: input_number.turn_small_fan_on_when_hot_threshold
+#   location_sensors: sensor.location_user_one,sensor.location_user_two
+#   room: Wohnzimmer
+#   actor: switch.small_ventilator
+#   delay: 120
