@@ -1,16 +1,16 @@
-#Control the isHome state. Determines if someone is home or all persons are away
-isHomeDeterminer:
-  module: isHomeDeterminer
-  class: IsHomeDeterminer
-  app_switch: input_boolean.is_home_determiner
-  ishome: input_boolean.is_home
-  input_booleans: input_boolean.user_one_home,input_boolean.user_two_home
-  message:
-    - "Es ist keiner mehr zu Hause."
-    - "Keiner mehr da? Panda Party!"
-    - "Ich passe auf die Wohnung auf, einen schönen Tag"
-    - "Tschüss, bis nachher"
-  #message: "Everyone left home. Setting isHome to off"
-  global_dependencies:
-    - globals
-    - secrets
+# #Control the isHome state. Determines if someone is home or all persons are away
+# isHomeDeterminer:
+#   module: isHomeDeterminer
+#   class: IsHomeDeterminer
+#   app_switch: input_boolean.is_home_determiner
+#   ishome: input_boolean.is_home
+#   input_booleans: input_boolean.user_one_home,input_boolean.user_two_home
+#   message:
+#     - "Es ist keiner mehr zu Hause."
+#     - "Keiner mehr da? Panda Party!"
+#     - "Ich passe auf die Wohnung auf, einen schönen Tag"
+#     - "Tschüss, bis nachher"
+#   #message: "Everyone left home. Setting isHome to off"
+#   global_dependencies:
+#     - globals
+#     - secrets
