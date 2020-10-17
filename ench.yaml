@@ -2,7 +2,7 @@
 ench:
   module: ench
   class: EnCh
-  notify: "notify.kevin"
+  notify: "notify.mobile_app_sm_g975f"
   exclude:
     - device_tracker.venue_8*
     - person.kevin
@@ -15,7 +15,6 @@ ench:
     - device_tracker.iphone*
     - device_tracker.oneplus*
     - device_tracker.unifi*
-    - input_text.avanza*
     - light.group_0
     - media_player.kevin_s*
     - sensor.192_168_1_39*
@@ -35,6 +34,11 @@ ench:
     - switch.*_repeat_switch*
     - switch.*_shuffle_switch*
     - switch.*do_not_disturb_switch
+    - media_player.55pus7304_12
+    - media_player.fernseher
+    - sensor.consumption_31
+    - sensor.power_30
+    - sensor.openweathermap*
   battery:
     interval_min: 180
     min_level: 20
