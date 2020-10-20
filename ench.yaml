@@ -2,7 +2,7 @@
 ench:
   module: ench
   class: EnCh
-  notify: "notify.mobile_app_sm_g975f"
+  notify: "notify.kevin"
   exclude:
     - device_tracker.venue_8*
     - person.kevin
