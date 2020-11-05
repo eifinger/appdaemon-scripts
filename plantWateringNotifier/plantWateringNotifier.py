@@ -44,6 +44,12 @@ import datetime
 
 class PlantWateringNotifier(hass.Hass):
     def initialize(self):
+        """
+        Initialize the sensor.
+
+        Args:
+            self: (todo): write your description
+        """
 
         self.timer_handle_list = []
         self.listen_event_handle_list = []
@@ -163,6 +169,12 @@ class PlantWateringNotifier(hass.Hass):
             )
 
     def terminate(self):
+        """
+        Terminate all the event.
+
+        Args:
+            self: (todo): write your description
+        """
         for timer_handle in self.timer_handle_list:
             self.cancel_timer(timer_handle)
 

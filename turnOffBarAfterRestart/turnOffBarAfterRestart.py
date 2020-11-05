@@ -17,6 +17,12 @@ from requests.exceptions import HTTPError
 
 class TurnOffBarAfterRestart(hass.Hass):
     def initialize(self):
+        """
+        Initialize the timer.
+
+        Args:
+            self: (todo): write your description
+        """
 
         self.timer_handle_list = []
         self.listen_event_handle_list = []
@@ -61,6 +67,12 @@ class TurnOffBarAfterRestart(hass.Hass):
             self.timer_handle_list.append(self.run_in(self.turn_green_callback, 1))
 
     def terminate(self):
+        """
+        Terminate all the event.
+
+        Args:
+            self: (todo): write your description
+        """
         for timer_handle in self.timer_handle_list:
             self.cancel_timer(timer_handle)
 

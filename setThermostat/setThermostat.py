@@ -44,6 +44,12 @@ import datetime
 
 class SetThermostat(hass.Hass):
     def initialize(self):
+        """
+        Initialize the simulation.
+
+        Args:
+            self: (todo): write your description
+        """
         self.timer_handle_list = []
         self.listen_state_handle_list = []
 
@@ -73,6 +79,16 @@ class SetThermostat(hass.Hass):
         )
 
     def schedule_trigger(self, entity, attribute, old, new, kwargs):
+        """
+        Schedules an event.
+
+        Args:
+            self: (todo): write your description
+            entity: (todo): write your description
+            attribute: (str): write your description
+            old: (str): write your description
+            new: (str): write your description
+        """
         if (
             new is not None
             and new != old
@@ -95,6 +111,12 @@ class SetThermostat(hass.Hass):
                 self.log("New trigger time would be in the past: {}".format(event_time))
 
     def trigger_thermostat(self, kwargs):
+        """
+        Trigmost timer.
+
+        Args:
+            self: (todo): write your description
+        """
         if (
             self.get_state(self.app_switch) == "on"
             and self.get_state(self.isHome) == "on"
@@ -132,6 +154,12 @@ class SetThermostat(hass.Hass):
                 self.cancel_timer(self.run_timer)
 
     def reset_thermostat(self, kwargs):
+        """
+        Reset the previous state of the previous state
+
+        Args:
+            self: (todo): write your description
+        """
         if self.previous_temp is not None:
             self.log(
                 self.message.format(
@@ -155,6 +183,12 @@ class SetThermostat(hass.Hass):
             )
 
     def terminate(self):
+        """
+        Terminate all the timer.
+
+        Args:
+            self: (todo): write your description
+        """
         for timer_handle in self.timer_handle_list:
             self.cancel_timer(timer_handle)
 

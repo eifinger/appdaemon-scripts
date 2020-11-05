@@ -26,6 +26,12 @@ import globals
 
 class IsHomeDeterminer(hass.Hass):
     def initialize(self):
+        """
+        Initialize the service
+
+        Args:
+            self: (todo): write your description
+        """
         self.listen_state_handle_list = []
 
         self.app_switch = self.args["app_switch"]
@@ -61,6 +67,16 @@ class IsHomeDeterminer(hass.Hass):
                         )
 
     def state_change(self, entity, attribute, old, new, kwargs):
+        """
+        Acknowledge a state change.
+
+        Args:
+            self: (todo): write your description
+            entity: (todo): write your description
+            attribute: (str): write your description
+            old: (str): write your description
+            new: (str): write your description
+        """
         if self.get_state(self.app_switch) == "on":
             if new != "" and new != old:
                 self.log("{} changed from {} to {}".format(entity, old, new))
@@ -78,6 +94,13 @@ class IsHomeDeterminer(hass.Hass):
                         )
 
     def are_others_away(self, entity):
+        """
+        Return true if two entities are the same
+
+        Args:
+            self: (todo): write your description
+            entity: (todo): write your description
+        """
         self.log("Entity: {}".format(entity))
         for input_boolean in self.input_booleans:
             self.log("{} is {}".format(input_boolean, self.get_state(input_boolean)))
@@ -90,5 +113,11 @@ class IsHomeDeterminer(hass.Hass):
         return True
 
     def terminate(self):
+        """
+        Terminate all active tasks.
+
+        Args:
+            self: (todo): write your description
+        """
         for listen_state_handle in self.listen_state_handle_list:
             self.cancel_listen_state(listen_state_handle)

@@ -7,6 +7,12 @@ __ZONE_ACTION_LEAVE__ = "verlassen"
 
 class RemindMeOfXWhenZoneIntent(hass.Hass):
     def initialize(self):
+        """
+        Initialize the device.
+
+        Args:
+            self: (todo): write your description
+        """
         self.timer_handle_list = []
         self.listen_state_handle_list = []
 
@@ -18,6 +24,14 @@ class RemindMeOfXWhenZoneIntent(hass.Hass):
         return
 
     def getIntentResponse(self, slots, devicename):
+        """
+        Get a device response from the device.
+
+        Args:
+            self: (todo): write your description
+            slots: (todo): write your description
+            devicename: (str): write your description
+        """
         ############################################
         # an Intent to give back the state from a light.
         # but it also can be any other kind of entity
@@ -55,6 +69,16 @@ class RemindMeOfXWhenZoneIntent(hass.Hass):
         return text
 
     def remind_callback(self, entity, attribute, old, new, kwargs):
+        """
+        Removes a callback from an entity
+
+        Args:
+            self: (todo): write your description
+            entity: (todo): write your description
+            attribute: (str): write your description
+            old: (str): write your description
+            new: (str): write your description
+        """
         if kwargs["zoneAction"] == __ZONE_ACTION_ENTER__:
             if new != old and new == kwargs["zone"]:
                 self.log("Notifying")
@@ -73,6 +97,12 @@ class RemindMeOfXWhenZoneIntent(hass.Hass):
                 )
 
     def terminate(self):
+        """
+        Terminate all the timer.
+
+        Args:
+            self: (todo): write your description
+        """
         for timer_handle in self.timer_handle_list:
             self.cancel_timer(timer_handle)
 

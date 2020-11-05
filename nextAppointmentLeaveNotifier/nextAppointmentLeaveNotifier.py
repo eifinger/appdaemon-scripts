@@ -42,6 +42,12 @@ import datetime
 
 class NextAppointmentLeaveNotifier(hass.Hass):
     def initialize(self):
+        """
+        Initializes the service.
+
+        Args:
+            self: (todo): write your description
+        """
 
         self.listen_state_handle_list = []
 
@@ -68,6 +74,16 @@ class NextAppointmentLeaveNotifier(hass.Hass):
         )
 
     def state_change(self, entity, attributes, old, new, kwargs):
+        """
+        Called when a change change.
+
+        Args:
+            self: (todo): write your description
+            entity: (todo): write your description
+            attributes: (str): write your description
+            old: (str): write your description
+            new: (str): write your description
+        """
         try:
             self.cancel_timer(self.timer_handle)
             self.timer_handle = None
@@ -77,6 +93,12 @@ class NextAppointmentLeaveNotifier(hass.Hass):
         self.set_timer_handle()
 
     def set_timer_handle(self):
+        """
+        Set a sensor.
+
+        Args:
+            self: (todo): write your description
+        """
         destination_name = self.get_state(self.destination_name_sensor)
         self.log(f"destination_name_sensor: {destination_name}")
         if self.get_state(self.sensor) != None:
@@ -97,6 +119,12 @@ class NextAppointmentLeaveNotifier(hass.Hass):
                         )
 
     def notify_user(self, *kwargs):
+        """
+        Called when a user has changed.
+
+        Args:
+            self: (todo): write your description
+        """
         if self.get_state(self.notify_input_boolean) == "on":
             location_name = self.get_state(self.destination_name_sensor)
             if location_name != "None":
@@ -125,6 +153,12 @@ class NextAppointmentLeaveNotifier(hass.Hass):
             self.log("Notification is turned off")
 
     def terminate(self):
+        """
+        Terminate all registered tasks.
+
+        Args:
+            self: (todo): write your description
+        """
         for listen_state_handle in self.listen_state_handle_list:
             self.cancel_listen_state(listen_state_handle)
         if self.timer_handle is not None:

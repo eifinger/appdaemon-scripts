@@ -6,11 +6,25 @@ import datetime
 
 class TurnEntityOffInXIntent(hass.Hass):
     def initialize(self):
+        """
+        Initialize the application.
+
+        Args:
+            self: (todo): write your description
+        """
         self.timer_handle_list = []
         self.listService = self.get_app("listService")
         return
 
     def getIntentResponse(self, slots, devicename):
+        """
+        Generate a list of the response.
+
+        Args:
+            self: (todo): write your description
+            slots: (todo): write your description
+            devicename: (str): write your description
+        """
         ############################################
         # an Intent to give back the state from a light.
         # but it also can be any other kind of entity
@@ -57,11 +71,24 @@ class TurnEntityOffInXIntent(hass.Hass):
         return text
 
     def turn_off_callback(self, kwargs):
+        """
+        Turn off the callback : ~.
+
+        Args:
+            self: (todo): write your description
+        """
         entityname = kwargs["entityname"]
         self.log("Turning off {}".format(entityname))
         self.turn_off(entityname)
 
     def random_arg(self, argName):
+        """
+        Return the value from argname.
+
+        Args:
+            self: (todo): write your description
+            argName: (str): write your description
+        """
         ############################################
         # pick a random text from a list
         ############################################
@@ -72,5 +99,11 @@ class TurnEntityOffInXIntent(hass.Hass):
         return text
 
     def terminate(self):
+        """
+        Terminate the timer.
+
+        Args:
+            self: (todo): write your description
+        """
         for timer_handle in self.timer_handle_list:
             self.cancel_timer(timer_handle)

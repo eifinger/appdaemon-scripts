@@ -28,6 +28,12 @@ import appdaemon.plugins.hass.hassapi as hass
 
 class SetThermostatOnStateChange(hass.Hass):
     def initialize(self):
+        """
+        Initialize the consumer
+
+        Args:
+            self: (todo): write your description
+        """
         self.timer_handle_list = []
         self.listen_state_handle_list = []
 
@@ -50,6 +56,16 @@ class SetThermostatOnStateChange(hass.Hass):
         )
 
     def state_change(self, entity, attribute, old, new, kwargs):
+        """
+        Changes the state of a state change.
+
+        Args:
+            self: (todo): write your description
+            entity: (todo): write your description
+            attribute: (str): write your description
+            old: (str): write your description
+            new: (str): write your description
+        """
         if self.get_state(self.app_switch) == "on":
             if new != "" and new == self.trigger_state and old != new:
                 if self.message is not None:
@@ -76,6 +92,12 @@ class SetThermostatOnStateChange(hass.Hass):
                     )
 
     def terminate(self):
+        """
+        Terminate all the timer.
+
+        Args:
+            self: (todo): write your description
+        """
         for timer_handle in self.timer_handle_list:
             self.cancel_timer(timer_handle)
 

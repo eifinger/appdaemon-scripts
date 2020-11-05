@@ -50,6 +50,12 @@ from requests.exceptions import HTTPError
 
 class IsUserHomeDeterminer(hass.Hass):
     def initialize(self):
+        """
+        Initialize the sensor.
+
+        Args:
+            self: (todo): write your description
+        """
         self.listen_state_handle_list = []
         self.timer_handle_list = []
 
@@ -84,6 +90,16 @@ class IsUserHomeDeterminer(hass.Hass):
         self.listen_state_handle = None
 
     def state_change(self, entity, attribute, old, new, kwargs):
+        """
+        Change state of an attribute change.
+
+        Args:
+            self: (todo): write your description
+            entity: (todo): write your description
+            attribute: (str): write your description
+            old: (str): write your description
+            new: (str): write your description
+        """
         if self.get_state(self.app_switch) == "on":
             if new != "" and new != old:
                 self.log("{} changed from {} to {}".format(entity, old, new))
@@ -126,6 +142,12 @@ class IsUserHomeDeterminer(hass.Hass):
                         self.listen_state_handle_list.append(self.listen_state_handle)
 
     def cancel_listen_state_callback(self, kwargs):
+        """
+        Cancel the callback.
+
+        Args:
+            self: (todo): write your description
+        """
         if self.listen_state_handle is not None:
             self.log(
                 "Timeout while waiting for user to get/leave home. Cancel listen_state"
@@ -136,6 +158,16 @@ class IsUserHomeDeterminer(hass.Hass):
             self.listen_state_handle = None
 
     def check_if_user_left_home(self, entity, attribute, old, new, kwargs):
+        """
+        Check if user if the user in the specified callback.
+
+        Args:
+            self: (todo): write your description
+            entity: (todo): write your description
+            attribute: (str): write your description
+            old: (todo): write your description
+            new: (str): write your description
+        """
         if new != "home":
             self.log("User left home")
             if self.listen_state_handle in self.listen_state_handle_list:
@@ -150,6 +182,16 @@ class IsUserHomeDeterminer(hass.Hass):
                 )
 
     def check_if_user_got_home(self, entity, attribute, old, new, kwargs):
+        """
+        Checks if the user can be fetched
+
+        Args:
+            self: (todo): write your description
+            entity: (todo): write your description
+            attribute: (str): write your description
+            old: (todo): write your description
+            new: (todo): write your description
+        """
         if new == "home":
             self.log("User got home")
             if self.listen_state_handle in self.listen_state_handle_list:
@@ -198,6 +240,12 @@ class IsUserHomeDeterminer(hass.Hass):
             )
 
     def terminate(self):
+        """
+        Terminate all the jobs.
+
+        Args:
+            self: (todo): write your description
+        """
         for listen_state_handle in self.listen_state_handle_list:
             self.cancel_listen_state(listen_state_handle)
 

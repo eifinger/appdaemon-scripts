@@ -42,6 +42,12 @@ import math
 
 class AlarmClock(hass.Hass):
     def initialize(self):
+        """
+        Initialize the internal state.
+
+        Args:
+            self: (todo): write your description
+        """
 
         self.timer_handle_list = []
         self.listen_event_handle_list = []
@@ -81,6 +87,16 @@ class AlarmClock(hass.Hass):
         )
 
     def alarm_change(self, entity, attributes, old, new, kwargs):
+        """
+        Cancel a new alarm.
+
+        Args:
+            self: (todo): write your description
+            entity: (todo): write your description
+            attributes: (dict): write your description
+            old: (str): write your description
+            new: (str): write your description
+        """
         if new is not None and new != old and new != self.cached_alarm_time:
             if self.alarm_timer is not None:
                 if self.alarm_timer in self.timer_handle_list:
@@ -91,6 +107,16 @@ class AlarmClock(hass.Hass):
             self.add_timer()
 
     def naturalwakeup_change(self, entity, attributes, old, new, kwargs):
+        """
+        Cancel a new change.
+
+        Args:
+            self: (todo): write your description
+            entity: (todo): write your description
+            attributes: (dict): write your description
+            old: (todo): write your description
+            new: (todo): write your description
+        """
         if new is not None and new != old and new != self.cached_fade_in_time:
             if self.alarm_timer is not None:
                 if self.alarm_timer in self.timer_handle_list:
@@ -101,6 +127,12 @@ class AlarmClock(hass.Hass):
             self.add_timer()
 
     def add_timer(self):
+        """
+        Add a timer.
+
+        Args:
+            self: (todo): write your description
+        """
         self.log("cached_alarm_time: {}".format(self.cached_alarm_time))
         self.log("cached_fade_in_time: {}".format(self.cached_fade_in_time))
         offset = self.cached_fade_in_time.split(".", 1)[0]
@@ -122,6 +154,12 @@ class AlarmClock(hass.Hass):
                 self.log("New trigger time would be in the past: {}".format(event_time))
 
     def trigger_alarm(self, kwargs):
+        """
+        Trigger an alarm on a specific service.
+
+        Args:
+            self: (todo): write your description
+        """
         if self.get_state(self.wakemeup) == "on":
             if self.get_state(self.alarmweekday) == "off" or (
                 self.get_state(self.alarmweekday) == "on"
@@ -216,10 +254,22 @@ class AlarmClock(hass.Hass):
             )
 
     def run_alarm(self, kwargs):
+        """
+        Run a message.
+
+        Args:
+            self: (todo): write your description
+        """
         self.notifier.notify(self.notify_name, self.message)
         # TODO radio
 
     def terminate(self):
+        """
+        Terminate all the event.
+
+        Args:
+            self: (todo): write your description
+        """
         for timer_handle in self.timer_handle_list:
             self.cancel_timer(timer_handle)
 

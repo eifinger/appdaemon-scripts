@@ -56,6 +56,12 @@ UNKNOWN_FACE_NAME = "unkown"
 
 class FaceRecognitionBot(hass.Hass):
     def initialize(self):
+        """
+        Initialize the device.
+
+        Args:
+            self: (todo): write your description
+        """
 
         # handle lists
         self.timer_handle_list = []
@@ -704,6 +710,12 @@ class FaceRecognitionBot(hass.Hass):
             self.log("PROVIDE_NAME_TIMEOUT exceeded")
 
     def terminate(self):
+        """
+        Terminate all the event.
+
+        Args:
+            self: (todo): write your description
+        """
         for timer_handle in self.timer_handle_list:
             self.cancel_timer(timer_handle)
 

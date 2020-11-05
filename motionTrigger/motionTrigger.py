@@ -66,6 +66,12 @@ SENSOR_TYPE_DECONZ = "deconz"
 
 class MotionTrigger(hass.Hass):
     def initialize(self):
+        """
+        Initialize the sensor.
+
+        Args:
+            self: (todo): write your description
+        """
 
         self.timer_handle = None
         self.listen_event_handle_list = []
@@ -136,20 +142,54 @@ class MotionTrigger(hass.Hass):
             self.log(f"Unknown sensor_type: {self.sensor_type}", level="ERROR")
 
     def delay_changed(self, entity, attribute, old, new, kwargs):
+        """
+        Called when a new state has changed.
+
+        Args:
+            self: (todo): write your description
+            entity: (todo): write your description
+            attribute: (str): write your description
+            old: (str): write your description
+            new: (str): write your description
+        """
         self.delay = int(self.get_state(self.delay_entity).split(".")[0])
         self.log(f"Delay changed to : {self.delay}")
 
     def motion_event_detected(self, event_name, data, kwargs):
+        """
+        Callback function called when motion motion.
+
+        Args:
+            self: (todo): write your description
+            event_name: (str): write your description
+            data: (todo): write your description
+        """
         if self.get_state(self.app_switch) == "on":
             if data["entity_id"] == self.sensor:
                 self.turn_on_callback(None)
 
     def state_changed(self, entity, attribute, old, new, kwargs):
+        """
+        Called when a state has changed.
+
+        Args:
+            self: (todo): write your description
+            entity: (todo): write your description
+            attribute: (str): write your description
+            old: (str): write your description
+            new: (str): write your description
+        """
         if self.get_state(self.app_switch) == "on":
             if new == "on":
                 self.turn_on_callback(None)
 
     def turn_on_callback(self, kwargs):
+        """
+        Called by the callback when the callback.
+
+        Args:
+            self: (todo): write your description
+        """
         self.log(f"Motion detected on sensor: {self.friendly_name(self.sensor)}",)
         turn_on = True
         if self.after_sundown is not None:
@@ -186,6 +226,12 @@ class MotionTrigger(hass.Hass):
             self.reset_timer()
 
     def turn_off_callback(self, kwargs):
+        """
+        Turn off the off of the - off callback.
+
+        Args:
+            self: (todo): write your description
+        """
         if self.get_state(self.sensor) == "on":
             self.log(f"{self.sensor} is still on")
             self.reset_timer()
@@ -212,6 +258,12 @@ class MotionTrigger(hass.Hass):
                 self.log("No entity_off defined.")
 
     def reset_timer(self):
+        """
+        Reset the timer.
+
+        Args:
+            self: (todo): write your description
+        """
         if self.timer_handle is not None:
             self.log("Resetting timer")
             self.timer_handle_list.remove(self.timer_handle)
@@ -221,6 +273,12 @@ class MotionTrigger(hass.Hass):
         self.timer_handle_list.append(self.timer_handle)
 
     def terminate(self):
+        """
+        Terminate all the event.
+
+        Args:
+            self: (todo): write your description
+        """
         for timer_handle in self.timer_handle_list:
             self.cancel_timer(timer_handle)
 

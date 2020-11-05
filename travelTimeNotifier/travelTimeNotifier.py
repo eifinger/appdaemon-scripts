@@ -43,6 +43,12 @@ from typing import Optional
 
 class TravelTimeNotifier(hass.Hass):
     def initialize(self):
+        """
+        Initialize the internal state.
+
+        Args:
+            self: (todo): write your description
+        """
 
         self.listen_state_handle_list = []
         self.timer_handle_list = []
@@ -67,6 +73,16 @@ class TravelTimeNotifier(hass.Hass):
         )
 
     def state_change(self, entity, attributes, old, new, kwargs) -> None:
+        """
+        This method is called bytestring change.
+
+        Args:
+            self: (todo): write your description
+            entity: (todo): write your description
+            attributes: (str): write your description
+            old: (str): write your description
+            new: (str): write your description
+        """
         self.log("entity: {}".format(entity))
         self.log("old: {}".format(old))
         self.log("new: {}".format(new))
@@ -139,5 +155,11 @@ class TravelTimeNotifier(hass.Hass):
         return duration_minutes
 
     def terminate(self) -> None:
+        """
+        Terminate all running tasks.
+
+        Args:
+            self: (todo): write your description
+        """
         for listen_state_handle in self.listen_state_handle_list:
             self.cancel_listen_state(listen_state_handle)

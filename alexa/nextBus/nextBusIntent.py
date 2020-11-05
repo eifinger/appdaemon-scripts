@@ -4,11 +4,25 @@ import random
 
 class nextBusIntent(hass.Hass):
     def initialize(self):
+        """
+        Initialize the sensor
+
+        Args:
+            self: (todo): write your description
+        """
         self.sensor = self.args["sensor"]
         self.textLine = self.args["textLine"]
         self.error = self.args["error"]
 
     def getIntentResponse(self, slots, devicename):
+        """
+        Get the response for a sensor.
+
+        Args:
+            self: (todo): write your description
+            slots: (todo): write your description
+            devicename: (str): write your description
+        """
         ############################################
         # give next bus departure
         ############################################

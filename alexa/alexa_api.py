@@ -5,10 +5,23 @@ import datetime
 
 class alexa_api(hass.Hass):
     def initialize(self):
+        """
+        Initialize the reader.
+
+        Args:
+            self: (todo): write your description
+        """
         self.register_endpoint(self.api_call)
         self.tempCardContent = ""
 
     def api_call(self, data):
+        """
+        Make an api call
+
+        Args:
+            self: (todo): write your description
+            data: (todo): write your description
+        """
         self.my_alexa_interpret_data(data)
         response = ""
         dialogDelegate = False
@@ -121,6 +134,13 @@ class alexa_api(hass.Hass):
         return response, 200
 
     def my_alexa_interpret_data(self, data):
+        """
+        This method data from the device.
+
+        Args:
+            self: (todo): write your description
+            data: (array): write your description
+        """
         ############################################
         # create vars from the data
         ############################################
@@ -182,6 +202,13 @@ class alexa_api(hass.Hass):
         self.alexalog(" ", 100, "#")
 
     def my_alexa_intent_name(self, data):
+        """
+        Determine name for the intent.
+
+        Args:
+            self: (todo): write your description
+            data: (array): write your description
+        """
         ############################################
         # find the intent name in the data
         ############################################
@@ -195,6 +222,13 @@ class alexa_api(hass.Hass):
             return None
 
     def my_alexa_dialog_state(self, data):
+        """
+        Return the dialog state for the dialog.
+
+        Args:
+            self: (todo): write your description
+            data: (array): write your description
+        """
         ############################################
         # find the dialog state in the data
         ############################################
@@ -204,6 +238,13 @@ class alexa_api(hass.Hass):
             return None
 
     def my_alexa_intent(self, data):
+        """
+        Returns the intent for the given data.
+
+        Args:
+            self: (todo): write your description
+            data: (array): write your description
+        """
         ############################################
         # find the requesttype in the data
         ############################################
@@ -213,6 +254,13 @@ class alexa_api(hass.Hass):
             return None
 
     def my_alexa_request_type(self, data):
+        """
+        Returns the data type for the given data.
+
+        Args:
+            self: (todo): write your description
+            data: (array): write your description
+        """
         ############################################
         # find the requesttype in the data
         ############################################
@@ -222,6 +270,13 @@ class alexa_api(hass.Hass):
             return None
 
     def my_alexa_error(self, data):
+        """
+        Returns the error message for an error.
+
+        Args:
+            self: (todo): write your description
+            data: (array): write your description
+        """
         ############################################
         # get an error out of the data
         ############################################
@@ -235,6 +290,14 @@ class alexa_api(hass.Hass):
             return None
 
     def my_alexa_slot_value(self, data, slot):
+        """
+        Returns the slot slot value for slot.
+
+        Args:
+            self: (todo): write your description
+            data: (array): write your description
+            slot: (todo): write your description
+        """
         ############################################
         # get a slot value from the data
         ############################################
@@ -258,6 +321,18 @@ class alexa_api(hass.Hass):
         title=None,
         content=None,
     ):
+        """
+        Generate a json for the response.
+
+        Args:
+            self: (todo): write your description
+            EndSession: (todo): write your description
+            DialogDelegate: (todo): write your description
+            speech: (todo): write your description
+            card: (todo): write your description
+            title: (str): write your description
+            content: (str): write your description
+        """
         ############################################
         # put the speechfield from the response toghether
         ############################################
@@ -278,6 +353,13 @@ class alexa_api(hass.Hass):
         return speech
 
     def random_arg(self, argName):
+        """
+        Return the value from argname from argname.
+
+        Args:
+            self: (todo): write your description
+            argName: (str): write your description
+        """
         ############################################
         # pick a random text from a list
         ############################################
@@ -288,6 +370,13 @@ class alexa_api(hass.Hass):
         return text
 
     def floatToStr(self, myfloat):
+        """
+        Returns float ascii string.
+
+        Args:
+            self: (todo): write your description
+            myfloat: (todo): write your description
+        """
         ############################################
         # replace . with , for better speech
         ############################################
@@ -296,6 +385,13 @@ class alexa_api(hass.Hass):
         return floatstr
 
     def cleanup_text(self, text):
+        """
+        Removes the slot references.
+
+        Args:
+            self: (todo): write your description
+            text: (str): write your description
+        """
         ############################################
         # replace some text like temperary slots with its value
         ############################################
@@ -309,6 +405,15 @@ class alexa_api(hass.Hass):
         return text
 
     def alexalog(self, logtext, repeat=0, surrounding=""):
+        """
+        Write a log message
+
+        Args:
+            self: (todo): write your description
+            logtext: (str): write your description
+            repeat: (int): write your description
+            surrounding: (todo): write your description
+        """
         ############################################
         # put an entry in the alexa log
         ############################################
@@ -331,6 +436,13 @@ class alexa_api(hass.Hass):
                 self.log("ALEXA LOGFILE CANT BE WRITTEN!!")
 
     def alexaresponselog(self, logtext):
+        """
+        Write the logtext
+
+        Args:
+            self: (todo): write your description
+            logtext: (str): write your description
+        """
         ############################################
         # put an entry in the alexa responses log
         ############################################
@@ -344,6 +456,12 @@ class alexa_api(hass.Hass):
                 self.log("ALEXA RESPONSELOGFILE CANT BE WRITTEN!!")
 
     def getIntentResponse(self):
+        """
+        Return the response for this intent.
+
+        Args:
+            self: (todo): write your description
+        """
         ############################################
         # perform the intent end get the response back
         # from the intent apps

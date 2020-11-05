@@ -30,6 +30,12 @@ import datetime
 
 class TurnFanOnWhenHot(hass.Hass):
     def initialize(self):
+        """
+        Initialize sensor manager.
+
+        Args:
+            self: (todo): write your description
+        """
         self.listen_state_handle_list = []
         self.timer_handle_list = []
 
@@ -54,6 +60,16 @@ class TurnFanOnWhenHot(hass.Hass):
             )
 
     def state_change(self, entity, attribute, old, new, kwargs):
+        """
+        Changes the state of a sensor.
+
+        Args:
+            self: (todo): write your description
+            entity: (todo): write your description
+            attribute: (str): write your description
+            old: (str): write your description
+            new: (str): write your description
+        """
         if self.get_state(self.app_switch) == "on":
             turn_on = False
             if (
@@ -99,6 +115,12 @@ class TurnFanOnWhenHot(hass.Hass):
         self.turn_off_timer_handle = None
 
     def terminate(self):
+        """
+        Terminate all the jobs.
+
+        Args:
+            self: (todo): write your description
+        """
         for listen_state_handle in self.listen_state_handle_list:
             self.cancel_listen_state(listen_state_handle)
 

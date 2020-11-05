@@ -4,9 +4,23 @@ import random
 
 class temperatureStateIntent(hass.Hass):
     def initialize(self):
+        """
+        Initialize the next callable.
+
+        Args:
+            self: (todo): write your description
+        """
         return
 
     def getIntentResponse(self, slots, devicename):
+        """
+        Gets the response for a device
+
+        Args:
+            self: (todo): write your description
+            slots: (todo): write your description
+            devicename: (str): write your description
+        """
         ############################################
         # give temperature for a list of temperature sensors
         ############################################
@@ -29,6 +43,13 @@ class temperatureStateIntent(hass.Hass):
         return text
 
     def floatToStr(self, myfloat):
+        """
+        Returns float ascii string.
+
+        Args:
+            self: (todo): write your description
+            myfloat: (todo): write your description
+        """
         ############################################
         # replace . with , for better speech
         ############################################
@@ -37,6 +58,13 @@ class temperatureStateIntent(hass.Hass):
         return floatstr
 
     def random_arg(self, argName):
+        """
+        Return the value from argname.
+
+        Args:
+            self: (todo): write your description
+            argName: (str): write your description
+        """
         ############################################
         # pick a random text from a list
         ############################################

@@ -44,6 +44,12 @@ __WAIT_TIME__ = 5  # seconds
 
 class Notifier(hass.Hass):
     def initialize(self):
+        """
+        Initialize the notification
+
+        Args:
+            self: (todo): write your description
+        """
         self.timer_handle_list = []
 
         self.alexa_tts = self.args["alexa_tts"]
@@ -53,6 +59,16 @@ class Notifier(hass.Hass):
         self.last_alexa_notification_time = None
 
     def notify(self, notify_name, message, useAlexa=True, useTelegram=True):
+        """
+        Notify about about notification.
+
+        Args:
+            self: (todo): write your description
+            notify_name: (str): write your description
+            message: (str): write your description
+            useAlexa: (bool): write your description
+            useTelegram: (bool): write your description
+        """
         if useTelegram:
             self.log("Notifying via Telegram")
             self.call_service(__NOTIFY__ + notify_name, message=message)
@@ -70,6 +86,12 @@ class Notifier(hass.Hass):
                 self.run_in(self.notify_callback, 0, message=message)
 
     def notify_callback(self, kwargs):
+        """
+        Called when a notification
+
+        Args:
+            self: (todo): write your description
+        """
         self.last_alexa_notification_time = datetime.datetime.now()
         self.call_service(
             __NOTIFY__ + self.alexa_tts,
@@ -79,6 +101,13 @@ class Notifier(hass.Hass):
         )
 
     def getAlexaDeviceForUserLocation(self, notify_name):
+        """
+        Look up a device by name
+
+        Args:
+            self: (todo): write your description
+            notify_name: (str): write your description
+        """
         if notify_name == __GROUP_NOTIFICATIONS__:
             return self.args["alexa_to_location_mapping"]["Wohnzimmer"]
         elif notify_name.lower() in self.args["user_location_sensors"]:
@@ -94,5 +123,11 @@ class Notifier(hass.Hass):
             return None
 
     def terminate(self):
+        """
+        Terminate the timer.
+
+        Args:
+            self: (todo): write your description
+        """
         for timer_handle in self.timer_handle_list:
             self.cancel_timer(timer_handle)

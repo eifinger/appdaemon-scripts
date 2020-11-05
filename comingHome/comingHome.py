@@ -45,6 +45,12 @@ import datetime
 
 class ComingHome(hass.Hass):
     def initialize(self):
+        """
+        Initialize the service.
+
+        Args:
+            self: (todo): write your description
+        """
         self.listen_state_handle_list = []
 
         self.app_switch = self.args["app_switch"]
@@ -62,6 +68,16 @@ class ComingHome(hass.Hass):
         )
 
     def state_change(self, entity, attribute, old, new, kwargs):
+        """
+        Changes the state of an entity.
+
+        Args:
+            self: (todo): write your description
+            entity: (todo): write your description
+            attribute: (str): write your description
+            old: (str): write your description
+            new: (str): write your description
+        """
         if self.get_state(self.app_switch) == "on":
             if new != "" and new != old:
                 isHome_attributes = self.get_state(self.isHome, attribute="all")
@@ -84,16 +100,41 @@ class ComingHome(hass.Hass):
                         )
 
     def turn_on_actor(self, actor, entity, new):
+        """
+        Turn on on the actor.
+
+        Args:
+            self: (todo): write your description
+            actor: (float): write your description
+            entity: (todo): write your description
+            new: (str): write your description
+        """
         if self.actor is not None:
             self.log("{} changed to {}".format(self.friendly_name(entity), new))
             self.turn_on(actor)
 
     def my_call_service(self, service, service_data, entity, new):
+        """
+        Calls the given service.
+
+        Args:
+            self: (todo): write your description
+            service: (todo): write your description
+            service_data: (str): write your description
+            entity: (todo): write your description
+            new: (todo): write your description
+        """
         if self.service is not None:
             if self.service_data is not None:
                 self.log("{} changed to {}".format(self.friendly_name(entity), new))
                 self.call_service(service, **service_data)
 
     def terminate(self):
+        """
+        Terminate all active tasks.
+
+        Args:
+            self: (todo): write your description
+        """
         for listen_state_handle in self.listen_state_handle_list:
             self.cancel_listen_state(listen_state_handle)

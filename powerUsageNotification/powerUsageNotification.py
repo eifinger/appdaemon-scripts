@@ -43,6 +43,12 @@ import appdaemon.plugins.hass.hassapi as hass
 
 class PowerUsageNotification(hass.Hass):
     def initialize(self):
+        """
+        Initialize the sensor.
+
+        Args:
+            self: (todo): write your description
+        """
 
         self.timer_handle_list = []
         self.listen_event_handle_list = []
@@ -85,6 +91,16 @@ class PowerUsageNotification(hass.Hass):
         )
 
     def state_change(self, entity, attribute, old, new, kwargs):
+        """
+        Called when state change.
+
+        Args:
+            self: (todo): write your description
+            entity: (todo): write your description
+            attribute: (str): write your description
+            old: (str): write your description
+            new: (str): write your description
+        """
         if self.get_state(self.app_switch) == "on":
             # Initial: power usage goes up
             if (
@@ -150,6 +166,12 @@ class PowerUsageNotification(hass.Hass):
             self.log("Not notifying user")
 
     def terminate(self):
+        """
+        Terminate all the event.
+
+        Args:
+            self: (todo): write your description
+        """
         for timer_handle in self.timer_handle_list:
             self.cancel_timer(timer_handle)
 

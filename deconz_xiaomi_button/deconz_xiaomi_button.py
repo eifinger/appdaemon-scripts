@@ -28,6 +28,12 @@ import datetime
 
 class DeconzXiaomiButton(hass.Hass):
     def initialize(self):
+        """
+        Initializes the actor.
+
+        Args:
+            self: (todo): write your description
+        """
         self.listen_event_handle_list = []
         self.timer_handle_list = []
 
@@ -43,6 +49,14 @@ class DeconzXiaomiButton(hass.Hass):
         )
 
     def event_detected(self, event_name, data, kwargs):
+        """
+        Method called when an event is received.
+
+        Args:
+            self: (todo): write your description
+            event_name: (str): write your description
+            data: (todo): write your description
+        """
         if data["id"] == self.id:
             if data["event"] == 1002 and self.actor_single is not None:
                 self.log("ButtonClicked: {}".format(data["id"]))
@@ -104,6 +118,12 @@ class DeconzXiaomiButton(hass.Hass):
         )
 
     def terminate(self):
+        """
+        Terminate all registered timer.
+
+        Args:
+            self: (todo): write your description
+        """
         for listen_event_handle in self.listen_event_handle_list:
             self.cancel_listen_event(listen_event_handle)
 

@@ -42,6 +42,12 @@ from queue import Queue
 
 class UserSleepModeHandler(hass.Hass):
     def initialize(self):
+        """
+        Initialize the sensor
+
+        Args:
+            self: (todo): write your description
+        """
         self.listen_state_handle_list = []
 
         self.app_switch = self.args["app_switch"]
@@ -146,6 +152,12 @@ class UserSleepModeHandler(hass.Hass):
             pass
 
     def terminate(self):
+        """
+        Terminate the timer.
+
+        Args:
+            self: (todo): write your description
+        """
         if self.timer_handle is not None:
             self.cancel_timer(self.timer_handle)
 

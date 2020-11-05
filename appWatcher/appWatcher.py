@@ -16,6 +16,12 @@ import appdaemon.plugins.hass.hassapi as hass
 
 class AppWatcher(hass.Hass):
     def initialize(self):
+        """
+        Initialize the application
+
+        Args:
+            self: (todo): write your description
+        """
         self.notify_name = self.args["notify_name"]
         self.notify_message = self.args["notify_message"]
         try:
@@ -29,6 +35,17 @@ class AppWatcher(hass.Hass):
         self.handle = self.listen_log(self.log_message_callback)
 
     def log_message_callback(self, app_name, ts, level, log_type, message, kwargs):
+        """
+        Log a message callback.
+
+        Args:
+            self: (todo): write your description
+            app_name: (str): write your description
+            ts: (str): write your description
+            level: (int): write your description
+            log_type: (str): write your description
+            message: (str): write your description
+        """
         if level == "WARNING" or level == "ERROR" or level == "CRITICAL":
             if app_name == "AppDaemon":
                 if "Unexpected error" in message:
@@ -39,4 +56,10 @@ class AppWatcher(hass.Hass):
                     )
 
     def terminate(self):
+        """
+        Terminate the consumer.
+
+        Args:
+            self: (todo): write your description
+        """
         self.cancel_listen_log(self.handle)

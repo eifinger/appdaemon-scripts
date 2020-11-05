@@ -65,6 +65,12 @@ import appdaemon.plugins.hass.hassapi as hass
 
 class DetectWrongState(hass.Hass):
     def initialize(self):
+        """
+        Initialize the message list
+
+        Args:
+            self: (todo): write your description
+        """
         self.listen_state_handle_list = []
 
         self.app_switch = self.args["app_switch"]
@@ -93,6 +99,16 @@ class DetectWrongState(hass.Hass):
         )
 
     def state_change(self, entity, attribute, old, new, kwargs):
+        """
+        Change the state of an entity.
+
+        Args:
+            self: (todo): write your description
+            entity: (todo): write your description
+            attribute: (str): write your description
+            old: (str): write your description
+            new: (str): write your description
+        """
         if self.get_state(self.app_switch) == "on":
             if new != "" and new == self.trigger_state:
                 if self.after_sundown is None or (
@@ -103,6 +119,12 @@ class DetectWrongState(hass.Hass):
                     self.check_entities_should_be_on()
 
     def check_entities_should_be_off(self):
+        """
+        Check for the state of a notification.
+
+        Args:
+            self: (todo): write your description
+        """
         off_states = ["off", "unavailable", "paused", "standby"]
         for entity in self.entities_off:
             state = self.get_state(entity)
@@ -116,6 +138,12 @@ class DetectWrongState(hass.Hass):
                 self.send_notification(message, entity)
 
     def check_entities_should_be_on(self):
+        """
+        Check for entities have_on_on_be
+
+        Args:
+            self: (todo): write your description
+        """
         for entity in self.entities_on:
             state = self.get_state(entity)
             if state == "off":
@@ -127,6 +155,13 @@ class DetectWrongState(hass.Hass):
                 self.send_notification(message, entity)
 
     def is_entity_reed_contact(self, entity):
+        """
+        Determine if an entity is an entity
+
+        Args:
+            self: (todo): write your description
+            entity: (todo): write your description
+        """
         reed_types = ["window", "door", "garage_door"]
         full_state = self.get_state(entity, attribute="all")
         if full_state is not None:
@@ -137,6 +172,14 @@ class DetectWrongState(hass.Hass):
         return False
 
     def send_notification(self, message, entity):
+        """
+        Sends a notification to the specified entity.
+
+        Args:
+            self: (todo): write your description
+            message: (str): write your description
+            entity: (todo): write your description
+        """
         if message is not None:
             formatted_message = message.format(self.friendly_name(entity))
             self.log(formatted_message)
@@ -146,5 +189,11 @@ class DetectWrongState(hass.Hass):
                 )
 
     def terminate(self):
+        """
+        Terminate all active tasks.
+
+        Args:
+            self: (todo): write your description
+        """
         for listen_state_handle in self.listen_state_handle_list:
             self.cancel_listen_state(listen_state_handle)

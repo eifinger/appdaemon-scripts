@@ -51,6 +51,12 @@ BLOCK_CALLBACK_IDENTIFIER = "/NEWDEVICEBNOTIFYLOCK"
 
 class DeviceNotify(hass.Hass):
     def initialize(self):
+        """
+        Initialize the device.
+
+        Args:
+            self: (todo): write your description
+        """
         self.listen_event_handle_list = []
 
         self.notify_name = self.args["notify_name"]
@@ -233,5 +239,11 @@ class DeviceNotify(hass.Hass):
             self.notifier.notify(self.notify_name, message)
 
     def terminate(self):
+        """
+        Terminate all registered listeners.
+
+        Args:
+            self: (todo): write your description
+        """
         for listen_event_handle in self.listen_event_handle_list:
             self.cancel_listen_event(listen_event_handle)

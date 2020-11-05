@@ -69,6 +69,12 @@ import datetime
 
 class LeavingZoneNotifier(hass.Hass):
     def initialize(self):
+        """
+        Initializes initial initialization.
+
+        Args:
+            self: (todo): write your description
+        """
 
         self.listen_state_handle_list = []
         self.timer_handle_list = []
@@ -134,6 +140,12 @@ class LeavingZoneNotifier(hass.Hass):
                         self.log("Setting false_positive to {}".format(self.false_positive))
 
     def notify_user(self, kwargs):
+        """
+        Notify about a user.
+
+        Args:
+            self: (todo): write your description
+        """
         # Check if user did not come back to the zone in the meantime
         if self.get_state(self.device) != kwargs["old_zone"]:
             if self.travel_time_sensor is not None:
@@ -159,6 +171,12 @@ class LeavingZoneNotifier(hass.Hass):
                 self.log("Setting false_positive to {}".format(self.false_positive))
 
     def notify_user_callback(self, kwargs):
+        """
+        Notify the user about the sensor.
+
+        Args:
+            self: (todo): write your description
+        """
         self.log("Notify user")
         self.notifier.notify(
             self.notify_name,
@@ -171,6 +189,12 @@ class LeavingZoneNotifier(hass.Hass):
         self.log("Setting false_positive to {}".format(self.false_positive))
 
     def terminate(self):
+        """
+        Terminate all the jobs.
+
+        Args:
+            self: (todo): write your description
+        """
         for listen_state_handle in self.listen_state_handle_list:
             self.cancel_listen_state(listen_state_handle)
 

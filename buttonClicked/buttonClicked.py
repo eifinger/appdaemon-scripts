@@ -24,6 +24,12 @@ import datetime
 
 class ButtonClicked(hass.Hass):
     def initialize(self):
+        """
+        Initialize the actor.
+
+        Args:
+            self: (todo): write your description
+        """
         self.listen_event_handle_list = []
         self.timer_handle_list = []
 
@@ -38,6 +44,14 @@ class ButtonClicked(hass.Hass):
         )
 
     def event_detected(self, event_name, data, kwargs):
+        """
+        Called when a new actor is received.
+
+        Args:
+            self: (todo): write your description
+            event_name: (str): write your description
+            data: (todo): write your description
+        """
         if data["entity_id"] == self.args["sensor"]:
             if data["click_type"] == "single" and self.actor_single != None:
                 self.log("ButtonClicked: {}".format(data["entity_id"]))
@@ -138,9 +152,21 @@ class ButtonClicked(hass.Hass):
         )
 
     def turn_off_workaround(self, *kwargs):
+        """
+        Turn the given entity into the future.
+
+        Args:
+            self: (todo): write your description
+        """
         self.call_service("light/turn_off", entity_id=self.actor_single)
 
     def terminate(self):
+        """
+        Terminate all registered timer.
+
+        Args:
+            self: (todo): write your description
+        """
         for listen_event_handle in self.listen_event_handle_list:
             self.cancel_listen_event(listen_event_handle)
 

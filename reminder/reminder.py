@@ -26,6 +26,12 @@ KEYBOARD_CALLBACK_BASE = "/reminder_acknowledged"
 
 class Reminder(hass.Hass):
     def initialize(self):
+        """
+        Initialize the timer.
+
+        Args:
+            self: (todo): write your description
+        """
 
         self.timer_handle_list = []
         self.listen_event_handle_list = []
@@ -113,6 +119,12 @@ class Reminder(hass.Hass):
             )
 
     def terminate(self):
+        """
+        Terminate all the event.
+
+        Args:
+            self: (todo): write your description
+        """
         for timer_handle in self.timer_handle_list:
             self.cancel_timer(timer_handle)
 

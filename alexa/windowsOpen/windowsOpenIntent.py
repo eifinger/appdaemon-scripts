@@ -6,10 +6,24 @@ import datetime
 
 class WindowsOpenIntent(hass.Hass):
     def initialize(self):
+        """
+        Initialize the application.
+
+        Args:
+            self: (todo): write your description
+        """
         self.listService = self.get_app("listService")
         return
 
     def getIntentResponse(self, slots, devicename):
+        """
+        Return a list of all openapi window
+
+        Args:
+            self: (todo): write your description
+            slots: (todo): write your description
+            devicename: (str): write your description
+        """
         ############################################
         # an Intent to give back the state of windows
         ############################################
@@ -76,6 +90,13 @@ class WindowsOpenIntent(hass.Hass):
         return text
 
     def random_arg(self, argName):
+        """
+        Return the value from argname.
+
+        Args:
+            self: (todo): write your description
+            argName: (str): write your description
+        """
         ############################################
         # pick a random text from a list
         ############################################

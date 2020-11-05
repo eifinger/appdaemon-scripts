@@ -20,6 +20,12 @@ import requests
 
 class SeqSink(hass.Hass):
     def initialize(self):
+        """
+        Initialize the server.
+
+        Args:
+            self: (todo): write your description
+        """
         self.server_url = self.args["server_url"]
         if not self.server_url.endswith("/"):
             self.server_url += "/"
@@ -35,6 +41,17 @@ class SeqSink(hass.Hass):
         self.handle = self.listen_log(self.log_message_callback)
 
     def log_message_callback(self, app_name, ts, level, log_type, message, kwargs):
+        """
+        Log a message to the server.
+
+        Args:
+            self: (todo): write your description
+            app_name: (str): write your description
+            ts: (str): write your description
+            level: (int): write your description
+            log_type: (str): write your description
+            message: (str): write your description
+        """
         if app_name != "seqSink":
             event_data = {
                 "Timestamp": str(ts),
@@ -71,4 +88,10 @@ class SeqSink(hass.Hass):
                     self.log(f"Response body from Seq:{requestFailed.response.text}")
 
     def terminate(self):
+        """
+        Terminate the consumer.
+
+        Args:
+            self: (todo): write your description
+        """
         self.cancel_listen_log(self.handle)

@@ -33,6 +33,12 @@ import appdaemon.plugins.hass.hassapi as hass
 
 class HomeArrivalNotifier(hass.Hass):
     def initialize(self):
+        """
+        Initialize the zone
+
+        Args:
+            self: (todo): write your description
+        """
         self.listen_state_handle_list = []
 
         self.app_switch = self.args["app_switch"]
@@ -49,6 +55,16 @@ class HomeArrivalNotifier(hass.Hass):
         )
 
     def state_change(self, entity, attribute, old, new, kwargs):
+        """
+        Called when a state change.
+
+        Args:
+            self: (todo): write your description
+            entity: (todo): write your description
+            attribute: (str): write your description
+            old: (str): write your description
+            new: (str): write your description
+        """
         if self.get_state(self.app_switch) == "on":
             if new != "" and new != old:
                 self.log("{} changed from {} to {}".format(entity, old, new))
@@ -61,5 +77,11 @@ class HomeArrivalNotifier(hass.Hass):
                     )
 
     def terminate(self):
+        """
+        Terminate all active tasks.
+
+        Args:
+            self: (todo): write your description
+        """
         for listen_state_handle in self.listen_state_handle_list:
             self.cancel_listen_state(listen_state_handle)

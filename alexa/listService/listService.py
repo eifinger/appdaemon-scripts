@@ -21,19 +21,55 @@ import appdaemon.plugins.hass.hassapi as hass
 
 class ListService(hass.Hass):
     def initialize(self):
+        """
+        Initialize the next callable.
+
+        Args:
+            self: (todo): write your description
+        """
         return
 
     def getSwitchable(self):
+        """
+        : return : py : class : rtype : class : return : the current : class : rtype : str
+
+        Args:
+            self: (todo): write your description
+        """
         return self.args["switchable"]
 
     def getTemperature(self):
+        """
+        Gets the current user s }
+
+        Args:
+            self: (todo): write your description
+        """
         return self.args["temperature"]
 
     def getDoor(self):
+        """
+        Return door
+
+        Args:
+            self: (todo): write your description
+        """
         return self.args["door"]
 
     def getWindow(self):
+        """
+        Returns the currently active window
+
+        Args:
+            self: (todo): write your description
+        """
         return self.args["window"]
 
     def getDoorTilted(self):
+        """
+        Return the doorted door door
+
+        Args:
+            self: (todo): write your description
+        """
         return self.args["door_tilted"]
