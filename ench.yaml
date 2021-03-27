@@ -45,3 +45,4 @@ ench:
     min_level: 20
   unavailable:
     interval_min: 60
+    max_unavailable_min: 15
