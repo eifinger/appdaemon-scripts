@@ -4,7 +4,7 @@
   @benleb / https://github.com/benleb/ad-ench
 """
 
-__version__ = "0.8.0"
+__version__ = "0.9.0"
 
 from datetime import datetime, timedelta
 from fnmatch import fnmatch
@@ -24,6 +24,7 @@ INTERVAL_BATTERY = INTERVAL_BATTERY_MIN / 60
 
 INTERVAL_UNAVAILABLE_MIN = 60
 INTERVAL_UNAVAILABLE = INTERVAL_UNAVAILABLE_MIN / 60
+MAX_UNAVAILABLE_MIN = 0
 
 INTERVAL_STALE_MIN = 15
 MAX_STALE_MIN = 60
@@ -131,6 +132,7 @@ class EnCh(hass.Hass):  # type: ignore
             # store configuration
             self.cfg["unavailable"] = dict(
                 interval_min=int(config.get("interval_min", INTERVAL_UNAVAILABLE_MIN)),
+                max_unavailable_min=int(config.get("max_unavailable_min", MAX_UNAVAILABLE_MIN)),
             )
 
             # no, per check or global notification
@@ -192,22 +194,27 @@ class EnCh(hass.Hass):  # type: ignore
 
         self.lg("Checking entities for low battery levels...", icon=APP_ICON, level="DEBUG")
 
+        states = await self.get_state()
+
         entities = filter(
             lambda entity: not any(fnmatch(entity, pattern) for pattern in self.cfg["exclude"]),
-            await self.get_state(),
+            states,
         )
 
         for entity in sorted(entities):
             battery_level = None
+
             try:
                 # check entities which may be battery level sensors
                 if "battery_level" in entity or "battery" in entity:
-                    battery_level = int(await self.get_state(entity))
+                    # battery_level = int(await self.get_state(entity))
+                    battery_level = int(states[entity]["state"])
 
                 # check entity attributes for battery levels
                 if not battery_level:
                     for attr in LEVEL_ATTRIBUTES:
-                        battery_level = int(await self.get_state(entity, attribute=attr))
+                        # battery_level = int(await self.get_state(entity, attribute=attr))
+                        battery_level = int(states[entity]["attributes"].get(attr))
                         break
             except (TypeError, ValueError):
                 pass
@@ -227,7 +234,7 @@ class EnCh(hass.Hass):  # type: ignore
         # send notification
         notify = self.cfg.get("notify") or check_config.get("notify")
         if notify and results:
-            self.call_service(
+            await self.call_service(
                 str(notify).replace(".", "/"),
                 message=f"{ICONS['battery']} Battery low ({len(results)}): "
                 f"{', '.join([f'{str(await self._name(entity[0], notification=True))} {entity[1]}%' for entity in results])}",  # noqa
@@ -255,12 +262,25 @@ class EnCh(hass.Hass):  # type: ignore
             state = await self.get_state(entity_id=entity)
 
             if state in BAD_STATES and entity not in results:
-                results.append(entity)
-                last_updated = (await self.last_update(entity)).time().isoformat(timespec="seconds")
-                self.lg(
-                    f"{await self._name(entity)} is {hl(state)} | " f"last update: {last_updated}",
-                    icon=ICONS[state],
-                )
+
+                last_update = await self.last_update(entity)
+                now: datetime = await self.datetime(aware=True)
+                unavailable_time: timedelta = now - last_update
+                max_unavailable_min = timedelta(minutes=self.cfg["unavailable"]["max_unavailable_min"])
+
+                if unavailable_time >= max_unavailable_min:
+                    results.append(entity)
+                    last_updated = (await self.last_update(entity)).time().isoformat(timespec="seconds")
+                    self.lg(
+                        f"{await self._name(entity)} is "
+                        f"{hl(state)} since {hl(int(unavailable_time.seconds / 60))}min | "
+                        f"last update: {last_updated}",
+                        icon=ICONS[state],
+                    )
+                    # self.lg(
+                    #     f"{await self._name(entity)} is {hl(state)} | " f"last update: {last_updated}",
+                    #     icon=ICONS[state],
+                    # )
 
         # send notification
         notify = self.cfg.get("notify") or check_config.get("notify")
