@@ -27,6 +27,14 @@ ench:
     - sensor.glances*_temp
     - sensor.publish_ip_on_boot
     - sensor.*odroid*
+    - media_player.55pus7304_12
+    - media_player.fernseher
+    - sensor.consumption_31
+    - sensor.power_30
+    - sensor.openweathermap*
+    - light.bar_table
+    - sensor.*_nachster_wecker
+    - switch.xiaomi_plug
     # Alexa Media Player
     - sensor.*next_alarm
     - sensor.*next_reminder
@@ -35,11 +43,6 @@ ench:
     - switch.*_repeat_switch*
     - switch.*_shuffle_switch*
     - switch.*do_not_disturb_switch
-    - media_player.55pus7304_12
-    - media_player.fernseher
-    - sensor.consumption_31
-    - sensor.power_30
-    - sensor.openweathermap*
   battery:
     interval_min: 180
     min_level: 20
