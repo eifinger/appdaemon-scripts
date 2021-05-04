@@ -35,6 +35,7 @@ ench:
     - light.bar_table
     - sensor.*_nachster_wecker
     - switch.xiaomi_plug
+    - media_player.55pus7304_12_*
     # Alexa Media Player
     - sensor.*next_alarm
     - sensor.*next_reminder
