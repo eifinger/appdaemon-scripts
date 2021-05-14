@@ -1,53 +1,53 @@
-leavingWorkNotifierUserOne:
-  module: leavingZoneNotifier
-  class: LeavingZoneNotifier
-  app_switch: input_boolean.leaving_work_notifier_user_one
-  device: person.kevin
-  user_name: Kevin
-  lingering_time: 3600
-  delay: 120
-  zone: Arbeit
-  notify_name: group_notifications
-  message: "{} hat {} vor {} Minuten verlassen."
-  #message: "{} left {} {} minutes ago"
-  travel_time_sensor: sensor.travel_time_home_user_one
-  travel_time_sensor_message: "Es dauert circa {} Minuten bis nach Hause."
-  #travel_time_sensor_message: "The travel time is {}."
-  dependencies: 
-    - Notifier
+# leavingWorkNotifierUserOne:
+#   module: leavingZoneNotifier
+#   class: LeavingZoneNotifier
+#   app_switch: input_boolean.leaving_work_notifier_user_one
+#   device: person.kevin
+#   user_name: Kevin
+#   lingering_time: 3600
+#   delay: 120
+#   zone: Arbeit
+#   notify_name: group_notifications
+#   message: "{} hat {} vor {} Minuten verlassen."
+#   #message: "{} left {} {} minutes ago"
+#   travel_time_sensor: sensor.travel_time_home_user_one
+#   travel_time_sensor_message: "Es dauert circa {} Minuten bis nach Hause."
+#   #travel_time_sensor_message: "The travel time is {}."
+#   dependencies: 
+#     - Notifier
 
-leavingWorkNotifierUserTwo:
-  module: leavingZoneNotifier
-  class: LeavingZoneNotifier
-  app_switch: input_boolean.leaving_work_notifier_user_two
-  device: person.sina
-  user_name: Sina
-  lingering_time: 3600
-  delay: 120
-  zone: !secret friendly_name_work_user_two
-  notify_name: group_notifications
-  message: "{} hat {} vor {} Minuten verlassen."
-  #message: "{} left {} {} minutes ago"
-  travel_time_sensor: sensor.travel_time_home_user_two
-  travel_time_sensor_message: "Es dauert circa {} Minuten bis nach Hause."
-  #travel_time_sensor_message: "The travel time is {}."
-  dependencies:
-    - Notifier
+# leavingWorkNotifierUserTwo:
+#   module: leavingZoneNotifier
+#   class: LeavingZoneNotifier
+#   app_switch: input_boolean.leaving_work_notifier_user_two
+#   device: person.sina
+#   user_name: Sina
+#   lingering_time: 3600
+#   delay: 120
+#   zone: !secret friendly_name_work_user_two
+#   notify_name: group_notifications
+#   message: "{} hat {} vor {} Minuten verlassen."
+#   #message: "{} left {} {} minutes ago"
+#   travel_time_sensor: sensor.travel_time_home_user_two
+#   travel_time_sensor_message: "Es dauert circa {} Minuten bis nach Hause."
+#   #travel_time_sensor_message: "The travel time is {}."
+#   dependencies:
+#     - Notifier
 
-leavingElmoNotifierUserTwo:
-  module: leavingZoneNotifier
-  class: LeavingZoneNotifier
-  app_switch: input_boolean.leaving_elmo_notifier_user_two
-  device: person.sina
-  user_name: Sina
-  lingering_time: 3600
-  delay: 120
-  zone: Elmo
-  notify_name: group_notifications
-  message: "{} hat {} vor {} Minuten verlassen."
-  #message: "{} left {} {} minutes ago"
-  travel_time_sensor: sensor.travel_time_home_user_two
-  travel_time_sensor_message: "Es dauert circa {} Minuten bis nach Hause."
-  #travel_time_sensor_message: "The travel time is {}."
-  dependencies: 
-    - Notifier
+# leavingElmoNotifierUserTwo:
+#   module: leavingZoneNotifier
+#   class: LeavingZoneNotifier
+#   app_switch: input_boolean.leaving_elmo_notifier_user_two
+#   device: person.sina
+#   user_name: Sina
+#   lingering_time: 3600
+#   delay: 120
+#   zone: Elmo
+#   notify_name: group_notifications
+#   message: "{} hat {} vor {} Minuten verlassen."
+#   #message: "{} left {} {} minutes ago"
+#   travel_time_sensor: sensor.travel_time_home_user_two
+#   travel_time_sensor_message: "Es dauert circa {} Minuten bis nach Hause."
+#   #travel_time_sensor_message: "The travel time is {}."
+#   dependencies: 
+#     - Notifier
