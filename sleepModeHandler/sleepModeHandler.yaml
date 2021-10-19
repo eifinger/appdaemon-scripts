@@ -1,18 +1,18 @@
-sleepModeHandler:
-  module: sleepModeHandler
-  class: SleepModeHandler
-  app_switch: input_boolean.sleep_mode_handler
-  sleepmode: input_boolean.sleepmode
-  notify_name: group_notifications
-  message_sleeping: "Alle zu Hause sind im Bett"
-  #message_sleeping: "All home are in bed"
-  message_awake: "Alle zu Hause sind wach"
-  #message_awake: "All home are awake"
-  use_alexa: False
-  users:
-    - sleep_mode: input_boolean.user_one_sleep
-      isHome: input_boolean.user_one_home
-    - sleep_mode: input_boolean.user_two_sleep
-      isHome: input_boolean.user_two_home
-  dependencies:
-    - Notifier
+# sleepModeHandler:
+#   module: sleepModeHandler
+#   class: SleepModeHandler
+#   app_switch: input_boolean.sleep_mode_handler
+#   sleepmode: input_boolean.sleepmode
+#   notify_name: group_notifications
+#   message_sleeping: "Alle zu Hause sind im Bett"
+#   #message_sleeping: "All home are in bed"
+#   message_awake: "Alle zu Hause sind wach"
+#   #message_awake: "All home are awake"
+#   use_alexa: False
+#   users:
+#     - sleep_mode: input_boolean.user_one_sleep
+#       isHome: input_boolean.user_one_home
+#     - sleep_mode: input_boolean.user_two_sleep
+#       isHome: input_boolean.user_two_home
+#   dependencies:
+#     - Notifier
