@@ -1,5 +1,5 @@
-seqSink:
-  module: seqSink
-  class: SeqSink
-  server_url: "http://seq:5341/"
-  api_key: !secret seq_api_key
+# seqSink:
+#   module: seqSink
+#   class: SeqSink
+#   server_url: "http://seq:5341/"
+#   api_key: !secret seq_api_key
