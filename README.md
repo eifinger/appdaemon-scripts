@@ -3,7 +3,6 @@
   <br>
   eifinger's Appdaemon Scripts
 </h1>
-<h4 align="center">Be sure to :star: my repo so you can keep up to date on the daily progress!.</h4>
 
 ## About
 
@@ -17,7 +16,14 @@ I use Appdaemon for all my automations since I am a programmer myself and it pro
 of the Python world and a far better debugging experience than
 [HA Automations](https://www.home-assistant.io/getting-started/automation/) or [nodered](https://nodered.org/).
 
-This is a continuous work in progress and I am no real Python programmer. So any comments are highly appreciated.
+### No longer actively maintained
+
+I no longer use appdaemon for my automations and switched over to automations completely:
+
+* Traces allow easy debugging of what happened and why
+* I can see related entities from automations and vise versa
+* I can quickly adjust automations via the UI editor on my smartphone
+* There is no disconnect/lag between Appdaemon and Homeassistant.
 
 ## How to contribute
 
